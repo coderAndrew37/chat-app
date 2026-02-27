@@ -12,7 +12,7 @@ import {
   Navbar,
   ProfilesGrid,
   RegisterModal,
-} from "./components";
+} from ".";
 
 type ModalType = "login" | "register" | null;
 

@@ -1,0 +1,10 @@
+export { default as Navbar } from "./Navbar";
+export { default as Hero } from "./Hero";
+export { default as ProfilesGrid } from "./ProfilesGrid";
+export { default as HowItWorks } from "./HowItWorks";
+export { default as Features } from "./Features";
+export { default as CTABanner } from "./CTABanner";
+export { default as Footer } from "./Footer";
+export { default as LoginModal } from "./LoginModal";
+export { default as RegisterModal } from "./RegisterModal";
+export { default as HomePage } from "./HomePage";
