@@ -4,12 +4,16 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
 import { registerSchema, type RegisterFormData } from "@/types/schemas";
 
 interface RegisterModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSwitchToLogin: () => void;
+  /** If set, redirect here after successful registration instead of /chat */
+  redirectTo?: string;
 }
 
 type Gender = "male" | "female" | "other";
@@ -24,7 +28,10 @@ export default function RegisterModal({
   isOpen,
   onClose,
   onSwitchToLogin,
+  redirectTo,
 }: RegisterModalProps) {
+  const router = useRouter();
+  const supabase = createClient();
   const [isLoading, setIsLoading] = useState(false);
 
   const {
@@ -34,22 +41,65 @@ export default function RegisterModal({
     formState: { errors },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
-    defaultValues: {
-      agreeToTerms: false,
-    },
+    defaultValues: { agreeToTerms: false },
   });
 
   const onSubmit = async (data: RegisterFormData) => {
     setIsLoading(true);
     try {
-      // Replace with your actual register API call
-      await new Promise((resolve) => setTimeout(resolve, 1400));
-      console.log("Register data:", data);
-      toast.success("Account created! Welcome to Chat254 🎉");
+      // 1. Create auth user
+      const { data: authData, error: signUpError } = await supabase.auth.signUp(
+        {
+          email: data.email,
+          password: data.password,
+          options: {
+            data: { name: data.name }, // raw_user_meta_data
+          },
+        },
+      );
+
+      if (signUpError) {
+        if (signUpError.message.includes("already registered")) {
+          toast.error("This email is already registered. Try logging in.");
+        } else {
+          toast.error(signUpError.message);
+        }
+        return;
+      }
+
+      const userId = authData.user?.id;
+      if (!userId) {
+        toast.error("Registration failed. Please try again.");
+        return;
+      }
+
+      // 2. Upsert public profile
+      const { error: profileError } = await supabase.from("profiles").upsert({
+        id: userId,
+        name: data.name,
+        email: data.email,
+        age: data.age,
+        gender: data.gender,
+        is_online: true,
+        last_seen: new Date().toISOString(),
+      });
+
+      if (profileError) {
+        console.error("Profile creation error:", profileError);
+        // Auth succeeded — don't block the user, profile can be retried
+        toast.warning(
+          "Account created but profile setup had an issue. You may need to update your profile.",
+        );
+      } else {
+        toast.success("Welcome to Chat254! 🎉 Your account is ready.");
+      }
+
       reset();
       onClose();
+      router.push(redirectTo ?? "/chat");
+      router.refresh();
     } catch {
-      toast.error("Registration failed. Please try again.");
+      toast.error("Something went wrong. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -65,7 +115,7 @@ export default function RegisterModal({
       }}
     >
       <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto p-8 relative animate-in fade-in zoom-in-95 duration-200">
-        {/* Close button */}
+        {/* Close */}
         <button
           onClick={onClose}
           className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
@@ -102,7 +152,7 @@ export default function RegisterModal({
           className="space-y-5"
           noValidate
         >
-          {/* Full Name */}
+          {/* Name */}
           <div>
             <label
               className="block text-sm font-semibold text-gray-700 mb-1.5"
@@ -113,6 +163,7 @@ export default function RegisterModal({
             <input
               id="reg-name"
               type="text"
+              autoComplete="name"
               placeholder="Your name"
               className={`w-full px-4 py-3 rounded-xl border text-sm outline-none transition-colors focus:ring-2 focus:ring-rose-500/20 ${
                 errors.name
@@ -139,6 +190,7 @@ export default function RegisterModal({
             <input
               id="reg-email"
               type="email"
+              autoComplete="email"
               placeholder="you@example.com"
               className={`w-full px-4 py-3 rounded-xl border text-sm outline-none transition-colors focus:ring-2 focus:ring-rose-500/20 ${
                 errors.email
@@ -154,7 +206,7 @@ export default function RegisterModal({
             )}
           </div>
 
-          {/* Age + Gender row */}
+          {/* Age + Gender */}
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label
@@ -182,7 +234,6 @@ export default function RegisterModal({
                 </p>
               )}
             </div>
-
             <div>
               <label
                 className="block text-sm font-semibold text-gray-700 mb-1.5"
@@ -225,6 +276,7 @@ export default function RegisterModal({
             <input
               id="reg-password"
               type="password"
+              autoComplete="new-password"
               placeholder="Min. 6 characters"
               className={`w-full px-4 py-3 rounded-xl border text-sm outline-none transition-colors focus:ring-2 focus:ring-rose-500/20 ${
                 errors.password
@@ -251,6 +303,7 @@ export default function RegisterModal({
             <input
               id="reg-confirm"
               type="password"
+              autoComplete="new-password"
               placeholder="Repeat your password"
               className={`w-full px-4 py-3 rounded-xl border text-sm outline-none transition-colors focus:ring-2 focus:ring-rose-500/20 ${
                 errors.confirmPassword
@@ -266,7 +319,7 @@ export default function RegisterModal({
             )}
           </div>
 
-          {/* Terms checkbox */}
+          {/* Terms */}
           <div>
             <label className="flex items-start gap-3 cursor-pointer">
               <input
@@ -333,7 +386,6 @@ export default function RegisterModal({
           </button>
         </form>
 
-        {/* Switch to login */}
         <p className="text-center text-sm text-gray-500 mt-6">
           Already have an account?{" "}
           <button

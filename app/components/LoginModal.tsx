@@ -4,19 +4,26 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
 import { loginSchema, type LoginFormData } from "@/types/schemas";
 
 interface LoginModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSwitchToRegister: () => void;
+  /** If set, redirect here after successful login instead of /chat */
+  redirectTo?: string;
 }
 
 export default function LoginModal({
   isOpen,
   onClose,
   onSwitchToRegister,
+  redirectTo,
 }: LoginModalProps) {
+  const router = useRouter();
+  const supabase = createClient();
   const [isLoading, setIsLoading] = useState(false);
 
   const {
@@ -24,21 +31,34 @@ export default function LoginModal({
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
-  });
+  } = useForm<LoginFormData>({ resolver: zodResolver(loginSchema) });
 
   const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
     try {
-      // Replace with your actual login API call
-      await new Promise((resolve) => setTimeout(resolve, 1200));
-      console.log("Login data:", data);
-      toast.success("Welcome back! Redirecting...");
+      const { error } = await supabase.auth.signInWithPassword({
+        email: data.email,
+        password: data.password,
+      });
+
+      if (error) {
+        if (error.message.includes("Invalid login credentials")) {
+          toast.error("Invalid email or password. Please try again.");
+        } else if (error.message.includes("Email not confirmed")) {
+          toast.error("Please verify your email before logging in.");
+        } else {
+          toast.error(error.message);
+        }
+        return;
+      }
+
+      toast.success("Welcome back! 🎉");
       reset();
       onClose();
+      router.push(redirectTo ?? "/chat");
+      router.refresh();
     } catch {
-      toast.error("Login failed. Please check your credentials.");
+      toast.error("Something went wrong. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -54,7 +74,7 @@ export default function LoginModal({
       }}
     >
       <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md p-8 relative animate-in fade-in zoom-in-95 duration-200">
-        {/* Close button */}
+        {/* Close */}
         <button
           onClick={onClose}
           className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
@@ -86,7 +106,6 @@ export default function LoginModal({
           </p>
         </div>
 
-        {/* Form */}
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="space-y-5"
@@ -103,10 +122,11 @@ export default function LoginModal({
             <input
               id="login-email"
               type="email"
+              autoComplete="email"
               placeholder="you@example.com"
               className={`w-full px-4 py-3 rounded-xl border text-sm outline-none transition-colors focus:ring-2 focus:ring-rose-500/20 ${
                 errors.email
-                  ? "border-red-400 bg-red-50 focus:border-red-400"
+                  ? "border-red-400 bg-red-50"
                   : "border-gray-200 focus:border-rose-400"
               }`}
               {...register("email")}
@@ -129,10 +149,11 @@ export default function LoginModal({
             <input
               id="login-password"
               type="password"
+              autoComplete="current-password"
               placeholder="••••••••"
               className={`w-full px-4 py-3 rounded-xl border text-sm outline-none transition-colors focus:ring-2 focus:ring-rose-500/20 ${
                 errors.password
-                  ? "border-red-400 bg-red-50 focus:border-red-400"
+                  ? "border-red-400 bg-red-50"
                   : "border-gray-200 focus:border-rose-400"
               }`}
               {...register("password")}
@@ -179,7 +200,6 @@ export default function LoginModal({
           </button>
         </form>
 
-        {/* Switch to register */}
         <p className="text-center text-sm text-gray-500 mt-6">
           Don&apos;t have an account?{" "}
           <button

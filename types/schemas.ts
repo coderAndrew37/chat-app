@@ -24,10 +24,11 @@ export const registerSchema = z
       .max(100, "Password is too long"),
     confirmPassword: z.string().min(1, "Please confirm your password"),
     gender: z.enum(["male", "female", "other"], {
-      errorMap: () => ({ message: "Please select a gender" }),
+      message: "Please select a gender",
     }),
-    age: z
-      .number({ invalid_type_error: "Age is required" })
+
+    age: z.coerce // 'coerce' transforms string input from forms into numbers automatically
+      .number()
       .int()
       .min(18, "You must be at least 18 years old")
       .max(99, "Please enter a valid age"),
@@ -40,5 +41,13 @@ export const registerSchema = z
     path: ["confirmPassword"],
   });
 
+export const sendMessageSchema = z.object({
+  content: z
+    .string()
+    .min(1, "Message cannot be empty")
+    .max(2000, "Message is too long"),
+});
+
 export type LoginFormData = z.infer<typeof loginSchema>;
 export type RegisterFormData = z.infer<typeof registerSchema>;
+export type SendMessageFormData = z.infer<typeof sendMessageSchema>;
