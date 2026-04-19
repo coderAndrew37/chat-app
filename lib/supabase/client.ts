@@ -1,10 +1,9 @@
-import { createClient as createSupabaseClient } from "@supabase/supabase-js";
-import { Database } from "@/types/database"; // Path to your types file
+import { Database } from "@/types/database";
+import { createBrowserClient } from "@supabase/ssr";
 
-export const createClient = () => {
-  // Pass the <Database> generic here
-  return createSupabaseClient<Database>(
+export function createClient() {
+  return createBrowserClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
   );
-};
+}

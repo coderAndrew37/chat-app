@@ -24,6 +24,12 @@ const GENDER_OPTIONS: { value: Gender; label: string }[] = [
   { value: "other", label: "Other" },
 ];
 
+// z.coerce.number() infers its input as `unknown` (not `string`), so we
+// must mirror that here. TFieldValues = raw DOM input, TTransformedValues
+// = what zod outputs after coercion. This is the only way to satisfy the
+// Resolver generic without casting.
+type RegisterFormInput = Omit<RegisterFormData, "age"> & { age: unknown };
+
 export default function RegisterModal({
   isOpen,
   onClose,
@@ -39,7 +45,7 @@ export default function RegisterModal({
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<RegisterFormData>({
+  } = useForm<RegisterFormInput, unknown, RegisterFormData>({
     resolver: zodResolver(registerSchema),
     defaultValues: { agreeToTerms: false },
   });
@@ -47,13 +53,12 @@ export default function RegisterModal({
   const onSubmit = async (data: RegisterFormData) => {
     setIsLoading(true);
     try {
-      // 1. Create auth user
       const { data: authData, error: signUpError } = await supabase.auth.signUp(
         {
           email: data.email,
           password: data.password,
           options: {
-            data: { name: data.name }, // raw_user_meta_data
+            data: { name: data.name },
           },
         },
       );
@@ -72,21 +77,21 @@ export default function RegisterModal({
         toast.error("Registration failed. Please try again.");
         return;
       }
-
-      // 2. Upsert public profile
-      const { error: profileError } = await supabase.from("profiles").upsert({
-        id: userId,
-        name: data.name,
-        email: data.email,
-        age: data.age,
-        gender: data.gender,
-        is_online: true,
-        last_seen: new Date().toISOString(),
-      });
+const { error: profileError } = await supabase.from("profiles").upsert(
+  {
+    id: userId,
+    name: data.name,
+    email: data.email,
+    age: data.age,
+    gender: data.gender,
+    is_online: true,
+    last_seen: new Date().toISOString(),
+  },
+  { onConflict: "id" },
+);
 
       if (profileError) {
         console.error("Profile creation error:", profileError);
-        // Auth succeeded — don't block the user, profile can be retried
         toast.warning(
           "Account created but profile setup had an issue. You may need to update your profile.",
         );
@@ -226,7 +231,7 @@ export default function RegisterModal({
                     ? "border-red-400 bg-red-50"
                     : "border-gray-200 focus:border-rose-400"
                 }`}
-                {...register("age", { valueAsNumber: true })}
+                {...register("age")}
               />
               {errors.age && (
                 <p className="text-red-500 text-xs mt-1.5">

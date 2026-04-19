@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/client";
 import { useAuth } from "@/context/AuthContext";
 import type {
   ConversationWithProfile,
+  ConversationRow,
   ProfileRow,
   MessageRow,
 } from "@/types/database";
@@ -24,22 +25,25 @@ export function useConversations() {
       .from("conversations")
       .select("*")
       .or(`participant_one.eq.${user.id},participant_two.eq.${user.id}`)
-      .order("updated_at", { ascending: false });
+      .order("updated_at", { ascending: false })
+      .returns<ConversationRow[]>();
 
     if (error || !convRows) {
       setIsLoading(false);
       return;
     }
 
-    // Collect all other user IDs
     const otherIds = convRows.map((c) =>
       c.participant_one === user.id ? c.participant_two : c.participant_one,
     );
 
     const [{ data: profilesData }, { data: lastMsgs }, { data: unreadData }] =
       await Promise.all([
-        supabase.from("profiles").select("*").in("id", otherIds),
-        // Last message per conversation
+        supabase
+          .from("profiles")
+          .select("*")
+          .in("id", otherIds)
+          .returns<ProfileRow[]>(),
         supabase
           .from("messages")
           .select("*")
@@ -47,8 +51,8 @@ export function useConversations() {
             "conversation_id",
             convRows.map((c) => c.id),
           )
-          .order("created_at", { ascending: false }),
-        // Unread counts
+          .order("created_at", { ascending: false })
+          .returns<MessageRow[]>(),
         supabase
           .from("messages")
           .select("conversation_id")
@@ -57,14 +61,14 @@ export function useConversations() {
             convRows.map((c) => c.id),
           )
           .eq("is_read", false)
-          .neq("sender_id", user.id),
+          .neq("sender_id", user.id)
+          .returns<Pick<MessageRow, "conversation_id">[]>(),
       ]);
 
     const profileMap = new Map<string, ProfileRow>(
       (profilesData ?? []).map((p) => [p.id, p]),
     );
 
-    // Build last-message map (first per conversation = most recent)
     const lastMsgMap = new Map<string, MessageRow>();
     (lastMsgs ?? []).forEach((m) => {
       if (!lastMsgMap.has(m.conversation_id)) {
@@ -72,7 +76,6 @@ export function useConversations() {
       }
     });
 
-    // Unread count map
     const unreadMap = new Map<string, number>();
     (unreadData ?? []).forEach((m) => {
       unreadMap.set(
@@ -101,20 +104,22 @@ export function useConversations() {
   }, [user, supabase]);
 
   useEffect(() => {
-    fetchConversations();
+    // Wrap in void — ESLint sees synchronous setState only if the call is
+    // directly in the effect body returning a value. void makes it clear
+    // this is fire-and-forget; all setState calls inside are after awaits.
+    void fetchConversations();
 
-    // Realtime: refresh when conversations or messages change
     const channel = supabase
       .channel("conversations-list")
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "conversations" },
-        fetchConversations,
+        () => void fetchConversations(),
       )
       .on(
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "messages" },
-        fetchConversations,
+        () => void fetchConversations(),
       )
       .subscribe();
 

@@ -31,17 +31,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [profile, setProfile] = useState<ProfileRow | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchProfile = useCallback(
-    async (userId: string) => {
-      const { data } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", userId)
-        .single();
-      setProfile(data ?? null);
-    },
-    [supabase],
-  );
+ const fetchProfile = useCallback(
+  async (userId: string) => {
+    const { data } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", userId)
+      .single<ProfileRow>();   // ← add the generic here
+    setProfile(data ?? null);
+  },
+  [supabase],
+);
 
   const refreshProfile = useCallback(async () => {
     if (user) await fetchProfile(user.id);

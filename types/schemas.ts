@@ -51,3 +51,4 @@ export const sendMessageSchema = z.object({
 export type LoginFormData = z.infer<typeof loginSchema>;
 export type RegisterFormData = z.infer<typeof registerSchema>;
 export type SendMessageFormData = z.infer<typeof sendMessageSchema>;
+

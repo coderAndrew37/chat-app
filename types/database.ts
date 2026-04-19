@@ -13,7 +13,7 @@ export interface Database {
     Tables: {
       profiles: {
         Row: {
-          id: string; // uuid — matches auth.users.id
+          id: string;
           name: string;
           email: string;
           age: number;
@@ -22,7 +22,7 @@ export interface Database {
           avatar_url: string | null;
           bio: string | null;
           is_online: boolean;
-          last_seen: string; // timestamptz
+          last_seen: string;
           created_at: string;
         };
         Insert: {
@@ -39,6 +39,8 @@ export interface Database {
           created_at?: string;
         };
         Update: {
+          id?: string;
+          email?: string;
           name?: string;
           age?: number;
           gender?: Gender;
@@ -48,12 +50,13 @@ export interface Database {
           is_online?: boolean;
           last_seen?: string;
         };
+        Relationships: [];
       };
       conversations: {
         Row: {
           id: string;
-          participant_one: string; // user id
-          participant_two: string; // user id
+          participant_one: string;
+          participant_two: string;
           created_at: string;
           updated_at: string;
         };
@@ -67,6 +70,7 @@ export interface Database {
         Update: {
           updated_at?: string;
         };
+        Relationships: [];
       };
       messages: {
         Row: {
@@ -90,9 +94,10 @@ export interface Database {
           conversation_id?: string;
           sender_id?: string;
           content?: string;
-          is_read?: boolean; // Must be here!
+          is_read?: boolean;
           created_at?: string;
         };
+        Relationships: [];
       };
     };
     Views: Record<string, never>;
@@ -100,6 +105,7 @@ export interface Database {
     Enums: {
       gender: Gender;
     };
+    CompositeTypes: Record<string, never>;
   };
 }
 

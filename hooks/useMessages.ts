@@ -20,12 +20,12 @@ export function useMessages(conversationId: string | null) {
       .from("messages")
       .select("*")
       .eq("conversation_id", conversationId)
-      .order("created_at", { ascending: true });
+      .order("created_at", { ascending: true })
+      .returns<MessageRow[]>();
 
     setMessages(data ?? []);
     setIsLoading(false);
 
-    // Mark incoming messages as read
     if (user && data && data.length > 0) {
       const unreadIds = data
         .filter((m) => m.sender_id !== user.id && !m.is_read)
@@ -45,14 +45,12 @@ export function useMessages(conversationId: string | null) {
       return;
     }
 
-    fetchMessages();
+    void fetchMessages();
 
-    // Clean up previous channel
     if (channelRef.current) {
       supabase.removeChannel(channelRef.current);
     }
 
-    // Subscribe to new messages
     const channel = supabase
       .channel(`messages:${conversationId}`)
       .on(
@@ -67,7 +65,6 @@ export function useMessages(conversationId: string | null) {
           const newMsg = payload.new as MessageRow;
           setMessages((prev) => [...prev, newMsg]);
 
-          // Mark as read immediately if sender is not us
           if (user && newMsg.sender_id !== user.id) {
             supabase
               .from("messages")
@@ -96,7 +93,6 @@ export function useMessages(conversationId: string | null) {
         content: content.trim(),
       });
 
-      // Also bump updated_at on the conversation
       if (!error) {
         await supabase
           .from("conversations")
