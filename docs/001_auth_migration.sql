@@ -1,5 +1,5 @@
 -- ============================================================
--- Chat254 — Supabase Database Setup (Updated & Fixed)
+-- Chat254 — Supabase Database Setup
 -- ============================================================
 
 -- 1. ENUM for gender
@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS public.profiles (
 );
 
 -- Trigger for last_seen
-CREATE OR REPLACE FUNCTION update_last_seen()
+CREATE OR REPLACE FUNCTION public.update_last_seen()
 RETURNS TRIGGER AS $$
 BEGIN
   IF NEW.is_online = FALSE AND OLD.is_online = TRUE THEN
@@ -38,7 +38,7 @@ $$ LANGUAGE plpgsql;
 DROP TRIGGER IF EXISTS on_profile_online_change ON public.profiles;
 CREATE TRIGGER on_profile_online_change
   BEFORE UPDATE OF is_online ON public.profiles
-  FOR EACH ROW EXECUTE FUNCTION update_last_seen();
+  FOR EACH ROW EXECUTE FUNCTION public.update_last_seen();
 
 -- 3. CONVERSATIONS TABLE
 CREATE TABLE IF NOT EXISTS public.conversations (
@@ -49,7 +49,6 @@ CREATE TABLE IF NOT EXISTS public.conversations (
   updated_at      TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
--- THE FIX: Unique Index instead of Constraint
 CREATE UNIQUE INDEX IF NOT EXISTS idx_unique_conversation_pair 
 ON public.conversations (
   (LEAST(participant_one, participant_two)), 
@@ -73,7 +72,7 @@ CREATE INDEX IF NOT EXISTS idx_messages_conversation_id ON public.messages (conv
 CREATE INDEX IF NOT EXISTS idx_messages_sender_id ON public.messages (sender_id);
 
 -- 5. AUTO-UPDATE updated_at
-CREATE OR REPLACE FUNCTION bump_conversation_updated_at()
+CREATE OR REPLACE FUNCTION public.bump_conversation_updated_at()
 RETURNS TRIGGER AS $$
 BEGIN
   UPDATE public.conversations
@@ -86,26 +85,23 @@ $$ LANGUAGE plpgsql;
 DROP TRIGGER IF EXISTS on_message_insert ON public.messages;
 CREATE TRIGGER on_message_insert
   AFTER INSERT ON public.messages
-  FOR EACH ROW EXECUTE FUNCTION bump_conversation_updated_at();
+  FOR EACH ROW EXECUTE FUNCTION public.bump_conversation_updated_at();
 
--- 6. RLS POLICIES (Simplified for clarity)
+-- 6. RLS POLICIES
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.conversations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.messages ENABLE ROW LEVEL SECURITY;
 
--- Profiles: Public read, private write
 CREATE POLICY "Profiles are viewable by everyone" ON public.profiles FOR SELECT USING (true);
 CREATE POLICY "Users can insert their own profile" ON public.profiles FOR INSERT WITH CHECK (auth.uid() = id);
 CREATE POLICY "Users can update own profile" ON public.profiles FOR UPDATE USING (auth.uid() = id);
 
--- Conversations: Viewable only by participants
 CREATE POLICY "Participants can view conversations" ON public.conversations 
 FOR SELECT USING (auth.uid() = participant_one OR auth.uid() = participant_two);
 
 CREATE POLICY "Participants can create conversations" ON public.conversations 
 FOR INSERT WITH CHECK (auth.uid() = participant_one OR auth.uid() = participant_two);
 
--- Messages: Only participants can read/write
 CREATE POLICY "Participants can view messages" ON public.messages 
 FOR SELECT USING (
   EXISTS (
@@ -124,7 +120,6 @@ FOR INSERT WITH CHECK (
 );
 
 -- 7. ENABLE REALTIME
--- Check if publication exists before adding tables
 DO $$ 
 BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_publication WHERE pubname = 'supabase_realtime') THEN
@@ -135,27 +130,23 @@ END $$;
 ALTER PUBLICATION supabase_realtime ADD TABLE public.messages, public.conversations;
 
 -- 8. HELPER FUNCTION: Get or Create
-CREATE OR REPLACE FUNCTION get_or_create_conversation(user_a UUID, user_b UUID)
+-- Using a fully qualified approach to ensure no "relation" errors
+-- 8. HELPER FUNCTION: Get or Create (Fixed Parser-Conflict Version)
+CREATE OR REPLACE FUNCTION public.get_or_create_conversation(user_a UUID, user_b UUID)
 RETURNS UUID AS $$
 DECLARE
-  conv_id UUID;
+  v_res UUID;
 BEGIN
-  -- Try to find existing
-  SELECT id INTO conv_id
-  FROM public.conversations
-  WHERE (participant_one = user_a AND participant_two = user_b)
-     OR (participant_one = user_b AND participant_two = user_a)
-  LIMIT 1;
+  -- We use a single SQL statement to handle logic. 
+  -- This avoids the variable-naming conflict 42P01 error.
+  
+  INSERT INTO public.conversations (participant_one, participant_two)
+  VALUES (user_a, user_b)
+  ON CONFLICT ((LEAST(participant_one, participant_two)), 
+               (GREATEST(participant_one, participant_two)))
+  DO UPDATE SET updated_at = EXCLUDED.updated_at
+  RETURNING id INTO v_res;
 
-  -- If not found, insert with conflict handling
-  IF conv_id IS NULL THEN
-    INSERT INTO public.conversations (participant_one, participant_two)
-    VALUES (user_a, user_b)
-    ON CONFLICT ((LEAST(participant_one, participant_two)), (GREATEST(participant_one, participant_two)))
-    DO UPDATE SET updated_at = NOW()
-    RETURNING id INTO conv_id;
-  END IF;
-
-  RETURN conv_id;
+  RETURN v_res;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
