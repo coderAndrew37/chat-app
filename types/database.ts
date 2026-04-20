@@ -101,7 +101,15 @@ export interface Database {
       };
     };
     Views: Record<string, never>;
-    Functions: Record<string, never>;
+   Functions: {
+  get_or_create_conversation: {
+    Args: {
+      user_a: string;
+      user_b: string;
+    };
+    Returns: string;
+  };
+};
     Enums: {
       gender: Gender;
     };

@@ -5,6 +5,7 @@ import { useState } from "react";
 import type { ConversationWithProfile } from "@/types/database";
 import ChatWindow from "../components/ChatWindow";
 import ConversationSidebar from "../components/ConversationSidebar";
+import Link from "next/link";
 
 export default function ChatPage() {
   const [selectedConversation, setSelectedConversation] =
@@ -68,12 +69,12 @@ function EmptyState() {
           new chat.
         </p>
       </div>
-      <a
-        href="/#profiles"
+      <Link
+        href="/profiles"
         className="mt-2 bg-rose-500 hover:bg-rose-600 text-white font-semibold text-sm px-6 py-3 rounded-full transition-colors shadow-md shadow-rose-100"
       >
         Browse Profiles
-      </a>
+      </Link>
     </div>
   );
 }
