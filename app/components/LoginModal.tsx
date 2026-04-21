@@ -1,14 +1,14 @@
 // app/components/LoginModal.tsx
 "use client";
 
-import { useState } from "react";
+import { useActionState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { loginSchema, type LoginFormData } from "@/types/schemas";
-import { signInAction } from "@/lib/actions/auth.actions";
+import { signInAction, type AuthState } from "@/lib/actions/auth.actions";
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -17,6 +17,8 @@ interface LoginModalProps {
   redirectTo?: string;
 }
 
+const INITIAL_STATE: AuthState = { success: false };
+
 export default function LoginModal({
   isOpen,
   onClose,
@@ -24,27 +26,35 @@ export default function LoginModal({
   redirectTo,
 }: LoginModalProps) {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
 
-  const { register, handleSubmit, reset, formState: { errors } } =
-    useForm<LoginFormData>({ resolver: zodResolver(loginSchema) });
+  // Consistent with RegisterModal: useActionState owns the lifecycle,
+  // react-hook-form is used only for client-side validation display.
+  // Previously LoginModal called signInAction(data) passing the RHF object —
+  // that's wrong because the action expects FormData. Fixed here.
+  const [state, action, isPending] = useActionState<AuthState, FormData>(
+    signInAction,
+    INITIAL_STATE
+  );
 
-  const onSubmit = async (data: LoginFormData) => {
-    setIsLoading(true);
-    const result = await signInAction(data);
-    setIsLoading(false);
+  const { register, reset, formState: { errors } } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+  });
 
-    if (!result.success) {
-      toast.error(result.error);
-      return;
+  const prevStateRef = useRef(state);
+  useEffect(() => {
+    if (state === prevStateRef.current) return;
+    prevStateRef.current = state;
+
+    if (state.success) {
+      toast.success("Welcome back! 🎉");
+      reset();
+      onClose();
+      router.push(redirectTo ?? "/chat");
+      router.refresh();
+    } else if (state.error) {
+      toast.error(state.error);
     }
-
-    toast.success("Welcome back! 🎉");
-    reset();
-    onClose();
-    router.push(redirectTo ?? "/chat");
-    router.refresh();
-  };
+  }, [state, reset, onClose, router, redirectTo]);
 
   if (!isOpen) return null;
 
@@ -68,8 +78,7 @@ export default function LoginModal({
           <p className="text-gray-500 text-sm mt-1">Sign in to continue chatting</p>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
-          {/* Email */}
+        <form action={action} className="space-y-5" noValidate>
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1.5" htmlFor="login-email">
               Email Address
@@ -80,7 +89,6 @@ export default function LoginModal({
             {errors.email && <p className="text-red-500 text-xs mt-1.5">{errors.email.message}</p>}
           </div>
 
-          {/* Password */}
           <div>
             <div className="flex items-center justify-between mb-1.5">
               <label className="block text-sm font-semibold text-gray-700" htmlFor="login-password">
@@ -97,10 +105,9 @@ export default function LoginModal({
             {errors.password && <p className="text-red-500 text-xs mt-1.5">{errors.password.message}</p>}
           </div>
 
-          {/* Submit */}
-          <button type="submit" disabled={isLoading}
+          <button type="submit" disabled={isPending}
             className="w-full bg-rose-500 hover:bg-rose-600 disabled:bg-rose-300 text-white font-bold py-3.5 rounded-xl transition-colors shadow-md shadow-rose-100 flex items-center justify-center gap-2">
-            {isLoading ? (
+            {isPending ? (
               <>
                 <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
