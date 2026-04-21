@@ -1,8 +1,11 @@
+"use server-only";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import type { Database } from "@/types/database";
 
-export async function createClient() {
+// Used in Route Handlers and Server Components.
+// Never import this in "use client" files.
+export async function createServerSupabaseClient() {
   const cookieStore = await cookies();
 
   return createServerClient<Database>(
@@ -10,17 +13,11 @@ export async function createClient() {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        getAll() {
-          return cookieStore.getAll();
-        },
-        setAll(cookiesToSet) {
-          try {
-            cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options),
-            );
-          } catch {
-            // Server component – cookie mutations are no-ops
-          }
+        getAll: () => cookieStore.getAll(),
+        setAll: (cookiesToSet) => {
+          cookiesToSet.forEach(({ name, value, options }) =>
+            cookieStore.set(name, value, options),
+          );
         },
       },
     },
