@@ -22,10 +22,11 @@ export type AuthState = {
 //
 // With confirmations OFF:
 //   - signUp() creates + auto-confirms the user immediately
+//   - The on_auth_user_created DB trigger automatically inserts the profile row
 //   - We generate a magiclink via admin client (one-time login link)
 //   - Only our Resend email goes out — Supabase sends nothing
 //   - User clicks link → /auth/confirm page (client-side) reads the hash
-//     fragment, calls verifyOtp(), establishes session, creates profile
+//     fragment, calls verifyOtp(), establishes session
 
 export async function signUpAction(
   _prevState: AuthState | null,
@@ -43,6 +44,8 @@ export async function signUpAction(
   console.log("[signUp] attempting signup for:", email);
 
   // ── Step 1: Create the auth user ─────────────────────────────────────────
+  // Passing name/age/gender as metadata so the on_auth_user_created trigger
+  // can read raw_user_meta_data and populate the profiles row fully.
   const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
     email,
     password,
@@ -72,7 +75,6 @@ export async function signUpAction(
     email,
     options: {
       redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/confirm`,
-      data: { name, age, gender },
     },
   });
 

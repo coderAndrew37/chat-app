@@ -6,6 +6,9 @@
 // The full session (access_token + refresh_token) is embedded directly in
 // the URL hash fragment. No token exchange is needed — we call setSession()
 // with the tokens we already have.
+//
+// Profile creation is handled automatically by the on_auth_user_created
+// database trigger — no client-side profile upsert needed.
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -61,7 +64,6 @@ export default function ConfirmPage() {
         }
 
         console.log("[auth/confirm] session set, user:", data.user.id);
-        await createProfile(supabase, data.user);
         setStatus("success");
         setTimeout(() => router.replace(next), 800);
         return;
@@ -86,7 +88,6 @@ export default function ConfirmPage() {
           return;
         }
 
-        await createProfile(supabase, data.user);
         setStatus("success");
         setTimeout(() => router.replace(next), 800);
         return;
@@ -103,7 +104,6 @@ export default function ConfirmPage() {
           return;
         }
 
-        await createProfile(supabase, data.user);
         setStatus("success");
         setTimeout(() => router.replace(next), 800);
         return;
@@ -180,34 +180,4 @@ function Screen({ children }: { children: React.ReactNode }) {
       </div>
     </div>
   );
-}
-
-async function createProfile(
-  supabase: ReturnType<typeof createClient>,
-  user: { id: string; email?: string; user_metadata?: Record<string, unknown> },
-) {
-  const meta = (user.user_metadata ?? {}) as {
-    name?: string;
-    age?: number;
-    gender?: "male" | "female" | "other";
-  };
-
-  const { error } = await supabase.from("profiles").upsert(
-    {
-      id:        user.id,
-      name:      meta.name   ?? "User",
-      email:     user.email  ?? "",
-      age:       meta.age    ?? 18,
-      gender:    meta.gender ?? "other",
-      is_online: true,
-      last_seen: new Date().toISOString(),
-    },
-    { onConflict: "id" },
-  );
-
-  if (error) {
-    console.error("[auth/confirm] profile upsert failed:", error.message);
-  } else {
-    console.log("[auth/confirm] profile created/updated for:", user.id);
-  }
 }
