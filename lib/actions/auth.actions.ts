@@ -2,6 +2,7 @@
 "use server";
 
 import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { createAdminSupabaseClient } from "@/lib/supabase/admin";
 import { revalidatePath } from "next/cache";
 import { sendConfirmationEmail, sendPasswordResetEmail } from "@/lib/mail";
 
@@ -14,22 +15,24 @@ export type AuthState = {
 
 // ─── Sign Up ──────────────────────────────────────────────────────────────────
 //
-// Architecture:
-//   1. Create the user in Supabase Auth (email confirmation disabled in
-//      Supabase dashboard — we own the confirmation flow via Resend).
-//   2. Generate a sign-up OTP via Supabase (gives us a secure token).
-//   3. Send the branded confirmation email through Resend directly.
+// Supabase dashboard must have:
+//   Authentication → Settings → "Enable email confirmations" → OFF
+//   Authentication → Settings → "Enable email signups"       → ON
+//   Authentication → Hooks → "Customize Access Token" hook   → DISABLED
 //
-// Why not use Supabase's built-in email?
-//   Supabase's SMTP relay is rate-limited, unreliable for production, and
-//   gives you no delivery visibility. Owning the send via Resend gives you
-//   delivery logs, webhooks, and full template control.
+// With confirmations OFF:
+//   - signUp() creates + auto-confirms the user immediately
+//   - We generate a magiclink via admin client (one-time login link)
+//   - Only our Resend email goes out — Supabase sends nothing
+//   - User clicks link → /auth/confirm page (client-side) reads the hash
+//     fragment, calls verifyOtp(), establishes session, creates profile
 
 export async function signUpAction(
   _prevState: AuthState | null,
-  formData: FormData
+  formData: FormData,
 ): Promise<AuthState> {
   const supabase = await createServerSupabaseClient();
+  const admin    = createAdminSupabaseClient();
 
   const email    = (formData.get("email")    as string).trim().toLowerCase();
   const password =  formData.get("password") as string;
@@ -39,80 +42,76 @@ export async function signUpAction(
 
   console.log("[signUp] attempting signup for:", email);
 
-  // ── Step 1: Create the user ──────────────────────────────────────────────
+  // ── Step 1: Create the auth user ─────────────────────────────────────────
   const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
     email,
     password,
     options: {
       data: { name, age, gender },
-      // emailRedirectTo is unused — we build the link ourselves below.
-      // Supabase dashboard must have "Confirm email" DISABLED so the user
-      // record is created immediately without waiting for Supabase to send.
     },
   });
 
   if (signUpError) {
-    console.error("[signUp] supabase.auth.signUp error:", signUpError);
+    console.error("[signUp] error:", signUpError.message);
     const msg = signUpError.message.toLowerCase();
     if (msg.includes("already registered") || msg.includes("already been registered"))
       return { success: false, error: "That email is already registered. Try signing in." };
     if (msg.includes("signups not allowed"))
       return { success: false, error: "Sign ups are currently disabled." };
-    if (msg.includes("password"))
-      return { success: false, error: "Password must be at least 6 characters." };
     return { success: false, error: signUpError.message };
   }
 
   console.log("[signUp] user created, id:", signUpData.user?.id);
 
-  // ── Step 2: Generate a confirmation token via Supabase OTP ──────────────
-  // We use generateLink() to get a secure, expiring token URL from Supabase,
-  // then embed it in our own branded email instead of letting Supabase send.
-  const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({
-    type: "signup",
+  // ── Step 2: Generate one-time magic link via admin client ─────────────────
+  // type "magiclink" = a one-time login link. With email confirmations OFF,
+  // the user is already confirmed — this link just proves they own the email
+  // and establishes their first session.
+  const { data: linkData, error: linkError } = await admin.auth.admin.generateLink({
+    type: "magiclink",
     email,
-    password,
     options: {
-      data: { name, age, gender },
       redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/confirm`,
+      data: { name, age, gender },
     },
   });
 
   if (linkError || !linkData?.properties?.action_link) {
-    console.error("[signUp] generateLink error:", linkError);
-    // User was created — don't block them. Return success; they can
-    // request a resend later. Log for ops visibility.
+    console.error("[signUp] generateLink error:", linkError?.message);
     return {
       success: true,
       email,
-      message: "Account created but confirmation email failed. Contact support.",
+      message: "Account created but confirmation email failed. Please contact support.",
     };
   }
 
-  const confirmationUrl = linkData.properties.action_link;
-  console.log("[signUp] confirmation link generated (not logged for security)");
+  console.log("[signUp] magic link generated");
 
-  // ── Step 3: Send confirmation email via Resend ───────────────────────────
-  const { error: mailError } = await sendConfirmationEmail({ email, name, confirmationUrl });
+  // ── Step 3: Send via Resend ───────────────────────────────────────────────
+  const { error: mailError } = await sendConfirmationEmail({
+    email,
+    name,
+    confirmationUrl: linkData.properties.action_link,
+  });
 
   if (mailError) {
-    console.error("[signUp] resend email error:", mailError);
+    console.error("[signUp] mail error:", mailError.message);
     return {
       success: true,
       email,
-      message: "Account created but confirmation email failed. Contact support.",
+      message: "Account created but confirmation email failed. Please contact support.",
     };
   }
 
   console.log("[signUp] confirmation email sent to:", email);
-  return { success: true, email, message: "Confirmation link sent to your email." };
+  return { success: true, email };
 }
 
 // ─── Sign In ──────────────────────────────────────────────────────────────────
 
 export async function signInAction(
   _prevState: AuthState | null,
-  formData: FormData
+  formData: FormData,
 ): Promise<AuthState> {
   const supabase = await createServerSupabaseClient();
 
@@ -131,7 +130,7 @@ export async function signInAction(
     if (msg.includes("email not confirmed"))
       return { success: false, error: "Please confirm your email before signing in." };
     if (msg.includes("too many requests"))
-      return { success: false, error: "Too many attempts. Please wait a moment and try again." };
+      return { success: false, error: "Too many attempts. Please wait a moment." };
     return { success: false, error: error.message };
   }
 
@@ -147,7 +146,7 @@ export async function signOutAction(): Promise<AuthState> {
 
   const { data: { user } } = await supabase.auth.getUser();
   if (user) {
-    console.log("[signOut] marking offline, user:", user.id);
+    console.log("[signOut] marking offline:", user.id);
     await supabase.from("profiles").update({ is_online: false }).eq("id", user.id);
   }
 
@@ -165,15 +164,14 @@ export async function signOutAction(): Promise<AuthState> {
 
 export async function forgotPasswordAction(
   _prevState: AuthState | null,
-  formData: FormData
+  formData: FormData,
 ): Promise<AuthState> {
-  const supabase = await createServerSupabaseClient();
+  const admin = createAdminSupabaseClient();
   const email = (formData.get("email") as string).trim().toLowerCase();
 
   console.log("[forgotPassword] reset requested for:", email);
 
-  // Generate the reset link via Supabase admin (same pattern as signup)
-  const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({
+  const { data: linkData, error: linkError } = await admin.auth.admin.generateLink({
     type: "recovery",
     email,
     options: {
@@ -181,29 +179,31 @@ export async function forgotPasswordAction(
     },
   });
 
-  // Always return success to prevent email enumeration — log errors internally
+  // Always return success — prevents email enumeration
   if (linkError || !linkData?.properties?.action_link) {
-    console.error("[forgotPassword] generateLink error:", linkError);
-    return { success: true, message: "If the account exists, a reset link has been sent." };
+    console.error("[forgotPassword] generateLink error:", linkError?.message);
+    return { success: true };
   }
 
-  const resetUrl = linkData.properties.action_link;
-  const { error: mailError } = await sendPasswordResetEmail({ email, resetUrl });
+  const { error: mailError } = await sendPasswordResetEmail({
+    email,
+    resetUrl: linkData.properties.action_link,
+  });
 
   if (mailError) {
-    console.error("[forgotPassword] resend email error:", mailError);
+    console.error("[forgotPassword] mail error:", mailError.message);
   } else {
     console.log("[forgotPassword] reset email sent to:", email);
   }
 
-  return { success: true, message: "If the account exists, a reset link has been sent." };
+  return { success: true };
 }
 
 // ─── Update Password ──────────────────────────────────────────────────────────
 
 export async function updatePasswordAction(
   _prevState: AuthState | null,
-  formData: FormData
+  formData: FormData,
 ): Promise<AuthState> {
   const supabase = await createServerSupabaseClient();
   const newPassword = formData.get("password") as string;
@@ -218,6 +218,6 @@ export async function updatePasswordAction(
   }
 
   await supabase.auth.signOut();
-  console.log("[updatePassword] success, signed out");
-  return { success: true, message: "Password updated. Please sign in." };
+  console.log("[updatePassword] success");
+  return { success: true };
 }
