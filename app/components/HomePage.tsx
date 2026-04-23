@@ -1,18 +1,17 @@
 "use client";
 
+import { useAuth } from "@/context/AuthContext";
 import { useState } from "react";
 import { Toaster } from "sonner";
-import { useAuth } from "@/context/AuthContext";
 import {
   CTABanner,
   Features,
-  Footer,
   Hero,
   HowItWorks,
   LoginModal,
   Navbar,
   ProfilesGrid,
-  RegisterModal,
+  RegisterModal
 } from ".";
 
 type ModalType = "login" | "register" | null;
@@ -63,7 +62,6 @@ export default function HomePage() {
         />
       </main>
 
-      <Footer />
 
       <LoginModal
         isOpen={activeModal === "login"}
