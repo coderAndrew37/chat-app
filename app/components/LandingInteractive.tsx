@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -18,6 +19,9 @@ interface TestimonialItem {
   quote: string;
   lifestyle: string;
   earned: string;
+  /** Path in /public first, Unsplash URL as fallback */
+  image: string;
+  unsplashFallback: string;
 }
 
 interface EarningMethod {
@@ -27,6 +31,8 @@ interface EarningMethod {
   detail: string;
   href: string;
   badge: string;
+  image: string;
+  unsplashFallback: string;
 }
 
 interface DeepDiveItem {
@@ -37,6 +43,50 @@ interface DeepDiveItem {
 interface RequirementItem {
   icon: string;
   text: string;
+}
+
+// ─── SmartImage ───────────────────────────────────────────────────────────────
+// Tries the local `/public` path first; on error, swaps to the Unsplash URL.
+
+function SmartImage({
+  src,
+  fallback,
+  alt,
+  fill,
+  width,
+  height,
+  className,
+  sizes,
+}: {
+  src: string;
+  fallback: string;
+  alt: string;
+  fill?: boolean;
+  width?: number;
+  height?: number;
+  className?: string;
+  sizes?: string;
+}) {
+  const [imgSrc, setImgSrc] = useState(src);
+
+  // Reset when prop changes (e.g. carousel slides)
+  useEffect(() => {
+    setImgSrc(src);
+  }, [src]);
+
+  const sharedProps = {
+    src: imgSrc,
+    alt,
+    className,
+    onError: () => setImgSrc(fallback),
+    sizes,
+  };
+
+  return fill ? (
+    <Image {...sharedProps} fill unoptimized />
+  ) : (
+    <Image {...sharedProps} width={width ?? 400} height={height ?? 300} unoptimized />
+  );
 }
 
 // ─── Data ────────────────────────────────────────────────────────────────────
@@ -51,6 +101,10 @@ const TESTIMONIALS: TestimonialItem[] = [
       "I paid my kids' school fees this term entirely from what I make here. Nobody knows I'm working — I just look like I'm on my phone.",
     lifestyle: "School fees covered",
     earned: "KES 18,400 / month",
+    // Put your actual file at /public/testimonials/wanjiru.jpg
+    image: "/testimonials/wanjiru.jpg",
+    unsplashFallback:
+      "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=200&h=200&fit=crop&crop=face&auto=format",
   },
   {
     id: 2,
@@ -61,6 +115,9 @@ const TESTIMONIALS: TestimonialItem[] = [
       "I booked a Diani trip last month and didn't stress about the cost once. This has changed the way I move through life, for real.",
     lifestyle: "Coastal holiday, stress-free",
     earned: "KES 24,000 / month",
+    image: "/testimonials/brian.jpg",
+    unsplashFallback:
+      "https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?w=200&h=200&fit=crop&crop=face&auto=format",
   },
   {
     id: 3,
@@ -71,6 +128,9 @@ const TESTIMONIALS: TestimonialItem[] = [
       "My campus friends kept asking how I'm always sorted. I just smile. The M-Pesa notifications come in while I'm out with them.",
     lifestyle: "Always sorted at campus",
     earned: "KES 11,200 / month",
+    image: "/testimonials/akinyi.jpg",
+    unsplashFallback:
+      "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&h=200&fit=crop&crop=face&auto=format",
   },
   {
     id: 4,
@@ -81,6 +141,9 @@ const TESTIMONIALS: TestimonialItem[] = [
       "I upgraded my phone, restocked my business, and still had money left. Soft life is not just a saying — it's the plan.",
     lifestyle: "Business + lifestyle upgrade",
     earned: "KES 15,000 / month",
+    image: "/testimonials/fatuma.jpg",
+    unsplashFallback:
+      "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&h=200&fit=crop&crop=face&auto=format",
   },
 ];
 
@@ -93,6 +156,10 @@ const EARNING_METHODS: EarningMethod[] = [
       "Real-time communication tasks, moderation, and engagement work. Structured shifts, clear payouts.",
     href: "/earn/chatting",
     badge: "Most popular",
+    // Put your file at /public/earn/chatting.jpg
+    image: "/earn/chatting.jpg",
+    unsplashFallback:
+      "https://images.unsplash.com/photo-1611746872915-64382b5c76da?w=600&h=360&fit=crop&auto=format",
   },
   {
     icon: "🤖",
@@ -102,6 +169,9 @@ const EARNING_METHODS: EarningMethod[] = [
       "Review, rate, and improve AI responses. Flexible tasks you can do from anywhere, any time.",
     href: "/earn/ai-training",
     badge: "High demand",
+    image: "/earn/ai-training.jpg",
+    unsplashFallback:
+      "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=600&h=360&fit=crop&auto=format",
   },
   {
     icon: "🌍",
@@ -111,6 +181,9 @@ const EARNING_METHODS: EarningMethod[] = [
       "Online one-on-one and group lessons for international learners. Your language is your income.",
     href: "/earn/swahili-teaching",
     badge: "Unique skill",
+    image: "/earn/swahili.jpg",
+    unsplashFallback:
+      "https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=600&h=360&fit=crop&auto=format",
   },
   {
     icon: "📋",
@@ -120,6 +193,9 @@ const EARNING_METHODS: EarningMethod[] = [
       "Paid surveys, product testing, and consumer research tasks. Quick tasks, consistent payouts.",
     href: "/earn/surveys",
     badge: "Quick start",
+    image: "/earn/surveys.jpg",
+    unsplashFallback:
+      "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=600&h=360&fit=crop&auto=format",
   },
 ];
 
@@ -189,9 +265,19 @@ function TestimonialSlider() {
     <div>
       <div className="bg-white rounded-2xl p-6 sm:p-8 border border-gray-100 shadow-sm min-h-[200px] transition-all duration-500">
         <div className="flex items-start gap-4 mb-5">
-          <div className="w-11 h-11 rounded-full bg-rose-100 text-rose-600 font-bold text-sm flex items-center justify-center shrink-0">
-            {t.initials}
+          {/* Avatar — photo with initials fallback */}
+          <div className="relative w-11 h-11 rounded-full overflow-hidden shrink-0 bg-rose-100">
+            <SmartImage
+              src={t.image}
+              fallback={t.unsplashFallback}
+              alt={t.name}
+              fill
+              className="object-cover"
+              sizes="44px"
+            />
+            {/* Initials overlay shown only when image is absent — controlled via CSS */}
           </div>
+
           <div className="flex-1 min-w-0">
             <div className="font-semibold text-gray-900 text-sm">{t.name}</div>
             <div className="text-xs text-gray-400">{t.location}</div>
@@ -306,90 +392,105 @@ function ApplicationModal({
       style={{ background: "rgba(0,0,0,0.5)" }}
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
-      <div className="bg-white w-full sm:max-w-md sm:rounded-3xl rounded-t-3xl p-6 sm:p-8 shadow-2xl">
-        {/* Header */}
-        <div className="flex items-start justify-between mb-6">
-          <div>
-            <div className="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 text-xs font-semibold px-3 py-1 rounded-full mb-3">
-              <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full" />
-              Applications Open
+      <div className="bg-white w-full sm:max-w-md sm:rounded-3xl rounded-t-3xl shadow-2xl overflow-hidden">
+        {/* Modal hero image */}
+        <div className="relative h-36 w-full">
+          <SmartImage
+            src="/modal/team-working.jpg"
+            fallback="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&h=300&fit=crop&auto=format"
+            alt="Chat254 team working remotely"
+            fill
+            className="object-cover"
+            sizes="(max-width: 448px) 100vw, 448px"
+          />
+          <div className="absolute inset-0 bg-linear-to-b from-black/10 to-black/50" />
+        </div>
+
+        <div className="p-6 sm:p-8">
+          {/* Header */}
+          <div className="flex items-start justify-between mb-6">
+            <div>
+              <div className="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 text-xs font-semibold px-3 py-1 rounded-full mb-3">
+                <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full" />
+                Applications Open
+              </div>
+              <h2 className="text-xl font-extrabold text-gray-900 leading-tight">
+                Apply to Join the Team
+              </h2>
+              <p className="text-sm text-gray-500 mt-1">
+                We&apos;ll review your application and reach out on WhatsApp within 24 hours.
+              </p>
             </div>
-            <h2 className="text-xl font-extrabold text-gray-900 leading-tight">
-              Apply to Join the Team
-            </h2>
-            <p className="text-sm text-gray-500 mt-1">
-              We&apos;ll review your application and reach out on WhatsApp within 24 hours.
-            </p>
+            <button
+              aria-label="close application form"
+              onClick={onClose}
+              className="shrink-0 ml-4 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 transition"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
-          <button
-          aria-label="close application form"
-            onClick={onClose}
-            className="shrink-0 ml-4 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 transition"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
+
+          {/* Form */}
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                Your full name
+              </label>
+              <input
+                type="text"
+                placeholder="e.g. Wanjiru Muthoni"
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
+                className={`w-full px-4 py-3 rounded-xl border text-sm focus:outline-none focus:ring-2 focus:ring-rose-300 transition ${
+                  errors.name ? "border-red-300 bg-red-50" : "border-gray-200 bg-gray-50"
+                }`}
+              />
+              {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                WhatsApp number
+              </label>
+              <input
+                type="tel"
+                placeholder="e.g. 0712 345 678"
+                value={form.whatsapp}
+                onChange={(e) => setForm({ ...form, whatsapp: e.target.value })}
+                className={`w-full px-4 py-3 rounded-xl border text-sm focus:outline-none focus:ring-2 focus:ring-rose-300 transition ${
+                  errors.whatsapp ? "border-red-300 bg-red-50" : "border-gray-200 bg-gray-50"
+                }`}
+              />
+              {errors.whatsapp && <p className="text-red-500 text-xs mt-1">{errors.whatsapp}</p>}
+              <p className="text-xs text-gray-400 mt-1">
+                This is where we&apos;ll send your activation instructions.
+              </p>
+            </div>
+
+            <button
+              onClick={handleSubmit}
+              disabled={isSubmitting}
+              className="w-full bg-rose-500 hover:bg-rose-600 disabled:bg-rose-300 text-white font-bold text-base py-4 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-rose-200 mt-2"
+            >
+              {isSubmitting ? (
+                <span className="flex items-center justify-center gap-2">
+                  <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                  </svg>
+                  Submitting application...
+                </span>
+              ) : (
+                "Submit My Application →"
+              )}
+            </button>
+          </div>
+
+          <p className="text-center text-xs text-gray-400 mt-4">
+            By applying you agree to our terms. We don&apos;t share your details with third parties.
+          </p>
         </div>
-
-        {/* Form */}
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-              Your full name
-            </label>
-            <input
-              type="text"
-              placeholder="e.g. Wanjiru Muthoni"
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
-              className={`w-full px-4 py-3 rounded-xl border text-sm focus:outline-none focus:ring-2 focus:ring-rose-300 transition ${
-                errors.name ? "border-red-300 bg-red-50" : "border-gray-200 bg-gray-50"
-              }`}
-            />
-            {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
-          </div>
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-              WhatsApp number
-            </label>
-            <input
-              type="tel"
-              placeholder="e.g. 0712 345 678"
-              value={form.whatsapp}
-              onChange={(e) => setForm({ ...form, whatsapp: e.target.value })}
-              className={`w-full px-4 py-3 rounded-xl border text-sm focus:outline-none focus:ring-2 focus:ring-rose-300 transition ${
-                errors.whatsapp ? "border-red-300 bg-red-50" : "border-gray-200 bg-gray-50"
-              }`}
-            />
-            {errors.whatsapp && <p className="text-red-500 text-xs mt-1">{errors.whatsapp}</p>}
-            <p className="text-xs text-gray-400 mt-1">
-              This is where we&apos;ll send your activation instructions.
-            </p>
-          </div>
-
-          <button
-            onClick={handleSubmit}
-            disabled={isSubmitting}
-            className="w-full bg-rose-500 hover:bg-rose-600 disabled:bg-rose-300 text-white font-bold text-base py-4 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-rose-200 mt-2"
-          >
-            {isSubmitting ? (
-              <span className="flex items-center justify-center gap-2">
-                <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                </svg>
-                Submitting application...
-              </span>
-            ) : (
-              "Submit My Application →"
-            )}
-          </button>
-        </div>
-
-        <p className="text-center text-xs text-gray-400 mt-4">
-          By applying you agree to our terms. We don&apos;t share your details with third parties.
-        </p>
       </div>
     </div>
   );
@@ -469,55 +570,103 @@ export default function LandingInteractive() {
         <div className="absolute top-0 right-0 w-96 h-96 bg-rose-200/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-pink-200/20 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 pointer-events-none" />
 
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center relative">
-          {/* Status pill */}
-          <div className="inline-flex items-center gap-2 bg-white border border-gray-100 shadow-sm text-gray-700 text-sm font-medium px-4 py-1.5 rounded-full mb-8">
-            <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
-            Applications open — limited spots this week
-          </div>
-
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight tracking-tight mb-5">
-            Join the Global{" "}
-            <span className="text-rose-500">Chatting &amp; Remote</span>
-            <br />Work Network.
-          </h1>
-
-          <p className="text-lg sm:text-xl text-gray-500 leading-relaxed mb-4 max-w-xl mx-auto">
-            We provide the training, the platform, and the payout infrastructure.{" "}
-            <strong className="text-gray-700 font-semibold">You provide the conversation.</strong>
-          </p>
-
-          <p className="text-base text-gray-400 mb-10 max-w-lg mx-auto">
-            M-Pesa notifications while you&apos;re out with friends. School fees sorted. Travel booked. That&apos;s the goal — and it&apos;s what our team members are already doing.
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <button
-              onClick={() => setModalOpen(true)}
-              className="bg-rose-500 hover:bg-rose-600 text-white font-bold text-base px-8 py-4 rounded-full shadow-lg shadow-rose-200 transition-all hover:scale-105 active:scale-95"
-            >
-              Apply to Join the Team
-            </button>
-            <a
-              href="#what-we-do"
-              className="bg-white hover:bg-gray-50 text-gray-700 font-semibold text-base px-8 py-4 rounded-full border border-gray-200 shadow-sm transition-all hover:scale-105 active:scale-95"
-            >
-              See how it works
-            </a>
-          </div>
-
-          {/* Social proof strip */}
-          <div className="mt-12 flex flex-wrap items-center justify-center gap-6 text-center">
-            {[
-              { value: "KES 30K+", label: "Top monthly earner" },
-              { value: "Instant", label: "M-Pesa payouts" },
-              { value: "4 ways", label: "To earn" },
-            ].map((s) => (
-              <div key={s.label}>
-                <div className="text-xl font-extrabold text-gray-900">{s.value}</div>
-                <div className="text-xs text-gray-400 mt-0.5">{s.label}</div>
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 relative">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Left: copy */}
+            <div className="text-center lg:text-left">
+              <div className="inline-flex items-center gap-2 bg-white border border-gray-100 shadow-sm text-gray-700 text-sm font-medium px-4 py-1.5 rounded-full mb-8">
+                <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
+                Applications open — limited spots this week
               </div>
-            ))}
+
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight tracking-tight mb-5">
+                Join the Global{" "}
+                <span className="text-rose-500">Chatting &amp; Remote</span>
+                <br />Work Network.
+              </h1>
+
+              <p className="text-lg sm:text-xl text-gray-500 leading-relaxed mb-4 max-w-xl mx-auto lg:mx-0">
+                We provide the training, the platform, and the payout infrastructure.{" "}
+                <strong className="text-gray-700 font-semibold">You provide the conversation.</strong>
+              </p>
+
+              <p className="text-base text-gray-400 mb-10 max-w-lg mx-auto lg:mx-0">
+                M-Pesa notifications while you&apos;re out with friends. School fees sorted. Travel booked. That&apos;s the goal — and it&apos;s what our team members are already doing.
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
+                <button
+                  onClick={() => setModalOpen(true)}
+                  className="bg-rose-500 hover:bg-rose-600 text-white font-bold text-base px-8 py-4 rounded-full shadow-lg shadow-rose-200 transition-all hover:scale-105 active:scale-95"
+                >
+                  Apply to Join the Team
+                </button>
+                <a
+                  href="#what-we-do"
+                  className="bg-white hover:bg-gray-50 text-gray-700 font-semibold text-base px-8 py-4 rounded-full border border-gray-200 shadow-sm transition-all hover:scale-105 active:scale-95"
+                >
+                  See how it works
+                </a>
+              </div>
+
+              {/* Social proof strip */}
+              <div className="mt-12 flex flex-wrap items-center justify-center lg:justify-start gap-6 text-center lg:text-left">
+                {[
+                  { value: "KES 30K+", label: "Top monthly earner" },
+                  { value: "Instant", label: "M-Pesa payouts" },
+                  { value: "4 ways", label: "To earn" },
+                ].map((s) => (
+                  <div key={s.label}>
+                    <div className="text-xl font-extrabold text-gray-900">{s.value}</div>
+                    <div className="text-xs text-gray-400 mt-0.5">{s.label}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Right: hero image collage */}
+            <div className="relative hidden lg:block">
+              {/* Main image */}
+              <div className="relative w-full h-[420px] rounded-3xl overflow-hidden shadow-2xl">
+                <SmartImage
+                  src="/hero/main.jpg"
+                  fallback="https://images.unsplash.com/photo-1616077168712-fc6c788db4af?w=800&h=840&fit=crop&auto=format"
+                  alt="Young Kenyan professional working on phone"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 0px, 50vw"
+                />
+                <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent" />
+              </div>
+
+              {/* Floating M-Pesa notification card */}
+              <div className="absolute -bottom-5 -left-6 bg-white rounded-2xl shadow-xl px-4 py-3 flex items-center gap-3 border border-gray-100">
+                <div className="w-9 h-9 bg-emerald-100 rounded-full flex items-center justify-center text-base">💸</div>
+                <div>
+                  <p className="text-xs text-gray-400">M-Pesa received</p>
+                  <p className="text-sm font-extrabold text-gray-900">+KES 2,400</p>
+                </div>
+              </div>
+
+              {/* Floating avatar stack */}
+              <div className="absolute -top-4 -right-4 bg-white rounded-2xl shadow-xl px-4 py-3 border border-gray-100">
+                <div className="flex -space-x-2 mb-1.5">
+                  {TESTIMONIALS.map((t) => (
+                    <div key={t.id} className="relative w-8 h-8 rounded-full overflow-hidden border-2 border-white">
+                      <SmartImage
+                        src={t.image}
+                        fallback={t.unsplashFallback}
+                        alt={t.name}
+                        fill
+                        className="object-cover"
+                        sizes="32px"
+                      />
+                    </div>
+                  ))}
+                </div>
+                <p className="text-xs text-gray-500 font-medium">Active earners this week</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -535,6 +684,24 @@ export default function LandingInteractive() {
             <p className="text-gray-500 max-w-xl mx-auto leading-relaxed">
               Chat254 connects skilled individuals with structured remote tasks — real-time communication support, moderation, AI training, and data engagement. We built the system so you can focus on earning.
             </p>
+          </div>
+
+          {/* Wide lifestyle image */}
+          <div className="relative w-full h-52 sm:h-64 rounded-2xl overflow-hidden mb-10 shadow-sm">
+            <SmartImage
+              src="/about/lifestyle.jpg"
+              fallback="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1200&h=500&fit=crop&auto=format"
+              alt="People working remotely in Nairobi"
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 768px"
+            />
+            <div className="absolute inset-0 bg-linear-to-r from-rose-900/30 to-transparent" />
+            <div className="absolute inset-0 flex items-end p-6">
+              <p className="text-white font-semibold text-sm drop-shadow">
+                Real people. Real payouts. From anywhere in Kenya.
+              </p>
+            </div>
           </div>
 
           <div className="grid sm:grid-cols-3 gap-5">
@@ -588,29 +755,57 @@ export default function LandingInteractive() {
               <Link
                 key={method.title}
                 href={method.href}
-                className="group bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md hover:border-rose-100 transition-all block"
+                className="group bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md hover:border-rose-100 transition-all block overflow-hidden"
               >
-                <div className="flex items-start justify-between mb-3">
-                  <span className="text-2xl">{method.icon}</span>
-                  <span className="text-xs bg-rose-50 text-rose-600 font-semibold px-2.5 py-1 rounded-full">
+                {/* Card image */}
+                <div className="relative w-full h-36 overflow-hidden">
+                  <SmartImage
+                    src={method.image}
+                    fallback={method.unsplashFallback}
+                    alt={method.title}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    sizes="(max-width: 640px) 100vw, 50vw"
+                  />
+                  <div className="absolute inset-0 bg-linear-to-t from-black/50 to-transparent" />
+                  <span className="absolute top-3 right-3 text-xs bg-rose-500 text-white font-semibold px-2.5 py-1 rounded-full">
                     {method.badge}
                   </span>
+                  <span className="absolute bottom-3 left-3 text-2xl">{method.icon}</span>
                 </div>
-                <h3 className="font-bold text-gray-900 text-base mb-1">{method.title}</h3>
-                <p className="text-sm text-rose-500 font-medium mb-2">{method.tagline}</p>
-                <p className="text-sm text-gray-500 leading-relaxed mb-4">{method.detail}</p>
-                <span className="text-sm font-semibold text-rose-500 group-hover:underline">
-                  Learn more →
-                </span>
+
+                <div className="p-5">
+                  <h3 className="font-bold text-gray-900 text-base mb-1">{method.title}</h3>
+                  <p className="text-sm text-rose-500 font-medium mb-2">{method.tagline}</p>
+                  <p className="text-sm text-gray-500 leading-relaxed mb-4">{method.detail}</p>
+                  <span className="text-sm font-semibold text-rose-500 group-hover:underline">
+                    Learn more →
+                  </span>
+                </div>
               </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── Requirements ─────────────────────────────────────────── */}
-      <section className="py-20 bg-white">
-        <div className="max-w-2xl mx-auto px-4 sm:px-6">
+{/* ── Requirements ─────────────────────────────────────────── */}
+
+      <section className="relative py-20 overflow-hidden">
+        {/* Next.js Background Image */}
+        <div className="absolute inset-0 -z-10">
+          <Image
+            src="/background.jpg" // Replace with your actual file name in /public
+            alt="Background decoration"
+            fill
+            priority
+            className="object-cover"
+            quality={90}
+          />
+          {/* Overlay to ensure text remains legible */}
+          <div className="absolute inset-0  "></div>
+        </div>
+
+        <div className="relative z-10 max-w-2xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
             <span className="text-rose-500 font-semibold text-sm uppercase tracking-wider">
               Who qualifies
@@ -618,14 +813,17 @@ export default function LandingInteractive() {
             <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mt-2 mb-3">
               The bar is low. The results aren&apos;t.
             </h2>
-            <p className="text-gray-500">
+            <p className="text-gray-600">
               You don&apos;t need a degree, experience, or a laptop. Just these.
             </p>
           </div>
 
           <div className="grid sm:grid-cols-2 gap-4">
             {REQUIREMENTS.map((req) => (
-              <div key={req.text} className="flex items-center gap-4 bg-gray-50 rounded-2xl p-5 border border-gray-100">
+              <div 
+                key={req.text} 
+                className="flex items-center gap-4 bg-white/70 backdrop-blur-md rounded-2xl p-5 border border-white/50 shadow-sm"
+              >
                 <span className="text-xl shrink-0">{req.icon}</span>
                 <span className="text-gray-700 text-sm font-medium">{req.text}</span>
               </div>
@@ -683,12 +881,21 @@ export default function LandingInteractive() {
       </section>
 
       {/* ── Bottom CTA ───────────────────────────────────────────── */}
-      <section className="py-16 bg-linear-to-br from-rose-500 to-pink-500 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10 pointer-events-none">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-white rounded-full -translate-y-1/2 translate-x-1/4" />
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-white rounded-full translate-y-1/3 -translate-x-1/4" />
+      <section className="relative py-16 overflow-hidden">
+        {/* Full-bleed background image */}
+        <div className="absolute inset-0">
+          <SmartImage
+            src="/cta/background.jpg"
+            fallback="https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=1600&h=600&fit=crop&auto=format"
+            alt="Remote workers in Kenya"
+            fill
+            className="object-cover"
+            sizes="100vw"
+          />
+          <div className="absolute inset-0 bg-linear-to-br from-rose-600/90 to-pink-600/90" />
         </div>
-        <div className="max-w-xl mx-auto px-4 sm:px-6 text-center relative">
+
+        <div className="relative max-w-xl mx-auto px-4 sm:px-6 text-center">
           <p className="text-rose-200 font-semibold text-sm uppercase tracking-wider mb-3">
             Ready?
           </p>

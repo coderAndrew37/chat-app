@@ -10,7 +10,7 @@ import type {
 export const NAV_LINKS: NavLink[] = [
   { label: "Browse", href: "#profiles" },
   { label: "Features", href: "#features" },
-  { label: "How It Works", href: "#how-it-works" },
+  { label: "How It Works", href: "/earn" },
 ];
 
 export const STATS: Stat[] = [
