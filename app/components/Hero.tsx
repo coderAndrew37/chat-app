@@ -4,7 +4,7 @@ import { STATS } from "@/data";
 import type { Stat } from "@/types";
 
 interface HeroProps {
-  onRegisterClick: () => void;
+  onApplyClick: () => void;
 }
 
 function StatCard({ stat }: { stat: Stat }) {
@@ -16,46 +16,50 @@ function StatCard({ stat }: { stat: Stat }) {
   );
 }
 
-export default function Hero({ onRegisterClick }: HeroProps) {
+export default function Hero({ onApplyClick }: HeroProps) {
   return (
     <section className="pt-24 pb-16 bg-gradient-to-br from-rose-50 via-white to-pink-50 relative overflow-hidden">
-      {/* Background decorative blobs */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-rose-200/30 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-72 h-72 bg-pink-200/30 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="text-center max-w-3xl mx-auto">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 bg-rose-100 text-rose-600 text-sm font-semibold px-4 py-1.5 rounded-full mb-6">
-            <span>🇰🇪</span>
-            Kenya&apos;s #1 Dating App
+
+          {/* Live badge */}
+          <div className="inline-flex items-center gap-2 bg-white border border-gray-100 shadow-sm text-gray-700 text-sm font-medium px-4 py-1.5 rounded-full mb-7">
+            <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
+            People online now — waiting to chat
           </div>
 
           {/* Headline */}
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight tracking-tight mb-6">
-            Meet Hot Singles.{" "}
-            <span className="text-rose-500">Chat &amp; Earn.</span>
+            Chat with lonely souls.{" "}
+            <span className="text-rose-500">Get paid for it.</span>
           </h1>
 
           {/* Sub-headline */}
-          <p className="text-lg sm:text-xl text-gray-500 mb-10 max-w-2xl mx-auto leading-relaxed">
-            Thousands of beautiful women waiting to connect. Browse real
-            profiles, start chatting, and earn rewards.
+          <p className="text-lg sm:text-xl text-gray-500 mb-4 max-w-2xl mx-auto leading-relaxed">
+            Real people. Real conversations. Maybe even find someone to hook up
+            with — and earn M-Pesa while you&apos;re at it.
+          </p>
+          <p className="text-base text-gray-400 mb-10 max-w-xl mx-auto">
+            Join Kenya&apos;s most interesting remote earning network. The work
+            is just talking to people.
           </p>
 
           {/* CTAs */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-14">
             <button
-              onClick={onRegisterClick}
+              onClick={onApplyClick}
               className="bg-rose-500 hover:bg-rose-600 text-white font-bold text-base px-8 py-4 rounded-full shadow-lg shadow-rose-200 transition-all hover:scale-105 active:scale-95"
             >
-              Start Matching Free
+              Apply to Join the Team
             </button>
             <a
-              href="#profiles"
+              href="#waiting"
               className="bg-white hover:bg-gray-50 text-gray-700 font-semibold text-base px-8 py-4 rounded-full border border-gray-200 shadow-sm transition-all hover:scale-105 active:scale-95"
             >
-              Browse Profiles
+              See who&apos;s waiting
             </a>
           </div>
 
@@ -67,7 +71,7 @@ export default function Hero({ onRegisterClick }: HeroProps) {
           </div>
         </div>
 
-        {/* App download banner */}
+        {/* App download strip */}
         <div className="mt-12 flex justify-center">
           <a
             href="/download"

@@ -19,7 +19,6 @@ interface TestimonialItem {
   quote: string;
   lifestyle: string;
   earned: string;
-  /** Path in /public first, Unsplash URL as fallback */
   image: string;
   unsplashFallback: string;
 }
@@ -46,7 +45,6 @@ interface RequirementItem {
 }
 
 // ─── SmartImage ───────────────────────────────────────────────────────────────
-// Tries the local `/public` path first; on error, swaps to the Unsplash URL.
 
 function SmartImage({
   src,
@@ -57,6 +55,7 @@ function SmartImage({
   height,
   className,
   sizes,
+  priority,
 }: {
   src: string;
   fallback: string;
@@ -66,10 +65,10 @@ function SmartImage({
   height?: number;
   className?: string;
   sizes?: string;
+  priority?: boolean;
 }) {
   const [imgSrc, setImgSrc] = useState(src);
 
-  // Reset when prop changes (e.g. carousel slides)
   useEffect(() => {
     setImgSrc(src);
   }, [src]);
@@ -80,6 +79,7 @@ function SmartImage({
     className,
     onError: () => setImgSrc(fallback),
     sizes,
+    priority,
   };
 
   return fill ? (
@@ -101,7 +101,6 @@ const TESTIMONIALS: TestimonialItem[] = [
       "I paid my kids' school fees this term entirely from what I make here. Nobody knows I'm working — I just look like I'm on my phone.",
     lifestyle: "School fees covered",
     earned: "KES 18,400 / month",
-    // Put your actual file at /public/testimonials/wanjiru.jpg
     image: "/testimonials/wanjiru.jpg",
     unsplashFallback:
       "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=200&h=200&fit=crop&crop=face&auto=format",
@@ -156,7 +155,6 @@ const EARNING_METHODS: EarningMethod[] = [
       "Real-time communication tasks, moderation, and engagement work. Structured shifts, clear payouts.",
     href: "/earn/chatting",
     badge: "Most popular",
-    // Put your file at /public/earn/chatting.jpg
     image: "/earn/chatting.jpg",
     unsplashFallback:
       "https://images.unsplash.com/photo-1611746872915-64382b5c76da?w=600&h=360&fit=crop&auto=format",
@@ -265,7 +263,6 @@ function TestimonialSlider() {
     <div>
       <div className="bg-white rounded-2xl p-6 sm:p-8 border border-gray-100 shadow-sm min-h-[200px] transition-all duration-500">
         <div className="flex items-start gap-4 mb-5">
-          {/* Avatar — photo with initials fallback */}
           <div className="relative w-11 h-11 rounded-full overflow-hidden shrink-0 bg-rose-100">
             <SmartImage
               src={t.image}
@@ -275,16 +272,14 @@ function TestimonialSlider() {
               className="object-cover"
               sizes="44px"
             />
-            {/* Initials overlay shown only when image is absent — controlled via CSS */}
           </div>
-
           <div className="flex-1 min-w-0">
             <div className="font-semibold text-gray-900 text-sm">{t.name}</div>
             <div className="text-xs text-gray-400">{t.location}</div>
           </div>
           <div className="text-right shrink-0">
             <div className="text-base font-bold text-emerald-600">{t.earned}</div>
-            <div className="text-xs text-gray-400 mt-0.5 bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded-full font-medium">
+            <div className="text-xs mt-0.5 bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded-full font-medium">
               {t.lifestyle}
             </div>
           </div>
@@ -337,12 +332,18 @@ function DeepDiveAccordion() {
             <div className="px-5 pb-5">
               <p className="text-gray-500 text-sm leading-relaxed">{item.answer}</p>
               {i === 2 && (
-                <Link href="/blog/mpesa-payments" className="inline-flex items-center gap-1 text-rose-500 text-sm font-medium mt-3 hover:underline">
+                <Link
+                  href="/blog/mpesa-payments"
+                  className="inline-flex items-center gap-1 text-rose-500 text-sm font-medium mt-3 hover:underline"
+                >
                   Read: How M-Pesa payments work →
                 </Link>
               )}
               {i === 3 && (
-                <Link href="/blog/scale-your-team" className="inline-flex items-center gap-1 text-rose-500 text-sm font-medium mt-3 hover:underline">
+                <Link
+                  href="/blog/scale-your-team"
+                  className="inline-flex items-center gap-1 text-rose-500 text-sm font-medium mt-3 hover:underline"
+                >
                   Read: How to scale your team →
                 </Link>
               )}
@@ -407,7 +408,6 @@ function ApplicationModal({
         </div>
 
         <div className="p-6 sm:p-8">
-          {/* Header */}
           <div className="flex items-start justify-between mb-6">
             <div>
               <div className="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 text-xs font-semibold px-3 py-1 rounded-full mb-3">
@@ -432,7 +432,6 @@ function ApplicationModal({
             </button>
           </div>
 
-          {/* Form */}
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1.5">
@@ -504,7 +503,7 @@ function SuccessState({
   onClose: () => void;
 }) {
   const firstName = data.name.trim().split(" ")[0];
-  const whatsappNumber = "254700000000"; // replace with your actual number
+  const whatsappNumber = "254700000000";
   const message = encodeURIComponent(
     `Hi! My name is ${data.name} and I just applied to join the Chat254 remote team. My WhatsApp is ${data.whatsapp}. I'd like to confirm my application and receive my activation instructions.`
   );
@@ -525,9 +524,9 @@ function SuccessState({
           Application received, {firstName}!
         </h2>
         <p className="text-gray-500 text-sm leading-relaxed mb-6">
-          We&apos;re reviewing your profile now. To confirm your spot and receive your activation instructions, tap the button below to message our team directly on WhatsApp.
+          We&apos;re reviewing your profile now. To confirm your spot and receive your activation
+          instructions, tap the button below to message our team directly on WhatsApp.
         </p>
-
         <a
           href={whatsappUrl}
           target="_blank"
@@ -539,11 +538,7 @@ function SuccessState({
           </svg>
           Confirm on WhatsApp
         </a>
-
-        <button
-          onClick={onClose}
-          className="text-sm text-gray-400 hover:text-gray-600 transition"
-        >
+        <button onClick={onClose} className="text-sm text-gray-400 hover:text-gray-600 transition">
           I&apos;ll do this later
         </button>
       </div>
@@ -572,6 +567,7 @@ export default function LandingInteractive() {
 
         <div className="max-w-5xl mx-auto px-4 sm:px-6 relative">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
+
             {/* Left: copy */}
             <div className="text-center lg:text-left">
               <div className="inline-flex items-center gap-2 bg-white border border-gray-100 shadow-sm text-gray-700 text-sm font-medium px-4 py-1.5 rounded-full mb-8">
@@ -591,7 +587,8 @@ export default function LandingInteractive() {
               </p>
 
               <p className="text-base text-gray-400 mb-10 max-w-lg mx-auto lg:mx-0">
-                M-Pesa notifications while you&apos;re out with friends. School fees sorted. Travel booked. That&apos;s the goal — and it&apos;s what our team members are already doing.
+                M-Pesa notifications while you&apos;re out with friends. School fees sorted. Travel booked.
+                That&apos;s the goal — and it&apos;s what our team members are already doing.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
@@ -624,35 +621,74 @@ export default function LandingInteractive() {
               </div>
             </div>
 
-            {/* Right: hero image collage */}
-            <div className="relative hidden lg:block">
-              {/* Main image */}
-              <div className="relative w-full h-[420px] rounded-3xl overflow-hidden shadow-2xl">
-                <SmartImage
-                  src="/hero/main.jpg"
-                  fallback="https://images.unsplash.com/photo-1616077168712-fc6c788db4af?w=800&h=840&fit=crop&auto=format"
-                  alt="Young Kenyan professional working on phone"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 1024px) 0px, 50vw"
-                />
-                <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent" />
-              </div>
+            {/* Right: image collage */}
+            <div className="hidden lg:flex flex-col gap-3 h-[500px]">
 
-              {/* Floating M-Pesa notification card */}
-              <div className="absolute -bottom-5 -left-6 bg-white rounded-2xl shadow-xl px-4 py-3 flex items-center gap-3 border border-gray-100">
-                <div className="w-9 h-9 bg-emerald-100 rounded-full flex items-center justify-center text-base">💸</div>
-                <div>
-                  <p className="text-xs text-gray-400">M-Pesa received</p>
-                  <p className="text-sm font-extrabold text-gray-900">+KES 2,400</p>
+              {/* Top row: tall portrait + two stacked images */}
+              <div className="flex gap-3 flex-1 min-h-0">
+
+                {/* Tall portrait — left */}
+                <div className="relative w-[56%] rounded-3xl overflow-hidden shadow-xl">
+                  <SmartImage
+                    src="/hero/main.jpg"
+                    fallback="https://images.unsplash.com/photo-1616077168712-fc6c788db4af?w=600&h=900&fit=crop&crop=top&auto=format"
+                    alt="Young Kenyan professional working on phone"
+                    fill
+                    priority
+                    className="object-cover"
+                    sizes="25vw"
+                  />
+                  <div className="absolute inset-0 bg-linear-to-t from-black/50 via-transparent to-transparent" />
+                  {/* M-Pesa badge overlaid on portrait */}
+                  <div className="absolute bottom-4 left-3 right-3 bg-white/90 backdrop-blur-sm rounded-2xl px-3 py-2.5 flex items-center gap-2.5">
+                    <div className="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center text-sm shrink-0">
+                      💸
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[10px] text-gray-400 leading-none mb-0.5">M-Pesa received</p>
+                      <p className="text-sm font-extrabold text-gray-900 leading-none">+KES 2,400</p>
+                    </div>
+                    <span className="text-[10px] text-emerald-600 font-semibold bg-emerald-50 px-2 py-0.5 rounded-full whitespace-nowrap">
+                      just now
+                    </span>
+                  </div>
+                </div>
+
+                {/* Right column: two stacked images */}
+                <div className="flex flex-col gap-3 flex-1 min-w-0">
+                  <div className="relative flex-1 rounded-2xl overflow-hidden shadow-lg">
+                    <SmartImage
+                      src="/hero/secondary.jpg"
+                      fallback="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&h=300&fit=crop&auto=format"
+                      alt="Team members working together"
+                      fill
+                      className="object-cover"
+                      sizes="15vw"
+                    />
+                    <div className="absolute inset-0 bg-linear-to-t from-black/30 to-transparent" />
+                  </div>
+                  <div className="relative flex-1 rounded-2xl overflow-hidden shadow-lg">
+                    <SmartImage
+                      src="/hero/lifestyle.jpg"
+                      fallback="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&h=300&fit=crop&auto=format"
+                      alt="Remote workers on phones"
+                      fill
+                      className="object-cover"
+                      sizes="15vw"
+                    />
+                    <div className="absolute inset-0 bg-linear-to-t from-black/30 to-transparent" />
+                  </div>
                 </div>
               </div>
 
-              {/* Floating avatar stack */}
-              <div className="absolute -top-4 -right-4 bg-white rounded-2xl shadow-xl px-4 py-3 border border-gray-100">
-                <div className="flex -space-x-2 mb-1.5">
+              {/* Bottom: stat bar */}
+              <div className="bg-white rounded-2xl shadow-md border border-gray-100 px-5 py-3.5 flex items-center gap-4 shrink-0">
+                <div className="flex -space-x-2 shrink-0">
                   {TESTIMONIALS.map((t) => (
-                    <div key={t.id} className="relative w-8 h-8 rounded-full overflow-hidden border-2 border-white">
+                    <div
+                      key={t.id}
+                      className="relative w-8 h-8 rounded-full overflow-hidden border-2 border-white shadow-sm"
+                    >
                       <SmartImage
                         src={t.image}
                         fallback={t.unsplashFallback}
@@ -663,9 +699,21 @@ export default function LandingInteractive() {
                       />
                     </div>
                   ))}
+                  <div className="w-8 h-8 rounded-full bg-rose-100 border-2 border-white flex items-center justify-center text-[10px] font-bold text-rose-600 shadow-sm shrink-0">
+                    +84
+                  </div>
                 </div>
-                <p className="text-xs text-gray-500 font-medium">Active earners this week</p>
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs font-semibold text-gray-900 truncate">Active earners this week</p>
+                  <p className="text-[10px] text-gray-400 truncate">Nairobi · Mombasa · Kisumu · Eldoret</p>
+                </div>
+                <div className="w-px h-8 bg-gray-100 shrink-0" />
+                <div className="text-right shrink-0">
+                  <p className="text-base font-extrabold text-emerald-600 leading-none">KES 1.2M</p>
+                  <p className="text-[10px] text-gray-400 mt-0.5">paid out this month</p>
+                </div>
               </div>
+
             </div>
           </div>
         </div>
@@ -682,7 +730,9 @@ export default function LandingInteractive() {
               This isn&apos;t a hustle. It&apos;s an infrastructure.
             </h2>
             <p className="text-gray-500 max-w-xl mx-auto leading-relaxed">
-              Chat254 connects skilled individuals with structured remote tasks — real-time communication support, moderation, AI training, and data engagement. We built the system so you can focus on earning.
+              Chat254 connects skilled individuals with structured remote tasks — real-time communication
+              support, moderation, AI training, and data engagement. We built the system so you can focus
+              on earning.
             </p>
           </div>
 
@@ -709,7 +759,7 @@ export default function LandingInteractive() {
               {
                 icon: "🏗️",
                 title: "Professional infrastructure",
-                body: "Defined tasks, rate cards, and a team structure. You always know what you&apos;re doing and how much it pays.",
+                body: "Defined tasks, rate cards, and a team structure. You always know what you're doing and how much it pays.",
               },
               {
                 icon: "💸",
@@ -725,10 +775,7 @@ export default function LandingInteractive() {
               <div key={card.title} className="bg-gray-50 rounded-2xl p-6 border border-gray-100">
                 <div className="text-2xl mb-3">{card.icon}</div>
                 <h3 className="font-bold text-gray-900 text-base mb-2">{card.title}</h3>
-                <p
-                  className="text-sm text-gray-500 leading-relaxed"
-                  dangerouslySetInnerHTML={{ __html: card.body }}
-                />
+                <p className="text-sm text-gray-500 leading-relaxed">{card.body}</p>
               </div>
             ))}
           </div>
@@ -757,7 +804,6 @@ export default function LandingInteractive() {
                 href={method.href}
                 className="group bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md hover:border-rose-100 transition-all block overflow-hidden"
               >
-                {/* Card image */}
                 <div className="relative w-full h-36 overflow-hidden">
                   <SmartImage
                     src={method.image}
@@ -773,7 +819,6 @@ export default function LandingInteractive() {
                   </span>
                   <span className="absolute bottom-3 left-3 text-2xl">{method.icon}</span>
                 </div>
-
                 <div className="p-5">
                   <h3 className="font-bold text-gray-900 text-base mb-1">{method.title}</h3>
                   <p className="text-sm text-rose-500 font-medium mb-2">{method.tagline}</p>
@@ -788,23 +833,23 @@ export default function LandingInteractive() {
         </div>
       </section>
 
-{/* ── Requirements ─────────────────────────────────────────── */}
-
+      {/* ── Requirements ─────────────────────────────────────────── */}
       <section className="relative py-20 overflow-hidden">
-        {/* Next.js Background Image */}
-        <div className="absolute inset-0 -z-10">
+        {/* Background image — sits at z-0, no negative z-index */}
+        <div className="absolute inset-0">
           <Image
-            src="/background.jpg" // Replace with your actual file name in /public
-            alt="Background decoration"
+            src="/background.jpg"
+            alt="Background"
             fill
             priority
             className="object-cover"
             quality={90}
           />
-          {/* Overlay to ensure text remains legible */}
-          <div className="absolute inset-0  "></div>
+          {/* Frosted overlay keeps text legible while image shows through */}
+          <div className="absolute inset-0 bg-white/30 backdrop-blur-[2px]" />
         </div>
 
+        {/* Content floats above */}
         <div className="relative z-10 max-w-2xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
             <span className="text-rose-500 font-semibold text-sm uppercase tracking-wider">
@@ -820,8 +865,8 @@ export default function LandingInteractive() {
 
           <div className="grid sm:grid-cols-2 gap-4">
             {REQUIREMENTS.map((req) => (
-              <div 
-                key={req.text} 
+              <div
+                key={req.text}
                 className="flex items-center gap-4 bg-white/70 backdrop-blur-md rounded-2xl p-5 border border-white/50 shadow-sm"
               >
                 <span className="text-xl shrink-0">{req.icon}</span>
@@ -882,7 +927,6 @@ export default function LandingInteractive() {
 
       {/* ── Bottom CTA ───────────────────────────────────────────── */}
       <section className="relative py-16 overflow-hidden">
-        {/* Full-bleed background image */}
         <div className="absolute inset-0">
           <SmartImage
             src="/cta/background.jpg"
@@ -895,7 +939,7 @@ export default function LandingInteractive() {
           <div className="absolute inset-0 bg-linear-to-br from-rose-600/90 to-pink-600/90" />
         </div>
 
-        <div className="relative max-w-xl mx-auto px-4 sm:px-6 text-center">
+        <div className="relative z-10 max-w-xl mx-auto px-4 sm:px-6 text-center">
           <p className="text-rose-200 font-semibold text-sm uppercase tracking-wider mb-3">
             Ready?
           </p>
@@ -903,7 +947,8 @@ export default function LandingInteractive() {
             Your next M-Pesa notification could be from us.
           </h2>
           <p className="text-rose-100 mb-8 leading-relaxed">
-            Applications take 2 minutes. Activation happens on WhatsApp. Your first task could be live today.
+            Applications take 2 minutes. Activation happens on WhatsApp. Your first task could be live
+            today.
           </p>
           <button
             onClick={() => setModalOpen(true)}
