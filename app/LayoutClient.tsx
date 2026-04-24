@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import { useAuth } from "@/context/AuthContext";
 import { Navbar, Footer, LoginModal, RegisterModal } from "./components";
 
 
@@ -10,7 +9,6 @@ interface LayoutClientProps {
 }
 
 export default function LayoutClient({ children }: LayoutClientProps) {
-  const { user } = useAuth();
   const [loginOpen, setLoginOpen] = useState(false);
   const [registerOpen, setRegisterOpen] = useState(false);
 
@@ -29,7 +27,6 @@ export default function LayoutClient({ children }: LayoutClientProps) {
       <Navbar
         onLoginClick={openLogin}
         onRegisterClick={openRegister}
-        isLoggedIn={!!user}
       />
 
       {children}
