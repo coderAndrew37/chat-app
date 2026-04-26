@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 interface NavLink {
   label: string;
@@ -18,35 +18,31 @@ const NAV_LINKS: NavLink[] = [
   { label: "Surveys", href: "/earn/surveys" },
 ];
 
-// Which links live in the desktop nav (top-level) vs sidebar-only on desktop
-const DESKTOP_NAV = NAV_LINKS.slice(0, 2); // "How It Works" + "Ways to Earn"
-const EARN_LINKS = NAV_LINKS.slice(2);      // the four earn tracks
+const DESKTOP_NAV = NAV_LINKS.slice(0, 2);
+const EARN_LINKS = NAV_LINKS.slice(2);
 
 interface NavbarProps {
-  onLoginClick: () => void;
-  onRegisterClick: () => void;
-  isLoggedIn?: boolean;
+  onApplyClick: () => void;
 }
 
-export default function Navbar({
-  onLoginClick,
-  onRegisterClick,
-  isLoggedIn = false,
-}: NavbarProps) {
+export default function Navbar({ onApplyClick }: NavbarProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [earnOpen, setEarnOpen] = useState(false); // desktop dropdown
+  const [earnOpen, setEarnOpen] = useState(false);
   const pathname = usePathname();
-  const router = useRouter();
 
-  // Close sidebar on route change
-  useEffect(() => {
-    setSidebarOpen(false);
-  }, [pathname]);
+  // Helper to close sidebar
+  const closeSidebar = () => setSidebarOpen(false);
 
   // Lock body scroll when sidebar is open
   useEffect(() => {
-    document.body.style.overflow = sidebarOpen ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    if (sidebarOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [sidebarOpen]);
 
   return (
@@ -55,22 +51,23 @@ export default function Navbar({
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100 shadow-sm">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between h-16">
-
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2 shrink-0">
-              <span className="text-2xl font-extrabold text-rose-500 tracking-tight">Chat254</span>
+              <span className="text-2xl font-extrabold text-rose-500 tracking-tight">
+                Chat254
+              </span>
             </Link>
 
             {/* Desktop links */}
             <div className="hidden md:flex items-center gap-6">
               {DESKTOP_NAV.map((link) => (
-                <a
+                <Link
                   key={link.label}
                   href={link.href}
                   className="text-gray-600 hover:text-rose-500 font-medium transition-colors text-sm"
                 >
                   {link.label}
-                </a>
+                </Link>
               ))}
 
               {/* "Ways to Earn" dropdown */}
@@ -81,8 +78,20 @@ export default function Navbar({
                   className="flex items-center gap-1 text-gray-600 hover:text-rose-500 font-medium transition-colors text-sm"
                 >
                   Earn Tracks
-                  <svg className={`w-4 h-4 transition-transform duration-200 ${earnOpen ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  <svg
+                    className={`w-4 h-4 transition-transform duration-200 ${
+                      earnOpen ? "rotate-180" : ""
+                    }`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
                   </svg>
                 </button>
                 {earnOpen && (
@@ -91,7 +100,11 @@ export default function Navbar({
                       <Link
                         key={link.href}
                         href={link.href}
-                        className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-rose-50 hover:text-rose-600 ${pathname === link.href ? "text-rose-600 bg-rose-50" : "text-gray-700"}`}
+                        className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-rose-50 hover:text-rose-600 ${
+                          pathname === link.href
+                            ? "text-rose-600 bg-rose-50"
+                            : "text-gray-700"
+                        }`}
                         onClick={() => setEarnOpen(false)}
                       >
                         {link.label}
@@ -102,105 +115,112 @@ export default function Navbar({
               </div>
             </div>
 
-            {/* Desktop CTAs */}
+            {/* Desktop CTA */}
             <div className="hidden md:flex items-center gap-3">
-              {isLoggedIn ? (
-                <button
-                  onClick={() => router.push("/dashboard")}
-                  className="bg-rose-500 hover:bg-rose-600 text-white font-semibold text-sm px-5 py-2.5 rounded-full transition-colors shadow-sm"
-                >
-                  Dashboard →
-                </button>
-              ) : (
-                <>
-                  <button
-                    onClick={onLoginClick}
-                    className="text-gray-700 hover:text-rose-500 font-medium text-sm transition-colors px-4 py-2"
-                  >
-                    Log In
-                  </button>
-                  <button
-                    onClick={onRegisterClick}
-                    className="bg-rose-500 hover:bg-rose-600 text-white font-semibold text-sm px-5 py-2.5 rounded-full transition-colors shadow-sm"
-                  >
-                    Apply Now
-                  </button>
-                </>
-              )}
+              <button
+                onClick={onApplyClick}
+                className="bg-rose-500 hover:bg-rose-600 text-white font-semibold text-sm px-5 py-2.5 rounded-full transition-colors shadow-sm"
+              >
+                Apply Now
+              </button>
             </div>
 
             {/* Mobile: Apply button + hamburger */}
             <div className="flex md:hidden items-center gap-2">
-              {!isLoggedIn && (
-                <button
-                  onClick={onRegisterClick}
-                  className="bg-rose-500 hover:bg-rose-600 text-white font-semibold text-xs px-4 py-2 rounded-full transition-colors"
-                >
-                  Apply
-                </button>
-              )}
+              <button
+                onClick={onApplyClick}
+                className="bg-rose-500 hover:bg-rose-600 text-white font-semibold text-xs px-4 py-2 rounded-full transition-colors"
+              >
+                Apply
+              </button>
               <button
                 onClick={() => setSidebarOpen(true)}
                 className="p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"
                 aria-label="Open menu"
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
                 </svg>
               </button>
             </div>
-
           </div>
         </div>
       </nav>
 
       {/* ── Mobile sidebar overlay ────────────────────────────── */}
-      {/* Backdrop */}
       <div
-        className={`fixed inset-0 z-50 bg-black/50 backdrop-blur-sm transition-opacity duration-300 md:hidden ${sidebarOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
-        onClick={() => setSidebarOpen(false)}
+        className={`fixed inset-0 z-50 bg-black/50 backdrop-blur-sm transition-opacity duration-300 md:hidden ${
+          sidebarOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        }`}
+        onClick={closeSidebar}
         aria-hidden="true"
       />
 
-      {/* Sidebar panel */}
       <aside
-        className={`fixed top-0 right-0 bottom-0 z-50 w-72 bg-white shadow-2xl flex flex-col transition-transform duration-300 ease-in-out md:hidden ${sidebarOpen ? "translate-x-0" : "translate-x-full"}`}
+        className={`fixed top-0 right-0 bottom-0 z-50 w-72 bg-white shadow-2xl flex flex-col transition-transform duration-300 ease-in-out md:hidden ${
+          sidebarOpen ? "translate-x-0" : "translate-x-full"
+        }`}
         aria-label="Navigation menu"
       >
         {/* Sidebar header */}
         <div className="flex items-center justify-between px-5 h-16 border-b border-gray-100 shrink-0">
-          <Link href="/" onClick={() => setSidebarOpen(false)}>
-            <span className="text-xl font-extrabold text-rose-500 tracking-tight">Chat254</span>
+          <Link href="/" onClick={closeSidebar}>
+            <span className="text-xl font-extrabold text-rose-500 tracking-tight">
+              Chat254
+            </span>
           </Link>
           <button
-            onClick={() => setSidebarOpen(false)}
+            onClick={closeSidebar}
             className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 transition-colors"
             aria-label="Close menu"
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </button>
         </div>
 
         {/* Sidebar body */}
         <nav className="flex-1 overflow-y-auto px-4 py-6 flex flex-col gap-1">
-
-          {/* Top-level links */}
           {DESKTOP_NAV.map((link) => (
-            <a
+            <Link
               key={link.label}
               href={link.href}
-              onClick={() => setSidebarOpen(false)}
-              className={`flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium transition-colors ${pathname === link.href ? "bg-rose-50 text-rose-600" : "text-gray-700 hover:bg-gray-50 hover:text-rose-500"}`}
+              onClick={closeSidebar}
+              className={`flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium transition-colors ${
+                pathname === link.href
+                  ? "bg-rose-50 text-rose-600"
+                  : "text-gray-700 hover:bg-gray-50 hover:text-rose-500"
+              }`}
             >
               {link.label}
-            </a>
+            </Link>
           ))}
 
-          {/* Earn tracks section */}
           <div className="mt-4 mb-1 px-3">
-            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Earn Tracks</p>
+            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+              Earn Tracks
+            </p>
           </div>
           {EARN_LINKS.map((link) => {
             const icons: Record<string, string> = {
@@ -213,41 +233,33 @@ export default function Navbar({
               <Link
                 key={link.href}
                 href={link.href}
-                onClick={() => setSidebarOpen(false)}
-                className={`flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium transition-colors ${pathname === link.href ? "bg-rose-50 text-rose-600" : "text-gray-700 hover:bg-gray-50 hover:text-rose-500"}`}
+                onClick={closeSidebar}
+                className={`flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium transition-colors ${
+                  pathname === link.href
+                    ? "bg-rose-50 text-rose-600"
+                    : "text-gray-700 hover:bg-gray-50 hover:text-rose-500"
+                }`}
               >
-                <span className="text-base w-6 text-center">{icons[link.href]}</span>
+                <span className="text-base w-6 text-center">
+                  {icons[link.href]}
+                </span>
                 {link.label}
               </Link>
             );
           })}
         </nav>
 
-        {/* Sidebar footer CTAs */}
+        {/* Sidebar footer CTA */}
         <div className="px-4 py-5 border-t border-gray-100 shrink-0 flex flex-col gap-3">
-          {isLoggedIn ? (
-            <button
-              onClick={() => { router.push("/dashboard"); setSidebarOpen(false); }}
-              className="w-full bg-rose-500 hover:bg-rose-600 text-white font-bold text-sm py-3 rounded-full transition-colors"
-            >
-              Go to Dashboard →
-            </button>
-          ) : (
-            <>
-              <button
-                onClick={() => { onRegisterClick(); setSidebarOpen(false); }}
-                className="w-full bg-rose-500 hover:bg-rose-600 text-white font-bold text-sm py-3 rounded-full transition-colors shadow-md"
-              >
-                Apply Now — It&apos;s Free
-              </button>
-              <button
-                onClick={() => { onLoginClick(); setSidebarOpen(false); }}
-                className="w-full border border-gray-200 text-gray-700 font-semibold text-sm py-3 rounded-full hover:border-rose-300 hover:text-rose-500 transition-colors"
-              >
-                Log In
-              </button>
-            </>
-          )}
+          <button
+            onClick={() => {
+              onApplyClick();
+              closeSidebar();
+            }}
+            className="w-full bg-rose-500 hover:bg-rose-600 text-white font-bold text-sm py-3 rounded-full transition-colors shadow-md"
+          >
+            Apply Now — It&apos;s Free
+          </button>
           <p className="text-center text-[10px] text-gray-400 mt-1">
             Chat254 · Remote work for Kenyans
           </p>

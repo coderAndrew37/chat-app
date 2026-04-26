@@ -1,48 +1,36 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import { Navbar, Footer, LoginModal, RegisterModal } from "./components";
-
+import { Footer, Navbar, ApplicationModal } from "./components";
+import { toast } from "sonner"; // Assuming you're using sonner for notifications
 
 interface LayoutClientProps {
   children: ReactNode;
 }
 
 export default function LayoutClient({ children }: LayoutClientProps) {
-  const [loginOpen, setLoginOpen] = useState(false);
-  const [registerOpen, setRegisterOpen] = useState(false);
+  const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
 
-  const openLogin = () => {
-    setRegisterOpen(false);
-    setLoginOpen(true);
-  };
-
-  const openRegister = () => {
-    setLoginOpen(false);
-    setRegisterOpen(true);
+  const handleSuccess = () => {
+    setIsApplyModalOpen(false);
+    toast.success("Application sent successfully!");
   };
 
   return (
     <>
-      <Navbar
-        onLoginClick={openLogin}
-        onRegisterClick={openRegister}
-      />
+      <Navbar onApplyClick={() => setIsApplyModalOpen(true)} />
 
-      {children}
+      <main>{children}</main>
 
       <Footer />
 
-      <LoginModal
-        isOpen={loginOpen}
-        onClose={() => setLoginOpen(false)}
-        onSwitchToRegister={openRegister}
-      />
-      <RegisterModal
-        isOpen={registerOpen}
-        onClose={() => setRegisterOpen(false)}
-        onSwitchToLogin={openLogin}
-      />
+      {isApplyModalOpen && (
+        <ApplicationModal 
+          onClose={() => setIsApplyModalOpen(false)} 
+          onSuccess={handleSuccess}
+          track="General Application" 
+        />
+      )}
     </>
   );
 }

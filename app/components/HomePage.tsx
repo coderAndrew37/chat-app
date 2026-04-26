@@ -37,8 +37,6 @@ export default function HomePageClient() {
     <>
       <Toaster position="top-center" richColors />
 
-      {/* <Navbar onApplyClick={openApply} /> */}
-
       <main>
         {/* 1. Hero — "Chat with lonely souls. Get paid for it." */}
         <Hero onApplyClick={openApply} />
@@ -64,16 +62,17 @@ export default function HomePageClient() {
         <ApplicationModal
           onClose={() => setModalOpen(false)}
           onSuccess={handleSuccess}
+          track="General Partner"
         />
       )}
 
       {/* WhatsApp success state */}
-       {successData && (
+      {successData && (
         <SuccessState
           data={successData}
           onClose={() => setSuccessData(null)}
         />
-      )} 
+      )}
 
       {/* WhatsApp FAB */}
       <a

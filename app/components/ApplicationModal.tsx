@@ -17,8 +17,8 @@ function SmartImage({
   const [imgSrc, setImgSrc] = useState(src);
   const sharedProps = { src: imgSrc, alt, className, onError: () => setImgSrc(fallback), sizes };
   return fill
-    ? <Image {...sharedProps} fill unoptimized  alt="image"/>
-    : <Image {...sharedProps} width={width ?? 400} height={height ?? 300} unoptimized  alt="image"/>;
+    ? <Image {...sharedProps} fill unoptimized alt={alt} />
+    : <Image {...sharedProps} width={width ?? 400} height={height ?? 300} unoptimized alt={alt} />;
 }
 
 function SuccessState({ data, onClose }: { data: ApplicationFormData; onClose: () => void }) {
@@ -55,7 +55,15 @@ function SuccessState({ data, onClose }: { data: ApplicationFormData; onClose: (
   );
 }
 
-export default function ApplicationModal({ onClose, track }: { onClose: () => void; track: string }) {
+export default function ApplicationModal({ 
+  onClose, 
+  track, 
+  onSuccess 
+}: { 
+  onClose: () => void; 
+  track: string;
+  onSuccess: (data: ApplicationFormData) => void;
+}) {
   const [form, setForm] = useState<ApplicationFormData>({ name: "", whatsapp: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<Partial<ApplicationFormData>>({});
@@ -76,8 +84,12 @@ export default function ApplicationModal({ onClose, track }: { onClose: () => vo
     await new Promise((r) => setTimeout(r, 1200));
     setIsSubmitting(false);
     setSubmitted(true);
+    // Call the parent success handler to fix the type error in HomePageClient
+    onSuccess(form);
   };
 
+  // If you want the modal to close and let HomePageClient show the SuccessState, 
+  // you could return null here, but I'll keep the internal SuccessState as a backup.
   if (submitted) return <SuccessState data={form} onClose={onClose} />;
 
   return (
