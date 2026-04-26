@@ -54,7 +54,7 @@ export default function Navbar({ onApplyClick }: NavbarProps) {
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2 shrink-0">
               <span className="text-2xl font-extrabold text-rose-500 tracking-tight">
-                Chat254
+                VelloEarn
               </span>
             </Link>
 
@@ -176,7 +176,7 @@ export default function Navbar({ onApplyClick }: NavbarProps) {
         <div className="flex items-center justify-between px-5 h-16 border-b border-gray-100 shrink-0">
           <Link href="/" onClick={closeSidebar}>
             <span className="text-xl font-extrabold text-rose-500 tracking-tight">
-              Chat254
+              VelloEarn
             </span>
           </Link>
           <button
@@ -261,7 +261,7 @@ export default function Navbar({ onApplyClick }: NavbarProps) {
             Apply Now — It&apos;s Free
           </button>
           <p className="text-center text-[10px] text-gray-400 mt-1">
-            Chat254 · Remote work for Kenyans
+            VelloEarn · Remote work for Kenyans
           </p>
         </div>
       </aside>

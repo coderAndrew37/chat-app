@@ -1,10 +1,11 @@
+import { whatsappNumber } from "@/lib/constants";
 import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "How to Scale Your Remote Earning Team | Chat254 Kenya",
+  title: "How to Scale Your Remote Earning Team | VelloEarn Kenya",
   description:
-    "A practical guide to building a team of earners under you on Chat254. How multi-level commissions work, how to recruit, and what serious earners do differently.",
+    "A practical guide to building a team of earners under you on VelloEarn. How multi-level commissions work, how to recruit, and what serious earners do differently.",
   keywords: ["remote team building Kenya", "multi-level earning Kenya", "scale online income Kenya", "referral team earnings"],
 };
 
@@ -14,7 +15,7 @@ export default function ScaleYourTeamPage() {
       <section className="pt-20 pb-10 bg-white border-b border-gray-100">
         <div className="max-w-2xl mx-auto px-4 sm:px-6">
           <Link href="/" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-rose-500 mb-8 transition">
-            ← Chat254
+            ← VelloEarn
           </Link>
           <div className="inline-flex items-center gap-2 bg-rose-50 text-rose-600 text-xs font-semibold px-3 py-1 rounded-full mb-4">
             Strategy guide
@@ -23,7 +24,7 @@ export default function ScaleYourTeamPage() {
             How to Scale Your Earning Team
           </h1>
           <p className="text-gray-500 text-base leading-relaxed">
-            Most Chat254 earners start solo. The ones making serious money have built teams. Here&apos;s how that works and how you can do the same.
+            Most VelloEarn earners start solo. The ones making serious money have built teams. Here&apos;s how that works and how you can do the same.
           </p>
         </div>
       </section>
@@ -34,7 +35,7 @@ export default function ScaleYourTeamPage() {
             {[
               {
                 heading: "What is a team commission model?",
-                body: "When you bring someone onto Chat254 and they become active, you earn a commission on their activity — not instead of them, but in addition to your own earnings. The platform pays you for building productive capacity. It's a multi-level structure that rewards both direct work and network building.",
+                body: "When you bring someone onto VelloEarn and they become active, you earn a commission on their activity — not instead of them, but in addition to your own earnings. The platform pays you for building productive capacity. It's a multi-level structure that rewards both direct work and network building.",
               },
               {
                 heading: "How do I bring people in?",
@@ -64,10 +65,10 @@ export default function ScaleYourTeamPage() {
             <p className="text-rose-700 font-semibold mb-1">Start before you scale</p>
             <p className="text-rose-500 text-sm mb-4">Apply to join the team first. Build your own earnings, then build your network.</p>
             <Link
-              href="/"
+              href={`https://wa.me/${whatsappNumber}?text=Hi%20VelloEarn%2C%20I%27m%20interested%20in%20joining%20your%20platform.%20Please%20send%20me%20more%20information.`}
               className="inline-block bg-rose-500 hover:bg-rose-600 text-white font-bold px-6 py-3 rounded-full text-sm transition-all hover:scale-105"
             >
-              Apply to join Chat254
+              Apply to join VelloEarn
             </Link>
           </div>
         </div>

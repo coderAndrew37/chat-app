@@ -32,3 +32,9 @@ export interface Stat {
   value: string;
   label: string;
 }
+
+// Define this once
+export interface ApplicationFormData {
+  name: string;
+  whatsapp: string;
+}

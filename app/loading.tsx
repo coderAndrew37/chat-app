@@ -235,7 +235,7 @@ export default function Loading() {
           textTransform: "uppercase",
         }}
       >
-        Loading Chat254…
+        Loading VelloEarn…
       </p>
     </div>
   );

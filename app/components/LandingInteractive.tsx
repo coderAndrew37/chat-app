@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { whatsappNumber } from "@/lib/constants";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -206,7 +207,7 @@ const DEEP_DIVE_ITEMS: DeepDiveItem[] = [
   {
     question: "What does 'structured earning environment' mean?",
     answer:
-      "Unlike random gig apps, Chat254 provides defined tasks, clear rate cards, and a team structure. You know exactly what you're doing, how much it pays, and when your money moves to M-Pesa. No ambiguity, no chasing payments.",
+      "Unlike random gig apps, VelloEarn provides defined tasks, clear rate cards, and a team structure. You know exactly what you're doing, how much it pays, and when your money moves to M-Pesa. No ambiguity, no chasing payments.",
   },
   {
     question: "How do M-Pesa payouts work?",
@@ -399,7 +400,7 @@ function ApplicationModal({
           <SmartImage
             src="/modal/team-working.jpg"
             fallback="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&h=300&fit=crop&auto=format"
-            alt="Chat254 team working remotely"
+            alt="VelloEarn team working remotely"
             fill
             className="object-cover"
             sizes="(max-width: 448px) 100vw, 448px"
@@ -503,9 +504,8 @@ function SuccessState({
   onClose: () => void;
 }) {
   const firstName = data.name.trim().split(" ")[0];
-  const whatsappNumber = "254700000000";
   const message = encodeURIComponent(
-    `Hi! My name is ${data.name} and I just applied to join the Chat254 remote team. My WhatsApp is ${data.whatsapp}. I'd like to confirm my application and receive my activation instructions.`
+    `Hi! My name is ${data.name} and I just applied to join the VelloEarn remote team. My WhatsApp is ${data.whatsapp}. I'd like to confirm my application and receive my activation instructions.`
   );
   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${message}`;
 
@@ -730,7 +730,7 @@ export default function LandingInteractive() {
               This isn&apos;t a hustle. It&apos;s an infrastructure.
             </h2>
             <p className="text-gray-500 max-w-xl mx-auto leading-relaxed">
-              Chat254 connects skilled individuals with structured remote tasks — real-time communication
+              VelloEarn connects skilled individuals with structured remote tasks — real-time communication
               support, moderation, AI training, and data engagement. We built the system so you can focus
               on earning.
             </p>
@@ -991,7 +991,7 @@ export default function LandingInteractive() {
 
       {/* ── WhatsApp FAB ─────────────────────────────────────────── */}
       <a
-        href="https://wa.me/254700000000?text=Hi%2C%20I%27d%20like%20to%20apply%20to%20join%20the%20Chat254%20remote%20team."
+        href={`https://wa.me/${whatsappNumber}?text=Hi%2C%20I%27d%20like%20to%20apply%20to%20join%20the%20VelloEarn%20remote%20team.`}
         target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-6 right-6 z-40 w-14 h-14 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-full shadow-2xl flex items-center justify-center transition-all hover:scale-110 active:scale-95"

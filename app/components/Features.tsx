@@ -42,7 +42,7 @@ export default function Features() {
             Built different. Pays different.
           </h2>
           <p className="text-gray-500 max-w-lg mx-auto">
-            Most side hustles pay you once. Chat254 keeps paying — and scales with the team you build.
+            Most side hustles pay you once. VelloEarn keeps paying — and scales with the team you build.
           </p>
         </div>
 
@@ -69,7 +69,7 @@ export default function Features() {
                 Not just chatting
               </p>
               <h3 className="text-2xl sm:text-3xl font-extrabold text-white mb-3">
-                4 ways to earn on Chat254.
+                4 ways to earn on VelloEarn.
               </h3>
               <p className="text-rose-100 text-sm leading-relaxed max-w-md">
                 AI training. Teaching Swahili to foreigners. Paid surveys. And of course, chatting. Pick one — or stack all four. All roads lead to M-Pesa.

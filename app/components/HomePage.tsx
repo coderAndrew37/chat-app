@@ -76,7 +76,7 @@ export default function HomePageClient() {
 
       {/* WhatsApp FAB */}
       <a
-        href="https://wa.me/254700000000?text=Hi%2C%20I%27d%20like%20to%20apply%20to%20join%20the%20Chat254%20team."
+        href="https://wa.me/254700000000?text=Hi%2C%20I%27d%20like%20to%20apply%20to%20join%20the%20velloearn%20team."
         target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-6 right-6 z-40 w-14 h-14 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-full shadow-2xl flex items-center justify-center transition-all hover:scale-110 active:scale-95"

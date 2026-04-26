@@ -8,7 +8,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
           {/* Brand */}
           <div>
-            <div className="text-2xl font-bold text-white mb-3">Chat254</div>
+            <div className="text-2xl font-bold text-white mb-3">VelloEarn</div>
             <p className="text-gray-400 text-sm leading-relaxed">
               Kenya&apos;s most rewarding dating platform. Find genuine
               connections and earn rewards along the way.
@@ -40,7 +40,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="border-t border-gray-800 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-gray-500 text-sm">
-            © 2026 Chat254. All rights reserved.
+            © 2026 VelloEarn. All rights reserved.
           </p>
           <div className="flex gap-5 text-sm">
             <Link

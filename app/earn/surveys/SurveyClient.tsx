@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ApplicationModal, SuccessState } from "@/app/components";
+import { whatsappNumber } from "@/lib/constants";
 
 // --- Components ---
 
@@ -126,7 +127,7 @@ const OBJECTIONS = [
     a: "Responses are flagged if they're too fast (rushing through), inconsistent (contradicting yourself), or off-topic. If you answer honestly and at a normal pace, rejection is rare. If a response is rejected, you're notified with the reason. It doesn't affect your account unless it becomes a pattern.",
   },
   {
-    q: "Can I do surveys alongside other Chat254 tracks?",
+    q: "Can I do surveys alongside other VelloEarn tracks?",
     a: "Yes. Surveys are the most stackable track — they're async, short, and don't require a shift or a session. Most members combine surveys with chatting or AI training. Surveys fill the gaps in your day.",
   },
   {
@@ -157,7 +158,7 @@ export default function SurveysClient() {
             <div>
               <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-600 mb-8 transition">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
-                Back to Chat254
+                Back to VelloEarn
               </Link>
               <div className="inline-flex items-center gap-2 bg-amber-50 border border-amber-100 text-amber-600 text-xs font-bold px-3 py-1.5 rounded-full mb-6 uppercase tracking-wider">
                 📋 Surveys & Research
@@ -332,7 +333,7 @@ export default function SurveysClient() {
       </section>
 
       {/* WhatsApp FAB */}
-      <a href="https://wa.me/254700000000?text=Hi%2C%20I%27d%20like%20to%20apply%20for%20surveys%20and%20research%20on%20Chat254."
+      <a href={`https://wa.me/${whatsappNumber}?text=Hi%2C%20I%27d%20like%20to%20apply%20for%20surveys%20and%20research%20on%20VelloEarn.`}
         target="_blank" rel="noopener noreferrer"
         className="fixed bottom-6 right-6 z-40 w-14 h-14 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-full shadow-2xl flex items-center justify-center transition-all hover:scale-110"
         aria-label="Chat on WhatsApp">

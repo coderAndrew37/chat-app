@@ -1,6 +1,7 @@
 "use client";
 
 import { STATS } from "@/data";
+import { whatsappNumber } from "@/lib/constants";
 import type { Stat } from "@/types";
 
 interface HeroProps {
@@ -74,7 +75,8 @@ export default function Hero({ onApplyClick }: HeroProps) {
         {/* App download strip */}
         <div className="mt-12 flex justify-center">
           <a
-            href="/download"
+          // link to whatsapp
+            href={`https://wa.me/${whatsappNumber}?text=Hi%2C%20I%27d%20like%20to%20apply%20to%20join%20the%20velloearn%20team.`}
             className="inline-flex items-center gap-4 bg-white border border-gray-200 rounded-2xl px-6 py-4 shadow-md hover:shadow-lg transition-shadow"
           >
             <div className="w-12 h-12 rounded-xl bg-rose-500 flex items-center justify-center text-white text-xl">
@@ -85,7 +87,7 @@ export default function Hero({ onApplyClick }: HeroProps) {
                 📲 Available Now
               </div>
               <div className="text-sm font-bold text-gray-800">
-                Get the Chat254 App
+                Get the VelloEarn App
               </div>
               <div className="text-xs text-gray-400">
                 ⭐ 4.8 · 61K+ users · Free

@@ -1,5 +1,7 @@
 // No "use client" needed — pure presentational
 
+import { whatsappNumber } from "@/lib/constants";
+
 interface Step {
   number: number;
   icon: string;
@@ -88,7 +90,7 @@ export default function HowItWorks() {
             Questions before you apply?
           </p>
           <a
-            href="https://wa.me/254700000000?text=Hi%2C%20I%27d%20like%20to%20learn%20more%20about%20Chat254%20before%20applying."
+            href={`https://wa.me/${whatsappNumber}?text=Hi%2C%20I%27d%20like%20to%20learn%20more%20about%20VelloEarn%20before%20applying.`}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold px-6 py-3 rounded-full text-sm shadow-md transition-all hover:scale-105 active:scale-95"

@@ -15,18 +15,18 @@ const geistMono = Geist_Mono({
 
 // ─── SEO Metadata ─────────────────────────────────────────────────────────────
 
-const BASE_URL = "https://chat254.co.ke"; // 🔁 update to your actual domain
+const BASE_URL = "https://velloearn.com"; // 🔁 update to your actual domain
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
 
   title: {
-    default: "Chat254 — Earn Money Online in Kenya | Remote Work, M-Pesa Payouts",
-    template: "%s | Chat254",
+    default: "VelloEarn — Earn Money Online in Kenya | Remote Work, M-Pesa Payouts",
+    template: "%s | VelloEarn",
   },
 
   description:
-    "Chat254 is Kenya's #1 remote earning platform. Get paid to chat, train AI, teach Swahili, and complete surveys — all from your phone. Instant M-Pesa payouts.",
+    "VelloEarn is Kenya's #1 remote earning platform. Get paid to chat, train AI, teach Swahili, and complete surveys — all from your phone. Instant M-Pesa payouts.",
 
   keywords: [
     "earn money online Kenya",
@@ -38,20 +38,20 @@ export const metadata: Metadata = {
     "AI training jobs Kenya",
     "paid surveys Kenya",
     "work from phone Kenya",
-    "Chat254",
+    "VelloEarn",
   ],
 
-  authors: [{ name: "Chat254" }],
-  creator: "Chat254",
-  publisher: "Chat254",
+  authors: [{ name: "VelloEarn" }],
+  creator: "VelloEarn",
+  publisher: "VelloEarn",
 
   // ── Open Graph ──────────────────────────────────────────────────────────────
   openGraph: {
     type: "website",
     locale: "en_KE",
     url: BASE_URL,
-    siteName: "Chat254",
-    title: "Chat254 — Earn Money Online in Kenya",
+    siteName: "VelloEarn",
+    title: "VelloEarn — Earn Money Online in Kenya",
     description:
       "Get paid to chat, train AI, teach Swahili, and complete surveys. Instant M-Pesa payouts. Apply free today.",
     images: [
@@ -59,7 +59,7 @@ export const metadata: Metadata = {
         url: "/og-image.jpg",      // place a 1200×630 image at /public/og-image.jpg
         width: 1200,
         height: 630,
-        alt: "Chat254 — Kenya's remote earning platform",
+        alt: "VelloEarn — Kenya's remote earning platform",
       },
     ],
   },
@@ -67,12 +67,12 @@ export const metadata: Metadata = {
   // ── Twitter / X card ────────────────────────────────────────────────────────
   twitter: {
     card: "summary_large_image",
-    title: "Chat254 — Earn Money Online in Kenya",
+    title: "VelloEarn — Earn Money Online in Kenya",
     description:
       "Get paid to chat, train AI, teach Swahili, and complete surveys. Instant M-Pesa payouts.",
     images: ["/og-image.jpg"],
-    site: "@chat254ke",       // 🔁 update to your Twitter handle if you have one
-    creator: "@chat254ke",
+    site: "@VelloEarnke",       // 🔁 update to your Twitter handle if you have one
+    creator: "@VelloEarnke",
   },
 
   // ── Robots ──────────────────────────────────────────────────────────────────

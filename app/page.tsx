@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { HomePageClient } from "./components";
 
 export const metadata: Metadata = {
-  title: "Chat254 — Chat with Lonely Souls. Get Paid for It.",
+  title: "VelloEarn — Chat with Lonely Souls. Get Paid for It.",
   description:
     "Join Kenya's remote chat & earn network. Real conversations, real people, direct M-Pesa payouts. Apply to join the team today — activation via WhatsApp.",
   keywords: [
@@ -12,24 +12,24 @@ export const metadata: Metadata = {
     "online jobs Kenya",
     "work from home Nairobi",
     "side hustle Kenya 2025",
-    "Chat254",
+    "VelloEarn",
   ],
   openGraph: {
-    title: "Chat254 — Chat with Lonely Souls. Get Paid for It.",
+    title: "VelloEarn — Chat with Lonely Souls. Get Paid for It.",
     description:
       "Real conversations. Instant M-Pesa payouts. Apply to join Kenya's remote chat & earn network.",
     type: "website",
     locale: "en_KE",
-    siteName: "Chat254",
+    siteName: "VelloEarn",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Chat254 — Chat with Lonely Souls. Get Paid for It.",
+    title: "VelloEarn — Chat with Lonely Souls. Get Paid for It.",
     description:
       "Real conversations. Instant M-Pesa payouts. Apply to join Kenya's remote chat & earn network.",
   },
   alternates: {
-    canonical: "https://chat254.com",
+    canonical: "https://velloearn.com",
   },
 };
 
@@ -38,11 +38,11 @@ const jsonLd = {
   "@type": "JobPosting",
   title: "Remote Chat & Engagement Specialist",
   description:
-    "Join Chat254's remote team. Engage with real users through structured chat tasks, moderation, and communication support. Earn directly to M-Pesa with flexible hours from anywhere in Kenya.",
+    "Join VelloEarn's remote team. Engage with real users through structured chat tasks, moderation, and communication support. Earn directly to M-Pesa with flexible hours from anywhere in Kenya.",
   hiringOrganization: {
     "@type": "Organization",
-    name: "Chat254",
-    sameAs: "https://chat254.com",
+    name: "VelloEarn",
+    sameAs: "https://velloearn.com",
   },
   jobLocationType: "TELECOMMUTE",
   applicantLocationRequirements: {

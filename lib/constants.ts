@@ -1,0 +1,1 @@
+export const whatsappNumber = "254700000000"; // Replace with actual number

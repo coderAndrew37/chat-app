@@ -1,8 +1,9 @@
 "use client"
+import { whatsappNumber } from "@/lib/constants";
 import Link from "next/link";
 
 // export const metadata = {
-//   title: "Page not found — Chat254",
+//   title: "Page not found — VelloEarn",
 // };
 
 export default function NotFound() {
@@ -167,7 +168,7 @@ export default function NotFound() {
 
         {/* WhatsApp nudge */}
         <a
-          href="https://wa.me/254700000000?text=Hi%2C%20I%20need%20some%20help%20with%20Chat254."
+          href={`https://wa.me/${whatsappNumber}?text=Hi%2C%20I%20need%20some%20help%20with%20VelloEarn.`}
           target="_blank"
           rel="noopener noreferrer"
           style={{

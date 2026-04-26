@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ApplicationModal, SuccessState } from "@/app/components";
+import { whatsappNumber } from "@/lib/constants";
 
 // --- Sub-components ---
 
@@ -120,7 +121,7 @@ export default function SwahiliClient() {
             <div>
               <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-600 mb-8 transition">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
-                Back to Chat254
+                Back to VelloEarn
               </Link>
               <div className="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-100 text-emerald-600 text-xs font-bold px-3 py-1.5 rounded-full mb-6 uppercase tracking-wider">
                 🌍 Teach Swahili
@@ -282,7 +283,7 @@ export default function SwahiliClient() {
       </section>
 
       {/* WhatsApp FAB */}
-      <a href="https://wa.me/254700000000?text=Hi%2C%20I%27d%20like%20to%20apply%20to%20teach%20Swahili%20on%20Chat254."
+      <a href={`https://wa.me/${whatsappNumber}?text=Hi%2C%20I%27d%20like%20to%20apply%20to%20teach%20Swahili%20on%20VelloEarn.`}
         target="_blank" rel="noopener noreferrer"
         className="fixed bottom-6 right-6 z-40 w-14 h-14 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-full shadow-2xl flex items-center justify-center transition-all hover:scale-110"
         aria-label="Chat on WhatsApp">

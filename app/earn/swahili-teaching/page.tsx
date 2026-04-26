@@ -1,11 +1,11 @@
 import { Metadata } from "next";
-import SwahiliClient from "./SwahiliClient";
+import SwahiliClient from "./SwahiliTeachingClient";
 
 export const metadata: Metadata = {
-  title: "Teach Swahili Online | Earn KES 1,200+ Per Session | Chat254",
+  title: "Teach Swahili Online | Earn KES 1,200+ Per Session | VelloEarn",
   description: "Turn your native Swahili fluency into an income stream. Connect with students from the US, UK, and China. Flexible hours, M-Pesa payouts.",
   openGraph: {
-    title: "Teach Swahili & Earn with Chat254",
+    title: "Teach Swahili & Earn with VelloEarn",
     description: "Your language is a global asset. Apply to become a Swahili tutor today and start earning from home.",
     images: [
       {
