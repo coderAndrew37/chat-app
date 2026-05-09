@@ -2,6 +2,11 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import LayoutClient from "./LayoutClient";
+import { Suspense } from "react";
+
+import Script from "next/script";
+import MetaPixel from "./components/pixels/MetaPixel";
+import TikTokPixel from "./components/pixels/TikTokPixel";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,7 +20,7 @@ const geistMono = Geist_Mono({
 
 // ─── SEO Metadata ─────────────────────────────────────────────────────────────
 
-const BASE_URL = "https://velloearn.com"; // 🔁 update to your actual domain
+const BASE_URL = "https://velloearn.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
@@ -26,7 +31,7 @@ export const metadata: Metadata = {
   },
 
   description:
-    "VelloEarn is Kenya's #1 remote earning platform. Get paid to chat, train AI, teach Swahili, and complete surveys — all from your phone. Instant M-Pesa payouts.",
+    "VelloEarn is Kenya's #1 remote earning platform. Get paid to chat, train AI, complete surveys, write, and trade forex — all from your phone. Instant M-Pesa payouts.",
 
   keywords: [
     "earn money online Kenya",
@@ -34,7 +39,8 @@ export const metadata: Metadata = {
     "mpesa earnings",
     "online jobs Kenya",
     "chat and earn Kenya",
-    "teach Swahili online",
+    "academic writing jobs Kenya",
+    "forex trading Kenya",
     "AI training jobs Kenya",
     "paid surveys Kenya",
     "work from phone Kenya",
@@ -45,7 +51,6 @@ export const metadata: Metadata = {
   creator: "VelloEarn",
   publisher: "VelloEarn",
 
-  // ── Open Graph ──────────────────────────────────────────────────────────────
   openGraph: {
     type: "website",
     locale: "en_KE",
@@ -53,10 +58,10 @@ export const metadata: Metadata = {
     siteName: "VelloEarn",
     title: "VelloEarn — Earn Money Online in Kenya",
     description:
-      "Get paid to chat, train AI, teach Swahili, and complete surveys. Instant M-Pesa payouts. Apply free today.",
+      "Get paid to chat, train AI, complete surveys, write, and trade forex. Instant M-Pesa payouts. Apply free today.",
     images: [
       {
-        url: "/og-image.jpg",      // place a 1200×630 image at /public/og-image.jpg
+        url: "/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "VelloEarn — Kenya's remote earning platform",
@@ -64,18 +69,16 @@ export const metadata: Metadata = {
     ],
   },
 
-  // ── Twitter / X card ────────────────────────────────────────────────────────
   twitter: {
     card: "summary_large_image",
     title: "VelloEarn — Earn Money Online in Kenya",
     description:
-      "Get paid to chat, train AI, teach Swahili, and complete surveys. Instant M-Pesa payouts.",
+      "Get paid to chat, train AI, complete surveys, write, and trade forex. Instant M-Pesa payouts.",
     images: ["/og-image.jpg"],
-    site: "@VelloEarnke",       // 🔁 update to your Twitter handle if you have one
+    site: "@VelloEarnke",
     creator: "@VelloEarnke",
   },
 
-  // ── Robots ──────────────────────────────────────────────────────────────────
   robots: {
     index: true,
     follow: true,
@@ -88,7 +91,6 @@ export const metadata: Metadata = {
     },
   },
 
-  // ── Icons ───────────────────────────────────────────────────────────────────
   icons: {
     icon: [
       { url: "/favicon.ico" },
@@ -99,22 +101,19 @@ export const metadata: Metadata = {
     shortcut: "/favicon.ico",
   },
 
-  // ── Manifest (PWA) ──────────────────────────────────────────────────────────
   manifest: "/site.webmanifest",
 
-  // ── Canonical ───────────────────────────────────────────────────────────────
   alternates: {
     canonical: BASE_URL,
   },
 
-  // ── Verification (add your codes when ready) ─────────────────────────────
-  // verification: {
-  //   google: "your-google-search-console-code",
-  // },
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+  },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f43f5e",           // rose-500 — matches brand
+  themeColor: "#f43f5e",
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
@@ -122,16 +121,40 @@ export const viewport: Viewport = {
 
 // ─── Root Layout ──────────────────────────────────────────────────────────────
 
+const GOOGLE_ADS_ID = process.env.NEXT_PUBLIC_GOOGLE_ADS_ID;
+
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+
+        {/* ── Google Ads global tag ───────────────────────────────────────── */}
+        {GOOGLE_ADS_ID && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ADS_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="google-ads-init" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${GOOGLE_ADS_ID}');
+              `}
+            </Script>
+          </>
+        )}
+
+        {/* ── Meta + TikTok pixels ────────────────────────────────────────── */}
+        {/* Suspense is required — both components use useSearchParams()      */}
+        <Suspense fallback={null}>
+          <MetaPixel />
+          <TikTokPixel />
+        </Suspense>
+
         <LayoutClient>{children}</LayoutClient>
       </body>
     </html>

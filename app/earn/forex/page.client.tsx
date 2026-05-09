@@ -1,0 +1,497 @@
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { ApplicationModal, SuccessState } from "@/app/components";
+import { whatsappNumber } from "@/lib/constants";
+
+// --- Components ---
+
+function SmartImage({
+  src, fallback, alt, fill, width, height, className, sizes, priority,
+}: {
+  src: string; fallback: string; alt: string; fill?: boolean; width?: number; height?: number;
+  className?: string; sizes?: string; priority?: boolean;
+}) {
+  const [imgSrc, setImgSrc] = useState(src);
+  const props = { src: imgSrc, alt, className, onError: () => setImgSrc(fallback), sizes, priority };
+  return fill
+    ? <Image {...props} fill unoptimized />
+    : <Image {...props} width={width ?? 400} height={height ?? 300} unoptimized />;
+}
+
+function ObjAccordion({ q, a }: { q: string; a: string }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+      <button
+        onClick={() => setOpen(!open)}
+        className="w-full flex items-center justify-between px-5 py-4 text-left transition-colors hover:bg-gray-50"
+      >
+        <span className="font-semibold text-gray-900 text-sm sm:text-base pr-4">{q}</span>
+        <span
+          className={`shrink-0 w-7 h-7 rounded-full flex items-center justify-center transition-all duration-200 ${
+            open ? "bg-blue-600 text-white rotate-45" : "bg-gray-100 text-gray-500"
+          }`}
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+          </svg>
+        </span>
+      </button>
+      {open && (
+        <div className="px-5 pb-5 animate-in fade-in slide-in-from-top-1 duration-200">
+          <p className="text-gray-500 text-sm leading-relaxed">{a}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// --- Data ---
+
+const WHAT_YOU_GET = [
+  {
+    icon: "📊",
+    title: "Structured trading education",
+    body: "A full curriculum — from what a pip is to reading price action on a 4H chart. Video lessons, PDF guides, and live walkthroughs. Built specifically for Kenyan traders, with local examples.",
+  },
+  {
+    icon: "🖥️",
+    title: "Practice on a demo account first",
+    body: "You trade with virtual money until you're consistently profitable. No pressure, no real losses. Most traders spend 4–8 weeks on demo before going live. We don't rush this.",
+  },
+  {
+    icon: "💰",
+    title: "Funded account access",
+    body: "Once you pass our internal evaluation (a 2-week demo challenge), you get access to a funded account — our capital, your trades. You keep 70–80% of profits. You don't risk your own savings.",
+  },
+  {
+    icon: "👥",
+    title: "A real trading community",
+    body: "Daily signals, trade analysis, and a WhatsApp group of active Kenyan traders. When someone spots a setup, the group knows. Learning alongside people in your timezone makes a difference.",
+  },
+];
+
+const HOW_IT_WORKS = [
+  {
+    step: "01",
+    title: "Apply and get onboarded",
+    body: "You apply, get accepted, and receive access to the full training curriculum. No prior knowledge required. We start from absolute zero — what forex is, how markets move, and why most people lose.",
+  },
+  {
+    step: "02",
+    title: "Go through the training (2–4 weeks)",
+    body: "Work through the curriculum at your pace. Modules cover: how to read charts, when to enter and exit trades, risk management, and the psychology behind trading decisions. This part is non-negotiable.",
+  },
+  {
+    step: "03",
+    title: "Trade on demo. Build a track record.",
+    body: "Open a demo account on MT4 or MT5 and trade with virtual funds. Target: two consecutive profitable weeks following your strategy. Your mentor reviews your trades and gives feedback.",
+  },
+  {
+    step: "04",
+    title: "Pass the evaluation. Get funded.",
+    body: "You run a 2-week funded challenge on a small live account. Hit the profit target without breaking risk rules and you graduate to a full funded account. Profits split 70/30 in your favour.",
+  },
+  {
+    step: "05",
+    title: "Withdraw profits to M-Pesa",
+    body: "Funded traders withdraw monthly or bi-monthly. Most withdrawals process within 24 hours to M-Pesa. You also earn referral commissions for bringing other traders into the programme.",
+  },
+];
+
+const EARNINGS = [
+  { label: "Learning phase (months 1–2)", range: "KES 0", note: "Building skill, not income yet" },
+  { label: "Early funded trading", range: "KES 8,000 – 25,000", note: "/ month (conservative)" },
+  { label: "Consistent funded trader", range: "KES 40,000 – 120,000+", note: "/ month (skilled)" },
+];
+
+const EARNER_STORIES = [
+  {
+    name: "James M.",
+    location: "Nairobi, Westlands",
+    earned: "KES 52,000 / month",
+    story:
+      "I lost money before I joined — I was copying signals from Telegram without understanding anything. The training changed how I see markets. I passed my evaluation in week three. Now I trade my own setups and actually know why I'm in a trade.",
+    img: "/testimonials/james.jpg",
+    fallback:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face&auto=format",
+  },
+  {
+    name: "Aisha R.",
+    location: "Nairobi, Kasarani",
+    earned: "KES 31,000 / month",
+    story:
+      "I started with zero experience. The demo phase was frustrating — I kept blowing accounts. My mentor told me to drop the lot size and focus on one pair. That shift changed everything. I've been funded for four months.",
+    img: "/testimonials/aisha.jpg",
+    fallback:
+      "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=200&h=200&fit=crop&crop=face&auto=format",
+  },
+];
+
+const PAIRS = [
+  { pair: "USD/KES", label: "US Dollar / Kenyan Shilling", note: "High local relevance" },
+  { pair: "EUR/USD", label: "Euro / US Dollar", note: "Most liquid pair globally" },
+  { pair: "XAU/USD", label: "Gold / US Dollar", note: "Favourite of Kenyan traders" },
+  { pair: "GBP/USD", label: "British Pound / US Dollar", note: "High volatility, high opportunity" },
+];
+
+const OBJECTIONS = [
+  {
+    q: "Isn't forex just gambling?",
+    a: "Gambling is random. Trading is probabilistic — you're making decisions with edge, not luck. A coin flip is 50/50 forever. A well-tested strategy on EUR/USD has a statistical edge that compounds over hundreds of trades. The problem isn't the market — it's undisciplined traders who treat it like gambling. The curriculum specifically addresses this.",
+  },
+  {
+    q: "I've seen people lose everything in forex. Why is this different?",
+    a: "Most losses come from three things: no education, too much leverage, and trading with money you can't afford to lose. Our structure removes all three. You don't trade live until you've proven you can manage risk on demo. And on the funded account, you're trading our money — not yours.",
+  },
+  {
+    q: "How long before I make money?",
+    a: "Be honest with yourself: the training and demo phase takes 4–12 weeks for most people. Rushing it is how people blow accounts. If you follow the programme, you can realistically be earning from a funded account within 3 months. We'll tell you clearly where you are and what's holding you back.",
+  },
+  {
+    q: "Do I need a laptop or special equipment?",
+    a: "No. You can trade on your phone using MT4 or MT5 — both have solid Android and iOS apps. A laptop helps for chart analysis during learning, but many of our traders manage live accounts entirely from their phones.",
+  },
+  {
+    q: "What is the funded account, exactly?",
+    a: "After passing your evaluation, you trade on a live account funded by VelloEarn. You make trading decisions. Profits are split — you take 70–80%, we take the rest. If you have a losing month, there's no debt — you simply don't earn that month and continue trading under revised risk rules.",
+  },
+  {
+    q: "Can I do this alongside other VelloEarn tracks?",
+    a: "Yes, but forex demands more mental presence than the other tracks. Most people who combine it do surveys or AI tasks during their non-trading hours — something that doesn't need deep focus. Don't try to trade while moderating a chat channel.",
+  },
+];
+
+// --- Main Page ---
+
+export default function ForexClient() {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [successData, setSuccessData] = useState<{ name: string; whatsapp: string } | null>(null);
+
+  const handleSuccess = (data: { name: string; whatsapp: string }) => {
+    setModalOpen(false);
+    setSuccessData(data);
+  };
+
+  return (
+    <main className="bg-gray-50 min-h-screen">
+
+      {/* ── Hero ── */}
+      <section className="relative pt-24 pb-20 overflow-hidden bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900">
+        {/* Subtle grid texture */}
+        <div
+          className="absolute inset-0 opacity-10"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(99,179,237,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(99,179,237,0.3) 1px, transparent 1px)",
+            backgroundSize: "40px 40px",
+          }}
+        />
+        <div className="absolute top-0 left-1/2 w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
+
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 relative">
+          <div className="grid lg:grid-cols-2 gap-14 items-center">
+            <div>
+              <Link
+                href="/"
+                className="inline-flex items-center gap-1.5 text-sm text-blue-300/70 hover:text-blue-200 mb-8 transition"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+                Back to VelloEarn
+              </Link>
+              <div className="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-400/20 text-blue-300 text-xs font-bold px-3 py-1.5 rounded-full mb-6 uppercase tracking-wider">
+                📈 Forex Trading
+              </div>
+              <h1 className="text-4xl sm:text-5xl font-extrabold text-white leading-tight tracking-tight mb-5">
+                Stop watching<br />
+                <span className="text-blue-400">other people trade.</span>
+              </h1>
+              <p className="text-lg text-blue-100/70 leading-relaxed mb-8 max-w-lg">
+                The forex market moves KES 24 trillion a day. Kenyan traders are in it. Most lose because they start without structure. We give you the education, the tools, and a funded account — so your only job is to learn to trade properly.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <button
+                  onClick={() => setModalOpen(true)}
+                  className="bg-blue-500 hover:bg-blue-400 text-white font-bold text-base px-8 py-4 rounded-full shadow-lg shadow-blue-900/50 transition-all hover:scale-105 active:scale-95"
+                >
+                  Apply for This Track →
+                </button>
+              </div>
+
+              {/* Risk disclaimer */}
+              <p className="mt-5 text-xs text-blue-300/40 leading-relaxed max-w-md">
+                Forex trading carries risk. You will go through a structured learning phase before trading with real funds. Past results of our traders do not guarantee your earnings.
+              </p>
+
+              <div className="mt-8 flex gap-8">
+                {[
+                  { v: "70–80%", l: "Profit split (your share)" },
+                  { v: "0 KES", l: "Your capital at risk" },
+                  { v: "M-Pesa", l: "Withdrawal method" },
+                ].map((s) => (
+                  <div key={s.l}>
+                    <div className="text-lg font-extrabold text-white">{s.v}</div>
+                    <div className="text-xs text-blue-300/50 mt-0.5">{s.l}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Hero image */}
+            <div className="relative hidden lg:block h-[420px] rounded-3xl overflow-hidden shadow-2xl shadow-blue-900/50 border border-blue-400/10">
+              <SmartImage
+                src="/earn/forex-hero.jpg"
+                fallback="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800&h=840&fit=crop&auto=format"
+                alt="Forex trading charts"
+                fill
+                priority
+                className="object-cover"
+                sizes="45vw"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent" />
+              {/* Live-style ticker */}
+              <div className="absolute bottom-5 left-5 right-5 bg-slate-900/90 backdrop-blur-sm border border-blue-400/20 rounded-2xl px-4 py-3">
+                <div className="flex items-center justify-between gap-3 flex-wrap">
+                  {PAIRS.slice(0, 2).map((p) => (
+                    <div key={p.pair} className="flex items-center gap-2">
+                      <span className="text-xs font-mono font-bold text-white">{p.pair}</span>
+                      <span className="text-xs text-emerald-400 font-semibold">▲ live</span>
+                    </div>
+                  ))}
+                  <span className="text-xs text-blue-300/50">Markets open 24/5</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── What you get ── */}
+      <section className="py-20 bg-white">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-12">
+            <span className="text-blue-600 font-semibold text-sm uppercase tracking-wider">What you get</span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mt-2 mb-4">
+              Not just signals. An actual trading system.
+            </h2>
+            <p className="text-gray-500 max-w-xl mx-auto">
+              Most Telegram &ldquo;forex groups&rdquo; sell you signals with no explanation. We give you the foundation to generate your own.
+            </p>
+          </div>
+          <div className="grid sm:grid-cols-2 gap-5 mb-10">
+            {WHAT_YOU_GET.map((t) => (
+              <div key={t.title} className="bg-gray-50 rounded-2xl p-6 border border-gray-100">
+                <div className="text-2xl mb-3">{t.icon}</div>
+                <h3 className="font-bold text-gray-900 text-base mb-2">{t.title}</h3>
+                <p className="text-sm text-gray-500 leading-relaxed">{t.body}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Pairs you'll trade */}
+          <div className="bg-slate-900 rounded-2xl p-6 border border-slate-700">
+            <p className="text-sm font-bold text-blue-300 mb-4 uppercase tracking-wider">Pairs you&apos;ll learn to trade</p>
+            <div className="grid grid-cols-2 gap-3">
+              {PAIRS.map((p) => (
+                <div key={p.pair} className="flex items-start gap-3">
+                  <span className="font-mono font-bold text-white text-sm shrink-0">{p.pair}</span>
+                  <div>
+                    <p className="text-xs text-slate-400">{p.label}</p>
+                    <p className="text-xs text-blue-400/70">{p.note}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── How it works ── */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-14">
+            <span className="text-blue-600 font-semibold text-sm uppercase tracking-wider">How it works</span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mt-2">
+              From zero to funded. Five steps.
+            </h2>
+          </div>
+          <div className="space-y-5">
+            {HOW_IT_WORKS.map((step, i) => (
+              <div key={i} className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm flex gap-5 items-start">
+                <div className="shrink-0 w-12 h-12 rounded-2xl bg-blue-600 text-white font-extrabold text-sm flex items-center justify-center">
+                  {step.step}
+                </div>
+                <div>
+                  <h3 className="font-bold text-gray-900 text-base mb-1">{step.title}</h3>
+                  <p className="text-sm text-gray-500 leading-relaxed">{step.body}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Earning potential ── */}
+      <section className="py-20 bg-white">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-12">
+            <span className="text-blue-600 font-semibold text-sm uppercase tracking-wider">Earning potential</span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mt-2 mb-3">
+              Honest numbers. This isn&apos;t instant.
+            </h2>
+            <p className="text-gray-500 max-w-xl mx-auto">
+              Forex is the highest-ceiling track on VelloEarn and the one that requires the most patience. The income takes time to build — but for traders who stay consistent, there&apos;s no ceiling.
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-3 gap-4 mb-6">
+            {EARNINGS.map((tier, i) => (
+              <div
+                key={i}
+                className={`rounded-2xl p-6 border text-center ${
+                  i === 2
+                    ? "bg-slate-900 border-slate-700 text-white"
+                    : i === 0
+                    ? "bg-gray-50 border-gray-100 opacity-70"
+                    : "bg-gray-50 border-gray-100"
+                }`}
+              >
+                <p
+                  className={`text-xs font-semibold uppercase tracking-wider mb-3 ${
+                    i === 2 ? "text-blue-400" : "text-gray-400"
+                  }`}
+                >
+                  {tier.label}
+                </p>
+                <p
+                  className={`text-2xl font-extrabold mb-1 ${
+                    i === 0 ? "text-gray-400" : i === 2 ? "text-white" : "text-gray-900"
+                  }`}
+                >
+                  {tier.range}
+                </p>
+                <p className={`text-xs ${i === 2 ? "text-blue-400/70" : "text-gray-400"}`}>{tier.note}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Honest disclaimer box */}
+          <div className="bg-amber-50 border border-amber-100 rounded-2xl p-5 flex gap-4 items-start mb-14">
+            <span className="text-xl shrink-0">⚠️</span>
+            <div>
+              <p className="font-bold text-gray-900 text-sm mb-1">We won&apos;t lie to you about this</p>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                Most people who &ldquo;try forex&rdquo; lose money because they skip the learning phase. We built this programme to change that — but it requires discipline. If you want fast money this month, start with the chatting or surveys track first. Come to forex when you can commit 4–8 weeks to learning before expecting income.
+              </p>
+            </div>
+          </div>
+
+          {/* Earner stories */}
+          <h3 className="text-xl font-extrabold text-gray-900 mb-5">From traders already funded</h3>
+          <div className="grid sm:grid-cols-2 gap-5">
+            {EARNER_STORIES.map((s) => (
+              <div key={s.name} className="bg-gray-50 rounded-2xl p-6 border border-gray-100">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="relative w-11 h-11 rounded-full overflow-hidden bg-blue-100 shrink-0">
+                    <SmartImage
+                      src={s.img}
+                      fallback={s.fallback}
+                      alt={s.name}
+                      fill
+                      className="object-cover"
+                      sizes="44px"
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-semibold text-gray-900 text-sm">{s.name}</p>
+                    <p className="text-xs text-gray-400">{s.location}</p>
+                  </div>
+                  <span className="text-sm font-bold text-emerald-600 shrink-0">{s.earned}</span>
+                </div>
+                <p className="text-sm text-gray-600 leading-relaxed italic">&ldquo;{s.story}&rdquo;</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Objections ── */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-12">
+            <span className="text-blue-600 font-semibold text-sm uppercase tracking-wider">Real talk</span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mt-2 mb-3">
+              The questions you&apos;re already thinking
+            </h2>
+          </div>
+          <div className="space-y-4">
+            {OBJECTIONS.map((o, i) => (
+              <ObjAccordion key={i} q={o.q} a={o.a} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── CTA ── */}
+      <section className="relative py-16 overflow-hidden">
+        <div className="absolute inset-0 bg-slate-900" />
+        <div
+          className="absolute inset-0 opacity-10"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(99,179,237,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(99,179,237,0.3) 1px, transparent 1px)",
+            backgroundSize: "40px 40px",
+          }}
+        />
+        <div className="absolute top-1/2 left-1/2 w-[500px] h-[300px] bg-blue-500/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
+        <div className="relative z-10 max-w-xl mx-auto px-4 sm:px-6 text-center">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4">
+            The market is open 24 hours a day.
+          </h2>
+          <p className="text-blue-200/60 mb-8 leading-relaxed">
+            Apply today. Start training this week. The only bad time to learn to trade is later.
+          </p>
+          <button
+            onClick={() => setModalOpen(true)}
+            className="inline-block bg-blue-500 hover:bg-blue-400 text-white font-bold text-base px-10 py-4 rounded-full shadow-xl shadow-blue-900/50 hover:scale-105 active:scale-95 transition-all"
+          >
+            Apply for Forex Track →
+          </button>
+          <p className="mt-4 text-xs text-blue-300/30">
+            Forex trading involves risk. Capital in funded accounts is subject to drawdown rules.
+          </p>
+        </div>
+      </section>
+
+      {/* WhatsApp FAB */}
+      <a
+        href={`https://wa.me/${whatsappNumber}?text=Hi%2C%20I%27d%20like%20to%20apply%20for%20the%20Forex%20trading%20track%20on%20VelloEarn.`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-6 right-6 z-40 w-14 h-14 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-full shadow-2xl flex items-center justify-center transition-all hover:scale-110"
+        aria-label="Chat on WhatsApp"
+      >
+        <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+        </svg>
+      </a>
+
+      {modalOpen && (
+        <ApplicationModal
+          onClose={() => setModalOpen(false)}
+          onSuccess={handleSuccess}
+          track="Forex Trading"
+        />
+      )}
+
+      {successData && (
+        <SuccessState data={successData} onClose={() => setSuccessData(null)} />
+      )}
+    </main>
+  );
+}

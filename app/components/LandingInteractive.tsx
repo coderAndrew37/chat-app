@@ -196,6 +196,31 @@ const EARNING_METHODS: EarningMethod[] = [
     unsplashFallback:
       "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=600&h=360&fit=crop&auto=format",
   },
+  //adding forex and academic writing
+  {
+    icon: "💱",
+    title: "Forex trading",
+    tagline: "Earn from global currency markets with expert guidance.",
+    detail:
+      "Learn and participate in forex trading with real-time market insights and support. Flexible participation, potential for significant returns.",
+    href: "/earn/forex",
+    badge: "High potential",
+    image: "/earn/forex.jpg",
+    unsplashFallback:
+      "https://images.unsplash.com/photo-1556740749-887f6717d7e4?w=600&h=360&fit=crop&auto=format",
+  },
+  {
+    icon: "📚",
+    title: "Academic writing",
+    tagline: "Help students with their assignments and research papers.",
+    detail:
+      "Write essays, research papers, and other academic content. Flexible deadlines, competitive rates, and expert review.",
+    href: "/earn/academic-writing",
+    badge: "Expert skill",
+    image: "/earn/academic-writing.jpg",
+    unsplashFallback:
+      "https://images.unsplash.com/photo-1507842217343-583bb72959d3?w=600&h=360&fit=crop&auto=format",
+  }
 ];
 
 const DEEP_DIVE_ITEMS: DeepDiveItem[] = [

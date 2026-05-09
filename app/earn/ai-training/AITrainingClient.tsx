@@ -54,24 +54,24 @@ const EARNINGS = [
   { label: "Active + team commissions", range: "KES 28,000 – 50,000+", note: "/ month" },
 ];
 
-const EARNER_STORIES = [
-  {
-    name: "Patricia N.",
-    location: "Nairobi, Githurai",
-    earned: "KES 17,200 / month",
-    story: "I do this during my lunch break and late evenings. It doesn't feel like work — I'm just reading things and typing what I think. The money is real though.",
-    img: "/testimonials/patricia.jpg",
-    fallback: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&h=200&fit=crop&crop=face&auto=format",
-  },
-  {
-    name: "Moses A.",
-    location: "Mombasa",
-    earned: "KES 31,500 / month",
-    story: "I treat it like a second job. I block two hours every morning — no distractions. After three months I brought my cousin in. Her output adds to my team income now.",
-    img: "/testimonials/moses.jpg",
-    fallback: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face&auto=format",
-  },
-];
+// const EARNER_STORIES = [
+//   {
+//     name: "Patricia N.",
+//     location: "Nairobi, Githurai",
+//     earned: "KES 17,200 / month",
+//     story: "I do this during my lunch break and late evenings. It doesn't feel like work — I'm just reading things and typing what I think. The money is real though.",
+//     img: "/testimonials/patricia.jpg",
+//     fallback: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&h=200&fit=crop&crop=face&auto=format",
+//   },
+//   {
+//     name: "Moses A.",
+//     location: "Mombasa",
+//     earned: "KES 31,500 / month",
+//     story: "I treat it like a second job. I block two hours every morning — no distractions. After three months I brought my cousin in. Her output adds to my team income now.",
+//     img: "/testimonials/moses.jpg",
+//     fallback: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face&auto=format",
+//   },
+// ];
 
 const OBJECTIONS = [
   {
