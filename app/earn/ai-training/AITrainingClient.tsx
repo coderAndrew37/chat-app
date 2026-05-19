@@ -1,10 +1,12 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
-import Image from "next/image";
 import { ApplicationModal, SuccessState } from "@/app/components";
-import { whatsappNumber } from "@/lib/constants";
+import { TESTIMONIALS } from "@/app/components/LandingInteractive";
+import Requirements from "@/app/components/Requirements";
+import TestimonialSlider from "@/app/components/TestimonialSlider";
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
 
 // --- Sub-components ---
 
@@ -92,6 +94,8 @@ export default function AITrainingClient() {
   const [modalOpen, setModalOpen] = useState(false);
   const [successData, setSuccessData] = useState<{ name: string; whatsapp: string } | null>(null);
 
+  const openModal = () => setModalOpen(true);
+
   const handleSuccess = (data: { name: string; whatsapp: string }) => {
     setModalOpen(false);
     setSuccessData(data);
@@ -147,6 +151,29 @@ export default function AITrainingClient() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      <Requirements onApply={openModal} />
+
+       {/* ── Testimonials ─────────────────────────────────────────── */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-12">
+            <span className="text-rose-500 font-semibold text-sm uppercase tracking-wider">
+              The soft life, for real
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mt-2 mb-3">
+              Our team members are living it.
+            </h2>
+            <p className="text-gray-500">
+              Not influencers. Just regular Kenyans who applied and showed up.
+            </p>
+          </div>
+          <TestimonialSlider testimonials={TESTIMONIALS} />
+          <p className="text-center text-xs text-gray-400 mt-5">
+            ✅ Real team members · Real M-Pesa recipients
+          </p>
         </div>
       </section>
 

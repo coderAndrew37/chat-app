@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ApplicationModal, SuccessState } from "@/app/components";
 import { whatsappNumber } from "@/lib/constants";
+import Requirements from "@/app/components/Requirements";
 
 // --- Components ---
 
@@ -113,6 +114,10 @@ export default function ChattingClient() {
   const [modalOpen, setModalOpen] = useState(false);
   const [successData, setSuccessData] = useState<{ name: string; whatsapp: string } | null>(null);
 
+  
+
+  const openModal = () => setModalOpen(true);
+
   const handleSuccess = (data: { name: string; whatsapp: string }) => {
     setModalOpen(false);
     setSuccessData(data);
@@ -210,6 +215,8 @@ export default function ChattingClient() {
         </div>
       </section>
 
+      <Requirements onApply={openModal} />
+
       {/* ── How it works ── */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
@@ -253,6 +260,8 @@ export default function ChattingClient() {
               </div>
             ))}
           </div>
+
+          <Requirements onApply={openModal} />
 
           {/* Earner stories */}
           <h3 className="text-xl font-extrabold text-gray-900 mb-5">From people already doing it</h3>
