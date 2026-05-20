@@ -1,14 +1,19 @@
 // app/robots.ts
-// Next.js generates /robots.txt from this file.
+import type { MetadataRoute } from "next";
 
-import { MetadataRoute } from "next";
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://velloearn.co.ke";
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: {
-      userAgent: "*",
-      allow: "/",
-    },
-    sitemap: "https://velloearn.com/sitemap.xml",
+    rules: [
+      {
+        userAgent: "*",
+        allow: "/",
+        // Keep admin/api routes out of the index
+        disallow: ["/api/", "/admin/", "/_next/"],
+      },
+    ],
+    sitemap: `${BASE_URL}/sitemap.xml`,
+    host: BASE_URL,
   };
 }
