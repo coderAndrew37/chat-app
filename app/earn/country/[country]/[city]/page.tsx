@@ -88,8 +88,8 @@ export default function CityPage({ params }: PageProps) {
   const schemas = [
     breadcrumbSchema([
       { name: "Home", href: "/" },
-      { name: `Online Jobs in ${country}`, href: `/earn/${market.slug}` },
-      { name: `Online Jobs in ${city.name}`, href: `/earn/${market.slug}/${city.slug}` },
+      { name: `Online Jobs in ${country}`, href: `/earn/country/${market.slug}` },
+      { name: `Online Jobs in ${city.name}`, href: `/earn/country/${market.slug}/${city.slug}` },
     ]),
     faqSchema(faqs),
   ];
@@ -112,7 +112,7 @@ export default function CityPage({ params }: PageProps) {
           <ol className="flex items-center gap-1 max-w-3xl mx-auto flex-wrap">
             <li><Link href="/" className="hover:text-rose-500">Home</Link></li>
             <li>/</li>
-            <li><Link href={`/earn/${market.slug}`} className="hover:text-rose-500">Online Jobs in {country}</Link></li>
+            <li><Link href={`/earn/country/${market.slug}`} className="hover:text-rose-500">Online Jobs in {country}</Link></li>
             <li>/</li>
             <li className="text-gray-600">Online Jobs in {city.name}</li>
           </ol>
@@ -227,7 +227,7 @@ export default function CityPage({ params }: PageProps) {
                 .map((c) => (
                   <Link
                     key={c.slug}
-                    href={`/earn/${market.slug}/${c.slug}`}
+                    href={`/earn/country/${market.slug}/${c.slug}`}
                     className="text-sm text-gray-600 bg-white border border-gray-100 px-4 py-2 rounded-full hover:border-rose-200 hover:text-rose-600 transition-all shadow-sm"
                   >
                     Online jobs in {c.name}

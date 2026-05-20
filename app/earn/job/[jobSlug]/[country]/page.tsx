@@ -115,8 +115,8 @@ export default function JobCountryPage({ params }: PageProps) {
   const schemas = [
     breadcrumbSchema([
       { name: "Home",                        href: "/"                                       },
-      { name: `Online Jobs in ${country}`,   href: `/earn/${market.slug}`                    },
-      { name: `${title} Jobs in ${country}`, href: `/earn/${jobSlug}/${market.slug}` },
+      { name: `Online Jobs in ${country}`,   href: `/earn/country/${market.slug}`                    },
+      { name: `${title} Jobs in ${country}`, href: `/earn/job/${jobSlug}/${market.slug}` },
     ]),
     faqSchema(faqs),
     jobPostingSchema({
@@ -152,7 +152,7 @@ export default function JobCountryPage({ params }: PageProps) {
             <li><Link href="/" className="hover:text-rose-500">Home</Link></li>
             <li>/</li>
             <li>
-              <Link href={`/earn/${market.slug}`} className="hover:text-rose-500">
+              <Link href={`/earn/country/${market.slug}`} className="hover:text-rose-500">
                 Online Jobs in {country}
               </Link>
             </li>
@@ -186,7 +186,7 @@ export default function JobCountryPage({ params }: PageProps) {
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <ApplyButton track={title} label={`Apply for ${title} Jobs →`} />
               <Link
-                href={`/earn/${market.slug}`}
+                href={`/earn/country/${market.slug}`}
                 className="bg-white text-gray-700 font-semibold text-base px-8 py-4 rounded-full border border-gray-200 shadow-sm transition-all hover:scale-105"
               >
                 All online jobs in {country}
@@ -261,7 +261,7 @@ export default function JobCountryPage({ params }: PageProps) {
               {cities.map((city) => (
                 <Link
                   key={city.slug}
-                  href={`/earn/${market.slug}/${city.slug}`}
+                  href={`/earn/country/${market.slug}/${city.slug}`}
                   className="text-sm text-gray-600 bg-gray-50 border border-gray-100 px-4 py-2 rounded-full hover:border-rose-200 hover:text-rose-600 transition-all"
                 >
                   {title} in {city.name}
@@ -298,7 +298,7 @@ export default function JobCountryPage({ params }: PageProps) {
               {related.map((job) => (
                 <Link
                   key={job.slug}
-                  href={`/earn/${job.slug}/${market.slug}`}
+                  href={`/earn/job/${job.slug}/${market.slug}`}
                   className="group bg-gray-50 hover:bg-rose-50 border border-gray-100 hover:border-rose-200 rounded-2xl p-4 transition-all text-center"
                 >
                   <div className="text-2xl mb-1">{job.icon}</div>

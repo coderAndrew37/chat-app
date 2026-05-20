@@ -116,8 +116,8 @@ export default function JobCountryPage({ params }: PageProps) {
   const schemas = [
     breadcrumbSchema([
       { name: "Home",                           href: "/" },
-      { name: `Online Jobs in ${country}`,      href: `/earn/${market.slug}` },
-      { name: `${title} Jobs in ${country}`,    href: `/earn/${jobType.slug}/${market.slug}` },
+      { name: `Online Jobs in ${country}`,      href: `/earn/country/${market.slug}` },
+      { name: `${title} Jobs in ${country}`,    href: `/earn/country/${jobType.slug}/${market.slug}` },
     ]),
     faqSchema(faqs),
     jobPostingSchema({
@@ -152,7 +152,7 @@ export default function JobCountryPage({ params }: PageProps) {
           <ol className="flex items-center gap-1 max-w-3xl mx-auto flex-wrap">
             <li><Link href="/" className="hover:text-rose-500">Home</Link></li>
             <li>/</li>
-            <li><Link href={`/earn/${market.slug}`} className="hover:text-rose-500">Online Jobs in {country}</Link></li>
+            <li><Link href={`/earn/country/${market.slug}`} className="hover:text-rose-500">Online Jobs in {country}</Link></li>
             <li>/</li>
             <li className="text-gray-600">{title} Jobs in {country}</li>
           </ol>
@@ -189,7 +189,7 @@ export default function JobCountryPage({ params }: PageProps) {
                 Apply for {title} Jobs →
               </Link>
               <Link
-                href={`/earn/${market.slug}`}
+                href={`/earn/country/${market.slug}`}
                 className="bg-white text-gray-700 font-semibold text-base px-8 py-4 rounded-full border border-gray-200 shadow-sm transition-all hover:scale-105"
               >
                 All online jobs in {country}
@@ -258,7 +258,7 @@ export default function JobCountryPage({ params }: PageProps) {
               {cities.map((city) => (
                 <Link
                   key={city.slug}
-                  href={`/earn/${market.slug}/${city.slug}`}
+                  href={`/earn/country/${market.slug}/${city.slug}`}
                   className="text-sm text-gray-600 bg-gray-50 border border-gray-100 px-4 py-2 rounded-full hover:border-rose-200 hover:text-rose-600 transition-all"
                 >
                   {title} in {city.name}

@@ -95,7 +95,7 @@ export default function CountryPage({ params }: PageProps) {
   const schemas = [
     breadcrumbSchema([
       { name: "Home", href: "/" },
-      { name: `Online Jobs in ${country}`, href: `/earn/${market.slug}` },
+      { name: `Online Jobs in ${country}`, href: `/earn/country/${market.slug}` },
     ]),
     faqSchema(faqs),
     jobPostingSchema({
@@ -180,7 +180,7 @@ export default function CountryPage({ params }: PageProps) {
               {JOB_TYPES.map((job) => (
                 <Link
                   key={job.slug}
-                  href={`/earn/${job.slug}/${market.slug}`}
+                  href={`/earn/job/${job.slug}/${market.slug}`}
                   className="group bg-gray-50 hover:bg-rose-50 border border-gray-100 hover:border-rose-200 rounded-2xl p-5 transition-all"
                 >
                   <div className="flex items-start gap-3">
@@ -217,7 +217,7 @@ export default function CountryPage({ params }: PageProps) {
               {cities.map((city) => (
                 <Link
                   key={city.slug}
-                  href={`/earn/${market.slug}/${city.slug}`}
+                  href={`/earn/country/${market.slug}/${city.slug}`}
                   className="bg-white border border-gray-100 hover:border-rose-200 hover:text-rose-600 text-gray-700 text-sm font-medium px-4 py-2 rounded-full shadow-sm transition-all"
                 >
                   Online jobs in {city.name}
@@ -299,7 +299,7 @@ export default function CountryPage({ params }: PageProps) {
               {MARKETS.filter((m) => m.slug !== market.slug).map((m) => (
                 <Link
                   key={m.slug}
-                  href={`/earn/${m.slug}`}
+                  href={`/earn/country/${m.slug}`}
                   className="text-sm text-gray-600 bg-white border border-gray-100 px-4 py-2 rounded-full hover:border-rose-200 hover:text-rose-600 transition-all shadow-sm"
                 >
                   Online jobs in {m.country} →
