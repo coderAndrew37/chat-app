@@ -33,7 +33,6 @@ export default function LayoutClient({ children }: LayoutClientProps) {
       {isApplyModalOpen && (
         <ApplicationModal 
           onClose={() => setIsApplyModalOpen(false)} 
-          onSuccess={handleSuccess}
           track="General Application" 
         />
       )}

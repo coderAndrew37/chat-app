@@ -1,359 +1,214 @@
 "use client";
 
+import { WA_NUMBER } from "@/lib/constants";
 import { useState, useEffect, useRef } from "react";
-import { fireApplicationSubmit } from "@/lib/conversionEvents";
-import { ApplicationFormData } from "@/types";
 
-// Track-specific accent colours so the modal feels native to each page
-const TRACK_ACCENT: Record<string, { from: string; to: string; badge: string }> = {
-  "Remote Chatting":    { from: "#f43f5e", to: "#fb923c", badge: "💬" },
-  "Surveys & Research": { from: "#f59e0b", to: "#f97316", badge: "📋" },
-  "AI Training":        { from: "#8b5cf6", to: "#6366f1", badge: "🤖" },
-  "Academic Writing":   { from: "#10b981", to: "#0d9488", badge: "✍️" },
-  "Forex Trading":      { from: "#3b82f6", to: "#06b6d4", badge: "📈" },
-  "General Application":{ from: "#f43f5e", to: "#fb923c", badge: "🚀" },
+const TRACKS: Record<string, { label: string; emoji: string }> = {
+  "chatting":          { label: "Remote Chatting",  emoji: "💬" },
+  "ai-training":       { label: "AI Training",      emoji: "🤖" },
+  "surveys":           { label: "Surveys",          emoji: "📋" },
+  "academic-writing":  { label: "Academic Writing", emoji: "✍️" },
+  "forex":             { label: "Forex Trading",    emoji: "📈" },
+  "swahili-teaching":  { label: "Teach Swahili",    emoji: "🌍" },
 };
 
-function getAccent(track: string) {
-  return TRACK_ACCENT[track] ?? TRACK_ACCENT["General Application"];
+
+interface Props {
+  track: string;
+  onClose: () => void;
 }
 
-// Social proof cycling under the CTA
-const PROOF_LINES = [
-  "Zawadi from Embakasi made KES 22,500 last month.",
-  "Kelvin from Kisumu earns KES 41,000 / month.",
-  "Faith from South B made KES 38,000 writing.",
-  "James from Westlands earns KES 52,000 trading.",
-  "Over 60% of our team earns through chatting.",
-];
+export default function ApplicationModal({ track, onClose }: Props) {
+  const [name, setName]       = useState("");
+  const [error, setError]     = useState("");
+  const [loading, setLoading] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const inputRef              = useRef<HTMLInputElement>(null);
 
-export default function ApplicationModal({
-  onClose,
-  track,
-  onSuccess,
-}: {
-  onClose: () => void;
-  track: string;
-  onSuccess: (data: ApplicationFormData) => void;
-}) {
-  const [form, setForm]           = useState<ApplicationFormData>({ name: "", whatsapp: "" });
-  const [errors, setErrors]       = useState<Partial<ApplicationFormData>>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [proofIdx, setProofIdx]   = useState(0);
-  const [mounted, setMounted]     = useState(false);
-  const nameRef                   = useRef<HTMLInputElement>(null);
-  const accent                    = getAccent(track);
+  const t = TRACKS[track] ?? TRACKS["chatting"];
 
-  // Slide-in animation on mount
   useEffect(() => {
-    const t = setTimeout(() => setMounted(true), 10);
-    nameRef.current?.focus();
-    return () => clearTimeout(t);
+    const id = setTimeout(() => setMounted(true), 10);
+    inputRef.current?.focus();
+    return () => clearTimeout(id);
   }, []);
 
-  // Cycle social proof every 3.5 s
   useEffect(() => {
-    const id = setInterval(
-      () => setProofIdx((i) => (i + 1) % PROOF_LINES.length),
-      3500,
-    );
-    return () => clearInterval(id);
-  }, []);
-
-  // Close on Escape
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => e.key === "Escape" && onClose();
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
+    const fn = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", fn);
+    return () => window.removeEventListener("keydown", fn);
   }, [onClose]);
 
-  const validate = (): boolean => {
-    const errs: Partial<ApplicationFormData> = {};
-    if (!form.name.trim() || form.name.trim().length < 2)
-      errs.name = "Enter your full name";
-    const cleaned = form.whatsapp.replace(/\s/g, "");
-    if (!cleaned || !/^(07|01|\+254|254)\d{8,9}$/.test(cleaned))
-      errs.whatsapp = "Enter a valid Kenyan number (e.g. 0712 345 678)";
-    setErrors(errs);
-    return Object.keys(errs).length === 0;
-  };
-
-  const handleSubmit = async () => {
-    if (!validate()) return;
-    setIsSubmitting(true);
-
-    // Fire all pixel conversion events before the fake delay
-    fireApplicationSubmit({ track, name: form.name });
-
-    await new Promise((r) => setTimeout(r, 1100));
-    setIsSubmitting(false);
-    onSuccess(form);
-  };
+  function handleSubmit() {
+    const trimmed = name.trim();
+    if (!trimmed || trimmed.length < 2) {
+      setError("Enter your first name");
+      inputRef.current?.focus();
+      return;
+    }
+    setLoading(true);
+    const msg = encodeURIComponent(
+  `Hi, my name is ${trimmed}. I'm ready to start earning online with VelloEarn. Please guide me through the next step and activate my account.`
+);
+    setTimeout(() => {
+      window.open(`https://wa.me/${WA_NUMBER}?text=${msg}`, "_blank");
+      setLoading(false);
+    }, 600);
+  }
 
   return (
-    /* ── Backdrop ── */
     <div
-      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center"
-      style={{ background: "rgba(0,0,0,0.65)", backdropFilter: "blur(4px)" }}
       onClick={(e) => e.target === e.currentTarget && onClose()}
+      className="fixed inset-0 z-50 flex items-end justify-center bg-slate-900/50 backdrop-blur-sm"
     >
-      {/* ── Sheet / Card ── */}
       <div
-        className="relative w-full sm:max-w-md overflow-hidden
-                   rounded-t-[28px] sm:rounded-[28px]
-                   shadow-2xl"
-        style={{
-          background: "#0f1117",
-          border: "1px solid rgba(255,255,255,0.07)",
-          transform: mounted ? "translateY(0)" : "translateY(40px)",
-          opacity: mounted ? 1 : 0,
-          transition: "transform 0.35s cubic-bezier(0.34,1.56,0.64,1), opacity 0.25s ease",
-        }}
+        className={`w-full max-w-[460px] bg-white rounded-t-[22px] overflow-hidden transition-all duration-[380ms] ease-[cubic-bezier(0.34,1.3,0.64,1)] ${
+          mounted ? "translate-y-0 opacity-100" : "translate-y-12 opacity-0"
+        }`}
       >
-        {/* ── Gradient accent bar ── */}
-        <div
-          className="h-1.5 w-full"
-          style={{ background: `linear-gradient(90deg, ${accent.from}, ${accent.to})` }}
-        />
+        {/* Rose bar */}
+        <div className="h-[3px] bg-rose-500 w-full" />
 
-        {/* ── Glow behind the bar ── */}
-        <div
-          className="absolute top-0 left-0 right-0 h-32 pointer-events-none"
-          style={{
-            background: `radial-gradient(ellipse 70% 60px at 50% 0, ${accent.from}22, transparent)`,
-          }}
-        />
+        {/* Drag pill */}
+        <div className="w-9 h-1 bg-slate-200 rounded-full mx-auto mt-3" />
 
-        {/* ── Header ── */}
-        <div className="relative px-7 pt-7 pb-0">
-          <div className="flex items-start justify-between">
-            <div>
-              {/* Track badge */}
-              <div
-                className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold mb-4"
-                style={{
-                  background: `linear-gradient(135deg, ${accent.from}22, ${accent.to}22)`,
-                  border: `1px solid ${accent.from}44`,
-                  color: accent.from,
-                }}
+        <div className="px-6 pt-5 pb-8 relative">
+
+          {/* Close */}
+          <button
+            onClick={onClose}
+            aria-label="Close"
+            className="absolute top-0 right-6 w-8 h-8 rounded-full bg-slate-100 hover:bg-rose-50 text-slate-400 hover:text-rose-500 flex items-center justify-center transition-colors"
+          >
+            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+
+         {/* Track badge */}
+<div className="inline-flex items-center gap-1.5 bg-rose-50 border border-rose-200 text-rose-500 text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full mb-3.5">
+  <span>{t.emoji}</span>
+  <span>Remote Income Opportunities</span>
+</div>
+
+          {/* Heading */}
+<h2 className="font-extrabold text-[27px] text-slate-900 leading-[1.18] tracking-tight mb-2">
+  Learn How To Earn Online.<br />
+  <span className="text-rose-500">Start Today.</span>
+</h2>
+
+          {/* Subheading */}
+<p className="text-[13.5px] text-slate-500 leading-relaxed mb-5">
+  Enter your name and we&apos;ll guide you through the fastest way to get started with remote income opportunities. No experience, no laptop, and no joining fee required.
+</p>
+
+          {/* Trust pills */}
+          <div className="flex flex-wrap gap-1.5 mb-5">
+            {["📱 Phone only", "💸 M-Pesa payouts", "✅ Free to join"].map((pill) => (
+              <span
+                key={pill}
+                className="text-[11.5px] text-slate-600 bg-slate-50 border border-slate-200 rounded-full px-2.5 py-1 font-medium"
               >
-                <span>{accent.badge}</span>
-                <span>{track}</span>
-              </div>
-              <h2 className="text-2xl font-extrabold text-white leading-tight tracking-tight">
-                Apply in 30 seconds.
-              </h2>
-              <p className="text-sm mt-1" style={{ color: "rgba(255,255,255,0.45)" }}>
-                We&apos;ll reach out on WhatsApp within 24 hrs.
-              </p>
-            </div>
+                {pill}
+              </span>
+            ))}
+          </div>
 
-            {/* Close */}
-            <button
-              onClick={onClose}
-              aria-label="Close"
-              className="shrink-0 ml-4 w-8 h-8 rounded-full flex items-center justify-center transition-colors"
-              style={{ background: "rgba(255,255,255,0.06)", color: "rgba(255,255,255,0.5)" }}
-              onMouseEnter={(e) =>
-                ((e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.12)")
-              }
-              onMouseLeave={(e) =>
-                ((e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.06)")
-              }
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          {/* Input */}
+          <label className="block text-[10px] font-bold uppercase tracking-[0.1em] text-slate-400 mb-2">
+            Your first name
+          </label>
+
+          <input
+            ref={inputRef}
+            type="text"
+            placeholder="e.g. Wanjiru"
+            autoComplete="given-name"
+            value={name}
+            onChange={(e) => { setName(e.target.value); setError(""); }}
+            onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
+            className={`w-full rounded-[13px] px-4 py-3.5 text-[15px] text-slate-900 placeholder-slate-300 outline-none transition-all border-[1.5px] focus:ring-[3px] focus:ring-rose-500/10 focus:border-rose-500 ${
+              error
+                ? "border-rose-500 bg-rose-50/50"
+                : "border-slate-200 bg-slate-50 focus:bg-white"
+            }`}
+          />
+
+          {error && (
+            <p className="flex items-center gap-1 mt-1.5 text-[11.5px] text-rose-500">
+              <svg className="w-3 h-3 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
               </svg>
-            </button>
-          </div>
-        </div>
+              {error}
+            </p>
+          )}
 
-        {/* ── Form ── */}
-        <div className="px-7 pt-6 pb-7 space-y-4">
-
-          {/* Name field */}
-          <div>
-            <label
-              className="block text-xs font-semibold mb-1.5 uppercase tracking-wider"
-              style={{ color: "rgba(255,255,255,0.4)" }}
-            >
-              Full name
-            </label>
-            <input
-              ref={nameRef}
-              type="text"
-              placeholder="e.g. Wanjiru Muthoni"
-              value={form.name}
-              onChange={(e) => {
-                setForm({ ...form, name: e.target.value });
-                if (errors.name) setErrors({ ...errors, name: undefined });
-              }}
-              className="w-full px-4 py-3.5 rounded-xl text-sm text-white placeholder-white/20 outline-none transition-all"
-              style={{
-                background: errors.name
-                  ? "rgba(244,63,94,0.08)"
-                  : "rgba(255,255,255,0.05)",
-                border: errors.name
-                  ? "1px solid rgba(244,63,94,0.5)"
-                  : "1px solid rgba(255,255,255,0.08)",
-                caretColor: accent.from,
-              }}
-              onFocus={(e) => {
-                if (!errors.name)
-                  (e.target as HTMLInputElement).style.border = `1px solid ${accent.from}88`;
-              }}
-              onBlur={(e) => {
-                if (!errors.name)
-                  (e.target as HTMLInputElement).style.border = "1px solid rgba(255,255,255,0.08)";
-              }}
-            />
-            {errors.name && (
-              <p className="text-xs mt-1.5 flex items-center gap-1" style={{ color: "#f87171" }}>
-                <svg className="w-3 h-3 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                </svg>
-                {errors.name}
-              </p>
-            )}
-          </div>
-
-          {/* WhatsApp field */}
-          <div>
-            <label
-              className="block text-xs font-semibold mb-1.5 uppercase tracking-wider"
-              style={{ color: "rgba(255,255,255,0.4)" }}
-            >
-              WhatsApp number
-            </label>
-            <div className="relative">
-              {/* Flag prefix */}
-              <div
-                className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center gap-1.5 text-sm select-none pointer-events-none"
-                style={{ color: "rgba(255,255,255,0.35)" }}
-              >
-                🇰🇪
-                <span style={{ color: "rgba(255,255,255,0.15)" }}>|</span>
-              </div>
-              <input
-                type="tel"
-                placeholder="0712 345 678"
-                value={form.whatsapp}
-                onChange={(e) => {
-                  setForm({ ...form, whatsapp: e.target.value });
-                  if (errors.whatsapp) setErrors({ ...errors, whatsapp: undefined });
-                }}
-                className="w-full pl-14 pr-4 py-3.5 rounded-xl text-sm text-white placeholder-white/20 outline-none transition-all"
-                style={{
-                  background: errors.whatsapp
-                    ? "rgba(244,63,94,0.08)"
-                    : "rgba(255,255,255,0.05)",
-                  border: errors.whatsapp
-                    ? "1px solid rgba(244,63,94,0.5)"
-                    : "1px solid rgba(255,255,255,0.08)",
-                  caretColor: accent.from,
-                }}
-                onFocus={(e) => {
-                  if (!errors.whatsapp)
-                    (e.target as HTMLInputElement).style.border = `1px solid ${accent.from}88`;
-                }}
-                onBlur={(e) => {
-                  if (!errors.whatsapp)
-                    (e.target as HTMLInputElement).style.border = "1px solid rgba(255,255,255,0.08)";
-                }}
-              />
-            </div>
-            {errors.whatsapp ? (
-              <p className="text-xs mt-1.5 flex items-center gap-1" style={{ color: "#f87171" }}>
-                <svg className="w-3 h-3 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                </svg>
-                {errors.whatsapp}
-              </p>
-            ) : (
-              <p className="text-xs mt-1.5" style={{ color: "rgba(255,255,255,0.25)" }}>
-                Activation instructions come here.
-              </p>
-            )}
-          </div>
-
-          {/* Submit button */}
+          {/* CTA */}
           <button
             onClick={handleSubmit}
-            disabled={isSubmitting}
-            className="w-full relative overflow-hidden py-4 rounded-xl font-extrabold text-base text-white transition-all mt-2"
-            style={{
-              background: isSubmitting
-                ? `linear-gradient(135deg, ${accent.from}99, ${accent.to}99)`
-                : `linear-gradient(135deg, ${accent.from}, ${accent.to})`,
-              boxShadow: isSubmitting
-                ? "none"
-                : `0 8px 32px ${accent.from}55`,
-              transform: isSubmitting ? "scale(0.98)" : "scale(1)",
-            }}
+            disabled={loading}
+            className="w-full mt-4 flex items-center justify-center gap-2.5 bg-rose-500 hover:bg-rose-600 disabled:bg-rose-300 text-white font-bold text-[15px] rounded-[13px] py-4 shadow-[0_4px_18px_rgba(244,63,94,0.3)] hover:shadow-[0_6px_22px_rgba(244,63,94,0.38)] hover:-translate-y-px active:scale-[0.98] disabled:shadow-none disabled:cursor-default transition-all"
           >
-            {isSubmitting ? (
-              <span className="flex items-center justify-center gap-2">
-                <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                </svg>
-                Submitting...
-              </span>
+            {loading ? (
+              <>
+                <SpinnerIcon />
+                Opening WhatsApp...
+              </>
             ) : (
-              <span className="flex items-center justify-center gap-2">
-                Submit My Application
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
-              </span>
-            )}
-
-            {/* Shimmer sweep on hover */}
-            {!isSubmitting && (
-              <span
-                className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity"
-                style={{
-                  background:
-                    "linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.15) 50%, transparent 60%)",
-                  backgroundSize: "200% 100%",
-                  animation: "shimmer 1.4s infinite",
-                }}
-              />
+              <>
+                <WhatsAppIcon />
+                Start My Application
+              </>
             )}
           </button>
 
-          {/* ── Social proof ticker ── */}
-          <div
-            className="flex items-center gap-3 px-4 py-3 rounded-xl"
-            style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.05)" }}
-          >
-            <div
-              className="shrink-0 w-2 h-2 rounded-full animate-pulse"
-              style={{ background: accent.from }}
-            />
-            <p
-              className="text-xs leading-relaxed transition-all duration-500"
-              style={{ color: "rgba(255,255,255,0.4)" }}
-              key={proofIdx}
-            >
-              {PROOF_LINES[proofIdx]}
-            </p>
-          </div>
+          <p className="text-center text-[11px] text-slate-500 mt-3">
+  Takes less than 2 minutes to get started.
+</p>
 
-          {/* Privacy note */}
-          <p className="text-center text-xs" style={{ color: "rgba(255,255,255,0.2)" }}>
-            No spam. No third-party sharing. Ever.
+          {/* WhatsApp handoff note */}
+<div className="flex items-center gap-2.5 bg-green-50 border border-green-200 rounded-xl px-3.5 py-2.5 mt-3.5">
+  <div className="w-7 h-7 rounded-full bg-[#25d366] flex items-center justify-center shrink-0">
+    <WhatsAppIcon size={14} color="white" />
+  </div>
+
+  <p className="text-xs text-green-800 leading-relaxed">
+    <strong className="font-semibold">
+      Our onboarding team is ready.
+    </strong>{" "}
+    Once you message us, we&apos;ll review your application and guide you to the next available earning opportunities.
+  </p>
+</div>
+
+          {/* Privacy */}
+          <p className="text-center text-[11px] text-slate-300 mt-4">
+            No spam. No sharing. Free forever.
           </p>
+
         </div>
       </div>
-
-      {/* Shimmer keyframe — injected inline so no globals.css edit needed */}
-      <style>{`
-        @keyframes shimmer {
-          0%   { background-position: 200% center; }
-          100% { background-position: -200% center; }
-        }
-      `}</style>
     </div>
+  );
+}
+
+function WhatsAppIcon({ size = 20, color = "white" }: { size?: number; color?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill={color}>
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+    </svg>
+  );
+}
+
+function SpinnerIcon() {
+  return (
+    <svg
+      className="w-4 h-4 animate-spin"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2.5}
+      viewBox="0 0 24 24"
+    >
+      <path strokeLinecap="round" d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+    </svg>
   );
 }

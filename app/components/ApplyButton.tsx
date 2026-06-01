@@ -41,10 +41,7 @@ export default function ApplyButton({ track, label, className }: ApplyButtonProp
         <ApplicationModal
           track={track}
           onClose={() => setModalOpen(false)}
-          onSuccess={(data) => {
-            setModalOpen(false);
-            setSuccessData(data);
-          }}
+          
         />
       )}
 

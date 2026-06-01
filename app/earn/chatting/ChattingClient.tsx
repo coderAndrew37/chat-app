@@ -1,11 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
-import Image from "next/image";
 import { ApplicationModal, SuccessState } from "@/app/components";
-import { whatsappNumber } from "@/lib/constants";
 import Requirements from "@/app/components/Requirements";
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
 
 // --- Components ---
 
@@ -15,7 +14,7 @@ function SmartImage({ src, fallback, alt, fill, width, height, className, sizes,
 }) {
   const [imgSrc, setImgSrc] = useState(src);
   const props = { src: imgSrc, alt, className, onError: () => setImgSrc(fallback), sizes, priority };
-  return fill ? <Image {...props} fill unoptimized /> : <Image {...props} width={width ?? 400} height={height ?? 300} unoptimized />;
+  return fill ? <Image {...props} fill unoptimized alt="" /> : <Image {...props} width={width ?? 400} height={height ?? 300} unoptimized alt="" />;
 }
 
 function ObjAccordion({ q, a }: { q: string; a: string }) {
@@ -118,10 +117,6 @@ export default function ChattingClient() {
 
   const openModal = () => setModalOpen(true);
 
-  const handleSuccess = (data: { name: string; whatsapp: string }) => {
-    setModalOpen(false);
-    setSuccessData(data);
-  };
 
   return (
     <main className="bg-gray-50 min-h-screen">
@@ -327,7 +322,6 @@ export default function ChattingClient() {
       {modalOpen && (
         <ApplicationModal 
           onClose={() => setModalOpen(false)} 
-          onSuccess={handleSuccess} 
           track="Remote Chatting" 
         />
       )}

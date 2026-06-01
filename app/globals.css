@@ -42,3 +42,36 @@ textarea,
   -ms-user-select: text;
   user-select: text;
 }
+
+/* Add to your global.css or use Tailwind classes */
+.carousel-container .slick-prev:before,
+.carousel-container .slick-next:before {
+  color: #8b5cf6; /* violet-500 */
+  font-size: 24px;
+}
+
+.carousel-container .slick-dots li button:before {
+  font-size: 12px;
+  color: #cbd5e1;
+}
+
+.carousel-container .slick-dots li.slick-active button:before {
+  color: #8b5cf6;
+}
+
+.carousel-container .slick-prev {
+  left: -25px;
+}
+
+.carousel-container .slick-next {
+  right: -25px;
+}
+
+@media (max-width: 768px) {
+  .carousel-container .slick-prev {
+    left: -15px;
+  }
+  .carousel-container .slick-next {
+    right: -15px;
+  }
+}

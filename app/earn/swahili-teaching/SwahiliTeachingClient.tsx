@@ -105,10 +105,7 @@ export default function SwahiliClient() {
   const [modalOpen, setModalOpen] = useState(false);
   const [successData, setSuccessData] = useState<{ name: string; whatsapp: string } | null>(null);
 
-  const handleSuccess = (data: { name: string; whatsapp: string }) => {
-    setModalOpen(false);
-    setSuccessData(data);
-  };
+  
 
   return (
     <main className="bg-gray-50 min-h-screen">
@@ -286,7 +283,6 @@ export default function SwahiliClient() {
       {modalOpen && (
         <ApplicationModal 
           onClose={() => setModalOpen(false)} 
-          onSuccess={handleSuccess} 
           track="Teach Swahili" 
         />
       )}

@@ -62,7 +62,6 @@ export default function HomePageClient() {
       {modalOpen && (
         <ApplicationModal
           onClose={() => setModalOpen(false)}
-          onSuccess={handleSuccess}
           track="General Partner"
         />
       )}

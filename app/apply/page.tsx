@@ -91,7 +91,6 @@ export default function ApplyPage({ searchParams }: ApplyPageProps) {
         <ApplicationModal
           track={selectedTrack}
           onClose={() => setIsOpen(false)}
-          onSuccess={handleSuccess}
         />
       )}
     </main>

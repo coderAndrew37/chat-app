@@ -7,6 +7,8 @@ import TestimonialSlider from "@/app/components/TestimonialSlider";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import EarnerStoriesCarousel from "@/app/components/EarnerStoriesGrid";
+
 
 // --- Sub-components ---
 
@@ -16,7 +18,7 @@ function SmartImage({ src, fallback, alt, fill, width, height, className, sizes,
 }) {
   const [imgSrc, setImgSrc] = useState(src);
   const props = { src: imgSrc, alt, className, onError: () => setImgSrc(fallback), sizes, priority };
-  return fill ? <Image {...props} fill unoptimized /> : <Image {...props} width={width ?? 400} height={height ?? 300} unoptimized />;
+  return fill ? <Image {...props} fill unoptimized alt="" /> : <Image {...props} width={width ?? 400} height={height ?? 300} unoptimized  alt=""/>;
 }
 
 function ObjAccordion({ q, a }: { q: string; a: string }) {
@@ -43,37 +45,47 @@ const TASK_TYPES = [
   { icon: "📝", title: "Data labelling", body: "Tagging content — images, text, audio clips — so AI models can learn to classify things. Clear instructions, simple interface." },
 ];
 
-// These copy points are in the onboarding doc now, not the landing page, so I removed them from here to avoid repetition. The doc goes into more detail on each step, so it felt weird to have a super high-level version on the landing page too.
-//   { step: "01", title: "Apply and get onboarded", body: "You apply, get accepted, then receive a short onboarding doc explaining the task types and how the scoring system works. No prior knowledge needed." },
-//   { step: "02", title: "Pick tasks from the queue", body: "You log in and see available tasks. Each one shows the task type, estimated time, and payout. You pick what you want." },
-//   { step: "03", title: "Complete them at your pace", body: "Tasks have deadlines, but you don't sit in a time-block. You can do three tasks in the morning and five at night. It's async." },
-//   { step: "04", title: "Earn and withdraw", body: "Approved tasks add to your balance. Withdraw to M-Pesa anytime from KES 500 upward." },
-// ];
-
 const EARNINGS = [
   { label: "Casual (5–10 tasks/day)", range: "KES 4,000 – 9,000", note: "/ month" },
   { label: "Active (20–30 tasks/day)", range: "KES 14,000 – 22,000", note: "/ month" },
   { label: "Active + team commissions", range: "KES 28,000 – 50,000+", note: "/ month" },
 ];
 
-// const EARNER_STORIES = [
-//   {
-//     name: "Patricia N.",
-//     location: "Nairobi, Githurai",
-//     earned: "KES 17,200 / month",
-//     story: "I do this during my lunch break and late evenings. It doesn't feel like work — I'm just reading things and typing what I think. The money is real though.",
-//     img: "/testimonials/patricia.jpg",
-//     fallback: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&h=200&fit=crop&crop=face&auto=format",
-//   },
-//   {
-//     name: "Moses A.",
-//     location: "Mombasa",
-//     earned: "KES 31,500 / month",
-//     story: "I treat it like a second job. I block two hours every morning — no distractions. After three months I brought my cousin in. Her output adds to my team income now.",
-//     img: "/testimonials/moses.jpg",
-//     fallback: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face&auto=format",
-//   },
-// ];
+
+interface EarningsStories{
+  name:string,
+  location:string,
+  story:string,
+  earned:string,
+  image:{
+    actualImage?:string,
+    fallback?:string,
+  },
+  
+}
+
+const EARNER_STORIES: EarningsStories[] = [  // Note the [] for array
+  {
+    name: "Patricia N.",  // Use : not =
+    location: "Nairobi, Githurai",
+    earned: "KES 17,200 / month",
+    story: "I do this during my lunch break and late evenings. It doesn't feel like work — I'm just reading things and typing what I think. The money is real though.",
+    image: {
+      actualImage: "/testimonials/patricia.jpg",
+      fallback: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&h=200&fit=crop&crop=face&auto=format",
+    }
+  },
+  {
+    name: "Moses A.",
+    location: "Mombasa",
+    earned: "KES 31,500 / month",
+    story: "I treat it like a second job. I block two hours every morning — no distractions. After three months I brought my cousin in. Her output adds to my team income now.",
+    image: {
+      actualImage: "/testimonials/moses.jpg",
+      fallback: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face&auto=format",
+    }
+  },
+];
 
 const OBJECTIONS = [
   {
@@ -96,10 +108,7 @@ export default function AITrainingClient() {
 
   const openModal = () => setModalOpen(true);
 
-  const handleSuccess = (data: { name: string; whatsapp: string }) => {
-    setModalOpen(false);
-    setSuccessData(data);
-  };
+  
 
   return (
     <main className="bg-gray-50 min-h-screen">
@@ -177,6 +186,38 @@ export default function AITrainingClient() {
         </div>
       </section>
 
+
+<section className="py-20 bg-gray-50">
+  <div className="max-w-5xl mx-auto px-4 sm:px-6">
+    <div className="text-center mb-12">
+      <span className="text-rose-500 font-semibold text-sm uppercase tracking-wider">
+        Real stories, real earnings
+      </span>
+      <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mt-2 mb-3">
+        Meet our top earners
+      </h2>
+      <p className="text-gray-500 max-w-2xl mx-auto">
+        Regular Kenyans who turned their spare time into meaningful income.
+      </p>
+    </div>
+    
+    <EarnerStoriesCarousel 
+      stories={EARNER_STORIES}
+      layout="horizontal"
+      autoPlay={true}
+      autoPlayInterval={5000}
+      showDots={true}
+      showArrows={true}
+    />
+    
+    {/* For vertical layout carousel */}
+    {/* <EarnerStoriesCarousel 
+      stories={EARNER_STORIES}
+      layout="vertical"
+      autoPlay={true}
+    /> */}
+  </div>
+</section>
       {/* ── Earning Potential ── */}
       <section className="py-20 bg-white">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
@@ -192,6 +233,8 @@ export default function AITrainingClient() {
           </div>
         </div>
       </section>
+
+      <Requirements onApply={openModal} />
 
       {/* ── FAQs ── */}
       <section className="py-20 bg-gray-50">
@@ -218,7 +261,6 @@ export default function AITrainingClient() {
       {modalOpen && (
         <ApplicationModal 
           onClose={() => setModalOpen(false)} 
-          onSuccess={handleSuccess} 
           track="AI Training" 
         />
       )}
