@@ -1,7 +1,7 @@
 // app/sitemap.ts
 // ─── Dynamic sitemap ──────────────────────────────────────────────────────────
 // Registered in next.config with output: "standalone" + metadataBase.
-// Covers: homepage, static pages, all country pages, all city pages,
+// Covers: homepage, static pages, main job categories, all country pages, all city pages,
 // all job-type × country pages, and all blog posts.
 
 import type { MetadataRoute } from "next";
@@ -12,10 +12,9 @@ import {
   getAllJobCountryParams,
 } from "@/lib/seo/keyword-matrix";
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://velloearn.com";
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://velloearn.co.ke";
 
 // ─── Blog posts ───────────────────────────────────────────────────────────────
-// Replace this with a real CMS/DB fetch when you have one.
 const BLOG_POSTS = [
   { slug: "mpesa-payments",             lastModified: "2026-01-10" },
   { slug: "scale-your-team",            lastModified: "2026-01-10" },
@@ -23,6 +22,16 @@ const BLOG_POSTS = [
   { slug: "swahili-teaching-guide",     lastModified: "2026-02-15" },
   { slug: "online-surveys-kenya-guide", lastModified: "2026-03-01" },
   { slug: "forex-beginners-guide",      lastModified: "2026-03-15" },
+];
+
+// ─── Main Core Job Category Slugs ──────────────────────────────────────────────
+const CORE_JOB_SLUGS = [
+  "chatting",
+  "ai-training",
+  "swahili-teaching",
+  "surveys",
+  "forex",
+  "academic-writing"
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -44,6 +53,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
+  // ── Core Job Landing Pages (Explicitly Handled) ────────────────────────────
+  const coreJobPages: MetadataRoute.Sitemap = CORE_JOB_SLUGS.map((slug) => ({
+    url: `${BASE_URL}/earn/${slug}`,
+    lastModified: now,
+    changeFrequency: "weekly" as const,
+    priority: 0.95, // Higher priority as these are your primary money pages
+  }));
+
   // ── Country pages: /earn/[country] ─────────────────────────────────────────
   const countryPages: MetadataRoute.Sitemap = MARKETS.map((market) => ({
     url: `${BASE_URL}/earn/${market.slug}`,
@@ -62,7 +79,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })
   );
 
-  // ── Job type root pages: /earn/[jobSlug] ───────────────────────────────────
+  // ── Job type matrix pages: /earn/[jobSlug] (Fallback for matrix consistency) ──
   const jobRootPages: MetadataRoute.Sitemap = JOB_TYPES.map((job) => ({
     url: `${BASE_URL}/earn/${job.slug}`,
     lastModified: now,
@@ -88,12 +105,23 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  return [
+  // Filter out any duplicate root URLs that might happen from combining coreJobPages and jobRootPages
+  const allPages = [
     ...staticPages,
+    ...coreJobPages,
     ...countryPages,
     ...cityPages,
     ...jobRootPages,
     ...jobCountryPages,
     ...blogPages,
   ];
+
+  const uniqueUrls = new Set<string>();
+  return allPages.filter((page) => {
+    if (uniqueUrls.has(page.url)) {
+      return false;
+    }
+    uniqueUrls.add(page.url);
+    return true;
+  });
 }

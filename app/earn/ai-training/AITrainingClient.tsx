@@ -205,7 +205,7 @@ export default function AITrainingClient() {
       stories={EARNER_STORIES}
       layout="horizontal"
       autoPlay={true}
-      autoPlayInterval={5000}
+      autoPlaySpeed={5000}  
       showDots={true}
       showArrows={true}
     />
