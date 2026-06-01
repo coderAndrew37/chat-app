@@ -2,7 +2,7 @@
 // ─── Dynamic sitemap ──────────────────────────────────────────────────────────
 // Registered in next.config with output: "standalone" + metadataBase.
 // Covers: homepage, static pages, main job categories, all country pages, all city pages,
-// all job-type × country pages, and all blog posts.
+// all job-type × country pages, all blog posts, and specialized parameterized localized tracks.
 
 import type { MetadataRoute } from "next";
 import {
@@ -61,6 +61,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.95, // Higher priority as these are your primary money pages
   }));
 
+  // PRO-TIP IMPLEMENTATION: Explicit target parameters pushed to sitemap to enforce crawler parsing
+  const parameterizedAILocalizedPages: MetadataRoute.Sitemap = ["kenya", "uganda", "ghana"].map((country) => ({
+    url: `${BASE_URL}/earn/ai-training?country=${country}`,
+    lastModified: now,
+    changeFrequency: "weekly" as const,
+    priority: 0.95,
+  }));
+
   // ── Country pages: /earn/[country] ─────────────────────────────────────────
   const countryPages: MetadataRoute.Sitemap = MARKETS.map((market) => ({
     url: `${BASE_URL}/earn/${market.slug}`,
@@ -109,6 +117,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const allPages = [
     ...staticPages,
     ...coreJobPages,
+    ...parameterizedAILocalizedPages,
     ...countryPages,
     ...cityPages,
     ...jobRootPages,
