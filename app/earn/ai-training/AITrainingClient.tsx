@@ -323,7 +323,6 @@ export default function AITrainingClient({ countryTarget = "kenya" }: AITraining
         <ApplicationModal 
           onClose={() => setModalOpen(false)} 
           track="AI Training" 
-          setSuccessData={setSuccessData}
         />
       )}
 

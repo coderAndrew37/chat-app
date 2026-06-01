@@ -22,6 +22,10 @@ const BLOG_POSTS = [
   { slug: "swahili-teaching-guide",     lastModified: "2026-02-15" },
   { slug: "online-surveys-kenya-guide", lastModified: "2026-03-01" },
   { slug: "forex-beginners-guide",      lastModified: "2026-03-15" },
+  { slug: "maximize-ai-earnings",       lastModified: "2026-04-01" },
+  { slug: "ai-tools-requirements",      lastModified: "2026-05-01" },
+  { slug: "rlhf-tasks-guide",           lastModified: "2026-05-15" },
+  {slug:'ai-data-annotation-jobs' , lastModified: "2026-06-01"}
 ];
 
 // ─── Main Core Job Category Slugs ──────────────────────────────────────────────

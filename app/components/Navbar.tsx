@@ -12,14 +12,15 @@ interface NavLink {
 const NAV_LINKS: NavLink[] = [
   { label: "How It Works", href: "/earn" },
   { label: "Ways to Earn", href: "/earn" },
+  { label: "Blog", href: "/blog" },
   { label: "Chatting", href: "/earn/chatting" },
   { label: "AI Training", href: "/earn/ai-training" },
   { label: "Teach Swahili", href: "/earn/swahili-teaching" },
   { label: "Surveys", href: "/earn/surveys" },
 ];
 
-const DESKTOP_NAV = NAV_LINKS.slice(0, 2);
-const EARN_LINKS = NAV_LINKS.slice(2);
+const DESKTOP_NAV = NAV_LINKS.slice(0, 3); // Now includes Blog
+const EARN_LINKS = NAV_LINKS.slice(3);
 
 interface NavbarProps {
   onApplyClick: () => void;
@@ -64,18 +65,18 @@ export default function Navbar({ onApplyClick }: NavbarProps) {
                 <Link
                   key={link.label}
                   href={link.href}
-                  className="text-gray-600 hover:text-rose-500 font-medium transition-colors text-sm"
+                  className="text-gray-600 hover:text-violet-600 font-medium transition-colors text-sm"
                 >
                   {link.label}
                 </Link>
               ))}
 
-              {/* "Ways to Earn" dropdown */}
+              {/* "Earn Tracks" dropdown */}
               <div className="relative" onMouseLeave={() => setEarnOpen(false)}>
                 <button
                   onMouseEnter={() => setEarnOpen(true)}
                   onClick={() => setEarnOpen(!earnOpen)}
-                  className="flex items-center gap-1 text-gray-600 hover:text-rose-500 font-medium transition-colors text-sm"
+                  className="flex items-center gap-1 text-gray-600 hover:text-violet-600 font-medium transition-colors text-sm"
                 >
                   Earn Tracks
                   <svg
@@ -100,9 +101,9 @@ export default function Navbar({ onApplyClick }: NavbarProps) {
                       <Link
                         key={link.href}
                         href={link.href}
-                        className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-rose-50 hover:text-rose-600 ${
+                        className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-violet-50 hover:text-violet-600 ${
                           pathname === link.href
-                            ? "text-rose-600 bg-rose-50"
+                            ? "text-violet-600 bg-violet-50"
                             : "text-gray-700"
                         }`}
                         onClick={() => setEarnOpen(false)}
@@ -119,7 +120,7 @@ export default function Navbar({ onApplyClick }: NavbarProps) {
             <div className="hidden md:flex items-center gap-3">
               <button
                 onClick={onApplyClick}
-                className="bg-rose-500 hover:bg-rose-600 text-white font-semibold text-sm px-5 py-2.5 rounded-full transition-colors shadow-sm"
+                className="bg-violet-600 hover:bg-violet-700 text-white font-semibold text-sm px-5 py-2.5 rounded-full transition-colors shadow-sm"
               >
                 Apply Now
               </button>
@@ -129,7 +130,7 @@ export default function Navbar({ onApplyClick }: NavbarProps) {
             <div className="flex md:hidden items-center gap-2">
               <button
                 onClick={onApplyClick}
-                className="bg-rose-500 hover:bg-rose-600 text-white font-semibold text-xs px-4 py-2 rounded-full transition-colors"
+                className="bg-violet-600 hover:bg-violet-700 text-white font-semibold text-xs px-4 py-2 rounded-full transition-colors"
               >
                 Apply
               </button>
@@ -209,8 +210,8 @@ export default function Navbar({ onApplyClick }: NavbarProps) {
               onClick={closeSidebar}
               className={`flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium transition-colors ${
                 pathname === link.href
-                  ? "bg-rose-50 text-rose-600"
-                  : "text-gray-700 hover:bg-gray-50 hover:text-rose-500"
+                  ? "bg-violet-50 text-violet-600"
+                  : "text-gray-700 hover:bg-gray-50 hover:text-violet-600"
               }`}
             >
               {link.label}
@@ -236,8 +237,8 @@ export default function Navbar({ onApplyClick }: NavbarProps) {
                 onClick={closeSidebar}
                 className={`flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium transition-colors ${
                   pathname === link.href
-                    ? "bg-rose-50 text-rose-600"
-                    : "text-gray-700 hover:bg-gray-50 hover:text-rose-500"
+                    ? "bg-violet-50 text-violet-600"
+                    : "text-gray-700 hover:bg-gray-50 hover:text-violet-600"
                 }`}
               >
                 <span className="text-base w-6 text-center">
@@ -256,7 +257,7 @@ export default function Navbar({ onApplyClick }: NavbarProps) {
               onApplyClick();
               closeSidebar();
             }}
-            className="w-full bg-rose-500 hover:bg-rose-600 text-white font-bold text-sm py-3 rounded-full transition-colors shadow-md"
+            className="w-full bg-violet-600 hover:bg-violet-700 text-white font-bold text-sm py-3 rounded-full transition-colors shadow-md"
           >
             Apply Now — It&apos;s Free
           </button>
