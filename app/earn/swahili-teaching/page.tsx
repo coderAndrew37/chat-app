@@ -19,5 +19,25 @@ export const metadata: Metadata = {
 };
 
 export default function SwahiliPage() {
-  return <SwahiliClient />;
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    "name": "Swahili Instructional and Conversational Tutoring Program",
+    "description": "Comprehensive pedagogical module detailing lesson planning, pronunciation grading, and remote student engagement strategies for Swahili speakers.",
+    "provider": {
+      "@type": "Organization",
+      "name": "VelloEarn Kenya",
+      "sameAs": "https://velloearn.co.ke",
+    },
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <SwahiliClient />
+    </>
+  );
 }

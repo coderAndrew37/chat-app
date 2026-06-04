@@ -32,91 +32,195 @@ function ObjAccordion({ q, a }: { q: string; a: string }) {
   );
 }
 
-// --- Data ---
+interface ChattingClientProps {
+  countryTarget: "kenya" | "uganda" | "ghana";
+}
 
-const HOW_IT_WORKS = [
-  {
-    step: "01",
-    title: "You apply & get approved",
-    body: "Fill in a short form. Our team reviews it, and if you're a fit, you get a WhatsApp message with your activation steps. Takes less than 24 hours.",
-  },
-  {
-    step: "02",
-    title: "You pick your shift",
-    body: "Log into the dashboard and claim a shift — morning, afternoon, or evening. You decide how many hours you work. No minimums. No pressure.",
-  },
-  {
-    step: "03",
-    title: "You handle conversations",
-    body: "You're assigned to a channel — could be customer support, community moderation, or engagement tasks. Scripts, templates, and training are provided.",
-  },
-  {
-    step: "04",
-    title: "Your earnings stack up",
-    body: "Every shift completed adds to your balance. You can request an M-Pesa withdrawal anytime. Most land in minutes.",
-  },
-];
-
-const EARNINGS = [
-  { label: "Part-time (2–3 hrs/day)", range: "KES 6,000 – 12,000", note: "/ month" },
-  { label: "Full shifts (5–6 hrs/day)", range: "KES 18,000 – 28,000", note: "/ month" },
-  { label: "Full shifts + team income", range: "KES 35,000 – 60,000+", note: "/ month" },
-];
-
-const EARNER_STORIES = [
-  {
-    name: "Zawadi T.",
-    location: "Nairobi, Embakasi",
-    earned: "KES 22,500 / month",
-    story: "I work the evening shift — 6pm to 11pm — while my husband watches the kids. By the time I sleep, M-Pesa has moved. It took me three days to figure out the platform. Now it's just routine.",
-    initials: "ZT",
-    img: "/testimonials/zawadi.jpg",
-    fallback: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=200&h=200&fit=crop&crop=face&auto=format",
-  },
-  {
-    name: "Kelvin O.",
-    location: "Kisumu",
-    earned: "KES 41,000 / month",
-    story: "I started solo. After two months I brought in three friends. Now their shifts contribute to my team income on top of mine. That's where the real number comes from.",
-    initials: "KO",
-    img: "/testimonials/kelvin.jpg",
-    fallback: "https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?w=200&h=200&fit=crop&crop=face&auto=format",
-  },
-];
-
-const OBJECTIONS = [
-  {
-    q: "Is this just another scam?",
-    a: "We get why you'd ask — the internet is full of fake 'earn online' schemes. What's different here: we don't ask you for money upfront to start earning. The application is free. Activation details come after you're accepted. You earn from real tasks, tracked in a real dashboard, paid to your real M-Pesa number.",
-  },
-  {
-    q: "Do I need experience in customer service?",
-    a: "No. Every channel you're assigned to comes with a briefing document, approved response templates, and a support channel where you can ask questions. If you can hold a decent conversation on WhatsApp, you can do this.",
-  },
-  {
-    q: "What if I miss a shift or can't show up?",
-    a: "Life happens. You're not fired for missing one shift. You simply don't earn for that time. There's no salary at risk — just the opportunity cost of not working. Consistent earners show up consistently. That's the only rule.",
-  },
-  {
-    q: "When exactly does M-Pesa come?",
-    a: "You request a withdrawal from your dashboard. The minimum withdrawal is KES 500. Once requested, most payments clear within 5–30 minutes depending on M-Pesa traffic. You'll see it in your Mpesa messages, not just the app.",
-  },
-  {
-    q: "Can I really earn KES 35K+ per month?",
-    a: "Yes — but not just from chatting. The bigger earners combine their shift income with team commissions. When you bring someone onto the platform and they become active, you earn a percentage of their output. That's where the ceiling goes away.",
-  },
-];
-
-// --- Main Page ---
-
-export default function ChattingClient() {
+export default function ChattingClient({ countryTarget }: ChattingClientProps) {
   const [modalOpen, setModalOpen] = useState(false);
   const [successData, setSuccessData] = useState<{ name: string; whatsapp: string } | null>(null);
 
-  
-
   const openModal = () => setModalOpen(true);
 
+  // --- Dynamic Content Mapping ---
+  const geoContent = {
+    kenya: {
+      wallet: "M-Pesa",
+      minWithdrawal: "KES 500",
+      locationContext: "a matatu stage, or a café in Westlands",
+      earnings: [
+        { label: "Part-time (2–3 hrs/day)", range: "KES 6,000 – 12,000", note: "/ month" },
+        { label: "Full shifts (5–6 hrs/day)", range: "KES 18,000 – 28,000", note: "/ month" },
+        { label: "Full shifts + team income", range: "KES 35,000 – 60,000+", note: "/ month" },
+      ],
+      stories: [
+        {
+          name: "Zawadi T.",
+          location: "Nairobi, Embakasi",
+          earned: "KES 22,500 / month",
+          story: "I work the evening shift — 6pm to 11pm — while my husband watches the kids. By the time I sleep, M-Pesa has moved. It took me three days to figure out the platform. Now it's just routine.",
+          initials: "ZT",
+          img: "/testimonials/zawadi.jpg",
+          fallback: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=200&h=200&fit=crop&crop=face&auto=format",
+        },
+        {
+          name: "Kelvin O.",
+          location: "Kisumu",
+          earned: "KES 41,000 / month",
+          story: "I started solo. After two months I brought in three friends. Now their shifts contribute to my team income on top of mine. That's where the real number comes from.",
+          initials: "KO",
+          img: "/testimonials/kelvin.jpg",
+          fallback: "https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?w=200&h=200&fit=crop&crop=face&auto=format",
+        }
+      ],
+      objections: [
+        {
+          q: "Is this just another scam?",
+          a: "We get why you'd ask — the internet is full of fake 'earn online' schemes. What's different here: we don't ask you for money upfront to start earning. The application is free. Activation details come after you're accepted. You earn from real tasks, tracked in a real dashboard, paid to your real M-Pesa number."
+        },
+        {
+          q: "When exactly does M-Pesa come?",
+          a: "You request a withdrawal from your dashboard. The minimum withdrawal is KES 500. Once requested, most payments clear within 5–30 minutes depending on M-Pesa traffic. You'll see it in your Mpesa messages, not just the app."
+        },
+        {
+          q: "Can I really earn KES 35K+ per month?",
+          a: "Yes — but not just from chatting. The bigger earners combine their shift income with team commissions. When you bring someone onto the platform and they become active, you earn a percentage of their output. That's where the ceiling goes away."
+        }
+      ]
+    },
+    uganda: {
+      wallet: "MTN MoMo / Airtel Money",
+      minWithdrawal: "UGX 15,000",
+      locationContext: "a taxi park, or a café in Kampala",
+      earnings: [
+        { label: "Part-time (2–3 hrs/day)", range: "UGX 180,000 – 360,000", note: "/ month" },
+        { label: "Full shifts (5–6 hrs/day)", range: "UGX 540,000 – 840,000", note: "/ month" },
+        { label: "Full shifts + team income", range: "UGX 1,000,000 – 1,800,000+", note: "/ month" },
+      ],
+      stories: [
+        {
+          name: "Florence N.",
+          location: "Kampala, Ntinda",
+          earned: "UGX 680,000 / month",
+          story: "I manage the evening shifts from my phone after university lectures. The mobile money payouts clear securely to my MTN line before midnight. It completely transformed my pocket money.",
+          initials: "FN",
+          img: "/testimonials/florence.jpg",
+          fallback: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=200&h=200&fit=crop&crop=face&auto=format",
+        },
+        {
+          name: "Derrick B.",
+          location: "Gulu",
+          earned: "UGX 1,200,000 / month",
+          story: "Building a small network of remote task friends here amplified my balance significantly. VelloEarn pays commissions reliably when your referred group finishes assignments.",
+          initials: "DB",
+          img: "/testimonials/derrick.jpg",
+          fallback: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=face&auto=format",
+        }
+      ],
+      objections: [
+        {
+          q: "Is this just another scam?",
+          a: "We get why you'd ask. What makes us different is that we do not charge registration or activation fees to start earning money. You get verified via WhatsApp and cash out real accumulated balances directly to your Mobile Money wallet numbers safely."
+        },
+        {
+          q: "When exactly does Mobile Money arrive?",
+          a: "Whenever you initiate a withdrawal, the system processes your request to MTN MoMo or Airtel lines. It scales within 5–30 minutes, popping directly into your core mobile carrier message boxes."
+        },
+        {
+          q: "Can I really clear over 1 Million UGX monthly?",
+          a: "Yes, but top earners scale up by inviting active team members. You receive recurring reward cuts from your squad's chat metrics alongside your normal personal shift logs."
+        }
+      ]
+    },
+    ghana: {
+      wallet: "MTN MoMo / Telecel / Vodafone",
+      minWithdrawal: "GHS 50",
+      locationContext: "a trotro station, or a spot in Osu",
+      earnings: [
+        { label: "Part-time (2–3 hrs/day)", range: "GHS 700 – 1,400", note: "/ month" },
+        { label: "Full shifts (5–6 hrs/day)", range: "GHS 2,100 – 3,200", note: "/ month" },
+        { label: "Full shifts + team income", range: "GHS 4,000 – 7,000+", note: "/ month" },
+      ],
+      stories: [
+        {
+          name: "Abena A.",
+          location: "Accra, Madina",
+          earned: "GHS 2,450 / month",
+          story: "The shift structure fits perfectly with my side business routines. I monitor text queues from my smartphone and trigger daily payouts directly to my Telecel Cash account.",
+          initials: "AA",
+          img: "/testimonials/abena.jpg",
+          fallback: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&h=200&fit=crop&crop=face&auto=format",
+        },
+        {
+          name: "Emmanuel K.",
+          location: "Kumasi",
+          earned: "GHS 4,800 / month",
+          story: "I onboarded four course mates into the system. As they complete moderation loops during active hours, my affiliate bonuses stack right into my wallet. It is incredibly structured.",
+          initials: "EK",
+          img: "/testimonials/emmanuel.jpg",
+          fallback: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face&auto=format",
+        }
+      ],
+      objections: [
+        {
+          q: "Is this just another scam?",
+          a: "No upfront payments are requested. Joining our remote task network is completely transparent and free. You earn based on genuine message metrics and withdraw directly via standard dynamic Ghanaian wallet frameworks."
+        },
+        {
+          q: "When exactly does my wallet update?",
+          a: "Withdrawals are instantly sent through local payment channels to your registered MTN Mobile Money, Telecel, or Vodafone nodes, processing in less than 30 minutes securely."
+        },
+        {
+          q: "Can I really secure GHS 4,000+ every month?",
+          a: "Yes. By executing shifts consistently and expanding your task networks, your base volume combined with secondary referral shares easily scales past that figure."
+        }
+      ]
+    }
+  };
+
+  const currentGeo = geoContent[countryTarget];
+
+  const baseObjections = [
+    {
+      q: "Do I need experience in customer service?",
+      a: "No. Every channel you're assigned to comes with a briefing document, approved response templates, and a support channel where you can ask questions. If you can hold a decent conversation on WhatsApp, you can do this.",
+    },
+    {
+      q: "What if I miss a shift or can't show up?",
+      a: "Life happens. You're not fired for missing one shift. You simply don't earn for that time. There's no salary at risk — just the opportunity cost of not working. Consistent earners show up consistently. That's the only rule.",
+    },
+  ];
+
+  const fullObjections = [
+    currentGeo.objections[0],
+    baseObjections[0],
+    baseObjections[1],
+    currentGeo.objections[1],
+    currentGeo.objections[2]
+  ];
+
+  const HOW_IT_WORKS_LOCALIZED = [
+    {
+      step: "01",
+      title: "You apply & get approved",
+      body: "Fill in a short form. Our team reviews it, and if you're a fit, you get a WhatsApp message with your activation steps. Takes less than 24 hours.",
+    },
+    {
+      step: "02",
+      title: "You pick your shift",
+      body: "Log into the dashboard and claim a shift — morning, afternoon, or evening. You decide how many hours you work. No minimums. No pressure.",
+    },
+    {
+      step: "03",
+      title: "You handle conversations",
+      body: "You're assigned to a channel — could be customer support, community moderation, or engagement tasks. Scripts, templates, and training are provided.",
+    },
+    {
+      step: "04",
+      title: "Your earnings stack up",
+      body: `Every shift completed adds to your balance. You can request a ${currentGeo.wallet} withdrawal anytime. Most land in minutes.`,
+    },
+  ];
 
   return (
     <main className="bg-gray-50 min-h-screen">
@@ -152,7 +256,7 @@ export default function ChattingClient() {
               <div className="mt-10 flex gap-8">
                 {[
                   { v: "2–6 hrs", l: "Flexible daily hours" },
-                  { v: "KES 500", l: "Min withdrawal" },
+                  { v: currentGeo.minWithdrawal, l: "Min withdrawal" },
                   { v: "Daily", l: "Tasks available" },
                 ].map(s => (
                   <div key={s.l}>
@@ -204,7 +308,7 @@ export default function ChattingClient() {
             <span className="text-2xl shrink-0">📱</span>
             <div>
               <p className="font-bold text-gray-900 mb-1">Everything runs on your phone</p>
-              <p className="text-sm text-gray-600 leading-relaxed">No laptop needed. No office. No commute. You log in, claim a shift, complete tasks, log out. You can do this from your house, a matatu stage, or a café in Westlands. The platform is fully mobile.</p>
+              <p className="text-sm text-gray-600 leading-relaxed">{`No laptop needed. No office. No commute. You log in, claim a shift, complete tasks, log out. You can do this from your house, ${currentGeo.locationContext}. The platform is fully mobile.`}</p>
             </div>
           </div>
         </div>
@@ -220,7 +324,7 @@ export default function ChattingClient() {
             <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mt-2">Four steps. That&apos;s it.</h2>
           </div>
           <div className="space-y-5">
-            {HOW_IT_WORKS.map((step, i) => (
+            {HOW_IT_WORKS_LOCALIZED.map((step, i) => (
               <div key={i} className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm flex gap-5 items-start">
                 <div className="shrink-0 w-12 h-12 rounded-2xl bg-rose-500 text-white font-extrabold text-sm flex items-center justify-center">
                   {step.step}
@@ -246,7 +350,7 @@ export default function ChattingClient() {
 
           {/* Earnings tiers */}
           <div className="grid sm:grid-cols-3 gap-4 mb-14">
-            {EARNINGS.map((tier, i) => (
+            {currentGeo.earnings.map((tier, i) => (
               <div key={i} className={`rounded-2xl p-6 border text-center ${i === 2 ? "bg-rose-500 border-rose-400 text-white" : "bg-gray-50 border-gray-100"}`}>
                 <p className={`text-xs font-semibold uppercase tracking-wider mb-3 ${i === 2 ? "text-rose-200" : "text-gray-400"}`}>{tier.label}</p>
                 <p className={`text-2xl font-extrabold mb-1 ${i === 2 ? "text-white" : "text-gray-900"}`}>{tier.range}</p>
@@ -261,7 +365,7 @@ export default function ChattingClient() {
           {/* Earner stories */}
           <h3 className="text-xl font-extrabold text-gray-900 mb-5">From people already doing it</h3>
           <div className="grid sm:grid-cols-2 gap-5">
-            {EARNER_STORIES.map(s => (
+            {currentGeo.stories.map(s => (
               <div key={s.name} className="bg-gray-50 rounded-2xl p-6 border border-gray-100">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="relative w-11 h-11 rounded-full overflow-hidden bg-rose-100 shrink-0">
@@ -288,7 +392,7 @@ export default function ChattingClient() {
             <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mt-2 mb-3">The questions you&apos;re already thinking</h2>
           </div>
           <div className="space-y-4">
-            {OBJECTIONS.map((o, i) => (
+            {fullObjections.map((o, i) => (
               <ObjAccordion key={i} q={o.q} a={o.a} />
             ))}
           </div>
@@ -307,7 +411,7 @@ export default function ChattingClient() {
         </div>
         <div className="relative z-10 max-w-xl mx-auto px-4 sm:px-6 text-center">
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4">Ready to start chatting for money?</h2>
-          <p className="text-rose-100 mb-8 leading-relaxed">Apply now. Get approved via WhatsApp. Your first shift could be today.</p>
+          <p className="text-rose-100 mb-8 leading-relaxed">{`Apply now. Get approved via WhatsApp. Your first shift could be today.`}</p>
           <button
             onClick={() => setModalOpen(true)}
             className="inline-block bg-white text-rose-500 font-bold text-base px-10 py-4 rounded-full shadow-xl hover:scale-105 active:scale-95 transition-all"
@@ -316,8 +420,6 @@ export default function ChattingClient() {
           </button>
         </div>
       </section>
-
-      
 
       {modalOpen && (
         <ApplicationModal 

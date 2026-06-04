@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import AITrainingClient from "./AITrainingClient";
+import JobSchema from "@/app/components/seo/JobSchema";
 
 type Props = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -54,5 +55,29 @@ export default async function AITrainingPage({ searchParams }: Props) {
     ? (countryParam as "kenya" | "uganda" | "ghana")
     : "kenya";
 
-  return <AITrainingClient countryTarget={targetGeo} />;
+  // Data matrix to fill out required schema fields based on the localized route variant
+  const jobSchemaDetails = {
+    kenya: { title: "AI Data Annotation Specialist", currency: "KES", minVal: 80, maxVal: 400, countryName: "Kenya" as const },
+    uganda: { title: "RLHF Remote Data Evaluator", currency: "UGX", minVal: 2500, maxVal: 12000, countryName: "Uganda" as const },
+    ghana: { title: "Online Text Evaluation Contributor", currency: "GHS", minVal: 10, maxVal: 50, countryName: "Ghana" as const }
+  };
+
+  const geoSchema = jobSchemaDetails[targetGeo];
+
+  return (
+    <>
+      {/* Clean Dynamic Schema Injection Component */}
+      <JobSchema
+        title={geoSchema.title}
+        description="Evaluate and rate AI-generated text responses, rewrite incorrect data outputs, and provide human feedback to optimize machine learning models via smartphone platforms."
+        currency={geoSchema.currency}
+        minSalary={geoSchema.minVal}
+        maxSalary={geoSchema.maxVal}
+        countryName={geoSchema.countryName}
+        baseUrl={BASE_URL}
+      />
+      
+      <AITrainingClient countryTarget={targetGeo} />
+    </>
+  );
 }

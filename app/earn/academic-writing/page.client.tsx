@@ -16,8 +16,8 @@ function SmartImage({
   const [imgSrc, setImgSrc] = useState(src);
   const props = { src: imgSrc, alt, className, onError: () => setImgSrc(fallback), sizes, priority };
   return fill
-    ? <Image {...props} fill unoptimized   alt=''/>
-    : <Image {...props} width={width ?? 400} height={height ?? 300} unoptimized  alt=''/>;
+    ? <Image {...props} fill unoptimized alt=''/>
+    : <Image {...props} width={width ?? 400} height={height ?? 300} unoptimized alt=''/>;
 }
 
 function ObjAccordion({ q, a }: { q: string; a: string }) {
@@ -48,128 +48,127 @@ function ObjAccordion({ q, a }: { q: string; a: string }) {
   );
 }
 
-// --- Data ---
+// --- Props Typings ---
+interface AcademicWritingClientProps {
+  countryTarget: "kenya" | "uganda" | "ghana";
+}
 
-const WRITING_TYPES = [
-  {
-    icon: "📄",
-    title: "Essays & coursework",
-    pages: "2–10 pages",
-    pay: "KES 500 – 2,500",
-    body: "The bread and butter. Undergraduate essays, discussion posts, case studies, and short papers. High volume, fast turnaround. You can complete several per day once you're in a rhythm.",
+// --- Dynamic Geo-Configuration Matrix ---
+const REGIONAL_CONFIGS = {
+  kenya: {
+    currency: "KES",
+    paymentMethod: "M-Pesa",
+    minWithdrawal: "KES 500",
+    topEarnerPayout: "KES 70,000+",
+    heroStats: [
+      { v: "KES 500+", l: "Per essay" },
+      { v: "KES 60,000+", l: "Max per dissertation" },
+      { v: "You choose", l: "Your subjects" },
+    ],
+    writingTypes: [
+      { icon: "📄", title: "Essays & coursework", pages: "2–10 pages", pay: "KES 500 – 2,500", body: "The bread and butter. Undergraduate essays, discussion posts, case studies, and short papers. High volume, fast turnaround." },
+      { icon: "🔬", title: "Research papers", pages: "10–30 pages", pay: "KES 3,000 – 9,000", body: "Term papers and research assignments requiring sources, citations, and structured argument. Higher pay grade profiles." },
+      { icon: "📚", title: "Dissertations & theses", pages: "30–100+ pages", pay: "KES 15,000 – 60,000", body: "The highest-paying category. Broken into chapters and delivered in stages. One solid dissertation can easily match a corporate salary." },
+      { icon: "💼", title: "Business & professional writing", pages: "Varies", pay: "KES 1,500 – 8,000", body: "Business plans, reports, executive summaries, and proposals. Clean, professionally structured academic language is standard." },
+    ],
+    earnings: [
+      { label: "Part-time (3–5 orders/week)", range: "KES 8,000 – 18,000", note: "/ month" },
+      { label: "Full-time (daily orders)", range: "KES 25,000 – 45,000", note: "/ month" },
+      { label: "Full-time + dissertations", range: "KES 50,000 – 90,000+", note: "/ month" },
+    ],
+    stories: [
+      { name: "Faith W.", location: "Nairobi, South B", earned: "KES 38,000 / month", story: "I graduated with a BA in Literature and had no idea what to do with it. A friend showed me this. I write 4–5 essays a week and two or three research papers. Now it's my main income.", img: "/testimonials/faith.jpg", fallback: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=200&h=200&fit=crop&crop=face&auto=format" },
+      { name: "Brian K.", location: "Mombasa", earned: "KES 71,000 / month", story: "I specialise in business and management writing. Dissertations mostly. I do maybe two full dissertations a month on top of regular essays. I make a great sustainable income here.", img: "/testimonials/brian.jpg", fallback: "https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?w=200&h=200&fit=crop&crop=face&auto=format" },
+    ],
+    objections: [
+      { q: "Is academic writing legal?", a: "Writing and selling academic content is completely legal. What clients do with work they purchase is their responsibility — the same way a ghostwriter isn't accountable for how a book is published. This is a legitimate global service industry." },
+      { q: "Do I need a degree to apply?", a: "A degree helps and gives you more subject coverage. But strong writers without a formal degree can still qualify based on their writing test result, especially for general subjects and business writing tracks." },
+    ]
   },
-  {
-    icon: "🔬",
-    title: "Research papers",
-    pages: "10–30 pages",
-    pay: "KES 3,000 – 9,000",
-    body: "Term papers and research assignments requiring sources, citations, and structured argument. Takes longer but pays proportionally more. Strong writers with subject expertise earn well here.",
+  uganda: {
+    currency: "UGX",
+    paymentMethod: "MTN MoMo & Airtel Money",
+    minWithdrawal: "UGX 15,000",
+    topEarnerPayout: "UGX 2,000,000+",
+    heroStats: [
+      { v: "UGX 15,000+", l: "Per essay" },
+      { v: "UGX 1,800,000+", l: "Max per dissertation" },
+      { v: "You choose", l: "Your subjects" },
+    ],
+    writingTypes: [
+      { icon: "📄", title: "Essays & coursework", pages: "2–10 pages", pay: "UGX 15,000 – 75,000", body: "The bread and butter. Undergraduate essays, discussion posts, case studies, and short papers. High volume, fast turnaround." },
+      { icon: "🔬", title: "Research papers", pages: "10–30 pages", pay: "UGX 90,000 – 270,000", body: "Term papers and research assignments requiring sources, citations, and structured argument. Higher pay grade profiles." },
+      { icon: "📚", title: "Dissertations & theses", pages: "30–100+ pages", pay: "UGX 450,000 – 1,800,000", body: "The highest-paying category. Broken into chapters and delivered in stages. One solid dissertation can easily match a corporate salary." },
+      { icon: "💼", title: "Business & professional writing", pages: "Varies", pay: "UGX 45,000 – 240,000", body: "Business plans, reports, executive summaries, and proposals. Clean, professionally structured academic language is standard." },
+    ],
+    earnings: [
+      { label: "Part-time (3–5 orders/week)", range: "UGX 240,000 – 550,000", note: "/ month" },
+      { label: "Full-time (daily orders)", range: "UGX 750,000 – 1,350,000", note: "/ month" },
+      { label: "Full-time + dissertations", range: "UGX 1,500,000 – 2,700,000+", note: "/ month" },
+    ],
+    stories: [
+      { name: "Florence N.", location: "Kampala, Makerere", earned: "UGX 1,150,000 / month", story: "After campus, finding a direct employment connection took months. VelloEarn changed everything. I handle literature reviews and history papers right from my phone and laptop.", img: "/testimonials/faith.jpg", fallback: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=200&h=200&fit=crop&crop=face&auto=format" },
+      { name: "Derrick O.", location: "Mbarara", earned: "UGX 2,100,000 / month", story: "I focus solely on business modules and strategic marketing tasks. Managing two big dissertations a month pays much better than traditional junior administration frameworks here.", img: "/testimonials/brian.jpg", fallback: "https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?w=200&h=200&fit=crop&crop=face&auto=format" },
+    ],
+    objections: [
+      { q: "Is academic writing legal in Uganda?", a: "Writing and selling academic reference material is completely legal. How clients choose to use their bought products is their business domain. It's an active global freelance industry employing thousands of writers." },
+      { q: "Do I need a degree to apply?", a: "A degree maps out direct domain authority, but your fundamental performance on our sample entry writing test is what overrides everything else during initial onboarding." },
+    ]
   },
-  {
-    icon: "📚",
-    title: "Dissertations & theses",
-    pages: "30–100+ pages",
-    pay: "KES 15,000 – 60,000",
-    body: "The highest-paying category. Broken into chapters and delivered in stages. One good dissertation a month can match a full salary. Reserved for writers who've proven consistency.",
+  ghana: {
+    currency: "GHS",
+    paymentMethod: "Mobile Money (MTN / Vodafone)",
+    minWithdrawal: "GHS 60",
+    topEarnerPayout: "GHS 7,500+",
+    heroStats: [
+      { v: "GHS 60+", l: "Per essay" },
+      { v: "GHS 7,000+", l: "Max per dissertation" },
+      { v: "You choose", l: "Your subjects" },
+    ],
+    writingTypes: [
+      { icon: "📄", title: "Essays & coursework", pages: "2–10 pages", pay: "GHS 60 – 300", body: "The bread and butter. Undergraduate essays, discussion posts, case studies, and short papers. High volume, fast turnaround." },
+      { icon: "🔬", title: "Research papers", pages: "10–30 pages", pay: "GHS 350 – 1,100", body: "Term papers and research assignments requiring sources, citations, and structured argument. Higher pay grade profiles." },
+      { icon: "📚", title: "Dissertations & theses", pages: "30–100+ pages", pay: "GHS 1,800 – 7,000", body: "The highest-paying category. Broken into chapters and delivered in stages. One solid dissertation can easily match a corporate salary." },
+      { icon: "💼", title: "Business & professional writing", pages: "Varies", pay: "GHS 180 – 950", body: "Business plans, reports, executive summaries, and proposals. Clean, professionally structured academic language is standard." },
+    ],
+    earnings: [
+      { label: "Part-time (3–5 orders/week)", range: "GHS 950 – 2,200", note: "/ month" },
+      { label: "Full-time (daily orders)", range: "GHS 3,000 – 5,500", note: "/ month" },
+      { label: "Full-time + dissertations", range: "GHS 6,000 – 11,000+", note: "/ month" },
+    ],
+    stories: [
+      { name: "Ama A.", location: "Accra, East Legon", earned: "GHS 4,500 / month", story: "My degree in economics was just sitting there until I started applying it to research orders here. Getting instant Mobile Money payouts directly helps smooth out monthly logistics.", img: "/testimonials/faith.jpg", fallback: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=200&h=200&fit=crop&crop=face&auto=format" },
+      { name: "Emmanuel T.", location: "Kumasi", earned: "GHS 8,200 / month", story: "STEM projects and long-form engineering dissertations bring in heavy value. Once you lock down standard citation styling layouts, writing flows naturally.", img: "/testimonials/brian.jpg", fallback: "https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?w=200&h=200&fit=crop&crop=face&auto=format" },
+    ],
+    objections: [
+      { q: "Is academic writing legal in Ghana?", a: "Yes, researching and writing content on contract terms is perfectly legal worldwide. Your operations fall under contract freelance writing services catering to global clients." },
+      { q: "Do I need a degree to apply?", a: "While specialized qualifications allow entry into high-tier assignments, any writer demonstrating strong research capabilities during our preliminary writing text gets approved." },
+    ]
   },
-  {
-    icon: "💼",
-    title: "Business & professional writing",
-    pages: "Varies",
-    pay: "KES 1,500 – 8,000",
-    body: "Business plans, reports, executive summaries, and proposals. Clients are often working professionals, not students. Clean, structured writing is the main skill here.",
-  },
-];
-
-const HOW_IT_WORKS = [
-  {
-    step: "01",
-    title: "Apply with your subject areas",
-    body: "Tell us your degree, your strong subjects, and your writing experience. You don't need prior freelance history — your academic background is the credential. Processing takes 24–48 hours.",
-  },
-  {
-    step: "02",
-    title: "Pass a short writing test",
-    body: "You'll write a short sample (200–400 words) on an assigned topic. This is how we place you at the right pay grade from the start — higher-quality writers get higher-paying orders.",
-  },
-  {
-    step: "03",
-    title: "Claim orders from the queue",
-    body: "You log in and browse available orders — topic, word count, deadline, and payout are shown upfront. You pick what suits your skills and schedule. No one assigns you work you didn't choose.",
-  },
-  {
-    step: "04",
-    title: "Submit, get approved, get paid",
-    body: "You submit your work through the platform. Once reviewed and approved (usually within 12–24 hours), your balance updates. Request an M-Pesa payout anytime from KES 500 upward.",
-  },
-];
-
-const EARNINGS = [
-  { label: "Part-time (3–5 orders/week)", range: "KES 8,000 – 18,000", note: "/ month" },
-  { label: "Full-time (daily orders)", range: "KES 25,000 – 45,000", note: "/ month" },
-  { label: "Full-time + dissertations", range: "KES 50,000 – 90,000+", note: "/ month" },
-];
-
-const EARNER_STORIES = [
-  {
-    name: "Faith W.",
-    location: "Nairobi, South B",
-    earned: "KES 38,000 / month",
-    story:
-      "I graduated with a BA in Literature and had no idea what to do with it. A friend showed me this. I write 4–5 essays a week and two or three research papers. It took me a month to find my pace — now it's my main income.",
-    img: "/testimonials/faith.jpg",
-    fallback:
-      "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=200&h=200&fit=crop&crop=face&auto=format",
-  },
-  {
-    name: "Brian K.",
-    location: "Mombasa",
-    earned: "KES 71,000 / month",
-    story:
-      "I specialise in business and management writing. Dissertations mostly. I do maybe two full dissertations a month on top of regular essays. I made more last month than my uncle who manages a bank branch.",
-    img: "/testimonials/brian.jpg",
-    fallback:
-      "https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?w=200&h=200&fit=crop&crop=face&auto=format",
-  },
-];
-
-const OBJECTIONS = [
-  {
-    q: "Is academic writing legal?",
-    a: "Writing and selling academic content is legal. What clients do with work they purchase is their responsibility — the same way a ghostwriter isn't accountable for how a book is published. This is a legitimate writing service industry operating globally, and thousands of professional writers earn their income this way.",
-  },
-  {
-    q: "Do I need a degree to apply?",
-    a: "A degree helps and gives you more subject coverage. But strong writers without a formal degree can still qualify, especially for general subjects and business writing. Your writing test result is the main qualifier — not your certificate.",
-  },
-  {
-    q: "What subjects are in demand?",
-    a: "Business, management, nursing, psychology, law, and education are consistently the highest-volume subjects. STEM papers (engineering, computer science) are fewer but pay significantly more per page. Whatever your field, there are likely orders waiting.",
-  },
-  {
-    q: "What if the client rejects my work?",
-    a: "Rejections are rare if you follow the brief. When they happen, you'll get specific revision notes. You revise and resubmit — this is normal in any writing workflow. Consistent, unreasonable rejections are flagged on the client side, not yours.",
-  },
-  {
-    q: "How fast do I need to write?",
-    a: "Orders come with deadlines you see before accepting. You pick orders whose deadlines work for you. Most writers do 500–1,000 words per hour on familiar subjects. A 2,000-word essay with a 24-hour deadline is very manageable. You set the pace.",
-  },
-  {
-    q: "What about plagiarism?",
-    a: "All submissions are checked. Work must be 100% original — no copying from the internet, no AI-generated text. If you write it yourself, you have nothing to worry about. Writers who pass our test generally have no issues here.",
-  },
-];
+};
 
 // --- Main Page ---
-
-export default function AcademicWritingClient() {
+export default function AcademicWritingClient({ countryTarget }: AcademicWritingClientProps) {
   const [modalOpen, setModalOpen] = useState(false);
   const [successData, setSuccessData] = useState<{ name: string; whatsapp: string } | null>(null);
+
+  // Active geo configuration backup fallback to Kenya
+  const config = REGIONAL_CONFIGS[countryTarget] || REGIONAL_CONFIGS.kenya;
 
   const handleSuccess = (data: { name: string; whatsapp: string }) => {
     setModalOpen(false);
     setSuccessData(data);
   };
+
+  // Remaining standard structural content
+  const INVARIANT_OBJECTIONS = [
+    { q: "What subjects are in demand?", a: "Business, management, nursing, psychology, law, and education are consistently the highest-volume subjects. STEM papers (engineering, computer science) are fewer but pay significantly more per page. Whatever your field, there are likely orders waiting." },
+    { q: "What if the client rejects my work?", a: "Rejections are rare if you follow the brief. When they happen, you'll get specific revision notes. You revise and resubmit — this is normal in any writing workflow." },
+    { q: "How fast do I need to write?", a: "Orders come with deadlines you see before accepting. Most writers do 500–1,000 words per hour on familiar subjects. You set the pace entirely." },
+    { q: "What about plagiarism?", a: "All submissions are checked. Work must be 100% original — no copying from the internet, no AI-generated text. If you write it yourself, you have nothing to worry about." }
+  ];
+
+  const fullObjections = [...config.objections, ...INVARIANT_OBJECTIONS];
 
   return (
     <main className="bg-gray-50 min-h-screen">
@@ -197,7 +196,7 @@ export default function AcademicWritingClient() {
                 <span className="text-emerald-600">idle. It shouldn&apos;t be.</span>
               </h1>
               <p className="text-lg text-gray-500 leading-relaxed mb-8 max-w-lg">
-                Students worldwide pay for quality academic writing. If you write well — in any subject — there&apos;s a queue of orders waiting. Get paid per paper, directly to M-Pesa, on your own schedule.
+                Students worldwide pay for quality academic writing. If you write well — in any subject — there&apos;s a queue of orders waiting. Get paid per paper, directly to {config.paymentMethod}, on your own schedule.
               </p>
               <div className="flex flex-col sm:flex-row gap-3">
                 <button
@@ -208,11 +207,7 @@ export default function AcademicWritingClient() {
                 </button>
               </div>
               <div className="mt-10 flex gap-8">
-                {[
-                  { v: "KES 500+", l: "Per essay" },
-                  { v: "KES 60,000+", l: "Max per dissertation" },
-                  { v: "You choose", l: "Your subjects" },
-                ].map((s) => (
+                {config.heroStats.map((s) => (
                   <div key={s.l}>
                     <div className="text-lg font-extrabold text-gray-900">{s.v}</div>
                     <div className="text-xs text-gray-400 mt-0.5">{s.l}</div>
@@ -235,7 +230,7 @@ export default function AcademicWritingClient() {
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
               <div className="absolute bottom-5 left-5 right-5 bg-white/90 backdrop-blur-sm rounded-2xl px-4 py-3">
                 <p className="text-xs text-gray-400 mb-1">Highest earning track</p>
-                <p className="text-sm font-bold text-gray-900">Top writers earn KES 70,000+ monthly</p>
+                <p className="text-sm font-bold text-gray-900">Top writers earn {config.topEarnerPayout} monthly</p>
               </div>
             </div>
           </div>
@@ -252,7 +247,7 @@ export default function AcademicWritingClient() {
             </h2>
           </div>
           <div className="grid sm:grid-cols-2 gap-5 mb-10">
-            {WRITING_TYPES.map((t) => (
+            {config.writingTypes.map((t) => (
               <div key={t.title} className="bg-gray-50 rounded-2xl p-6 border border-gray-100">
                 <div className="flex items-start justify-between mb-3">
                   <span className="text-2xl">{t.icon}</span>
@@ -286,7 +281,12 @@ export default function AcademicWritingClient() {
             <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mt-2">Apply. Test. Write. Earn.</h2>
           </div>
           <div className="space-y-5">
-            {HOW_IT_WORKS.map((step, i) => (
+            {[
+              { step: "01", title: "Apply with your subject areas", body: "Tell us your degree, your strong subjects, and your writing experience. You don't need prior freelance history — your academic background is the credential. Processing takes 24–48 hours." },
+              { step: "02", title: "Pass a short writing test", body: "You'll write a short sample (200–400 words) on an assigned topic. This is how we place you at the right pay grade from the start — higher-quality writers get higher-paying orders." },
+              { step: "03", title: "Claim orders from the queue", body: "You log in and browse available orders — topic, word count, deadline, and payout are shown upfront. You pick what suits your skills and schedule. No one assigns you work you didn't choose." },
+              { step: "04", title: "Submit, get approved, get paid", body: `You submit your work through the platform. Once reviewed and approved (usually within 12–24 hours), your balance updates. Request a ${config.paymentMethod} payout anytime from ${config.minWithdrawal} upward.` }
+            ].map((step, i) => (
               <div key={i} className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm flex gap-5 items-start">
                 <div className="shrink-0 w-12 h-12 rounded-2xl bg-emerald-600 text-white font-extrabold text-sm flex items-center justify-center">
                   {step.step}
@@ -315,7 +315,7 @@ export default function AcademicWritingClient() {
           </div>
 
           <div className="grid sm:grid-cols-3 gap-4 mb-14">
-            {EARNINGS.map((tier, i) => (
+            {config.earnings.map((tier, i) => (
               <div
                 key={i}
                 className={`rounded-2xl p-6 border text-center ${
@@ -345,7 +345,7 @@ export default function AcademicWritingClient() {
           {/* Earner stories */}
           <h3 className="text-xl font-extrabold text-gray-900 mb-5">From writers already doing it</h3>
           <div className="grid sm:grid-cols-2 gap-5">
-            {EARNER_STORIES.map((s) => (
+            {config.stories.map((s) => (
               <div key={s.name} className="bg-gray-50 rounded-2xl p-6 border border-gray-100">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="relative w-11 h-11 rounded-full overflow-hidden bg-emerald-100 shrink-0">
@@ -381,7 +381,7 @@ export default function AcademicWritingClient() {
             </h2>
           </div>
           <div className="space-y-4">
-            {OBJECTIONS.map((o, i) => (
+            {fullObjections.map((o, i) => (
               <ObjAccordion key={i} q={o.q} a={o.a} />
             ))}
           </div>
@@ -416,8 +416,6 @@ export default function AcademicWritingClient() {
           </button>
         </div>
       </section>
-
-      
 
       {modalOpen && (
         <ApplicationModal
