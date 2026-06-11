@@ -28,6 +28,14 @@ const nextConfig: NextConfig = {
         hostname: "www.facebook.com",
         port: "",
         pathname: "/**",
+      },
+
+      //sanity
+      {
+        protocol: "https",
+        hostname: "cdn.sanity.io",
+        port: "",
+        pathname: "/images/**",
       }
     ],
   },

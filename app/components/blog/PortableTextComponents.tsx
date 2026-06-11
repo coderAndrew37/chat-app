@@ -1,7 +1,11 @@
 "use client";
 
 import React from "react";
-import { PortableText, PortableTextBlock, PortableTextComponents } from "@portabletext/react";
+import {
+  PortableText,
+  PortableTextBlock,
+  PortableTextComponents,
+} from "@portabletext/react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import Image from "next/image";
@@ -10,26 +14,20 @@ import Link from "next/link";
 import { QuizComponent } from "./QuizComponent";
 import { Quiz, RelatedPostCard } from "@/types/blog";
 
-// --- Interfaces for Type Safety ---
-
-interface PricingRow {
-  tier: string;
-  price: string;
-  features: string;
-}
-
-interface ComparisonRow {
-  feature: string;
-  leftValue: string;
-  rightValue: string;
-}
+// --- Interfaces ---
 
 interface FaqItem {
   question: string;
   answer: string;
 }
 
-// Fixed slugify helper with strict typing
+interface TableRow {
+  isHeader: boolean;
+  cells: string[];
+}
+
+// --- Slugify helper ---
+
 const slugify = (children: React.ReactNode): string => {
   const childrenArray = React.Children.toArray(children);
 
@@ -38,16 +36,11 @@ const slugify = (children: React.ReactNode): string => {
       if (typeof child === "string" || typeof child === "number") {
         return child.toString();
       }
-
-      // Check if it's a valid React Element and safely access props
       if (React.isValidElement(child)) {
-        // We cast to any here because ReactNode props are technically unknown,
-        // but we are specifically looking for text content or nested children
         const props = child.props as {
           children?: React.ReactNode;
           text?: string;
         };
-
         if (props.text) return props.text;
         if (props.children) return slugify(props.children);
       }
@@ -62,8 +55,11 @@ const slugify = (children: React.ReactNode): string => {
     .replace(/\s+/g, "-");
 };
 
+// --- Components ---
+
 const components: PortableTextComponents = {
   types: {
+    // ─── Image ────────────────────────────────────────────────────────────────
     image: ({ value }) => (
       <figure className="my-12 group">
         <div className="relative w-full aspect-video rounded-[2rem] overflow-hidden bg-slate-100 border border-slate-200 transition-shadow duration-500 group-hover:shadow-2xl group-hover:shadow-blue-500/5">
@@ -74,7 +70,6 @@ const components: PortableTextComponents = {
             className="object-cover transition-transform duration-700 group-hover:scale-105"
           />
         </div>
-
         {(value.caption || value.source) && (
           <figcaption className="mt-4 px-4 flex flex-col md:flex-row md:justify-between items-baseline gap-2">
             {value.caption && (
@@ -92,6 +87,64 @@ const components: PortableTextComponents = {
       </figure>
     ),
 
+    // ─── Table ────────────────────────────────────────────────────────────────
+    table: ({ value }: { value: { caption?: string; rows: TableRow[] } }) => {
+      const headerRows = value.rows?.filter((r) => r.isHeader) ?? [];
+      const bodyRows = value.rows?.filter((r) => !r.isHeader) ?? [];
+
+      return (
+        <div className="my-12 overflow-x-auto">
+          <div className="inline-block min-w-full overflow-hidden border border-slate-200 rounded-2xl shadow-sm">
+            <table className="min-w-full divide-y divide-slate-200">
+              {headerRows.length > 0 && (
+                <thead>
+                  {headerRows.map((row, i) => (
+                    <tr key={i} className="bg-slate-50">
+                      {row.cells.map((cell, j) => (
+                        <th
+                          key={j}
+                          className="px-6 py-4 text-left text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 whitespace-nowrap"
+                        >
+                          {cell}
+                        </th>
+                      ))}
+                    </tr>
+                  ))}
+                </thead>
+              )}
+              <tbody className="bg-white divide-y divide-slate-100">
+                {bodyRows.map((row, i) => (
+                  <tr
+                    key={i}
+                    className="hover:bg-slate-50/50 transition-colors"
+                  >
+                    {row.cells.map((cell, j) => (
+                      <td
+                        key={j}
+                        className={`px-6 py-4 text-sm font-light text-slate-600 ${
+                          j === 0 ? "font-medium text-slate-900" : ""
+                        }`}
+                      >
+                        {cell}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {value.caption && (
+              <div className="px-6 py-3 border-t border-slate-100 bg-slate-50/50">
+                <span className="text-xs text-slate-400 font-light italic">
+                  — {value.caption}
+                </span>
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    },
+
+    // ─── Quiz ─────────────────────────────────────────────────────────────────
     quiz: ({ value }: { value: Quiz }) => (
       <div className="my-16">
         <QuizComponent
@@ -101,10 +154,10 @@ const components: PortableTextComponents = {
       </div>
     ),
 
+    // ─── Code ─────────────────────────────────────────────────────────────────
     code: ({ value }) => (
       <div className="my-10 group relative">
         <div className="absolute -inset-1 bg-gradient-to-r from-blue-600/10 to-transparent rounded-2xl blur opacity-0 group-hover:opacity-100 transition duration-500" />
-
         <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-slate-800 bg-[#282c34]">
           {value.filename && (
             <div className="px-6 py-3 border-b border-white/5 bg-white/5 text-slate-400 text-[10px] font-mono flex justify-between items-center tracking-widest uppercase">
@@ -140,73 +193,7 @@ const components: PortableTextComponents = {
       </div>
     ),
 
-    inlinePricingTable: ({
-      value,
-    }: {
-      value: { heading?: string; rows: PricingRow[] };
-    }) => (
-      <div className="my-12 overflow-hidden border border-slate-200 rounded-3xl bg-white shadow-sm">
-        {value.heading && (
-          <div className="px-6 py-4 border-b border-slate-100 bg-slate-50/50 text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">
-            {value.heading}
-          </div>
-        )}
-        <div className="divide-y divide-slate-100">
-          {value.rows?.map((row, i) => (
-            <div
-              key={i}
-              className="p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-slate-50/30 transition-colors"
-            >
-              <div className="max-w-md">
-                <span className="text-xs font-bold text-blue-600 uppercase tracking-widest">
-                  {row.tier}
-                </span>
-                <p className="text-sm text-slate-500 mt-1 leading-relaxed">
-                  {row.features}
-                </p>
-              </div>
-              <div className="text-xl font-black text-slate-900 leading-none">
-                {row.price}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    ),
-
-    comparisonBox: ({
-      value,
-    }: {
-      value: { leftLabel: string; rightLabel: string; rows: ComparisonRow[] };
-    }) => (
-      <div className="my-12 grid grid-cols-2 gap-px bg-slate-200 border border-slate-200 rounded-3xl overflow-hidden shadow-lg">
-        <div className="bg-slate-50 p-4 text-center border-b border-slate-200 text-[10px] font-black uppercase tracking-widest text-slate-400">
-          {value.leftLabel}
-        </div>
-        <div className="bg-slate-950 p-4 text-center border-b border-slate-900 text-[10px] font-black uppercase tracking-widest text-blue-400">
-          {value.rightLabel}
-        </div>
-        {value.rows?.map((row, i) => (
-          <React.Fragment key={i}>
-            <div className="bg-white p-6 flex flex-col justify-center border-b border-slate-100">
-              <span className="text-[9px] uppercase font-bold text-slate-300 mb-1">
-                {row.feature}
-              </span>
-              <p className="text-sm font-medium text-slate-600">
-                {row.leftValue}
-              </p>
-            </div>
-            <div className="bg-slate-950 p-6 flex flex-col justify-center border-b border-slate-900">
-              <span className="text-[9px] uppercase font-bold text-slate-600 mb-1">
-                {row.feature}
-              </span>
-              <p className="text-sm font-bold text-white">{row.rightValue}</p>
-            </div>
-          </React.Fragment>
-        ))}
-      </div>
-    ),
-
+    // ─── FAQ ──────────────────────────────────────────────────────────────────
     inlineFaq: ({ value }: { value: { faqs: FaqItem[] } }) => (
       <div className="my-12 space-y-4">
         {value.faqs?.map((faq, i) => (
@@ -228,6 +215,7 @@ const components: PortableTextComponents = {
       </div>
     ),
 
+    // ─── CTA ──────────────────────────────────────────────────────────────────
     cta: ({
       value,
     }: {
@@ -254,6 +242,7 @@ const components: PortableTextComponents = {
       </div>
     ),
 
+    // ─── Related Post ─────────────────────────────────────────────────────────
     relatedPost: ({ value }: { value: RelatedPostCard }) => {
       const post = value.article;
       if (!post) return null;
@@ -316,6 +305,7 @@ const components: PortableTextComponents = {
     },
   },
 
+  // ─── Block styles ───────────────────────────────────────────────────────────
   block: {
     h2: ({ children }) => (
       <h2
@@ -345,6 +335,7 @@ const components: PortableTextComponents = {
     ),
   },
 
+  // ─── Lists ──────────────────────────────────────────────────────────────────
   list: {
     bullet: ({ children }) => (
       <ul className="list-disc list-inside space-y-4 mb-8 text-lg md:text-xl text-slate-600 font-light pl-4">
@@ -358,6 +349,8 @@ const components: PortableTextComponents = {
     ),
   },
 };
+
+// ─── Export ─────────────────────────────────────────────────────────────────
 
 export default function CustomPortableText({
   value,

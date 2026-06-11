@@ -8,7 +8,9 @@ export const postFields = groq`
   title,
   "slug": slug.current,
   excerpt,
-  // Fetch tags by dereferencing the array of references
+  seoTitle,
+  featured,
+  publishedAt,
   "tags": tags[]->{
     _id,
     title,
@@ -19,17 +21,15 @@ export const postFields = groq`
     _type == "image" => {
       ...,
       "assetUrl": asset->url,
-      caption, 
-      source   
+      caption,
+      source
     },
     _type == "relatedPost" => {
       ...,
       article->{
         title,
         "slug": slug.current,
-        "mainImage": mainImage.asset->url,
-        "mainImageCaption": mainImage.caption,
-        "mainImageSource": mainImage.source
+        "mainImage": mainImage.asset->url
       }
     },
     _type == "quiz" => {
@@ -37,34 +37,21 @@ export const postFields = groq`
     }
   },
   "mainImage": mainImage.asset->url,
-  "mainImageCaption": mainImage.caption,
-  "mainImageSource": mainImage.source,
-  "publishedAt": _createdAt,
+  "mainImageAlt": mainImage.alt,
+  "publishedAt": publishedAt,
   "author": author->{
     name,
-    role,
     "image": image.asset->url,
     bio
   },
-  "category": categories[0]->title,
-  readTime,
-  "featured": isFeatured,
-  seo {
-    metaTitle,
-    metaDescription,
-    keywords,
-    "ogImage": ogImage.asset->url
-  }
+  "category": category->title,
+  "categorySlug": category->slug.current
 `;
 
-/**
- * Fetches a list of recent blog posts
- */
-export async function getPosts(limit: number = 3): Promise<BlogPost[]> {
+export async function getPosts(limit: number = 10): Promise<BlogPost[]> {
   const query = groq`*[_type == "post"] | order(publishedAt desc)[0...${limit}] {
     ${postFields}
   }`;
-
   try {
     return await client.fetch<BlogPost[]>(query);
   } catch (error) {
@@ -73,14 +60,22 @@ export async function getPosts(limit: number = 3): Promise<BlogPost[]> {
   }
 }
 
-/**
- * Fetches a single post by its slug
- */
+export async function getFeaturedPost(): Promise<BlogPost | null> {
+  try {
+    return await client.fetch(
+      groq`*[_type == "post" && featured == true] | order(publishedAt desc)[0] { ${postFields} }`
+    );
+  } catch (error) {
+    console.error("Featured post fetch error:", error);
+    return null;
+  }
+}
+
 export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
   try {
     return await client.fetch(
-      groq`*[_type == "post" && slug.current == $slug][0]{${postFields}}`,
-      { slug },
+      groq`*[_type == "post" && slug.current == $slug][0]{ ${postFields} }`,
+      { slug }
     );
   } catch (error) {
     console.error("Fetch error by slug:", error);
@@ -88,17 +83,14 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
   }
 }
 
-/**
- * Fetches posts within the same category, excluding the current post
- */
 export async function getRelatedPosts(
   category: string,
-  currentId: string,
+  currentId: string
 ): Promise<BlogPost[]> {
   try {
     return await client.fetch(
-      groq`*[_type == "post" && categories[0]->title == $category && _id != $currentId][0...3]{${postFields}}`,
-      { category, currentId },
+      groq`*[_type == "post" && category->title == $category && _id != $currentId] | order(publishedAt desc)[0...3]{ ${postFields} }`,
+      { category, currentId }
     );
   } catch (error) {
     console.error("Related posts fetch error:", error);
@@ -113,11 +105,8 @@ export const tagFields = groq`
   description
 `;
 
-/**
- * Fetches tag details and all posts referencing that specific tag
- */
 export async function getPostsByTag(
-  slug: string,
+  slug: string
 ): Promise<{ tag: Tag; posts: BlogPost[] } | null> {
   const query = groq`*[_type == "tag" && slug.current == $slug][0]{
     ${tagFields},
@@ -125,12 +114,9 @@ export async function getPostsByTag(
       ${postFields}
     }
   }`;
-
   try {
     const result = await client.fetch(query, { slug });
-
     if (!result) return null;
-
     return {
       tag: {
         _id: result._id,
@@ -145,4 +131,3 @@ export async function getPostsByTag(
     return null;
   }
 }
-
