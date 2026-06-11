@@ -2,47 +2,50 @@ import type { Metadata } from "next";
 import { HomePageClient } from "./components";
 
 export const metadata: Metadata = {
-  title: "VelloEarn — Chat with Lonely Souls. Get Paid for It.",
+  title: "Earn from Remote Tasks in Kenya — M-Pesa Payouts | VelloEarn",
   description:
-    "Join Kenya's remote chat & earn network. Real conversations, real people, direct M-Pesa payouts. Apply to join the team today — activation via WhatsApp.",
+    "Get paid to chat with foreigners or train AI in Kenya. Plus surveys, Swahili teaching & more. Free to join. Instant M-Pesa payouts.",
   keywords: [
-    "chat and earn Kenya",
-    "earn money chatting online Kenya",
-    "remote work Kenya M-Pesa",
+    "chat with foreigners and earn Kenya",
+    "AI training jobs Kenya",
+    "how to train AI and get paid Kenya",
+    "is AI training legit Kenya",
+    "earn money online Kenya M-Pesa",
+    "remote work Kenya",
     "online jobs Kenya",
     "work from home Nairobi",
-    "side hustle Kenya 2025",
+    "side hustle Kenya 2026",
     "VelloEarn",
   ],
   openGraph: {
-    title: "VelloEarn — Chat with Lonely Souls. Get Paid for It.",
+    title: "Earn from Remote Tasks in Kenya — M-Pesa Payouts | VelloEarn",
     description:
-      "Real conversations. Instant M-Pesa payouts. Apply to join Kenya's remote chat & earn network.",
+      "Get paid to chat with foreigners or train AI in Kenya. Free to join. Instant M-Pesa payouts.",
     type: "website",
     locale: "en_KE",
     siteName: "VelloEarn",
   },
   twitter: {
     card: "summary_large_image",
-    title: "VelloEarn — Chat with Lonely Souls. Get Paid for It.",
+    title: "Earn from Remote Tasks in Kenya — M-Pesa Payouts | VelloEarn",
     description:
-      "Real conversations. Instant M-Pesa payouts. Apply to join Kenya's remote chat & earn network.",
+      "Get paid to chat with foreigners or train AI in Kenya. Free to join. Instant M-Pesa payouts.",
   },
   alternates: {
-    canonical: "https://velloearn.com",
+    canonical: "https://velloearn.co.ke",
   },
 };
 
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "JobPosting",
-  title: "Remote Chat & Engagement Specialist",
+  title: "Remote Task Specialist — Chat, AI Training & More",
   description:
-    "Join VelloEarn's remote team. Engage with real users through structured chat tasks, moderation, and communication support. Earn directly to M-Pesa with flexible hours from anywhere in Kenya.",
+    "Join VelloEarn to earn from remote tasks in Kenya — AI training, chatting with foreigners, surveys, Swahili teaching and more. Paid directly to M-Pesa. Flexible hours, no experience needed.",
   hiringOrganization: {
     "@type": "Organization",
     name: "VelloEarn",
-    sameAs: "https://velloearn.com",
+    sameAs: "https://velloearn.co.ke",
   },
   jobLocationType: "TELECOMMUTE",
   applicantLocationRequirements: {

@@ -5,23 +5,18 @@ import { Toaster } from "sonner";
 import {
   ApplicationModal,
   CTABanner,
-  Features,
   Hero,
   HowItWorks,
-  ProfilesGrid,
   SuccessState,
-  Testimonials
+  Testimonials,
 } from ".";
-import { whatsappNumber } from "@/lib/constants";
-
-// ─── Types ────────────────────────────────────────────────────────────────────
+import EarnMethods from "./EarnMethods";
+import Trust from "./Trust";
 
 interface ApplicationFormData {
   name: string;
   whatsapp: string;
 }
-
-// ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function HomePageClient() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -29,36 +24,32 @@ export default function HomePageClient() {
 
   const openApply = () => setModalOpen(true);
 
-  const handleSuccess = (data: ApplicationFormData) => {
-    setModalOpen(false);
-    setSuccessData(data);
-  };
+
 
   return (
     <>
       <Toaster position="top-center" richColors />
 
       <main>
-        {/* 1. Hero — "Chat with lonely souls. Get paid for it." */}
+        {/* 1. Hero — platform statement, chat + AI training, funnel CTA */}
         <Hero onApplyClick={openApply} />
 
-        {/* 2. Profiles grid — social proof, locked preview */}
-        <ProfilesGrid onApplyClick={openApply} />
-
-        {/* 3. How it works — apply → WhatsApp → earn */}
+        {/* 2. How it works — apply → pick method → earn to M-Pesa */}
         <HowItWorks />
 
-        {/* 4. Features — why it works + earn page bridge */}
-        <Features />
+        {/* 3. Earn methods — internal link hub for all 6 earning pages */}
+        <EarnMethods />
 
-        {/* 5. Testimonials — lifestyle proof */}
+        {/* 4. Trust — answers "is this a scam", specific facts and numbers */}
+        <Trust />
+
+        {/* 5. Testimonials — method-specific social proof */}
         <Testimonials />
 
         {/* 6. Final CTA banner */}
         <CTABanner onApplyClick={openApply} />
       </main>
 
-      {/* Application modal */}
       {modalOpen && (
         <ApplicationModal
           onClose={() => setModalOpen(false)}
@@ -66,14 +57,12 @@ export default function HomePageClient() {
         />
       )}
 
-      {/* WhatsApp success state */}
       {successData && (
         <SuccessState
           data={successData}
           onClose={() => setSuccessData(null)}
         />
       )}
-
     </>
   );
 }
