@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Roboto:wght@300;400;500;700&display=swap');
+
 @import "tailwindcss";
 
 :root {
@@ -8,8 +10,9 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: 'Roboto', sans-serif;
   --font-mono: var(--font-geist-mono);
+  --font-heading: 'Poppins', sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -22,20 +25,18 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
 
-  /* ── Anti-Copy Text Selection Shield ── */
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none;   /* Safari */
-  -khtml-user-select: none;     /* Konqueror HTML */
-  -moz-user-select: none;      /* Old Firefox */
-  -ms-user-select: none;       /* Internet Explorer/Edge */
-  user-select: none;           /* Modern Browsers */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
-/* ── Exception Guard: Users MUST be able to highlight and type in forms ── */
-input, 
-textarea, 
+input,
+textarea,
 [contenteditable="true"] {
   -webkit-user-select: text;
   -moz-user-select: text;
@@ -43,10 +44,10 @@ textarea,
   user-select: text;
 }
 
-/* Add to your global.css or use Tailwind classes */
+/* carousel styles unchanged */
 .carousel-container .slick-prev:before,
 .carousel-container .slick-next:before {
-  color: #8b5cf6; /* violet-500 */
+  color: #8b5cf6;
   font-size: 24px;
 }
 
@@ -59,19 +60,10 @@ textarea,
   color: #8b5cf6;
 }
 
-.carousel-container .slick-prev {
-  left: -25px;
-}
-
-.carousel-container .slick-next {
-  right: -25px;
-}
+.carousel-container .slick-prev { left: -25px; }
+.carousel-container .slick-next { right: -25px; }
 
 @media (max-width: 768px) {
-  .carousel-container .slick-prev {
-    left: -15px;
-  }
-  .carousel-container .slick-next {
-    right: -15px;
-  }
+  .carousel-container .slick-prev { left: -15px; }
+  .carousel-container .slick-next { right: -15px; }
 }

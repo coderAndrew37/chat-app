@@ -1,111 +1,95 @@
 import { BlogPost, CustomImage } from "@/types/blog";
 import Image from "next/image";
 
-export function BlogHeader({ post }: { post: BlogPost }) {
-  const formattedDate = new Date(post.publishedAt).toLocaleDateString("en-US", {
+const getImgSrc = (
+  imageSource: CustomImage | string | null | undefined,
+): string => {
+  if (!imageSource) return "/placeholder.jpg";
+  if (typeof imageSource === "string") return imageSource;
+  if (imageSource.assetUrl) return imageSource.assetUrl;
+  return "/placeholder.jpg";
+};
+
+const formatDate = (dateString: string) =>
+  new Date(dateString).toLocaleDateString("en-KE", {
+    weekday: "long",
     day: "numeric",
     month: "long",
     year: "numeric",
   });
 
-  /**
-   * Refined helper to extract a string URL from our
-   * complex CustomImage object or a direct string.
-   */
-  const getImgSrc = (
-    imageSource: CustomImage | string | null | undefined,
-  ): string => {
-    if (!imageSource) return "/placeholder.jpg";
-
-    // If it's already a string, return it
-    if (typeof imageSource === "string") return imageSource;
-
-    // If it's a CustomImage object, return the assetUrl
-    if (imageSource.assetUrl) return imageSource.assetUrl;
-
-    return "/placeholder.jpg";
-  };
-
+export function BlogHeader({ post }: { post: BlogPost }) {
   return (
-    <header className="pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Meta Info */}
-        <div className="flex flex-wrap items-center gap-4 mb-8">
-          <span className="bg-blue-600 text-white px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest">
-            {post.category}
-          </span>
-          <span className="text-slate-400 text-sm font-light">
-            {formattedDate}
-          </span>
-          <span className="text-slate-300">•</span>
-          <span className="text-slate-400 text-sm font-light">
-            {post.readTime} min read
-          </span>
-        </div>
+    <header className="mb-8">
 
-        {/* Title */}
-        <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter text-slate-900 leading-[0.9] mb-12 max-w-5xl">
-          {post.title}
-        </h1>
+      {/* ── Meta row: category · date · author ── */}
+      <div className="flex flex-wrap items-center gap-2 text-sm text-gray-500 mb-5">
+        {post.category && (
+          <>
+            <span className="text-rose-500 font-semibold text-xs uppercase tracking-wider">
+              {post.category}
+            </span>
+            <span className="text-gray-300">·</span>
+          </>
+        )}
+        {post.publishedAt && (
+          <>
+            <time className="text-gray-400 text-xs">
+              {formatDate(post.publishedAt)}
+            </time>
+            <span className="text-gray-300">·</span>
+          </>
+        )}
+        {post.author?.name && (
+          <span className="text-xs text-gray-500">
+            By{" "}
+            <span className="font-semibold text-gray-700">
+              {post.author.name}
+            </span>
+          </span>
+        )}
+      </div>
 
-        {/* Author & Excerpt Row */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-end mb-16">
-          <div className="lg:col-span-4 flex items-center gap-4">
-            <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-slate-100 border border-slate-200">
-              <Image
-                src={getImgSrc(post.author.image)}
-                alt={post.author.name}
-                fill
-                className="object-cover grayscale"
-              />
-            </div>
-            <div>
-              <p className="text-sm font-bold text-slate-900">
-                {post.author.name}
-              </p>
-              <p className="text-xs text-slate-500 font-light">
-                {post.author.role}
-              </p>
-            </div>
-          </div>
-          <div className="lg:col-span-8">
-            <p className="text-xl md:text-2xl text-slate-600 font-light leading-relaxed max-w-3xl">
-              {post.excerpt}
-            </p>
-          </div>
-        </div>
+      {/* ── H1 ── */}
+      <h1 className="text-3xl sm:text-4xl lg:text-5xl font-heading text-gray-900 leading-tight tracking-tight mb-5">
+        {post.title}
+      </h1>
 
-        {/* Hero Figure Section */}
-        <figure className="group">
-          <div className="relative aspect-video w-full rounded-[2.5rem] overflow-hidden shadow-2xl border border-slate-100 bg-slate-50">
+      {/* ── Excerpt / standfirst ── */}
+      {post.excerpt && (
+        <p className="text-base sm:text-lg text-gray-500 leading-relaxed border-l-4 border-rose-400 pl-4 mb-8 font-normal">
+          {post.excerpt}
+        </p>
+      )}
+
+      {/* ── Hero image — full width, below headline ── */}
+      {post.mainImage && (
+        <figure className="mb-6">
+          <div className="relative w-full aspect-[16/9] overflow-hidden rounded-xl bg-gray-100">
             <Image
               src={getImgSrc(post.mainImage)}
               alt={post.title}
               fill
               priority
-              className="object-cover transition-transform duration-700 group-hover:scale-105"
-              sizes="100vw"
+              className="object-cover"
+              sizes="(max-width: 1024px) 100vw, 65vw"
             />
           </div>
-
-          {/* Hero Image Caption & Source */}
           {(post.mainImageCaption || post.mainImageSource) && (
-            <figcaption className="mt-6 flex flex-col md:flex-row md:justify-between items-baseline gap-4 px-4">
+            <figcaption className="mt-2 flex flex-col sm:flex-row sm:justify-between gap-1 text-xs text-gray-400 px-1">
               {post.mainImageCaption && (
-                <p className="text-sm text-slate-500 font-light italic max-w-2xl">
-                  — {post.mainImageCaption}
-                </p>
+                <span className="italic">{post.mainImageCaption}</span>
               )}
               {post.mainImageSource && (
-                <p className="text-[10px] uppercase tracking-[0.2em] text-slate-400 font-bold whitespace-nowrap">
-                  Source:{" "}
-                  <span className="text-slate-300">{post.mainImageSource}</span>
-                </p>
+                <span className="font-semibold uppercase tracking-wider">
+                  {post.mainImageSource}
+                </span>
               )}
             </figcaption>
           )}
         </figure>
-      </div>
+      )}
+
     </header>
   );
 }

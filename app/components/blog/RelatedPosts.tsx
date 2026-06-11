@@ -4,66 +4,77 @@ import Link from "next/link";
 
 interface RelatedPostsProps {
   posts: BlogPost[];
+  category?: string;
 }
 
-export function RelatedPosts({ posts }: RelatedPostsProps) {
+export function RelatedPosts({ posts, category }: RelatedPostsProps) {
   if (!posts || posts.length === 0) return null;
 
   return (
-    <section className="py-24 bg-white border-t border-slate-100">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
-          <div className="max-w-2xl">
-            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 tracking-tighter mb-4">
-              Keep{" "}
-              <span className="text-slate-400 font-light italic">Reading.</span>
-            </h2>
-            <p className="text-lg text-slate-500 font-light">
-              Explore more insights on digital strategy and Kenyan tech growth.
-            </p>
-          </div>
+    <section className="border-t border-gray-200 bg-gray-50 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        {/* Section header — PD style */}
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-sm font-black uppercase tracking-widest text-gray-900">
+            More on{" "}
+            <span className="text-rose-500">{category || "VelloEarn"}</span>
+          </h2>
           <Link
             href="/blog"
-            className="text-sm font-bold uppercase tracking-widest text-blue-600 border-b-2 border-blue-100 hover:border-blue-600 transition-all pb-1"
+            className="text-xs font-bold text-rose-500 hover:text-rose-600 underline underline-offset-4"
           >
-            View Journal
+            View all →
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {/* Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {posts.map((post) => (
             <Link
               key={post._id}
               href={`/blog/${post.slug}`}
-              className="group block"
+              className="group bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
             >
-              <div className="relative aspect-[16/10] rounded-[2rem] overflow-hidden mb-6 bg-slate-100 border border-slate-100">
-                <Image
-                  src={
-                    typeof post.mainImage === "string"
-                      ? post.mainImage
-                      : "/placeholder.jpg"
-                  }
-                  alt={post.title}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                />
+              {/* Image */}
+              <div className="relative aspect-[16/10] overflow-hidden bg-gray-100">
+                {post.mainImage ? (
+                  <Image
+                    src={post.mainImage as string}
+                    alt={post.title}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  />
+                ) : (
+                  <div className="absolute inset-0 bg-gradient-to-br from-rose-50 to-pink-50" />
+                )}
               </div>
-              <div className="space-y-3">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-blue-600">
-                  {post.category}
-                </span>
-                <h3 className="text-xl font-bold text-slate-900 leading-tight group-hover:text-blue-600 transition-colors">
+
+              {/* Content */}
+              <div className="p-4">
+                {post.category && (
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-rose-500 block mb-1">
+                    {post.category}
+                  </span>
+                )}
+                <h3 className="text-sm font-bold text-gray-900 leading-snug group-hover:text-rose-500 transition-colors line-clamp-2 mb-2">
                   {post.title}
                 </h3>
-                <p className="text-slate-500 text-sm font-light line-clamp-2">
-                  {post.excerpt}
-                </p>
+                {post.publishedAt && (
+                  <p className="text-xs text-gray-400">
+                    {new Date(post.publishedAt).toLocaleDateString("en-KE", {
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                    })}
+                  </p>
+                )}
               </div>
             </Link>
           ))}
         </div>
+
       </div>
     </section>
   );

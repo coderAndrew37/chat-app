@@ -78,6 +78,7 @@ export interface BlogPost {
     ogImage?: Image;
   };
   tags?: Tag[];
+  seoTitle?: string;
 }
 
 export interface Tag {
