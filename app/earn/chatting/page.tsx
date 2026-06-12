@@ -8,24 +8,26 @@ type Props = {
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://velloearn.co.ke";
 
-// Dynamically generate localized SEO metadata and self-referencing canonical tags
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
   const resolvedParams = await searchParams;
-  const countryParam = typeof resolvedParams.country === "string" ? resolvedParams.country.toLowerCase() : "kenya";
+  const countryParam =
+    typeof resolvedParams.country === "string"
+      ? resolvedParams.country.toLowerCase()
+      : "kenya";
 
   const localizedMeta: Record<string, { title: string; desc: string }> = {
     kenya: {
-      title: "Get Paid to Chat Online in Kenya | Remote Chatting Jobs | VelloEarn",
-      desc: "Work from your phone with VelloEarn. Earn KES 60–250 per hour handling customer support and community moderation chats. Flexible shifts, instant M-Pesa payments."
+      title: "Get Paid to Chat with Foreigners in Kenya — M-Pesa | VelloEarn",
+      desc: "Earn money chatting online in Kenya. Customer support, community moderation and engagement tasks. Flexible hours, instant M-Pesa payouts. Free to join.",
     },
     uganda: {
-      title: "Paid Chat Operator Jobs Uganda | Remote Customer Support | VelloEarn",
-      desc: "Turn your smartphone into an income stream in Uganda. Earn UGX 2,000–8,000 per hour responding to business text queues. Secure MTN MoMo & Airtel cashout."
+      title: "Get Paid to Chat Online in Uganda — MTN MoMo | VelloEarn",
+      desc: "Remote chatting jobs in Uganda. Handle customer support and moderation tasks from your phone. Instant MTN MoMo and Airtel Money payouts. Free to join.",
     },
     ghana: {
-      title: "Online Chatting Jobs Ghana | Remote Message Moderator | VelloEarn",
-      desc: "Join VelloEarn Ghana for remote text-based chat support. Earn GHS 8–35 per hour with daily mobile money pathways via MTN and Telecel wallets."
-    }
+      title: "Get Paid to Chat Online in Ghana — Mobile Money | VelloEarn",
+      desc: "Remote chatting jobs in Ghana. Customer support and moderation tasks from your phone. Paid to MTN MoMo, Telecel, and Vodafone. Free to join.",
+    },
   };
 
   const meta = localizedMeta[countryParam] || localizedMeta.kenya;
@@ -33,50 +35,79 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
   return {
     title: meta.title,
     description: meta.desc,
+    // CANONICAL: always points to clean URL — no query params
+    // This prevents duplicate content between ?country=kenya, ?country=uganda etc.
     alternates: {
-      canonical: `${BASE_URL}/earn/chatting?country=${countryParam}`,
+      canonical: `${BASE_URL}/earn/chatting`,
     },
     openGraph: {
       title: meta.title,
       description: meta.desc,
       images: ["/earn/chatting-hero.jpg"],
-      url: `${BASE_URL}/earn/chatting?country=${countryParam}`,
+      url: `${BASE_URL}/earn/chatting`,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: meta.title,
+      description: meta.desc,
     },
   };
 }
 
 export default async function ChattingPage({ searchParams }: Props) {
   const resolvedParams = await searchParams;
-  const countryParam = typeof resolvedParams.country === "string" ? resolvedParams.country.toLowerCase() : "kenya";
-  
-  // Validate target parameters to map matching layout data safely
+  const countryParam =
+    typeof resolvedParams.country === "string"
+      ? resolvedParams.country.toLowerCase()
+      : "kenya";
+
   const targetGeo = ["kenya", "uganda", "ghana"].includes(countryParam)
     ? (countryParam as "kenya" | "uganda" | "ghana")
     : "kenya";
 
-  // Data matrix to fill out required structural schema fields dynamically
   const jobSchemaDetails = {
-    kenya: { title: "Customer Support Chat Moderator", currency: "KES", minVal: 60, maxVal: 250, countryName: "Kenya" as const },
-    uganda: { title: "Remote Chat Support Operator", currency: "UGX", minVal: 2000, maxVal: 8000, countryName: "Uganda" as const },
-    ghana: { title: "Digital Message Queue Moderator", currency: "GHS", minVal: 8, maxVal: 35, countryName: "Ghana" as const }
+    kenya: {
+      title: "Remote Chat Operator — Customer Support & Moderation",
+      description:
+        "Handle customer support chats, community moderation, and engagement tasks for businesses worldwide. Work from your phone in Kenya. Paid directly to M-Pesa with no minimum withdrawal.",
+      currency: "KES",
+      minVal: 6000,
+      maxVal: 28000,
+      countryName: "Kenya" as const,
+    },
+    uganda: {
+      title: "Remote Chat Support Operator",
+      description:
+        "Handle customer support and moderation tasks remotely from Uganda. Paid to MTN MoMo and Airtel Money.",
+      currency: "UGX",
+      minVal: 180000,
+      maxVal: 840000,
+      countryName: "Uganda" as const,
+    },
+    ghana: {
+      title: "Remote Chat Moderator",
+      description:
+        "Customer support and community moderation tasks from Ghana. Paid to MTN MoMo, Telecel, and Vodafone.",
+      currency: "GHS",
+      minVal: 700,
+      maxVal: 3200,
+      countryName: "Ghana" as const,
+    },
   };
 
   const geoSchema = jobSchemaDetails[targetGeo];
 
   return (
     <>
-      {/* Clean Dynamic Schema Injection Component for the Chatting Track */}
       <JobSchema
         title={geoSchema.title}
-        description="Review and respond to incoming customer message chains, answer business text lines, and handle community platform moderation queues entirely over web or smartphone layouts."
+        description={geoSchema.description}
         currency={geoSchema.currency}
         minSalary={geoSchema.minVal}
         maxSalary={geoSchema.maxVal}
         countryName={geoSchema.countryName}
         baseUrl={BASE_URL}
       />
-      
-      {/* Pass the dynamic geolocation parameter to your client view if needed */}
       <ChattingClient countryTarget={targetGeo} />
     </>
   );

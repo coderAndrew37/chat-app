@@ -20,7 +20,7 @@ const geistMono = Geist_Mono({
 
 // ─── SEO Metadata ─────────────────────────────────────────────────────────────
 
-const BASE_URL = "https://velloearn.com";
+const BASE_URL = "https://velloearn.co.ke";
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
