@@ -12,7 +12,7 @@ import {
   getAllJobCountryParams,
 } from "@/lib/seo/keyword-matrix";
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://velloearn.co.ke";
+const NEXT_PUBLIC_SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://velloearn.co.ke";
 
 // ─── Blog posts ───────────────────────────────────────────────────────────────
 const BLOG_POSTS = [
@@ -44,13 +44,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // ── Static / high-priority pages ───────────────────────────────────────────
   const staticPages: MetadataRoute.Sitemap = [
     {
-      url: BASE_URL,
+      url: NEXT_PUBLIC_SITE_URL,
       lastModified: now,
       changeFrequency: "weekly",
       priority: 1.0,
     },
     {
-      url: `${BASE_URL}/apply`,
+      url: `${NEXT_PUBLIC_SITE_URL}/apply`,
       lastModified: now,
       changeFrequency: "monthly",
       priority: 0.9,
@@ -59,7 +59,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // ── Core Job Landing Pages (Explicitly Handled) ────────────────────────────
   const coreJobPages: MetadataRoute.Sitemap = CORE_JOB_SLUGS.map((slug) => ({
-    url: `${BASE_URL}/earn/${slug}`,
+    url: `${NEXT_PUBLIC_SITE_URL}/earn/${slug}`,
     lastModified: now,
     changeFrequency: "weekly" as const,
     priority: 0.95, // Higher priority as these are your primary money pages
@@ -67,7 +67,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // PRO-TIP IMPLEMENTATION: Explicit target parameters pushed to sitemap to enforce crawler parsing
   const parameterizedAILocalizedPages: MetadataRoute.Sitemap = ["kenya", "uganda", "ghana"].map((country) => ({
-    url: `${BASE_URL}/earn/ai-training?country=${country}`,
+    url: `${NEXT_PUBLIC_SITE_URL}/earn/ai-training?country=${country}`,
     lastModified: now,
     changeFrequency: "weekly" as const,
     priority: 0.95,
@@ -75,7 +75,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // ── Country pages: /earn/[country] ─────────────────────────────────────────
   const countryPages: MetadataRoute.Sitemap = MARKETS.map((market) => ({
-    url: `${BASE_URL}/earn/${market.slug}`,
+    url: `${NEXT_PUBLIC_SITE_URL}/earn/${market.slug}`,
     lastModified: now,
     changeFrequency: "weekly" as const,
     priority: 0.95,
@@ -84,7 +84,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // ── City pages: /earn/[country]/[city] ─────────────────────────────────────
   const cityPages: MetadataRoute.Sitemap = getAllCityParams().map(
     ({ market, city }) => ({
-      url: `${BASE_URL}/earn/${market.slug}/${city.slug}`,
+      url: `${NEXT_PUBLIC_SITE_URL}/earn/${market.slug}/${city.slug}`,
       lastModified: now,
       changeFrequency: "weekly" as const,
       priority: 0.85,
@@ -93,7 +93,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // ── Job type matrix pages: /earn/[jobSlug] (Fallback for matrix consistency) ──
   const jobRootPages: MetadataRoute.Sitemap = JOB_TYPES.map((job) => ({
-    url: `${BASE_URL}/earn/${job.slug}`,
+    url: `${NEXT_PUBLIC_SITE_URL}/earn/${job.slug}`,
     lastModified: now,
     changeFrequency: "weekly" as const,
     priority: 0.9,
@@ -102,7 +102,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // ── Job × country pages: /earn/[jobSlug]/[country] ─────────────────────────
   const jobCountryPages: MetadataRoute.Sitemap = getAllJobCountryParams().map(
     ({ market, jobType }) => ({
-      url: `${BASE_URL}/earn/${jobType.slug}/${market.slug}`,
+      url: `${NEXT_PUBLIC_SITE_URL}/earn/${jobType.slug}/${market.slug}`,
       lastModified: now,
       changeFrequency: "weekly" as const,
       priority: 0.8,
@@ -111,7 +111,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // ── Blog posts: /blog/[slug] ───────────────────────────────────────────────
   const blogPages: MetadataRoute.Sitemap = BLOG_POSTS.map((post) => ({
-    url: `${BASE_URL}/blog/${post.slug}`,
+    url: `${NEXT_PUBLIC_SITE_URL}/blog/${post.slug}`,
     lastModified: post.lastModified,
     changeFrequency: "monthly" as const,
     priority: 0.7,
