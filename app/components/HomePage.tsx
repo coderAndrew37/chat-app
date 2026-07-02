@@ -32,7 +32,7 @@ export default function HomePageClient() {
 
       <main>
         {/* 1. Hero — platform statement, chat + AI training, funnel CTA */}
-        <Hero onApplyClick={openApply} />
+        <Hero />
 
         {/* 2. How it works — apply → pick method → earn to M-Pesa */}
         <HowItWorks />
@@ -47,7 +47,7 @@ export default function HomePageClient() {
         <Testimonials />
 
         {/* 6. Final CTA banner */}
-        <CTABanner onApplyClick={openApply} />
+        <CTABanner />
       </main>
 
       {modalOpen && (

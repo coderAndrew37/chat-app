@@ -196,6 +196,9 @@ export default function AITrainingClient({ countryTarget = "kenya" }: AITraining
                 className="bg-violet-500 hover:bg-violet-600 text-white font-bold text-base px-8 py-4 rounded-full shadow-lg shadow-violet-200 transition-all hover:scale-105 active:scale-95">
                 Apply for This Track →
               </button>
+              <p className="text-xs text-gray-400 mt-4">
+                One-time KES 550 setup · KES 200 welcome bonus back · No monthly charges
+              </p>
             </div>
             <div className="relative hidden lg:block h-[420px] rounded-3xl overflow-hidden shadow-2xl">
               <SmartImage src="/earn/ai-training-hero.jpg" fallback="https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&h=840&fit=crop&auto=format"
@@ -304,6 +307,11 @@ export default function AITrainingClient({ countryTarget = "kenya" }: AITraining
           <div className="space-y-4">
             {geo.objections.map((o, i) => <ObjAccordion key={i} q={o.q} a={o.a} />)}
           </div>
+          <div className="mt-8 text-center">
+            <button onClick={() => setModalOpen(true)} className="text-violet-600 font-semibold text-sm hover:text-violet-700 transition">
+              Still have questions? Ask us directly →
+            </button>
+          </div>
         </div>
       </section>
 
@@ -312,8 +320,9 @@ export default function AITrainingClient({ countryTarget = "kenya" }: AITraining
         <div className="absolute inset-0 bg-violet-600" />
         <div className="relative z-10 max-w-xl mx-auto px-4">
           <h2 className="text-3xl font-extrabold text-white mb-6">Start your first task this week.</h2>
+          <p className="text-violet-200 text-sm mb-6">One-time KES 550 setup · KES 200 welcome bonus back</p>
           <button onClick={() => setModalOpen(true)} className="bg-white text-violet-600 font-bold px-10 py-4 rounded-full shadow-xl hover:scale-105 active:scale-95 transition-all duration-150">
-            Apply Now
+            Apply Now — KES 550 One-Time
           </button>
         </div>
       </section>

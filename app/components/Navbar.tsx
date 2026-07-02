@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 interface NavLink {
   label: string;
@@ -22,14 +22,11 @@ const NAV_LINKS: NavLink[] = [
 const DESKTOP_NAV = NAV_LINKS.slice(0, 3); // Now includes Blog
 const EARN_LINKS = NAV_LINKS.slice(3);
 
-interface NavbarProps {
-  onApplyClick: () => void;
-}
-
-export default function Navbar({ onApplyClick }: NavbarProps) {
+export default function Navbar() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [earnOpen, setEarnOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
 
   // Helper to close sidebar
   const closeSidebar = () => setSidebarOpen(false);
@@ -45,6 +42,11 @@ export default function Navbar({ onApplyClick }: NavbarProps) {
       document.body.style.overflow = "";
     };
   }, [sidebarOpen]);
+
+  // Handle Apply button click - navigate to join page
+  const handleApplyClick = () => {
+    router.push("/join");
+  };
 
   return (
     <>
@@ -119,7 +121,7 @@ export default function Navbar({ onApplyClick }: NavbarProps) {
             {/* Desktop CTA */}
             <div className="hidden md:flex items-center gap-3">
               <button
-                onClick={onApplyClick}
+                onClick={handleApplyClick}
                 className="bg-violet-600 hover:bg-violet-700 text-white font-semibold text-sm px-5 py-2.5 rounded-full transition-colors shadow-sm"
               >
                 Apply Now
@@ -129,7 +131,7 @@ export default function Navbar({ onApplyClick }: NavbarProps) {
             {/* Mobile: Apply button + hamburger */}
             <div className="flex md:hidden items-center gap-2">
               <button
-                onClick={onApplyClick}
+                onClick={handleApplyClick}
                 className="bg-violet-600 hover:bg-violet-700 text-white font-semibold text-xs px-4 py-2 rounded-full transition-colors"
               >
                 Apply
@@ -254,7 +256,7 @@ export default function Navbar({ onApplyClick }: NavbarProps) {
         <div className="px-4 py-5 border-t border-gray-100 shrink-0 flex flex-col gap-3">
           <button
             onClick={() => {
-              onApplyClick();
+              handleApplyClick();
               closeSidebar();
             }}
             className="w-full bg-violet-600 hover:bg-violet-700 text-white font-bold text-sm py-3 rounded-full transition-colors shadow-md"

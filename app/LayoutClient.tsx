@@ -15,14 +15,11 @@ interface LayoutClientProps {
 export default function LayoutClient({ children }: LayoutClientProps) {
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
 
-  const handleSuccess = () => {
-    setIsApplyModalOpen(false);
-    toast.success("Application sent successfully!");
-  };
+  
 
   return (
     <>
-      <Navbar onApplyClick={() => setIsApplyModalOpen(true)} />
+      <Navbar  />
 
       <main>{children}</main>
 

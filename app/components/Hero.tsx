@@ -2,13 +2,10 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { STATS } from "@/data";
 import { whatsappNumber } from "@/lib/constants";
 import type { Stat } from "@/types";
-
-interface HeroProps {
-  onApplyClick: () => void;
-}
 
 function StatCard({ stat }: { stat: Stat }) {
   return (
@@ -34,7 +31,13 @@ const LIFESTYLE_IMAGES = [
   },
 ];
 
-export default function Hero({ onApplyClick }: HeroProps) {
+export default function Hero() {
+  const router = useRouter();
+
+  const handleApplyClick = () => {
+    router.push("/join");
+  };
+
   return (
     <section className="pt-24 pb-16 bg-gradient-to-br from-rose-50 via-white to-pink-50 relative overflow-hidden">
       <div className="absolute top-0 right-0 w-96 h-96 bg-rose-200/30 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
@@ -72,10 +75,10 @@ export default function Hero({ onApplyClick }: HeroProps) {
               No office. No experience needed.
             </p>
 
-            {/* Secondary line: removes the two biggest objections */}
+            {/* Secondary line: updated to reflect one-time fee */}
             <p className="text-base text-gray-400 mb-10 max-w-lg">
-              Free to join. Earnings paid directly to M-Pesa — no minimum,
-              no waiting.
+              One-time KES 550 setup fee · KES 200 welcome bonus back immediately ·
+              M-Pesa payouts daily · No monthly charges ever.
             </p>
 
             {/*
@@ -89,10 +92,10 @@ export default function Hero({ onApplyClick }: HeroProps) {
             */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-10">
               <button
-                onClick={onApplyClick}
+                onClick={handleApplyClick}
                 className="bg-rose-500 hover:bg-rose-600 text-white font-bold text-base px-8 py-4 rounded-full shadow-lg shadow-rose-200 transition-all hover:scale-105 active:scale-95"
               >
-                Apply to Join — It&apos;s Free
+                Apply to Join — KES 550 One-Time
               </button>
               <Link
                 href="/earn/ai-training"

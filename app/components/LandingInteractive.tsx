@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import ApplicationModal, { ApplicationFormData } from "./CTAModal";
 import DeepDiveAccordion from "./DeepDiveAccordion";
 import Requirements from "./Requirements";
@@ -144,6 +145,7 @@ const EARNING_METHODS = [
 // ─── Main Landing Component ───────────────────────────────────────────────────
 
 export default function LandingInteractive() {
+  const router = useRouter();
   const [modalOpen, setModalOpen] = useState(false);
   const [successData, setSuccessData] = useState<ApplicationFormData | null>(null);
 
@@ -152,6 +154,10 @@ export default function LandingInteractive() {
   const handleSuccess = (data: ApplicationFormData) => {
     setModalOpen(false);
     setSuccessData(data);
+  };
+
+  const handleApplyClick = () => {
+    router.push("/join");
   };
 
   return (
@@ -184,16 +190,17 @@ export default function LandingInteractive() {
               </p>
 
               <p className="text-base text-gray-400 mb-10 max-w-lg mx-auto lg:mx-0">
-                M-Pesa notifications while you&apos;re out with friends. School fees sorted. Travel booked.
-                That&apos;s the goal — and it&apos;s what our team members are already doing.
+                One-time KES 550 setup unlocks your dashboard. KES 200 welcome bonus back immediately.
+                M-Pesa notifications while you&apos;re out with friends. That&apos;s the goal — and it&apos;s what 
+                our team members are already doing.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
                 <button
-                  onClick={openModal}
+                  onClick={handleApplyClick}
                   className="bg-rose-500 hover:bg-rose-600 text-white font-bold text-base px-8 py-4 rounded-full shadow-lg shadow-rose-200 transition-all hover:scale-105 active:scale-95"
                 >
-                  Apply to Join the Team
+                  Apply to Join — KES 550 One-Time
                 </button>
                 <a
                   href="#what-we-do"
@@ -208,7 +215,7 @@ export default function LandingInteractive() {
                 {[
                   { value: "KES 30K+", label: "Top monthly earner" },
                   { value: "Instant", label: "M-Pesa payouts" },
-                  { value: "4 ways", label: "To earn" },
+                  { value: "6 ways", label: "To earn" },
                 ].map((s) => (
                   <div key={s.label}>
                     <div className="text-xl font-extrabold text-gray-900">{s.value}</div>
@@ -218,7 +225,7 @@ export default function LandingInteractive() {
               </div>
             </div>
 
-            {/* Right: image collage */}
+            {/* Right: image collage (unchanged) */}
             <div className="hidden lg:flex flex-col gap-3 h-[500px]">
               <div className="flex gap-3 flex-1 min-h-0">
                 <div className="relative w-[56%] rounded-3xl overflow-hidden shadow-xl">
@@ -422,7 +429,7 @@ export default function LandingInteractive() {
       </section>
 
       {/* ── Requirements ─────────────────────────────────────────── */}
-      <Requirements onApply={openModal} />
+      <Requirements onApply={handleApplyClick} />
 
       {/* ── Testimonials ─────────────────────────────────────────── */}
       <section className="py-20 bg-gray-50">
@@ -485,17 +492,17 @@ export default function LandingInteractive() {
             Your next M-Pesa notification could be from us.
           </h2>
           <p className="text-rose-100 mb-8 leading-relaxed">
-            Applications take 2 minutes. Activation happens on WhatsApp. Your first task could be live
-            today.
+            One-time KES 550 setup unlocks your dashboard. KES 200 welcome bonus back immediately.
+            Your first task could be live today.
           </p>
           <button
-            onClick={openModal}
+            onClick={handleApplyClick}
             className="inline-block bg-white text-rose-500 font-bold text-base px-10 py-4 rounded-full shadow-xl hover:scale-105 active:scale-95 transition-all"
           >
-            Apply to Join the Team →
+            Apply to Join — KES 550 One-Time →
           </button>
           <p className="text-rose-200 text-xs mt-4">
-            Serious applicants only · Activation details shared via WhatsApp
+            KES 200 welcome bonus back immediately · No monthly charges ever
           </p>
         </div>
       </section>

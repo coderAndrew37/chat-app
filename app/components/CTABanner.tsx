@@ -1,10 +1,14 @@
 "use client";
 
-interface CTABannerProps {
-  onApplyClick: () => void;
-}
+import { useRouter } from "next/navigation";
 
-export default function CTABanner({ onApplyClick }: CTABannerProps) {
+export default function CTABanner() {
+  const router = useRouter();
+
+  const handleApplyClick = () => {
+    router.push("/join");
+  };
+
   return (
     <section className="py-20 bg-gradient-to-br from-rose-500 to-pink-600 relative overflow-hidden">
       <div className="absolute top-0 left-0 w-72 h-72 bg-white/10 rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
@@ -16,16 +20,17 @@ export default function CTABanner({ onApplyClick }: CTABannerProps) {
           Your next M-Pesa notification could be from us.
         </h2>
         <p className="text-rose-100 text-lg mb-10 leading-relaxed max-w-xl mx-auto">
-          Applications take 2 minutes. Activation happens on WhatsApp. You could be chatting — and earning — before the end of today.
+          Applications take 2 minutes. One-time KES 550 setup unlocks your dashboard. 
+          You could be chatting — and earning — before the end of today.
         </p>
         <button
-          onClick={onApplyClick}
+          onClick={handleApplyClick}
           className="bg-white hover:bg-rose-50 text-rose-500 font-bold text-base px-10 py-4 rounded-full shadow-xl transition-all hover:scale-105 active:scale-95"
         >
-          Apply to Join the Team →
+          Apply to Join — KES 550 One-Time →
         </button>
         <p className="text-rose-200 text-xs mt-5">
-          Serious applicants only · Activation details shared privately via WhatsApp
+          KES 200 welcome bonus back immediately · No monthly charges ever
         </p>
       </div>
     </section>
