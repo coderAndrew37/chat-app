@@ -1,3 +1,4 @@
+// app/blog/page.tsx (updated)
 import { Suspense } from "react";
 import Link from "next/link";
 import {
@@ -16,6 +17,7 @@ import {
 } from "../components/blog/Skeleton";
 import { BLOG_PAGE_SIZE } from "@/lib/blog/constants";
 import { CategorySection } from "../components/blog/BlogCategorySection";
+import SearchBar from "../components/blog/SearchBar";
 
 const SECTION_POST_COUNT = 9;
 
@@ -97,18 +99,18 @@ function NewsletterCTA() {
       <div className="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <span className="text-[10px] font-black uppercase tracking-widest text-rose-200">
-            Free to join
+            One-time setup
           </span>
           <h3 className="text-xl font-extrabold mt-1 leading-snug">
             Start earning from your phone today
           </h3>
-          <p className="text-rose-100 text-sm mt-1">No experience needed. Paid to M-Pesa.</p>
+          <p className="text-rose-100 text-sm mt-1">KES 550 one-time · KES 200 welcome bonus</p>
         </div>
         <Link
-          href="/#apply"
+          href="/join"
           className="shrink-0 text-center bg-white text-rose-500 font-bold text-sm px-6 py-3 rounded-full shadow-md hover:bg-rose-50 transition-colors"
         >
-          Apply — It&apos;s Free
+          Apply — KES 550 One-Time
         </Link>
       </div>
     </div>
@@ -125,18 +127,26 @@ export default async function BlogPage({ searchParams }: Props) {
       <section className="bg-gradient-to-br from-rose-50 via-white to-pink-50 border-b border-gray-100 pt-24 pb-12 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-80 h-80 bg-rose-200/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-          <div className="max-w-2xl">
-            <span className="text-rose-500 font-semibold text-sm uppercase tracking-wider">
-              VelloEarn Blog
-            </span>
-            <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 mt-2 mb-4 tracking-tight leading-tight">
-              Tips, guides &amp; earning strategies
-            </h1>
-            <p className="text-gray-500 text-lg leading-relaxed">
-              Everything you need to earn more from home — from AI training to
-              survey tricks, straight from the VelloEarn team.
-            </p>
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+            <div className="max-w-2xl">
+              <span className="text-rose-500 font-semibold text-sm uppercase tracking-wider">
+                VelloEarn Blog
+              </span>
+              <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 mt-2 mb-4 tracking-tight leading-tight">
+                Tips, guides &amp; earning strategies
+              </h1>
+              <p className="text-gray-500 text-lg leading-relaxed">
+                Everything you need to earn more from home — from AI training to
+                survey tricks, straight from the VelloEarn team.
+              </p>
+            </div>
+            
+            {/* Search Bar */}
+            <div className="w-full md:w-auto md:shrink-0">
+              <SearchBar />
+            </div>
           </div>
+          
           {categories.length > 0 && (
             <div className="mt-8">
               <CategoryFilter categories={categories} active={activeCategory} />
