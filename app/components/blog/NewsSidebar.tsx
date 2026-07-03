@@ -75,7 +75,7 @@ export function NewsSidebar({ posts }: NewsSidebarProps) {
             No experience needed. Withdraw any time.
           </p>
           <Link
-            href="/#apply"
+            href="/join"
             className="block text-center bg-white text-rose-500 font-bold text-xs px-4 py-2.5 rounded-full hover:bg-rose-50 transition-colors"
           >
             Apply — It&apos;s Free

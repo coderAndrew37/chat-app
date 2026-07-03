@@ -15,9 +15,9 @@ const TRACKS = [
 ];
 
 const COMPANY = [
-  { label: "How It Works",  href: "/#how-it-works" },
+  { label: "How It Works",  href: "/join" },
   { label: "Testimonials",  href: "/#testimonials" },
-  { label: "Apply Now",     href: "/#apply" },
+  { label: "Apply Now",     href: "/join" },
 ];
 
 const LEGAL = [
