@@ -52,18 +52,31 @@ export default function ApplyPage({ searchParams }: ApplyPageProps) {
           <h1 className="text-3xl font-extrabold text-white tracking-tight mb-2">
             Application Received!
           </h1>
-          <p className="text-sm text-gray-400 mb-6">
+          <p className="text-sm text-gray-400 mb-4">
             Thanks <strong className="text-white">{submittedData.name}</strong>. Your profile for <span className="text-rose-400 font-semibold">{selectedTrack}</span> has been queued.
           </p>
 
           <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-5 text-left space-y-4 mb-8">
             <h3 className="text-xs font-bold uppercase tracking-wider text-gray-400 flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
-              Next Step: WhatsApp Activation
+              Next Step: Complete Your Activation
             </h3>
             <p className="text-xs text-gray-400 leading-relaxed">
-              We have sent entry instructions to your phone number <strong className="text-white">{submittedData.whatsapp}</strong>. Please check your WhatsApp incoming requests within the next 24 hours to claim your dashboard activation.
+              We have sent activation instructions to your WhatsApp number <strong className="text-white">{submittedData.whatsapp}</strong>. 
+              Complete the one-time <strong className="text-emerald-400">KES 550</strong> setup to unlock your dashboard. 
+              Your <strong className="text-emerald-400">KES 200</strong> welcome bonus will be credited immediately after activation.
             </p>
+            <div className="flex flex-wrap gap-2 pt-2">
+              <span className="text-[10px] bg-white/5 text-gray-300 px-3 py-1 rounded-full border border-white/5">
+                💰 KES 550 one-time
+              </span>
+              <span className="text-[10px] bg-white/5 text-gray-300 px-3 py-1 rounded-full border border-white/5">
+                🎁 KES 200 bonus back
+              </span>
+              <span className="text-[10px] bg-white/5 text-gray-300 px-3 py-1 rounded-full border border-white/5">
+                📱 No monthly charges
+              </span>
+            </div>
           </div>
 
           <Link
@@ -82,7 +95,7 @@ export default function ApplyPage({ searchParams }: ApplyPageProps) {
     <main className="min-h-screen bg-gray-50 flex flex-col justify-center">
       {/* Dynamic contextual banner helper based on current path scope */}
       <div className="bg-rose-500 py-3 text-center text-white text-xs font-semibold px-4 tracking-wide shadow-inner">
-        🔥 Currently accepting applications for {selectedTrack} team openings.
+        🔥 KES 550 one-time setup · KES 200 welcome bonus back · Apply now for {selectedTrack}
       </div>
 
       <Requirements onApply={() => setIsOpen(true)} />
