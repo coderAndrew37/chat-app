@@ -12,12 +12,13 @@ interface SanityWebhookPayload {
 
 export async function POST(req: NextRequest) {
   try {
-    const signature = req.headers.get("x-sanity-webhook-secret");
-    if (SANITY_WEBHOOK_SECRET && signature !== SANITY_WEBHOOK_SECRET) {
+    // Read the custom HTTP header we will specify in Sanity
+    const apiKey = req.headers.get("x-api-key");
+    
+    if (SANITY_WEBHOOK_SECRET && apiKey !== SANITY_WEBHOOK_SECRET) {
       return NextResponse.json({ error: "Unauthorized access token" }, { status: 401 });
     }
 
-    // Explicitly typed body mapping instead of an implicit any
     const body = (await req.json()) as SanityWebhookPayload | null;
     const slug = body?.slug;
 
