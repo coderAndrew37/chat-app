@@ -93,23 +93,26 @@ export default function Trust() {
             </div>
 
             {/* Platform promise card */}
-            <div className="flex-1 bg-rose-500 rounded-3xl p-8 text-white flex flex-col justify-between">
-              <div>
-                <div className="text-rose-200 text-sm font-semibold uppercase tracking-wider mb-3">
-                  Our promise
-                </div>
-                <p className="text-2xl font-bold leading-snug mb-4">
-                  We never ask you for money. Not to join, not to unlock tasks, not ever.
-                </p>
-                <p className="text-rose-100 text-sm leading-relaxed">
-                  If anyone claiming to be VelloEarn asks for payment before you earn,
-                  that is a scam. Report it to us on WhatsApp immediately.
-                </p>
-              </div>
-              <div className="mt-6 text-xs text-rose-200">
-                ✓ Verified by 61,000+ earners across Kenya
-              </div>
-            </div>
+          <div className="flex-1 bg-rose-500 rounded-3xl p-8 text-white flex flex-col justify-between">
+  <div>
+    <div className="text-rose-200 text-sm font-semibold uppercase tracking-wider mb-3">
+      Our promise
+    </div>
+    <p className="text-2xl font-bold leading-snug mb-4">
+      Pay once. Earn forever. No monthly subscriptions.
+    </p>
+    <p className="text-rose-100 text-sm leading-relaxed">
+      One-time KES 550 setup unlocks your dashboard. Your KES 200 welcome bonus 
+      is credited instantly — that&apos;s KES 350 net. No task fees. No withdrawal 
+      fees. No surprise charges. Ever.
+    </p>
+  </div>
+  <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-rose-200">
+    <span>✓ KES 200 bonus back</span>
+    <span>✓ No monthly fees</span>
+    <span>✓ 61,000+ earners</span>
+  </div>
+</div>
           </div>
 
         </div>

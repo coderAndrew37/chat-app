@@ -1,11 +1,11 @@
-// No "use client" needed — pure presentational
-// SEO NOTE: This section is your internal link hub.
-// Every earn method links to its dedicated page, passing
-// authority from the homepage down to each earning page.
-// The two featured cards (Chat + AI Training) get the most
-// descriptive copy because they are your biggest keyword targets.
+"use client";
 
 import Link from "next/link";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 interface EarnMethod {
   icon: string;
@@ -69,10 +69,10 @@ const EARN_METHODS: EarnMethod[] = [
   },
 ];
 
-const featured = EARN_METHODS.filter((m) => m.featured);
-const secondary = EARN_METHODS.filter((m) => !m.featured);
-
 export default function EarnMethods() {
+  const featured = EARN_METHODS.filter((m) => m.featured);
+  const secondary = EARN_METHODS.filter((m) => !m.featured);
+
   return (
     <section id="earn-methods" className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -89,8 +89,8 @@ export default function EarnMethods() {
           </p>
         </div>
 
-        {/* Featured two — Chat and AI Training */}
-        <div className="grid sm:grid-cols-2 gap-6 mb-6">
+        {/* Featured two — Chat and AI Training (grid) */}
+        <div className="grid sm:grid-cols-2 gap-6 mb-10">
           {featured.map((method) => (
             <Link
               key={method.href}
@@ -116,28 +116,53 @@ export default function EarnMethods() {
           ))}
         </div>
 
-        {/* Secondary four — smaller cards */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {secondary.map((method) => (
-            <Link
-              key={method.href}
-              href={method.href}
-              className="group bg-gray-50 hover:bg-rose-50 border border-gray-100 hover:border-rose-200 rounded-2xl p-6 transition-all duration-200 hover:shadow-sm"
-            >
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-2xl">{method.icon}</span>
-                <span className="text-xs bg-white text-gray-500 font-medium px-2 py-0.5 rounded-full border border-gray-200">
-                  {method.tag}
-                </span>
-              </div>
-              <h3 className="text-base font-bold text-gray-900 mb-2 group-hover:text-rose-600 transition-colors">
-                {method.label}
-              </h3>
-              <p className="text-xs text-gray-500 leading-relaxed">
-                {method.description}
-              </p>
-            </Link>
-          ))}
+        {/* Secondary four — Swiper */}
+        <div className="relative">
+          <Swiper
+            modules={[Navigation, Pagination, Autoplay]}
+            spaceBetween={20}
+            slidesPerView={1}
+            navigation
+            pagination={{ clickable: true }}
+            autoplay={{
+              delay: 4000,
+              disableOnInteraction: false,
+              pauseOnMouseEnter: true,
+            }}
+            breakpoints={{
+              640: {
+                slidesPerView: 2,
+                spaceBetween: 20,
+              },
+              1024: {
+                slidesPerView: 4,
+                spaceBetween: 20,
+              },
+            }}
+            className="pb-12"
+          >
+            {secondary.map((method) => (
+              <SwiperSlide key={method.href}>
+                <Link
+                  href={method.href}
+                  className="group block bg-gray-50 hover:bg-rose-50 border border-gray-100 hover:border-rose-200 rounded-2xl p-6 transition-all duration-200 hover:shadow-sm h-full"
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-2xl">{method.icon}</span>
+                    <span className="text-xs bg-white text-gray-500 font-medium px-2 py-0.5 rounded-full border border-gray-200">
+                      {method.tag}
+                    </span>
+                  </div>
+                  <h3 className="text-base font-bold text-gray-900 mb-2 group-hover:text-rose-600 transition-colors">
+                    {method.label}
+                  </h3>
+                  <p className="text-xs text-gray-500 leading-relaxed">
+                    {method.description}
+                  </p>
+                </Link>
+              </SwiperSlide>
+            ))}
+          </Swiper>
         </div>
 
       </div>
