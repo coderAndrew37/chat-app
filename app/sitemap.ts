@@ -1,10 +1,6 @@
 // app/sitemap.ts
-// ─── Dynamic sitemap ──────────────────────────────────────────────────────────
-// Registered in next.config with output: "standalone" + metadataBase.
-// Covers: homepage, static pages, main job categories, all country pages, all city pages,
-// all job-type × country pages, all blog posts, and specialized parameterized localized tracks.
-
 import type { MetadataRoute } from "next";
+import { client } from "@/lib/sanity/client"; 
 import {
   MARKETS,
   JOB_TYPES,
@@ -14,34 +10,32 @@ import {
 
 const NEXT_PUBLIC_SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://velloearn.co.ke";
 
-// ─── Blog posts ───────────────────────────────────────────────────────────────
-const BLOG_POSTS = [
-  { slug: "mpesa-payments",             lastModified: "2026-01-10" },
-  { slug: "scale-your-team",            lastModified: "2026-01-10" },
-  { slug: "how-to-start-ai-training",   lastModified: "2026-02-01" },
-  { slug: "swahili-teaching-guide",     lastModified: "2026-02-15" },
-  { slug: "online-surveys-kenya-guide", lastModified: "2026-03-01" },
-  { slug: "forex-beginners-guide",      lastModified: "2026-03-15" },
-  { slug: "maximize-ai-earnings",       lastModified: "2026-04-01" },
-  { slug: "ai-tools-requirements",      lastModified: "2026-05-01" },
-  { slug: "rlhf-tasks-guide",           lastModified: "2026-05-15" },
-  {slug:'ai-data-annotation-jobs' , lastModified: "2026-06-01"}
-];
+// Revalidate the sitemap once every hour (3600 seconds) via ISR
+export const revalidate = 3600;
 
-// ─── Main Core Job Category Slugs ──────────────────────────────────────────────
-const CORE_JOB_SLUGS = [
-  "chatting",
-  "ai-training",
-  "swahili-teaching",
-  "surveys",
-  "forex",
-  "academic-writing"
-];
+interface SanityBlogPost {
+  slug: string;
+  lastModified: string;
+}
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date().toISOString();
 
-  // ── Static / high-priority pages ───────────────────────────────────────────
+  // 1. Fetch live blog posts from Sanity CMS using GROQ
+  let blogPosts: SanityBlogPost[] = [];
+  try {
+    blogPosts = await client.fetch<SanityBlogPost[]>(
+      `*[_type == "post" && defined(slug.current)] {
+        "slug": slug.current,
+        "lastModified": coalesce(_updatedAt, _createdAt)
+      }`
+    );
+  } catch (error) {
+    console.error("Failed to fetch blog posts for sitemap:", error);
+    blogPosts = []; // Fallback gracefully if the fetch fails
+  }
+
+  // 2. Static / high-priority pages
   const staticPages: MetadataRoute.Sitemap = [
     {
       url: NEXT_PUBLIC_SITE_URL,
@@ -50,74 +44,83 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1.0,
     },
     {
-      url: `${NEXT_PUBLIC_SITE_URL}/apply`,
+      url: `${NEXT_PUBLIC_SITE_URL}/join`,
       lastModified: now,
       changeFrequency: "monthly",
       priority: 0.9,
     },
   ];
 
-  // ── Core Job Landing Pages (Explicitly Handled) ────────────────────────────
+  // 3. Core Job Landing Pages (e.g., /earn/ai-training)
+  const CORE_JOB_SLUGS = [
+    "chatting",
+    "ai-training",
+    "swahili-teaching",
+    "surveys",
+    "forex",
+    "academic-writing"
+  ];
+  
   const coreJobPages: MetadataRoute.Sitemap = CORE_JOB_SLUGS.map((slug) => ({
     url: `${NEXT_PUBLIC_SITE_URL}/earn/${slug}`,
     lastModified: now,
-    changeFrequency: "weekly" as const,
-    priority: 0.95, // Higher priority as these are your primary money pages
+    changeFrequency: "weekly",
+    priority: 0.95,
   }));
 
-  // PRO-TIP IMPLEMENTATION: Explicit target parameters pushed to sitemap to enforce crawler parsing
+  // 4. Parameterized AI Localized Pages
   const parameterizedAILocalizedPages: MetadataRoute.Sitemap = ["kenya", "uganda", "ghana"].map((country) => ({
     url: `${NEXT_PUBLIC_SITE_URL}/earn/ai-training?country=${country}`,
     lastModified: now,
-    changeFrequency: "weekly" as const,
+    changeFrequency: "weekly",
     priority: 0.95,
   }));
 
-  // ── Country pages: /earn/[country] ─────────────────────────────────────────
+  // 5. Country pages: FIXED to match /earn/country/[country]
   const countryPages: MetadataRoute.Sitemap = MARKETS.map((market) => ({
-    url: `${NEXT_PUBLIC_SITE_URL}/earn/${market.slug}`,
+    url: `${NEXT_PUBLIC_SITE_URL}/earn/country/${market.slug}`,
     lastModified: now,
-    changeFrequency: "weekly" as const,
+    changeFrequency: "weekly",
     priority: 0.95,
   }));
 
-  // ── City pages: /earn/[country]/[city] ─────────────────────────────────────
+  // 6. City pages: FIXED to match /earn/country/[country]/[city]
   const cityPages: MetadataRoute.Sitemap = getAllCityParams().map(
     ({ market, city }) => ({
-      url: `${NEXT_PUBLIC_SITE_URL}/earn/${market.slug}/${city.slug}`,
+      url: `${NEXT_PUBLIC_SITE_URL}/earn/country/${market.slug}/${city.slug}`,
       lastModified: now,
-      changeFrequency: "weekly" as const,
+      changeFrequency: "weekly",
       priority: 0.85,
     })
   );
 
-  // ── Job type matrix pages: /earn/[jobSlug] (Fallback for matrix consistency) ──
+  // 7. Job type matrix root pages: FIXED to match /earn/job/[jobSlug]
   const jobRootPages: MetadataRoute.Sitemap = JOB_TYPES.map((job) => ({
-    url: `${NEXT_PUBLIC_SITE_URL}/earn/${job.slug}`,
+    url: `${NEXT_PUBLIC_SITE_URL}/earn/job/${job.slug}`,
     lastModified: now,
-    changeFrequency: "weekly" as const,
+    changeFrequency: "weekly",
     priority: 0.9,
   }));
 
-  // ── Job × country pages: /earn/[jobSlug]/[country] ─────────────────────────
+  // 8. Job × country pages: FIXED to match /earn/job/[jobSlug]/[country]
   const jobCountryPages: MetadataRoute.Sitemap = getAllJobCountryParams().map(
     ({ market, jobType }) => ({
-      url: `${NEXT_PUBLIC_SITE_URL}/earn/${jobType.slug}/${market.slug}`,
+      url: `${NEXT_PUBLIC_SITE_URL}/earn/job/${jobType.slug}/${market.slug}`,
       lastModified: now,
-      changeFrequency: "weekly" as const,
+      changeFrequency: "weekly",
       priority: 0.8,
     })
   );
 
-  // ── Blog posts: /blog/[slug] ───────────────────────────────────────────────
-  const blogPages: MetadataRoute.Sitemap = BLOG_POSTS.map((post) => ({
+  // 9. Map live Sanity data directly into sitemap format
+  const blogPages: MetadataRoute.Sitemap = blogPosts.map((post) => ({
     url: `${NEXT_PUBLIC_SITE_URL}/blog/${post.slug}`,
-    lastModified: post.lastModified,
-    changeFrequency: "monthly" as const,
+    lastModified: new Date(post.lastModified).toISOString(),
+    changeFrequency: "weekly",
     priority: 0.7,
   }));
 
-  // Filter out any duplicate root URLs that might happen from combining coreJobPages and jobRootPages
+  // 10. Combine layouts and enforce uniqueness
   const allPages = [
     ...staticPages,
     ...coreJobPages,
