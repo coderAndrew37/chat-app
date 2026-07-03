@@ -3,7 +3,7 @@ import { groq } from "next-sanity";
 import "server-only";
 import { client } from "./sanity/client";
 
-export const postFields = groq`
+const baseFields = groq`
   _id,
   title,
   "slug": slug.current,
@@ -16,6 +16,25 @@ export const postFields = groq`
     title,
     "slug": slug.current
   },
+  "mainImage": mainImage.asset->url,
+  "mainImageAlt": mainImage.alt,
+  "mainImageBlur": mainImage.asset->metadata.lqip,
+  "estimatedReadingTime": round(length(pt::text(body)) / 5 / 180) + 1,
+  "author": author->{
+    name,
+    "image": image.asset->url,
+    bio
+  },
+  "category": category->title,
+  "categorySlug": category->slug.current
+`;
+
+// Used for listing pages — no body, so payload stays small
+export const postListFields = baseFields;
+
+// Used for single post pages — includes full rich-text body
+export const postFields = groq`
+  ${baseFields},
   body[]{
     ...,
     _type == "image" => {
@@ -35,22 +54,65 @@ export const postFields = groq`
     _type == "quiz" => {
       ...
     }
-  },
-  "mainImage": mainImage.asset->url,
-  "mainImageAlt": mainImage.alt,
-  "publishedAt": publishedAt,
-  "author": author->{
-    name,
-    "image": image.asset->url,
-    bio
-  },
-  "category": category->title,
-  "categorySlug": category->slug.current
+  }
 `;
 
+interface PostListOptions {
+  category?: string;
+  excludeFeatured?: boolean;
+}
+
+function buildListFilter({ category, excludeFeatured }: PostListOptions) {
+  const clauses = [`_type == "post"`];
+  if (category) clauses.push(`category->title == $category`);
+  if (excludeFeatured) clauses.push(`featured != true`);
+  return clauses.join(" && ");
+}
+
+export async function getPostsPaginated(
+  offset: number,
+  limit: number,
+  options: PostListOptions = {}
+): Promise<BlogPost[]> {
+  const filter = buildListFilter(options);
+  const query = groq`*[${filter}] | order(publishedAt desc)[${offset}...${offset + limit}] {
+    ${postListFields}
+  }`;
+  try {
+    return await client.fetch<BlogPost[]>(query, { category: options.category });
+  } catch (error) {
+    console.error("Paginated posts fetch error:", error);
+    return [];
+  }
+}
+
+export async function getPostsCount(options: PostListOptions = {}): Promise<number> {
+  const filter = buildListFilter(options);
+  try {
+    return await client.fetch<number>(groq`count(*[${filter}])`, {
+      category: options.category,
+    });
+  } catch (error) {
+    console.error("Post count fetch error:", error);
+    return 0;
+  }
+}
+
+export async function getCategories(): Promise<string[]> {
+  try {
+    return await client.fetch<string[]>(
+      groq`array::unique(*[_type == "post" && defined(category->title)].category->title)`
+    );
+  } catch (error) {
+    console.error("Categories fetch error:", error);
+    return [];
+  }
+}
+
+// Kept for backwards compatibility (post detail page etc.)
 export async function getPosts(limit: number = 10): Promise<BlogPost[]> {
   const query = groq`*[_type == "post"] | order(publishedAt desc)[0...${limit}] {
-    ${postFields}
+    ${postListFields}
   }`;
   try {
     return await client.fetch<BlogPost[]>(query);
@@ -63,7 +125,7 @@ export async function getPosts(limit: number = 10): Promise<BlogPost[]> {
 export async function getFeaturedPost(): Promise<BlogPost | null> {
   try {
     return await client.fetch(
-      groq`*[_type == "post" && featured == true] | order(publishedAt desc)[0] { ${postFields} }`
+      groq`*[_type == "post" && featured == true] | order(publishedAt desc)[0] { ${postListFields} }`
     );
   } catch (error) {
     console.error("Featured post fetch error:", error);
@@ -89,7 +151,7 @@ export async function getRelatedPosts(
 ): Promise<BlogPost[]> {
   try {
     return await client.fetch(
-      groq`*[_type == "post" && category->title == $category && _id != $currentId] | order(publishedAt desc)[0...3]{ ${postFields} }`,
+      groq`*[_type == "post" && category->title == $category && _id != $currentId] | order(publishedAt desc)[0...3]{ ${postListFields} }`,
       { category, currentId }
     );
   } catch (error) {
@@ -111,7 +173,7 @@ export async function getPostsByTag(
   const query = groq`*[_type == "tag" && slug.current == $slug][0]{
     ${tagFields},
     "posts": *[_type == "post" && references(^._id)] | order(publishedAt desc) {
-      ${postFields}
+      ${postListFields}
     }
   }`;
   try {

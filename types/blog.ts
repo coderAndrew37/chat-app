@@ -79,6 +79,8 @@ export interface BlogPost {
   };
   tags?: Tag[];
   seoTitle?: string;
+   mainImageBlur?: string;
+  estimatedReadingTime?: number;
 }
 
 export interface Tag {
