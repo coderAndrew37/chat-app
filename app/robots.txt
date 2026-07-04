@@ -1,7 +1,11 @@
 // app/robots.ts
 import type { MetadataRoute } from "next";
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://velloearn.co.ke";
+// Standardized fallback path to prevent subdomain fragmentation
+const BASE_URL = 
+  process.env.NEXT_PUBLIC_SITE_URL || 
+  process.env.NEXT_PUBLIC_BASE_URL || 
+  "https://www.velloearn.co.ke";
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -9,8 +13,8 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        // Keep admin/api routes out of the index
-        disallow: ["/api/", "/admin/", "/_next/"],
+        // FIXED: Shield checkout and application screens from index spiders completely
+        disallow: ["/api/", "/admin/", "/_next/", "/join"],
       },
     ],
     sitemap: `${BASE_URL}/sitemap.xml`,

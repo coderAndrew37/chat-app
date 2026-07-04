@@ -8,9 +8,12 @@ import {
   getAllJobCountryParams,
 } from "@/lib/seo/keyword-matrix";
 
-const NEXT_PUBLIC_SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.velloearn.co.ke";
+const BASE_URL = 
+  process.env.NEXT_PUBLIC_SITE_URL || 
+  process.env.NEXT_PUBLIC_BASE_URL || 
+  "https://www.velloearn.co.ke";
 
-// Revalidate the sitemap once every hour (3600 seconds) via ISR
+// Revalidate the sitemap layout once every hour via Incremental Static Regeneration
 export const revalidate = 3600;
 
 interface SanityBlogPost {
@@ -32,99 +35,111 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     );
   } catch (error) {
     console.error("Failed to fetch blog posts for sitemap:", error);
-    blogPosts = []; // Fallback gracefully if the fetch fails
+    blogPosts = [];
   }
 
-  // 2. Static / high-priority pages
+  // 2. Static High-Priority Pages
   const staticPages: MetadataRoute.Sitemap = [
     {
-      url: NEXT_PUBLIC_SITE_URL,
+      url: BASE_URL,
       lastModified: now,
       changeFrequency: "weekly",
       priority: 1.0,
     },
-    {
-      url: `${NEXT_PUBLIC_SITE_URL}/join`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.9,
-    },
+    // CRITICAL: Removed "/join" from this tracking segment to resolve GSC indexing conflicts
   ];
 
-  // 3. Core Job Landing Pages (e.g., /earn/ai-training)
+  // 3. Core Job Landing Pages
+  // FIXED: Adjusted "swahili-teaching" to "swahili" to accurately mirror your actual page folder structures
   const CORE_JOB_SLUGS = [
     "chatting",
     "ai-training",
-    "swahili-teaching",
+    "swahili",
     "surveys",
     "forex",
     "academic-writing"
   ];
   
   const coreJobPages: MetadataRoute.Sitemap = CORE_JOB_SLUGS.map((slug) => ({
-    url: `${NEXT_PUBLIC_SITE_URL}/earn/${slug}`,
+    url: `${BASE_URL}/earn/${slug}`,
     lastModified: now,
     changeFrequency: "weekly",
     priority: 0.95,
   }));
 
-  // 4. Parameterized AI Localized Pages
-  const parameterizedAILocalizedPages: MetadataRoute.Sitemap = ["kenya", "uganda", "ghana"].map((country) => ({
-    url: `${NEXT_PUBLIC_SITE_URL}/earn/ai-training?country=${country}`,
-    lastModified: now,
-    changeFrequency: "weekly",
-    priority: 0.95,
-  }));
+  // 4. Parameterized Regional Variations
+  const targetRegions = ["kenya", "uganda", "ghana"];
+  const parameterizedLocalizedPages: MetadataRoute.Sitemap = [];
 
-  // 5. Country pages: FIXED to match /earn/country/[country]
+  targetRegions.forEach((country) => {
+    // Target country-parameterized paths for your AI segments
+    parameterizedLocalizedPages.push({
+      url: `${BASE_URL}/earn/ai-training?country=${country}`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.95,
+    });
+
+    // Target geo-parameterized paths for your Forex and Survey training pages
+    ["forex", "surveys"].forEach((slug) => {
+      parameterizedLocalizedPages.push({
+        url: `${BASE_URL}/earn/${slug}?geo=${country}`,
+        lastModified: now,
+        changeFrequency: "weekly",
+        priority: 0.95,
+      });
+    });
+  });
+
+  // 5. Country pages: /earn/country/[country]
   const countryPages: MetadataRoute.Sitemap = MARKETS.map((market) => ({
-    url: `${NEXT_PUBLIC_SITE_URL}/earn/country/${market.slug}`,
+    url: `${BASE_URL}/earn/country/${market.slug}`,
     lastModified: now,
     changeFrequency: "weekly",
     priority: 0.95,
   }));
 
-  // 6. City pages: FIXED to match /earn/country/[country]/[city]
+  // 6. City pages: /earn/country/[country]/[city]
   const cityPages: MetadataRoute.Sitemap = getAllCityParams().map(
     ({ market, city }) => ({
-      url: `${NEXT_PUBLIC_SITE_URL}/earn/country/${market.slug}/${city.slug}`,
+      url: `${BASE_URL}/earn/country/${market.slug}/${city.slug}`,
       lastModified: now,
       changeFrequency: "weekly",
       priority: 0.85,
     })
   );
 
-  // 7. Job type matrix root pages: FIXED to match /earn/job/[jobSlug]
+  // 7. Job type matrix root pages: /earn/job/[jobSlug]
   const jobRootPages: MetadataRoute.Sitemap = JOB_TYPES.map((job) => ({
-    url: `${NEXT_PUBLIC_SITE_URL}/earn/job/${job.slug}`,
+    url: `${BASE_URL}/earn/job/${job.slug}`,
     lastModified: now,
     changeFrequency: "weekly",
     priority: 0.9,
   }));
 
-  // 8. Job × country pages: FIXED to match /earn/job/[jobSlug]/[country]
+  // 8. Job × country pages: /earn/job/[jobSlug]/[country]
   const jobCountryPages: MetadataRoute.Sitemap = getAllJobCountryParams().map(
     ({ market, jobType }) => ({
-      url: `${NEXT_PUBLIC_SITE_URL}/earn/job/${jobType.slug}/${market.slug}`,
+      url: `${BASE_URL}/earn/job/${jobType.slug}/${market.slug}`,
       lastModified: now,
       changeFrequency: "weekly",
       priority: 0.8,
     })
   );
 
-  // 9. Map live Sanity data directly into sitemap format
+  // 9. Sanity Blog Post Entries
   const blogPages: MetadataRoute.Sitemap = blogPosts.map((post) => ({
-    url: `${NEXT_PUBLIC_SITE_URL}/blog/${post.slug}`,
+    url: `${BASE_URL}/blog/${post.slug}`,
     lastModified: new Date(post.lastModified).toISOString(),
     changeFrequency: "weekly",
     priority: 0.7,
   }));
 
-  // 10. Combine layouts and enforce uniqueness
+  // 10. Accumulate systems datasets and enforce uniqueness constraints safely
   const allPages = [
     ...staticPages,
     ...coreJobPages,
-    ...parameterizedAILocalizedPages,
+    ...parameterizedLocalizedPages,
     ...countryPages,
     ...cityPages,
     ...jobRootPages,
