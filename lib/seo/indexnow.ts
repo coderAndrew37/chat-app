@@ -6,36 +6,50 @@ interface IndexNowResult {
   message: string;
 }
 
-export async function notifyIndexNow(url: string): Promise<IndexNowResult> {
-  const host = "velloearn.co.ke";
-  const key = "velloearn_secure_crypto_token_2026"; 
-  const keyLocation = `https://${host}/indexnow-key`;
+// Keep this in sync with app/indexnow-key/route.ts.
+// Consider extracting to a shared const file (e.g. src/lib/seo/config.ts)
+// so the two files can never drift out of sync.
+const INDEXNOW_KEY = "velloearn_secure_crypto_token_2026";
 
+export async function notifyIndexNow(url: string): Promise<IndexNowResult> {
   try {
+    const parsedUrl = new URL(url);
+    const host = parsedUrl.hostname; // dynamically matches whatever domain the URL actually uses
+    const keyLocation = `${parsedUrl.protocol}//${host}/indexnow-key`;
+
     const endpoint = "https://api.indexnow.org/indexnow";
-    
+
     const response = await fetch(endpoint, {
       method: "POST",
       headers: {
         "Content-Type": "application/json; charset=utf-8",
       },
       body: JSON.stringify({
-        host: host,
-        key: key,
-        keyLocation: keyLocation,
+        host,
+        key: INDEXNOW_KEY,
+        keyLocation,
         urlList: [url],
       }),
     });
 
+    let message: string;
+    if (response.ok) {
+      message = "IndexNow notification sent successfully.";
+    } else {
+      const responseBody = await response.text().catch(() => "");
+      message = `IndexNow failed with status: ${response.status} ${response.statusText}${
+        responseBody ? ` — ${responseBody}` : ""
+      }`;
+    }
+
     return {
       success: response.ok,
       status: response.status,
-      message: response.ok 
-        ? "IndexNow notification sent successfully." 
-        : `IndexNow failed with status: ${response.statusText}`,
+      message,
     };
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : "Internal network failure pinging IndexNow API.";
+    const errorMessage =
+      error instanceof Error ? error.message : "Internal network failure pinging IndexNow API.";
     console.error("IndexNow submission execution error:", error);
     return {
       success: false,
