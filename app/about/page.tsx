@@ -1,9 +1,7 @@
+import { BASE_URL } from "@/lib/config";
 import type { Metadata } from "next";
 import Link from "next/link";
 
-// ─── SEO metadata ─────────────────────────────────────────────────────────────
-
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.velloearn.co.ke";
 
 export const metadata: Metadata = {
   title: "About VelloEarn — Connecting African Talent to Global Technology Work",

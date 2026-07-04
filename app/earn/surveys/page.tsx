@@ -1,16 +1,12 @@
 // app/earn/surveys/page.tsx
 import { Metadata } from "next";
 import SurveysClient from "./SurveyClient";
+import { BASE_URL } from "@/lib/config";
 
 type Props = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
-// Resilient domain configuration checking across all environment variables
-const BASE_URL = 
-  process.env.NEXT_PUBLIC_SITE_URL || 
-  process.env.NEXT_PUBLIC_BASE_URL || 
-  "https://www.velloearn.co.ke";
 
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
   const resolvedParams = await searchParams;
@@ -87,9 +83,13 @@ export default async function SurveysPage({ searchParams }: Props) {
     ghana: { name: "VelloEarn Ghana" },
   }[countryTarget];
 
+  const canonicalUrl = `${BASE_URL}/earn/surveys?geo=${countryTarget}`;
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Course",
+    // FIXED: Synchronized absolute asset path targets the exact parameter structure
+    "url": canonicalUrl,
     "name": `Consumer Insights & Market Research Analyst Track - ${countryTarget.toUpperCase()}`,
     "description": "Structured curriculum focusing on consumer survey accuracy, application interface benchmarking, and focus group parameters.",
     "provider": {
@@ -98,6 +98,12 @@ export default async function SurveysPage({ searchParams }: Props) {
       "sameAs": BASE_URL,
       "logo": `${BASE_URL}/logo.jpg`,
     },
+    // FIXED: Appended necessary workload properties to fulfill modern Course validation criteria
+    "hasCourseInstance": {
+      "@type": "CourseInstance",
+      "courseMode": "online",
+      "courseWorkload": "PT6H"
+    }
   };
 
   return (
