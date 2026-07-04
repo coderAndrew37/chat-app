@@ -330,7 +330,7 @@ export default function ChattingClient({ countryTarget }: ChattingClientProps) {
 
             <div className="relative hidden lg:block h-[420px] rounded-3xl overflow-hidden shadow-2xl">
               <SmartImage
-                src="/earn/chatting-hero.jpg"
+                src="/earn/chatting.jpg"
                 fallback="https://images.unsplash.com/photo-1611746872915-64382b5c76da?w=800&h=840&fit=crop&auto=format"
                 alt="Young Kenyan woman earning money by chatting online from her phone"
                 fill priority className="object-cover" sizes="45vw"

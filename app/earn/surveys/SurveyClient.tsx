@@ -245,7 +245,7 @@ export default function SurveysClient({ countryTarget }: SurveysClientProps) {
 
             <div className="relative hidden lg:block h-[420px] rounded-3xl overflow-hidden shadow-2xl">
               <SmartImage
-                src="/earn/surveys-hero.jpg"
+                src="/earn/surveys.jpg"
                 fallback="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800&h=840&fit=crop&auto=format"
                 alt="Person completing a survey on phone"
                 fill priority className="object-cover" sizes="45vw"

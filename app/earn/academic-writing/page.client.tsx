@@ -219,7 +219,7 @@ export default function AcademicWritingClient({ countryTarget }: AcademicWriting
             {/* Hero image */}
             <div className="relative hidden lg:block h-[420px] rounded-3xl overflow-hidden shadow-2xl">
               <SmartImage
-                src="/earn/academic-writing-hero.jpg"
+                src="/earn/academic-writing.jpg"
                 fallback="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=800&h=840&fit=crop&auto=format"
                 alt="Person writing at a desk"
                 fill

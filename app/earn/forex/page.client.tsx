@@ -294,7 +294,7 @@ export default function ForexClient({ countryTarget }: ForexClientProps) {
             {/* Hero image */}
             <div className="relative hidden lg:block h-[420px] rounded-3xl overflow-hidden shadow-2xl shadow-blue-900/50 border border-blue-400/10">
               <SmartImage
-                src="/earn/forex-hero.jpg"
+                src="/earn/forex.jpg"
                 fallback="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800&h=840&fit=crop&auto=format"
                 alt="Forex trading charts"
                 fill

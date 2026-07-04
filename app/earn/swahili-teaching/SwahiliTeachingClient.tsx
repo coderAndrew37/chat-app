@@ -154,7 +154,7 @@ export default function SwahiliClient() {
 
             <div className="relative hidden lg:block h-[420px] rounded-3xl overflow-hidden shadow-2xl">
               <SmartImage
-                src="/earn/swahili-hero.jpg"
+                src="/earn/swahili.jpg"
                 fallback="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=800&h=840&fit=crop&auto=format"
                 alt="Teaching session on video call"
                 fill priority className="object-cover" sizes="45vw"

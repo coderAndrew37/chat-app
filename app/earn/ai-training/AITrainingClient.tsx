@@ -201,7 +201,7 @@ export default function AITrainingClient({ countryTarget = "kenya" }: AITraining
               </p>
             </div>
             <div className="relative hidden lg:block h-[420px] rounded-3xl overflow-hidden shadow-2xl">
-              <SmartImage src="/earn/ai-training-hero.jpg" fallback="https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&h=840&fit=crop&auto=format"
+              <SmartImage src="/earn/ai-training.jpg" fallback="https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&h=840&fit=crop&auto=format"
                 alt="Person working on AI training task" fill priority className="object-cover" sizes="45vw" />
             </div>
           </div>
