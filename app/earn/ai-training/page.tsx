@@ -1,3 +1,4 @@
+// app/earn/ai-training/page.tsx
 import { Metadata } from "next";
 import AITrainingClient from "./AITrainingClient";
 import JobSchema from "@/app/components/seo/JobSchema";
@@ -6,7 +7,11 @@ type Props = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://velloearn.co.ke";
+// Resilient domain configuration checking across all environment variable variants
+const BASE_URL = 
+  process.env.NEXT_PUBLIC_SITE_URL || 
+  process.env.NEXT_PUBLIC_BASE_URL || 
+  "https://www.velloearn.co.ke";
 
 // Dynamically generate SEO tags using query parameters (e.g., /earn/ai-training?country=ghana)
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
@@ -29,19 +34,37 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
   };
 
   const meta = localizedMeta[countryParam] || localizedMeta.kenya;
+  const canonicalUrl = `${BASE_URL}/earn/ai-training?country=${countryParam}`;
+  const ogImageUrl = `${BASE_URL}/earn/og-cover.png`;
 
   return {
     title: meta.title,
     description: meta.desc,
-    // PRO-TIP IMPLEMENTATION: Self-referencing canonical URLs prevent Google from grouping or dropping your parameter variations
     alternates: {
-      canonical: `${BASE_URL}/earn/ai-training?country=${countryParam}`,
+      // Self-referencing dynamic parameter canonicals lock authority onto the specific regional variant
+      canonical: canonicalUrl,
     },
     openGraph: {
       title: meta.title,
       description: meta.desc,
-      images: ["/earn/ai-training-hero.jpg"],
-      url: `${BASE_URL}/earn/ai-training?country=${countryParam}`,
+      url: canonicalUrl,
+      siteName: "VelloEarn",
+      type: "website",
+      locale: "en_KE",
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: `${meta.title} Cover Image`,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: meta.title,
+      description: meta.desc,
+      images: [ogImageUrl],
     },
   };
 }

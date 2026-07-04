@@ -1,3 +1,4 @@
+// app/blog/[slug]/page.tsx
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { BlogHeader } from "@/app/components/blog/BlogHeader";
@@ -13,21 +14,32 @@ interface Props {
   params: Promise<{ slug: string }>;
 }
 
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.velloearn.co.ke";
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = await getPostBySlug(slug);
 
   if (!post) return {};
 
+  // Enforce unified www. canonical routing strategy 
+  const canonicalUrl = `${BASE_URL}/blog/${slug}`;
+  const ogImage = post.mainImage ? [{ url: post.mainImage as string }] : [];
+
   return {
     title: post.seoTitle || `${post.title} | VelloEarn`,
     description: post.excerpt,
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
       title: post.title,
       description: post.excerpt,
+      url: canonicalUrl,
       type: "article",
       publishedTime: post.publishedAt,
-      images: post.mainImage ? [{ url: post.mainImage as string }] : [],
+      images: ogImage,
+      siteName: "VelloEarn",
     },
     twitter: {
       card: "summary_large_image",
@@ -49,18 +61,33 @@ export default async function BlogPostPage({ params }: Props) {
   if (!post) notFound();
 
   const relatedPosts = await getRelatedPosts(post.category || "", post._id);
-
   const sidebarPosts = latestPosts.filter((p) => p._id !== post._id).slice(0, 5);
+  
+  const canonicalUrl = `${BASE_URL}/blog/${slug}`;
 
+  // Fully enriched Schema.org layout for rich card results
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     headline: post.title,
-    image: post.mainImage,
+    image: post.mainImage ? [post.mainImage] : [`${BASE_URL}/og-cover.png`],
     datePublished: post.publishedAt,
+    dateModified:  post.publishedAt, // Fallback gracefully if updatedAt isn't tracked
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": canonicalUrl,
+    },
     author: {
       "@type": "Person",
-      name: post.author?.name,
+      name: post.author?.name || "VelloEarn Team",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "VelloEarn",
+      logo: {
+        "@type": "ImageObject",
+        url: `${BASE_URL}/logo.jpg`, // Ensure this fallback brand asset exists
+      },
     },
     description: post.excerpt,
   };

@@ -1,3 +1,4 @@
+// app/earn/chatting/page.tsx
 import { Metadata } from "next";
 import ChattingClient from "./ChattingClient";
 import JobSchema from "@/app/components/seo/JobSchema";
@@ -6,7 +7,11 @@ type Props = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://velloearn.co.ke";
+// Resilient domain checking across all environment variables to ensure strict www. targeting
+const BASE_URL = 
+  process.env.NEXT_PUBLIC_SITE_URL || 
+  process.env.NEXT_PUBLIC_BASE_URL || 
+  "https://www.velloearn.co.ke";
 
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
   const resolvedParams = await searchParams;
@@ -31,25 +36,39 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
   };
 
   const meta = localizedMeta[countryParam] || localizedMeta.kenya;
+  
+  // FIXED: Using self-referencing canonical URLs to force Google to index and rank 
+  // these regional variations inside Uganda and Ghana search engine markets independently.
+  const canonicalUrl = `${BASE_URL}/earn/chatting?country=${countryParam}`;
+  const ogImageUrl = `${BASE_URL}/og-cover.png`;
 
   return {
     title: meta.title,
     description: meta.desc,
-    // CANONICAL: always points to clean URL — no query params
-    // This prevents duplicate content between ?country=kenya, ?country=uganda etc.
     alternates: {
-      canonical: `${BASE_URL}/earn/chatting`,
+      canonical: canonicalUrl,
     },
     openGraph: {
       title: meta.title,
       description: meta.desc,
-      images: ["/earn/chatting-hero.jpg"],
-      url: `${BASE_URL}/earn/chatting`,
+      url: canonicalUrl,
+      siteName: "VelloEarn",
+      type: "website",
+      locale: "en_KE",
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: `${meta.title} Cover Visual`,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title: meta.title,
       description: meta.desc,
+      images: [ogImageUrl], // FIXED: Added missing Twitter graphic arrays
     },
   };
 }

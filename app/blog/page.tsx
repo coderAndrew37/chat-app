@@ -1,25 +1,75 @@
 // app/blog/page.tsx (updated)
-import { Suspense } from "react";
-import Link from "next/link";
 import {
-  getPostsPaginated,
-  getPostsCount,
-  getFeaturedPost,
-  getCategories,
+    getCategories,
+    getFeaturedPost,
+    getPostsCount,
+    getPostsPaginated,
 } from "@/lib/api";
+import { BLOG_PAGE_SIZE } from "@/lib/blog/constants";
+import Link from "next/link";
+import { Suspense } from "react";
+import { CategorySection } from "../components/blog/BlogCategorySection";
 import { BlogGrid } from "../components/blog/BlogGrid";
 import { FeaturedCard, SidebarPostCard } from "../components/blog/PostCards";
-import {
-  FeaturedCardSkeleton,
-  GridSkeleton,
-  SidebarSkeleton,
-  CategorySectionSkeleton,
-} from "../components/blog/Skeleton";
-import { BLOG_PAGE_SIZE } from "@/lib/blog/constants";
-import { CategorySection } from "../components/blog/BlogCategorySection";
 import SearchBar from "../components/blog/SearchBar";
+import {
+    CategorySectionSkeleton,
+    FeaturedCardSkeleton,
+    GridSkeleton,
+    SidebarSkeleton,
+} from "../components/blog/Skeleton";
 
 const SECTION_POST_COUNT = 9;
+
+import { Metadata } from "next";
+
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://www.velloearn.co.ke";
+
+// Define the precise type matching Next.js App Router metadata conventions
+export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
+  const { category } = await searchParams;
+  
+  const title = category 
+    ? `${category} Tips & Strategies | VelloEarn Blog`
+    : "VelloEarn Blog | Online Earning Strategies, Guides & Tips in Kenya";
+    
+  const description = category
+    ? `Discover the best working strategies, expert guides, and tips for ${category} online. Start optimization setups with VelloEarn.`
+    : "Master online tasks, AI training, surveys, and remote digital opportunities. Explore free expert guides curated to optimize your digital side hustles in Kenya.";
+
+  const canonicalUrl = category 
+    ? `${BASE_URL}/blog?category=${encodeURIComponent(category)}`
+    : `${BASE_URL}/blog`;
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      title,
+      description,
+      url: canonicalUrl,
+      siteName: "VelloEarn",
+      type: "website",
+      images: [
+        {
+          url: `${BASE_URL}/og-cover.png`, // Ensure you have a global meta image asset here
+          width: 1200,
+          height: 630,
+          alt: "VelloEarn Blog Hub Cover",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [`${BASE_URL}/og-cover.png`],
+    },
+  };
+}
 
 interface Props {
   searchParams: Promise<{ category?: string }>;

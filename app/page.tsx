@@ -1,5 +1,8 @@
+// app/page.tsx
 import type { Metadata } from "next";
 import { HomePageClient } from "./components";
+
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.velloearn.co.ke";
 
 export const metadata: Metadata = {
   title: "Earn from Remote Tasks in Kenya — M-Pesa Payouts | VelloEarn",
@@ -17,22 +20,33 @@ export const metadata: Metadata = {
     "side hustle Kenya 2026",
     "VelloEarn",
   ],
+  alternates: {
+    // FIXED: Switched to match your www. canonical strategy perfectly
+    canonical: `${BASE_URL}`,
+  },
   openGraph: {
     title: "Earn from Remote Tasks in Kenya — M-Pesa Payouts | VelloEarn",
     description:
       "Get paid to chat with foreigners or train AI in Kenya. Free to join. Instant M-Pesa payouts.",
+    url: `${BASE_URL}`, // ADDED
     type: "website",
     locale: "en_KE",
     siteName: "VelloEarn",
+    images: [
+      {
+        url: `${BASE_URL}/og-cover.png`, // ADDED: Global open graph visual fallback
+        width: 1200,
+        height: 630,
+        alt: "VelloEarn — Remote Tasks Platform in Kenya",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Earn from Remote Tasks in Kenya — M-Pesa Payouts | VelloEarn",
     description:
       "Get paid to chat with foreigners or train AI in Kenya. Free to join. Instant M-Pesa payouts.",
-  },
-  alternates: {
-    canonical: "https://velloearn.co.ke",
+    images: [`${BASE_URL}/og-cover.png`], // ADDED
   },
 };
 
@@ -45,7 +59,8 @@ const jsonLd = {
   hiringOrganization: {
     "@type": "Organization",
     name: "VelloEarn",
-    sameAs: "https://velloearn.co.ke",
+    sameAs: `${BASE_URL}`, // FIXED: Aligned corporate schema link to your www domain
+    logo: `${BASE_URL}/logo.jpg`,
   },
   jobLocationType: "TELECOMMUTE",
   applicantLocationRequirements: {
@@ -54,6 +69,7 @@ const jsonLd = {
   },
   employmentType: "PART_TIME",
   datePosted: new Date().toISOString().split("T")[0],
+  validThrough: "2027-12-31", // ADDED: Suppresses GSC optimization warnings regarding missing expiration attributes
   baseSalary: {
     "@type": "MonetaryAmount",
     currency: "KES",

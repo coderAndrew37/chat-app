@@ -20,7 +20,11 @@ const geistMono = Geist_Mono({
 
 // ─── SEO Metadata ─────────────────────────────────────────────────────────────
 
-const BASE_URL = "https://velloearn.co.ke";
+// Resilient check across environment setups to guarantee absolute www. matching
+const BASE_URL = 
+  process.env.NEXT_PUBLIC_SITE_URL || 
+  process.env.NEXT_PUBLIC_BASE_URL || 
+  "https://www.velloearn.co.ke";
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
@@ -61,7 +65,7 @@ export const metadata: Metadata = {
       "Get paid to chat, train AI, complete surveys, write, and trade forex. Instant M-Pesa payouts. Apply free today.",
     images: [
       {
-        url: "/og-image.jpg",
+        url: "/og-cover.png", // Automatically prefixing absolute paths via metadataBase
         width: 1200,
         height: 630,
         alt: "VelloEarn — Kenya's remote earning platform",
@@ -74,7 +78,7 @@ export const metadata: Metadata = {
     title: "VelloEarn — Earn Money Online in Kenya",
     description:
       "Get paid to chat, train AI, complete surveys, write, and trade forex. Instant M-Pesa payouts.",
-    images: ["/og-image.jpg"],
+    images: ["/og-cover.png"],
     site: "@VelloEarnke",
     creator: "@VelloEarnke",
   },
@@ -103,10 +107,6 @@ export const metadata: Metadata = {
 
   manifest: "/site.webmanifest",
 
-  alternates: {
-    canonical: BASE_URL,
-  },
-
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
   },
@@ -126,9 +126,42 @@ const GOOGLE_ADS_ID = process.env.NEXT_PUBLIC_GOOGLE_ADS_ID;
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+
+  // Global structured data to anchor the brand entity setup across the entire site
+  const corporateJsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": `${BASE_URL}/#website`,
+        "url": BASE_URL,
+        "name": "VelloEarn",
+        "description": "Kenya's #1 remote earning micro-task engine.",
+        "publisher": { "@id": `${BASE_URL}/#organization` }
+      },
+      {
+        "@type": "Organization",
+        "@id": `${BASE_URL}/#organization`,
+        "name": "VelloEarn",
+        "url": BASE_URL,
+        "logo": {
+          "@type": "ImageObject",
+          "url": `${BASE_URL}/logo.jpg`
+        },
+        "sameAs": [
+          "https://twitter.com/VelloEarnke"
+        ]
+      }
+    ]
+  };
+
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(corporateJsonLd) }}
+        />
 
         {/* ── Google Ads global tag ───────────────────────────────────────── */}
         {GOOGLE_ADS_ID && (

@@ -8,7 +8,7 @@ import {
   getAllJobCountryParams,
 } from "@/lib/seo/keyword-matrix";
 
-const NEXT_PUBLIC_SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://velloearn.co.ke";
+const NEXT_PUBLIC_SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.velloearn.co.ke";
 
 // Revalidate the sitemap once every hour (3600 seconds) via ISR
 export const revalidate = 3600;

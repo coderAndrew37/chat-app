@@ -1,3 +1,4 @@
+// app/earn/academic-writing/page.tsx
 import { Metadata } from "next";
 import AcademicWritingClient from "./page.client";
 import JobSchema from "@/app/components/seo/JobSchema";
@@ -6,7 +7,11 @@ type Props = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://velloearn.co.ke";
+// Resilient domain checking configuration across multiple variable environments
+const BASE_URL = 
+  process.env.NEXT_PUBLIC_SITE_URL || 
+  process.env.NEXT_PUBLIC_BASE_URL || 
+  "https://www.velloearn.co.ke";
 
 // Dynamically generate localized SEO metadata and self-referencing canonical tags
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
@@ -29,18 +34,38 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
   };
 
   const meta = localizedMeta[countryParam] || localizedMeta.kenya;
+  const canonicalUrl = `${BASE_URL}/earn/academic-writing?country=${countryParam}`;
+  const ogImageUrl = `${BASE_URL}/og-cover.png`;
 
   return {
     title: meta.title,
     description: meta.desc,
     alternates: {
-      canonical: `${BASE_URL}/earn/academic-writing?country=${countryParam}`,
+      // Retaining self-referencing path strategy to let all 3 target regions index safely
+      canonical: canonicalUrl,
     },
     openGraph: {
       title: meta.title,
       description: meta.desc,
-      images: ["/earn/academic-writing-hero.jpg"],
-      url: `${BASE_URL}/earn/academic-writing?country=${countryParam}`,
+      url: canonicalUrl,
+      siteName: "VelloEarn",
+      type: "website",
+      locale: "en_KE",
+      images: [
+        {
+          url: ogImageUrl, // FIXED: Absolute path concatenation prevents unfurl parsing drops
+          width: 1200,
+          height: 630,
+          alt: `${meta.title} Promotional Cover`,
+        },
+      ],
+    },
+    twitter: {
+      // FIXED: Added missing Twitter metadata object array to preserve native cards on X
+      card: "summary_large_image",
+      title: meta.title,
+      description: meta.desc,
+      images: [ogImageUrl],
     },
   };
 }

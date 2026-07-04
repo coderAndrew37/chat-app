@@ -1,47 +1,86 @@
+// app/earn/forex/page.tsx
 import { Metadata } from "next";
 import ForexClient from "./page.client";
 
-interface PageProps {
-  searchParams: Promise<{ geo?: string }>;
-}
+type Props = {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
 
-export async function generateMetadata({ searchParams }: PageProps): Promise<Metadata> {
-  const params = await searchParams;
-  const geo = params.geo?.toLowerCase();
+// Resilient domain configuration checking across multiple environment setups
+const BASE_URL = 
+  process.env.NEXT_PUBLIC_SITE_URL || 
+  process.env.NEXT_PUBLIC_BASE_URL || 
+  "https://www.velloearn.co.ke";
 
-  let title = "Learn Forex Trading in Kenya & Earn | VelloEarn";
-  let description = "Get structured forex training, funded account access, and a community of Kenyan traders. Learn to trade major pairs. Withdraw profits via M-Pesa.";
+export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
+  const resolvedParams = await searchParams;
+  const geoParam = typeof resolvedParams.geo === "string" ? resolvedParams.geo.toLowerCase() : "kenya";
 
-  if (geo === "uganda") {
-    title = "Learn Forex Trading in Uganda & Earn | VelloEarn";
-    description = "Get structured forex training, funded account access, and a community of Ugandan traders. Withdraw profits via Mobile Money.";
-  } else if (geo === "ghana") {
-    title = "Learn Forex Trading in Ghana & Earn | VelloEarn";
-    description = "Get structured forex training, funded account access, and a community of Ghanaian traders. Withdraw profits via MTN MoMo.";
-  }
+  // Normalize geo target to match strict array bounds safely
+  const countryTarget = ["kenya", "uganda", "ghana"].includes(geoParam)
+    ? (geoParam as "kenya" | "uganda" | "ghana")
+    : "kenya";
+
+  const localizedMeta: Record<string, { title: string; desc: string }> = {
+    kenya: {
+      title: "Learn Forex Trading in Kenya & Earn | VelloEarn",
+      desc: "Get structured forex training, funded account access, and a community of Kenyan traders. Learn to trade major pairs. Withdraw profits via M-Pesa.",
+    },
+    uganda: {
+      title: "Learn Forex Trading in Uganda & Earn | VelloEarn",
+      desc: "Get structured forex training, funded account access, and a community of Ugandan traders. Withdraw profits via Mobile Money.",
+    },
+    ghana: {
+      title: "Learn Forex Trading in Ghana & Earn | VelloEarn",
+      desc: "Get structured forex training, funded account access, and a community of Ghanaian traders. Withdraw profits via MTN MoMo.",
+    },
+  };
+
+  const meta = localizedMeta[countryTarget];
+  const canonicalUrl = `${BASE_URL}/earn/forex?geo=${countryTarget}`;
+  const ogImageUrl = `${BASE_URL}/earn/forex-hero.jpg`;
 
   return {
-    title,
-    description,
+    title: meta.title,
+    description: meta.desc,
+    alternates: {
+      // FIXED: Locks regional search visibility onto specific geo-targeted paths
+      canonical: canonicalUrl,
+    },
     openGraph: {
-      title,
-      description,
-      images: ["/earn/forex-hero.jpg"],
+      title: meta.title,
+      description: meta.desc,
+      url: canonicalUrl,
+      siteName: "VelloEarn",
+      type: "website",
+      locale: "en_KE",
+      images: [
+        {
+          url: ogImageUrl, // FIXED: Explicit absolute mapping prevents unfurl display drops
+          width: 1200,
+          height: 630,
+          alt: `${meta.title} Program Cover`,
+        },
+      ],
+    },
+    twitter: {
+      // FIXED: Added missing Twitter card arrays to maintain rich links on X
+      card: "summary_large_image",
+      title: meta.title,
+      description: meta.desc,
+      images: [ogImageUrl],
     },
   };
 }
 
-export default async function ForexPage({ searchParams }: PageProps) {
-  const params = await searchParams;
-  const geo = params.geo?.toLowerCase();
+export default async function ForexPage({ searchParams }: Props) {
+  const resolvedParams = await searchParams;
+  const geoParam = typeof resolvedParams.geo === "string" ? resolvedParams.geo.toLowerCase() : "kenya";
   
-  // Normalize geo target
-  let countryTarget: "kenya" | "uganda" | "ghana" = "kenya";
-  if (geo === "uganda" || geo === "ghana") {
-    countryTarget = geo;
-  }
+  const countryTarget = ["kenya", "uganda", "ghana"].includes(geoParam)
+    ? (geoParam as "kenya" | "uganda" | "ghana")
+    : "kenya";
 
-  // Define localized dynamic schema values safely
   const localizedProvider = {
     kenya: { name: "VelloEarn Kenya", region: "KE" },
     uganda: { name: "VelloEarn Uganda", region: "UG" },
@@ -56,7 +95,8 @@ export default async function ForexPage({ searchParams }: PageProps) {
     "provider": {
       "@type": "Organization",
       "name": localizedProvider.name,
-      "sameAs": "https://velloearn.co.ke"
+      "sameAs": `${BASE_URL}`,
+      "logo": `${BASE_URL}/logo.jpg`
     }
   };
 
