@@ -39,6 +39,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   // 2. Static High-Priority Pages
+ // 2. Static High-Priority Pages
   const staticPages: MetadataRoute.Sitemap = [
     {
       url: BASE_URL,
@@ -46,6 +47,36 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "weekly",
       priority: 1.0,
     },
+    {
+      url: `${BASE_URL}/about`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${BASE_URL}/privacy`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.5,
+    },
+    {
+      url: `${BASE_URL}/terms`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.5,
+    },
+    {
+      url:`${BASE_URL}/cookies`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.5,
+    },
+    {
+      url:`${BASE_URL}/earn`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.95,
+    }
     // CRITICAL: Removed "/join" from this tracking segment to resolve GSC indexing conflicts
   ];
 
@@ -54,7 +85,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const CORE_JOB_SLUGS = [
     "chatting",
     "ai-training",
-    "swahili",
+    "swahili-teaching",
     "surveys",
     "forex",
     "academic-writing"

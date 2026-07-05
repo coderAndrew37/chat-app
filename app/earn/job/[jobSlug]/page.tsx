@@ -205,7 +205,7 @@ export default function GlobalJobPage({ params }: PageProps) {
   const schemas = [
     breadcrumbSchema([
       { name: "Home", href: "/" },
-      { name: "Remote Opportunities", href: "/apply" },
+      { name: "Remote Opportunities", href: "/join" },
       { name: `${title} Openings`, href: `/earn/${jobType.slug}` },
     ]),
     faqSchema(faqs),
@@ -229,7 +229,7 @@ export default function GlobalJobPage({ params }: PageProps) {
           <ol className="flex items-center gap-1 max-w-3xl mx-auto flex-wrap">
             <li><Link href="/" className="hover:text-rose-500">Home</Link></li>
             <li>/</li>
-            <li><Link href="/apply" className="hover:text-rose-500">Online Jobs</Link></li>
+            <li><Link href="/join" className="hover:text-rose-500">Online Jobs</Link></li>
             <li>/</li>
             <li className="text-gray-600">{title} Openings</li>
           </ol>
@@ -258,7 +258,7 @@ export default function GlobalJobPage({ params }: PageProps) {
 
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link
-                href={`/apply?track=${jobType.slug}`}
+                href={`/join`}
                 className="bg-rose-500 hover:bg-rose-600 text-white font-bold text-base px-8 py-4 rounded-full shadow-lg shadow-rose-200 transition-all hover:scale-105"
               >
                 Apply for {title} Jobs →
@@ -462,7 +462,7 @@ export default function GlobalJobPage({ params }: PageProps) {
               Apply free in 2 minutes. Onboarding queues are processed daily. Lock your operational dashboard slots now.
             </p>
             <Link
-              href={`/apply?track=${jobType.slug}`}
+              href={`/join`}
               className="inline-block bg-white text-rose-500 font-bold text-base px-10 py-4 rounded-full shadow-xl hover:scale-105 transition-all"
             >
               Initialize Free Application Now

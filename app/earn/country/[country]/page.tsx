@@ -159,7 +159,7 @@ export default function CountryPage({ params }: PageProps) {
               ))}
             </div>
             <Link
-              href="/apply"
+              href="/join"
               className="inline-block bg-rose-500 hover:bg-rose-600 text-white font-bold text-base px-8 py-4 rounded-full shadow-lg shadow-rose-200 transition-all hover:scale-105"
             >
               Apply to Join — Free
@@ -281,7 +281,7 @@ export default function CountryPage({ params }: PageProps) {
               2-minute application. Activation on WhatsApp. Payout to {payment}.
             </p>
             <Link
-              href="/apply"
+              href="/join"
               className="inline-block bg-white text-rose-500 font-bold text-base px-10 py-4 rounded-full shadow-xl hover:scale-105 transition-all"
             >
               Apply Free — {country}

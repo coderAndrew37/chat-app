@@ -515,8 +515,7 @@ export default function LandingInteractive() {
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             {[
-              { label: "How M-Pesa payments work", href: "/blog/mpesa-payments" },
-              { label: "Scaling your remote team", href: "/blog/scale-your-team" },
+            
               { label: "Remote chatting explained", href: "/earn/chatting" },
               { label: "Training AI from your phone", href: "/earn/ai-training" },
               { label: "Earn by teaching Swahili", href: "/earn/swahili-teaching" },
