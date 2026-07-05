@@ -1,3 +1,4 @@
+// app/layout.tsx
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -7,6 +8,7 @@ import { Suspense } from "react";
 import Script from "next/script";
 import MetaPixel from "./components/pixels/MetaPixel";
 import TikTokPixel from "./components/pixels/TikTokPixel";
+import { BASE_URL } from "@/lib/config";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,11 +22,6 @@ const geistMono = Geist_Mono({
 
 // ─── SEO Metadata ─────────────────────────────────────────────────────────────
 
-// Resilient check across environment setups to guarantee absolute www. matching
-const BASE_URL = 
-  process.env.NEXT_PUBLIC_SITE_URL || 
-  process.env.NEXT_PUBLIC_BASE_URL || 
-  "https://www.velloearn.co.ke";
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
@@ -65,7 +62,7 @@ export const metadata: Metadata = {
       "Get paid to chat, train AI, complete surveys, write, and trade forex. Instant M-Pesa payouts. Apply free today.",
     images: [
       {
-        url: "/og-cover.png", // Automatically prefixing absolute paths via metadataBase
+        url: "/og-cover.png",
         width: 1200,
         height: 630,
         alt: "VelloEarn — Kenya's remote earning platform",
@@ -127,7 +124,6 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
 
-  // Global structured data to anchor the brand entity setup across the entire site
   const corporateJsonLd = {
     "@context": "https://schema.org",
     "@graph": [
@@ -182,11 +178,13 @@ export default function RootLayout({
         )}
 
         {/* ── Meta + TikTok pixels ────────────────────────────────────────── */}
-        {/* Suspense is required — both components use useSearchParams()      */}
         <Suspense fallback={null}>
           <MetaPixel />
           <TikTokPixel />
         </Suspense>
+
+        {/* ── Ahrefs Web Analytics ────────────────── */}
+       <script src="https://analytics.ahrefs.com/analytics.js" data-key="oxt3DkRIHEroFVEUnKGCVQ" async></script>
 
         <LayoutClient>{children}</LayoutClient>
       </body>
