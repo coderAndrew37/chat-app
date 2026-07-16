@@ -226,17 +226,15 @@ const components: PortableTextComponents = {
         <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
           <div>
             <h3 className="text-xl font-extrabold tracking-tight mb-1">
-              {value.title}
+              {value.title || "Ready to get started?"}
             </h3>
-            <p className="text-rose-100 text-sm">
-              Free to join. Paid to M-Pesa.
-            </p>
+            
           </div>
           <Link
-            href={value.url || "#"}
+            href={value.url || "https://www.velloearn.co.ke/join"}
             className="shrink-0 px-6 py-3 bg-white text-rose-500 rounded-full font-bold text-sm hover:bg-rose-50 transition-colors shadow-md"
           >
-            {value.buttonText}
+            {value.buttonText || "Join Now"}
           </Link>
         </div>
       </div>
