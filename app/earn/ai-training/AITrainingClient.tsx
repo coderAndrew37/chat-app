@@ -35,7 +35,42 @@ function ObjAccordion({ q, a }: { q: string; a: string }) {
   );
 }
 
+function CountrySelector({ active }: { active: "kenya" | "uganda" | "ghana" }) {
+  const options: { key: "kenya" | "uganda" | "ghana"; label: string }[] = [
+    { key: "kenya", label: "🇰🇪 Kenya" },
+    { key: "uganda", label: "🇺🇬 Uganda" },
+    { key: "ghana", label: "🇬🇭 Ghana" },
+  ];
+  return (
+    <div className="flex justify-center gap-2 mb-10 flex-wrap">
+      {options.map((o) => (
+        <Link
+          key={o.key}
+          href={`/earn/ai-training?country=${o.key}`}
+          className={`px-4 py-2 rounded-full text-sm font-semibold border transition-colors ${
+            active === o.key
+              ? "bg-violet-500 border-violet-500 text-white"
+              : "bg-white border-gray-200 text-gray-500 hover:border-violet-300 hover:text-violet-600"
+          }`}
+        >
+          {o.label} Earnings
+        </Link>
+      ))}
+    </div>
+  );
+}
+
 // --- Multi-Country Dynamic Localization Matrix ---
+
+export interface ObjectionItem {
+  q: string;
+  a: string;
+}
+
+interface WorkStep {
+  title: string;
+  body: string;
+}
 
 interface LocalizationConfig {
   countryName: string;
@@ -44,19 +79,41 @@ interface LocalizationConfig {
   rateRange: string;
   dialectNote: string;
   tasksSectionNote: string;
+  networkProviders: string;
+  universities: string;
+  legitimacyNote: string;
+  payoutRailsDetail: string;
+  heroSetupPricingNote: string;
+  finalCtaPricingNote: string;
+  finalCtaButtonLabel: string;
+  howItWorks: WorkStep[];
   earningsTiers: { label: string; range: string; note: string }[];
   stories: { name: string; location: string; earned: string; story: string; image: { actualImage?: string; fallback: string } }[];
-  objections: { q: string; a: string }[];
+  objections: ObjectionItem[];
 }
 
-const LOCALIZATION_DATA: Record<string, LocalizationConfig> = {
+export const LOCALIZATION_DATA: Record<string, LocalizationConfig> = {
   kenya: {
     countryName: "Kenya",
     currency: "KES",
     payoutMethods: "M-Pesa withdrawals",
     rateRange: "KES 80–400",
     dialectNote: "Your Swahili, your slang, your clarity.",
-    tasksSectionNote: "Your real responses help train it to understand how Kenyans actually talk.",
+    tasksSectionNote: "Your real responses help train it to understand how Kenyans talk natively.",
+    networkProviders: "Safaricom, Airtel, or Telkom",
+    universities: "University of Nairobi (UoN) or JKUAT",
+    heroSetupPricingNote: "One-time KES 550 setup · KES 200 welcome bonus back · No monthly charges",
+    finalCtaPricingNote: "One-time KES 550 setup · KES 200 welcome bonus back",
+    finalCtaButtonLabel: "Apply Now — KES 550 One-Time",
+    legitimacyNote: "Kenya's fast-growing digital economy and high English proficiency make Kenyan contributors prime candidates for training global AI models. All you need is a stable internet connection (Safaricom, Airtel, or Telkom) and a modern browser — no coding or technical background required.",
+    payoutRailsDetail: "M-Pesa alongside standard bank transfers, converting cleanly into KES with minimal transaction friction",
+    howItWorks: [
+      { title: "1. Apply and verify your details", body: "Fill in your name and WhatsApp number, then complete the one-time setup step. This confirms you're a real person and keeps the task pool free of bots and duplicate accounts." },
+      { title: "2. Complete paid foundational training", body: "Before real tasks, you go through a short guided training module — usually under an hour — that walks through how rating, rewriting, and labelling work. This training itself is compensated, not unpaid onboarding." },
+      { title: "3. Start real micro-tasks", body: "You move into the live task queue: rating AI answers, rewriting weak ones, labelling content, or chatting with a model to probe its responses. Each task takes a few minutes and can be done from a smartphone or laptop." },
+      { title: "4. Quality review, not a pass/fail test", body: "A sample of your work is periodically checked against quality guidelines. If your ratings drift, you get specific feedback to recalibrate — it's a learning loop, not a one-strike system." },
+      { title: "5. Withdraw to M-Pesa", body: "Once your balance clears, you cash out directly to M-Pesa. No waiting for a monthly payroll cycle — withdrawals process on your schedule." },
+    ],
     earningsTiers: [
       { label: "Casual (5–10 tasks/day)", range: "KES 4,000 – 9,000", note: "/ month" },
       { label: "Active (20–30 tasks/day)", range: "KES 14,000 – 22,000", note: "/ month" },
@@ -79,9 +136,30 @@ const LOCALIZATION_DATA: Record<string, LocalizationConfig> = {
       },
     ],
     objections: [
-      { q: "Do I need to understand AI or tech to do this?", a: "Not at all. You don't need to know how AI works. You just need to be able to read, think, and give honest feedback. The training materials explain everything in plain language." },
-      { q: "What language do I work in?", a: "Most tasks are in English. Some are in Swahili or a mix of both. Swahili-language tasks often pay a premium because there's high demand and fewer qualified contributors." },
-      { q: "What if I rate something 'wrong'?", a: "There are quality checks built in. If your ratings consistently deviate, you'll get feedback to help you improve. It's a learning process, not a test you fail once." }
+      {
+        q: "Is AI data annotation available in Kenya?",
+        a: "Yes — 100% available across Nairobi, Mombasa, Kisumu, and every county in between. No VPN is required to access the platform, and beyond the one-time setup fee shown above there are no recurring registration or subscription charges."
+      },
+      {
+        q: "How do data annotation jobs work from home in Kenya?",
+        a: "It's completely remote and flexible enough to fit around university classes (UoN, JKUAT) or other freelance work. You can complete tasks from a laptop or smartphone, and the platform includes low-data modes so it stays usable on Safaricom, Airtel, or Telkom networks."
+      },
+      {
+        q: "Are these paid training jobs, and how do I get paid in Kenyan Shillings (KES)?",
+        a: "Yes — the foundational training itself is compensated. Once you're onboarded, earnings withdraw instantly to your M-Pesa wallet in Kenyan Shillings (KES)."
+      },
+      {
+        q: "This sounds too good to be true — how do I know it's not a scam?",
+        a: "Fair question, and worth asking of any online earning platform. We publish real payout amounts, keep the setup fee one-time and clearly stated upfront (never hidden), and our task structure matches how legitimate global AI companies actually source human feedback — through verified micro-task platforms, not personal data requests or upfront investment schemes."
+      },
+      {
+        q: "Do I need a degree or prior tech experience?",
+        a: "No. You need to read carefully, think clearly, and write in plain English. Most contributors have no AI or programming background at all — your everyday judgment is the actual skill being used."
+      },
+      {
+        q: "Can I do this alongside school or a full-time job?",
+        a: "Yes. There's no fixed shift schedule — tasks stay in the queue and you complete them whenever you have time, whether that's 30 minutes between lectures or a couple of hours in the evening."
+      },
     ]
   },
   uganda: {
@@ -91,6 +169,20 @@ const LOCALIZATION_DATA: Record<string, LocalizationConfig> = {
     rateRange: "UGX 2,500–12,000",
     dialectNote: "Your local phrasing, your context, your clarity.",
     tasksSectionNote: "Your real responses help train it to understand localized phrases used across Uganda.",
+    networkProviders: "MTN or Airtel",
+    universities: "Makerere University or MUBS",
+    heroSetupPricingNote: "One-time UGX 15,000 setup · UGX 5,000 welcome bonus back · No monthly charges",
+    finalCtaPricingNote: "One-time UGX 15,000 setup · UGX 5,000 welcome bonus back",
+    finalCtaButtonLabel: "Apply Now — UGX 15,000 One-Time",
+    legitimacyNote: "Uganda's expanding digital transformation and strong English-language education make Ugandan contributors well-positioned to train AI models. All that's required is a reliable internet connection (MTN or Airtel) and a standard browser — no technical background needed.",
+    payoutRailsDetail: "MTN Mobile Money and Airtel Money alongside standard bank transfers, converting cleanly into UGX with minimal transaction friction",
+    howItWorks: [
+      { title: "1. Apply and verify your details", body: "Submit your name and WhatsApp number and complete the one-time setup step, which confirms you're a real applicant and keeps the task pool free of bots and duplicate accounts." },
+      { title: "2. Complete paid foundational training", body: "A short guided module — usually under an hour — walks through rating, rewriting, and labelling before you touch live tasks. This training is compensated, not unpaid onboarding." },
+      { title: "3. Start real micro-tasks", body: "You move into the live queue: rating AI answers, rewriting weak ones, labelling content, or chatting with a model to test its responses. Each task takes minutes and works on smartphone or laptop." },
+      { title: "4. Quality review, not a pass/fail test", body: "A sample of your work is periodically checked. If your ratings drift from the guidelines, you get specific feedback to recalibrate — it's a learning loop, not a one-strike system." },
+      { title: "5. Withdraw to Mobile Money", body: "Once your balance clears, cash out directly to MTN Mobile Money or Airtel Money on your own schedule, not a fixed monthly payroll date." },
+    ],
     earningsTiers: [
       { label: "Casual (5–10 tasks/day)", range: "UGX 120,000 – 270,000", note: "/ month" },
       { label: "Active (20–30 tasks/day)", range: "UGX 420,000 – 660,000", note: "/ month" },
@@ -106,18 +198,53 @@ const LOCALIZATION_DATA: Record<string, LocalizationConfig> = {
       }
     ],
     objections: [
-      { q: "Do I need to understand AI or tech to do this?", a: "Not at all. You just need to read carefully and provide logical, human reasoning based on clear platform guidelines." },
-      { q: "What language do I work in?", a: "Tasks are mostly in English, with certain high-value localization sets designed for regional language comprehension." },
-      { q: "What if I rate something 'wrong'?", a: "Quality metrics look for natural patterns. Regular discrepancies will just trigger helpful guidance interfaces so you can learn safely." }
+      {
+        q: "Is AI data annotation available in Uganda?",
+        a: "Yes — fully available across Kampala, Mbarara, Gulu, and the rest of the country. No VPN is needed to use the platform, and beyond the one-time setup fee shown above there are no recurring registration charges."
+      },
+      {
+        q: "How do data annotation jobs work from home in Uganda?",
+        a: "The work is entirely remote and flexible around lectures at Makerere or MUBS, or alongside other freelance commitments. Tasks run on laptop or smartphone, with low-data modes built in for MTN and Airtel networks."
+      },
+      {
+        q: "Are these paid training jobs, and how do I get paid in Ugandan Shillings (UGX)?",
+        a: "Yes, the initial training itself is paid. Earnings withdraw instantly to MTN Mobile Money or Airtel Money in Ugandan Shillings (UGX)."
+      },
+      {
+        q: "This sounds too good to be true — how do I know it's not a scam?",
+        a: "A fair question for any online earning platform. We keep the setup fee one-time and clearly stated upfront, publish real payout figures, and structure tasks the way legitimate global AI companies actually source human feedback — through verified micro-task work, not personal data requests or investment schemes."
+      },
+      {
+        q: "Do I need a degree or prior tech experience?",
+        a: "No. You need to read carefully and respond in clear English. Most contributors have no programming or AI background — your everyday judgment is the skill being used."
+      },
+      {
+        q: "Can I do this alongside school or a full-time job?",
+        a: "Yes. There's no fixed shift schedule — tasks sit in the queue and you complete them whenever you have time, whether that's between lectures or in the evening."
+      },
     ]
   },
   ghana: {
     countryName: "Ghana",
     currency: "GHS",
-    payoutMethods: "MTN Mobile Money & Vodafone Cash",
+    payoutMethods: "MTN Mobile Money & Telecel Cash",
     rateRange: "GHS 10–50",
     dialectNote: "Your local expressions, your context, your clarity.",
-    tasksSectionNote: "Your inputs train artificial intelligence layers to accurately process West African English context.",
+    tasksSectionNote: "Your inputs train artificial intelligence layers to accurately process West African English and localized structural terms.",
+    networkProviders: "MTN, Telecel, or AT",
+    universities: "University of Ghana (UG Legon) or KNUST",
+    heroSetupPricingNote: "One-time GHS 60 setup · GHS 25 welcome bonus back · No monthly fees",
+    finalCtaPricingNote: "One-time GHS 60 setup · GHS 25 welcome bonus credit",
+    finalCtaButtonLabel: "Apply Now — GHS 60 One-Time Setup",
+    legitimacyNote: "Ghana's exceptional digital transformation pace, reliable fintech infrastructure, and high English fluency make Ghanaian youth and university students the absolute premier candidates for training AI models. All you need to scale up is a secure smartphone or laptop, a reliable browser, and an active connection on local data bundles — with completely zero code knowledge needed.",
+    payoutRailsDetail: "MTN Mobile Money (MoMo) and Telecel Cash (formerly Vodafone Cash) alongside direct local bank routing, translating securely into Ghana Cedis (GHS) with near-zero transaction friction",
+    howItWorks: [
+      { title: "1. Apply and verify your details", body: "Submit your name and WhatsApp number and complete the secure one-time setup step. This confirms you're a real applicant living inside Ghana and keeps the entire system safe from automated bots or duplicate farms." },
+      { title: "2. Complete paid foundational training", body: "Before you touch live systems, you walk through a guided online training module (takes under an hour) explaining how text rating and content labelling operate. Unlike other setups, this training phase is fully compensated." },
+      { title: "3. Start real micro-tasks", body: "Gain immediate access to the live task matrix: scoring AI text accuracy, rewriting unnatural outputs, or stress-testing layout boundaries. Each task takes just 2 to 5 minutes right from a phone or PC." },
+      { title: "4. Quality review, not a pass/fail test", body: "A random selection of data points is evaluated against global quality scripts. If answers drift, you get transparent dashboard hints to realign your tracking — it's built as an engineering learning loop." },
+      { title: "5. Withdraw instantly to Mobile Money", body: "The moment your verified milestone clears, cash out your earnings directly to your MTN MoMo or Telecel Cash wallet. You completely control your payroll timing." },
+    ],
     earningsTiers: [
       { label: "Casual (5–10 tasks/day)", range: "GHS 500 – 1,100", note: "/ month" },
       { label: "Active (20–30 tasks/day)", range: "GHS 1,800 – 2,800", note: "/ month" },
@@ -128,30 +255,40 @@ const LOCALIZATION_DATA: Record<string, LocalizationConfig> = {
         name: "Kwame A.",
         location: "Accra, Madina",
         earned: "GHS 2,200 / month",
-        story: "The platform provides consistent work. I log on after my main job to complete grading tracks. Payouts arrive directly to my mobile wallet instantly.",
+        story: "The data annotation platform delivers a highly consistent micro-task queue. I log on after classes to handle text grading. The payouts land directly in my mobile money wallet instantly.",
         image: { fallback: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=face&auto=format" }
       }
     ],
     objections: [
-      { q: "Do I need to understand AI or tech to do this?", a: "No engineering expertise required. Your normal, rational human logic is exactly what these algorithms are missing." },
-      { q: "What language do I work in?", a: "Tasks are standard English along with specialized contextual datasets optimized for local nuance." },
-      { q: "What if I rate something 'wrong'?", a: "The framework includes educational checkpoints. If answers match poorly against common standards, feedback tools deploy automatically to help you pick it up." }
+      {
+        q: "Is AI data annotation available in Ghana?",
+        a: "Yes — data annotation jobs are 100% available and operational across Accra, Kumasi, Tamale, Cape Coast, and all regions in Ghana. No VPN is required to access your work panel, and beyond the transparent one-time setup fee listed above, there are absolutely zero hidden recurring costs or platform registration fees."
+      },
+      {
+        q: "How do data annotation jobs work from home in Ghana?",
+        a: "These online jobs are engineered to work completely from home or campus, offering flexible hours ideal for students at UG Legon, KNUST, or tech freelancers. Every segment functions perfectly on both a smartphone or laptop, equipped with custom low-data optimization modes to conserve your MTN or Telecel bundles."
+      },
+      {
+        q: "Are these paid training jobs, and how do I get paid in Ghana Cedis (GHS)?",
+        a: "Yes — these are legitimate paid training jobs where your onboarding hours are fully compensated. Once tasks clear our quality parameters, you withdraw earnings directly to MTN Mobile Money (MoMo) or Telecel Cash in Ghana Cedis (GHS / ₵)."
+      },
+      {
+        q: "This sounds too good to be true — how do I know it's not a scam?",
+        a: "That is an essential question to ask given the volume of fake online jobs in Ghana. We establish complete trust by keeping the setup fee single, transparent, and up-front. We explicitly display real earner data, and our structure exactly matches how global platforms source distributed human review—relying on tangible micro-tasks, never tracking your private keys or demanding weird investment multi-level tiers."
+      },
+      {
+        q: "Do I need a degree or prior tech experience?",
+        a: "No degree or professional software experience is needed. The core skill is high context comprehension and writing clear English responses. Most active users across Ghana have zero engineering background."
+      },
+      {
+        q: "Can I do this alongside school or a full-time job?",
+        a: "Absolutely. There are no mandatory shifts or strict clock-ins. The micro-task queue runs 24/7, meaning you can knock out tasks between lectures at KNUST or during your quiet evening hours at home."
+      },
     ]
   }
 };
 
-// --- Interfaces & Shared Types ---
-
-interface EarningsStories {
-  name: string;
-  location: string;
-  story: string;
-  earned: string;
-  image: {
-    actualImage?: string;
-    fallback: string;
-  };
-}
+// --- Main Component ---
 
 interface AITrainingClientProps {
   countryTarget?: "kenya" | "uganda" | "ghana";
@@ -197,7 +334,7 @@ export default function AITrainingClient({ countryTarget = "kenya" }: AITraining
                 Apply for This Track →
               </button>
               <p className="text-xs text-gray-400 mt-4">
-                One-time KES 550 setup · KES 200 welcome bonus back · No monthly charges
+                {geo.heroSetupPricingNote}
               </p>
             </div>
             <div className="relative hidden lg:block h-[420px] rounded-3xl overflow-hidden shadow-2xl">
@@ -230,18 +367,45 @@ export default function AITrainingClient({ countryTarget = "kenya" }: AITraining
       {/* Conversion Optimizer CTA Answering What, How Much, How to Pay */}
       <Requirements onApply={() => setModalOpen(true)} />
 
-      {/* ── NEW SECTION: Deep SEO Rich-Text Context (Google Index Fuel) ── */}
+      {/* ── NEW SECTION: How It Actually Works ── */}
+      <section className="py-20 bg-white border-t border-gray-100">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-12">
+            <span className="text-violet-500 font-semibold text-sm uppercase tracking-wider">From application to payout</span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mt-2 mb-4">How it actually works, step by step.</h2>
+          </div>
+          <div className="space-y-4">
+            {geo.howItWorks.map((step) => (
+              <div key={step.title} className="bg-gray-50 rounded-2xl p-6 border border-gray-100">
+                <h3 className="font-bold text-gray-900 text-base mb-2">{step.title}</h3>
+                <p className="text-sm text-gray-500 leading-relaxed">{step.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Deep SEO Rich-Text Context (Google Index Fuel) ── */}
       <section className="py-16 bg-white border-t border-gray-100">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 text-left prose prose-violet">
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-6">Why Global Tech Companies Hire Remotely in {geo.countryName}</h2>
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-6">
+            Why Global Tech Companies Hire Remote AI Contributors in {geo.countryName}
+          </h2>
           <p className="text-gray-600 leading-relaxed mb-4">
             Artificial Intelligence models like ChatGPT, Claude, and specialized regional engines don&apos;t inherently understand human context, local dialects, or localized cultural nuances. To make these platforms useful for regional businesses and consumers, technology providers rely heavily on a data loop process called <strong>RLHF (Reinforcement Learning from Human Feedback)</strong>.
           </p>
-          <p className="text-gray-600 leading-relaxed mb-4">
-            By joining the VelloEarn AI data annotation community, you become an essential link in this engineering ecosystem. Your operational tasks involve verification of generated content for alignment, structural correction of broken logic templates, and semantic tagging of colloquial data strings.
+          <p className="text-gray-600 leading-relaxed mb-8">
+            By joining the VelloEarn AI data annotation community, you become an essential link in this engineering ecosystem — verifying generated content for alignment, correcting broken logic templates, and tagging colloquial data strings drawn from everyday {geo.countryName} usage.
           </p>
+
+          <h3 className="text-xl font-bold text-gray-900 mb-3">Does Data Annotation Work in {geo.countryName}?</h3>
+          <p className="text-gray-600 leading-relaxed mb-8">
+            {geo.legitimacyNote}
+          </p>
+
+          <h3 className="text-xl font-bold text-gray-900 mb-3">Direct Payment Systems via Local Networks</h3>
           <p className="text-gray-600 leading-relaxed">
-            Every submission is completely micro-tasked, allowing processing directly inside mobile viewports or laptop browsers within short intervals. Compensation details remain continually updated, with direct clearances handled smoothly via local network operators including <strong>{geo.payoutMethods}</strong>.
+            Every submission is micro-tasked, so it processes cleanly inside a mobile browser or laptop within short intervals. Once your balance clears, withdrawals route through {geo.payoutRailsDetail}.
           </p>
         </div>
       </section>
@@ -284,7 +448,8 @@ export default function AITrainingClient({ countryTarget = "kenya" }: AITraining
       {/* ── Earning Potential Tiers ── */}
       <section className="py-20 bg-white">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
-          <h2 className="text-3xl font-extrabold text-gray-900 mb-12">Monthly Earnings Overview ({geo.currency})</h2>
+          <h2 className="text-3xl font-extrabold text-gray-900 mb-6">Monthly Earnings Overview ({geo.currency})</h2>
+          <CountrySelector active={countryTarget} />
           <div className="grid sm:grid-cols-3 gap-4">
             {geo.earningsTiers.map((tier, i) => (
               <div key={i} className={`rounded-2xl p-6 border ${i === 2 ? "bg-violet-500 border-violet-400 text-white shadow-xl shadow-violet-200" : "bg-gray-50 border-gray-100"}`}>
@@ -320,9 +485,9 @@ export default function AITrainingClient({ countryTarget = "kenya" }: AITraining
         <div className="absolute inset-0 bg-violet-600" />
         <div className="relative z-10 max-w-xl mx-auto px-4">
           <h2 className="text-3xl font-extrabold text-white mb-6">Start your first task this week.</h2>
-          <p className="text-violet-200 text-sm mb-6">One-time KES 550 setup · KES 200 welcome bonus back</p>
+          <p className="text-violet-200 text-sm mb-6">{geo.finalCtaPricingNote}</p>
           <button onClick={() => setModalOpen(true)} className="bg-white text-violet-600 font-bold px-10 py-4 rounded-full shadow-xl hover:scale-105 active:scale-95 transition-all duration-150">
-            Apply Now — KES 550 One-Time
+            {geo.finalCtaButtonLabel}
           </button>
         </div>
       </section>
