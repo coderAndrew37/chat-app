@@ -18,12 +18,19 @@ const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.velloearn.co.k
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const post = await getPostBySlug(slug);
+  
+  // Clean up any accidental leading/trailing spaces passed down by messy links
+  const cleanSlug = slug ? decodeURIComponent(slug).trim() : "";
+  const post = await getPostBySlug(cleanSlug);
 
-  if (!post) return {};
+  if (!post) {
+    return {
+      robots: { index: false, follow: true }, // Keep non-existent records out of SERPs safely
+    };
+  }
 
   // Enforce unified www. canonical routing strategy 
-  const canonicalUrl = `${BASE_URL}/blog/${slug}`;
+  const canonicalUrl = `${BASE_URL}/blog/${cleanSlug}`;
   const ogImage = post.mainImage ? [{ url: post.mainImage as string }] : [];
 
   return {
@@ -31,6 +38,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: post.excerpt,
     alternates: {
       canonical: canonicalUrl,
+    },
+    // Forcefully clear out parent layout noindex flags
+    robots: {
+      index: true,
+      follow: true,
+      nocache: false,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
     },
     openGraph: {
       title: post.title,
@@ -52,9 +72,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
+  const cleanSlug = slug ? decodeURIComponent(slug).trim() : "";
 
   const [post, latestPosts] = await Promise.all([
-    getPostBySlug(slug),
+    getPostBySlug(cleanSlug),
     getPosts(6),
   ]);
 
@@ -63,7 +84,7 @@ export default async function BlogPostPage({ params }: Props) {
   const relatedPosts = await getRelatedPosts(post.category || "", post._id);
   const sidebarPosts = latestPosts.filter((p) => p._id !== post._id).slice(0, 5);
   
-  const canonicalUrl = `${BASE_URL}/blog/${slug}`;
+  const canonicalUrl = `${BASE_URL}/blog/${cleanSlug}`;
 
   // Fully enriched Schema.org layout for rich card results
   const jsonLd = {
@@ -72,7 +93,7 @@ export default async function BlogPostPage({ params }: Props) {
     headline: post.title,
     image: post.mainImage ? [post.mainImage] : [`${BASE_URL}/og-cover.png`],
     datePublished: post.publishedAt,
-    dateModified:  post.publishedAt, // Fallback gracefully if updatedAt isn't tracked
+    dateModified:  post.publishedAt, 
     mainEntityOfPage: {
       "@type": "WebPage",
       "@id": canonicalUrl,
@@ -86,7 +107,7 @@ export default async function BlogPostPage({ params }: Props) {
       name: "VelloEarn",
       logo: {
         "@type": "ImageObject",
-        url: `${BASE_URL}/logo.jpg`, // Ensure this fallback brand asset exists
+        url: `${BASE_URL}/logo.jpg`, 
       },
     },
     description: post.excerpt,
