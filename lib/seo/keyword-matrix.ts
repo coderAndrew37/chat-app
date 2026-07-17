@@ -36,67 +36,87 @@ export type JobType = {
 
 // ─── Markets ─────────────────────────────────────────────────────────────────
 
-export const MARKETS: Market[] = [
+export const MARKETS = [
   {
+    slug: "kenya",
     country: "Kenya",
     countryCode: "ke",
-    slug: "kenya",
+    demonym: "Kenyans",
     currency: "KES",
     payment: "M-Pesa",
     paymentSlug: "mpesa",
     mobileOperator: "Safaricom",
-    topEarning: "KES 30,000",
+    activationFee: "KES 450",
     avgEarning: "KES 15,000",
+    topEarning: "KES 55,000",
     locale: "en-KE",
     cities: [
-      { name: "Nairobi",  slug: "nairobi"  },
-      { name: "Mombasa",  slug: "mombasa"  },
-      { name: "Kisumu",   slug: "kisumu"   },
-      { name: "Nakuru",   slug: "nakuru"   },
-      { name: "Eldoret",  slug: "eldoret"  },
-      { name: "Thika",    slug: "thika"    },
-      { name: "Nyeri",    slug: "nyeri"    },
-      { name: "Kakamega", slug: "kakamega" },
-    ],
+      { name: "Nairobi", slug: "nairobi" },
+      { name: "Mombasa", slug: "mombasa" },
+      { name: "Kisumu", slug: "kisumu" },
+      { name: "Nakuru", slug: "nakuru" }
+    ]
   },
   {
-    country: "Uganda",
-    countryCode: "ug",
-    slug: "uganda",
-    currency: "UGX",
-    payment: "MTN Mobile Money",
-    paymentSlug: "mtn-mobile-money",
-    mobileOperator: "MTN Uganda",
-    topEarning: "UGX 1,200,000",
-    avgEarning: "UGX 600,000",
-    locale: "en-UG",
-    cities: [
-      { name: "Kampala",  slug: "kampala"  },
-      { name: "Entebbe",  slug: "entebbe"  },
-      { name: "Jinja",    slug: "jinja"    },
-      { name: "Mbarara",  slug: "mbarara"  },
-      { name: "Gulu",     slug: "gulu"     },
-    ],
-  },
-  {
+    slug: "ghana",
     country: "Ghana",
     countryCode: "gh",
-    slug: "ghana",
+    demonym: "Ghanaians",
     currency: "GHS",
     payment: "MTN MoMo",
     paymentSlug: "mtn-momo",
-    mobileOperator: "MTN Ghana",
-    topEarning: "GHS 4,500",
-    avgEarning: "GHS 2,000",
+    mobileOperator: "MTN",
+    activationFee: "GHS 50",
+    avgEarning: "GHS 1,800",
+    topEarning: "GHS 6,500",
     locale: "en-GH",
     cities: [
-      { name: "Accra",     slug: "accra"     },
-      { name: "Kumasi",    slug: "kumasi"    },
-      { name: "Tamale",    slug: "tamale"    },
-      { name: "Cape Coast",slug: "cape-coast"},
-      { name: "Takoradi",  slug: "takoradi"  },
-    ],
+      { name: "Accra", slug: "accra" },
+      { name: "Kumasi", slug: "kumasi" },
+      { name: "Tamale", slug: "tamale" },
+      { name: "Takoradi", slug: "takoradi" }
+    ]
   },
+  {
+    slug: "uganda",
+    country: "Uganda",
+    countryCode: "ug",
+    demonym: "Ugandans",
+    currency: "UGX",
+    payment: "MTN MoMo",
+    paymentSlug: "mtn-momo",
+    mobileOperator: "MTN or Airtel",
+    activationFee: "UGX 15,000",
+    avgEarning: "UGX 450,000",
+    topEarning: "UGX 1,600,000",
+    locale: "en-UG",
+    cities: [
+      { name: "Kampala", slug: "kampala" },
+      { name: "Entebbe", slug: "entebbe" },
+      { name: "Jinja", slug: "jinja" },
+      { name: "Mbarara", slug: "mbarara" }
+    ]
+  },
+  {
+    slug: "botswana",
+    country: "Botswana",
+    countryCode: "bw",
+    demonym: "Batswana",
+    currency: "BWP",
+    payment: "Orange Money",
+    paymentSlug: "orange-money",
+    mobileOperator: "Orange or Mascom",
+    activationFee: "BWP 50",
+    avgEarning: "BWP 1,500",
+    topEarning: "BWP 5,200",
+    locale: "en-BW",
+    cities: [
+      { name: "Gaborone", slug: "gaborone" },
+      { name: "Francistown", slug: "francistown" },
+      { name: "Molepolole", slug: "molepolole" },
+      { name: "Maun", slug: "maun" }
+    ]
+  }
 ];
 
 // ─── Job Types ────────────────────────────────────────────────────────────────

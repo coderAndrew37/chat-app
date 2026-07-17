@@ -40,7 +40,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: `Legit ${jobType.title} Jobs: Work From Home (Earn Weekly via Mobile Money)`,
     description: `Looking for ${jobType.title} opportunities? ${jobType.tagline} Discover remote positions, hourly pay structures, entry requirements, and secure payouts via local mobile money. Apply free inside.`,
     alternates: {
-      canonical: `/earn/${jobType.slug}`,
+      canonical: `/earn/job/${jobType.slug}`,
     }
   };
 }
