@@ -168,17 +168,6 @@ const JOIN_LOCALIZATION_DATA: Record<CountryKey, JoinLocalizationConfig> = {
   cfg.faqs = buildFaqs(cfg);
 });
 
-// ─── Live ticker ──────────────────────────────────────────────────────────────
-function LiveTicker() {
-  const [amount, setAmount] = useState(1247830);
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setAmount((prev) => prev + Math.floor(Math.random() * 180 + 40));
-    }, 1800);
-    return () => clearInterval(interval);
-  }, []);
-  return <span className="font-mono tabular-nums">KES {amount.toLocaleString()}</span>;
-}
 
 // ─── Floating M-Pesa notification ────────────────────────────────────────────
 function MpesaPing({ name, amount, time, delay }: {
@@ -259,15 +248,41 @@ function Faq({ q, a }: { q: string; a: string | React.ReactNode }) {
   );
 }
 
+// In JoinPage.tsx — on the activation button click handler
+const handleActivationClick = () => {
+  // Fire Meta pixel event
+  if (typeof window !== 'undefined' && window.fbq) {
+    window.fbq('track', 'InitiateCheckout', {
+      content_name: 'VelloEarn Activation',
+      currency: 'KES',
+      value: 550
+    })
+  }
+  // Then redirect to Starhela
+  window.open('https://starhela.com/register.php', '_blank')
+}
+
 // ─── CTA Button ───────────────────────────────────────────────────────────────
-function CtaButton({ label = "Create My Account — Activate Today →", className = "" }: {
-  label?: string; className?: string;
+function CtaButton({ 
+  label = "Create My Account — Activate Today →", 
+  className = "",
+  onClick // Add onClick prop
+}: {
+  label?: string; 
+  className?: string;
+  onClick?: () => void; // Add this
 }) {
+  const handleClick = (e: React.MouseEvent) => {
+    if (onClick) onClick(); // Fire tracking if provided
+    // The href will handle navigation
+  };
+
   return (
     <a
       href={VELLOEARN_REGISTER_URL}
       target="_blank"
       rel="noopener noreferrer"
+      onClick={handleClick} // Add click handler
       className={`group flex items-center justify-center gap-2 bg-rose-500 hover:bg-rose-600 text-white font-extrabold text-lg px-10 py-5 rounded-full shadow-2xl shadow-rose-200 transition-all hover:scale-105 active:scale-95 ${className}`}
     >
       {label}
@@ -361,6 +376,21 @@ function CountrySelector({ active }: { active: CountryKey }) {
   );
 }
 
+// Add this function before the main component
+const trackActivationClick = () => {
+  if (typeof window !== 'undefined' && window.fbq) {
+    window.fbq('track', 'InitiateCheckout', {
+      content_name: 'VelloEarn Activation',
+      currency: 'KES',
+      value: 550
+    });
+    console.log('Facebook Pixel: InitiateCheckout tracked');
+  } else {
+    console.warn('Facebook Pixel not available');
+  }
+};
+
+
 
 
 // ─── Main page ────────────────────────────────────────────────────────────────
@@ -422,7 +452,7 @@ export default function JoinPage() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 mb-14">
-              <CtaButton />
+              <CtaButton onClick={trackActivationClick} />
               <button
                 onClick={() => document.getElementById("how-it-works")?.scrollIntoView({ behavior: "smooth" })}
                 className="flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-white/70 font-semibold text-base px-8 py-5 rounded-full border border-white/10 transition-all"
@@ -558,7 +588,7 @@ export default function JoinPage() {
           </div>
 
           <div className="mt-12 text-center">
-            <CtaButton label="Start Earning Today →" />
+            <CtaButton label="Start Earning Today →" onClick={trackActivationClick} />
           </div>
         </div>
       </section>
@@ -678,7 +708,7 @@ export default function JoinPage() {
           </div>
 
           <div className="mt-14 text-center">
-            <CtaButton />
+              <CtaButton onClick={trackActivationClick} />
             <p className="text-gray-400 text-sm mt-4">
               {`Fill in your details on VelloEarn · Complete ${geo.payoutMethodShort} activation · Dashboard live immediately`}
             </p>
@@ -714,7 +744,7 @@ export default function JoinPage() {
           </div>
 
           <div className="text-center">
-            <CtaButton label="Unlock All 6 Tracks — Activate Today →" />
+            <CtaButton label="Unlock All 6 Tracks — Activate Today →" onClick={trackActivationClick} />
           </div>
         </div>
       </section>
