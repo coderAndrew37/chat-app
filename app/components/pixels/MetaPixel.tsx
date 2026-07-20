@@ -2,13 +2,13 @@
 
 import Script from "next/script";
 import { usePathname, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 
 const PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID;
 
 type FbqTrack = (
-  action: "track",
+  action: string,
   event: string,
   data?: Record<string, unknown>
 ) => void;
@@ -32,9 +32,16 @@ export function fbq(
 export default function MetaPixel() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const isFirstRender = useRef(true);
 
   useEffect(() => {
     if (!PIXEL_ID) return;
+
+    // Skip the absolute first render to prevent duplicate initial PageViews
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
 
     fbq("PageView");
   }, [pathname, searchParams]);
@@ -46,7 +53,6 @@ export default function MetaPixel() {
         "NEXT_PUBLIC_META_PIXEL_ID is missing"
       );
     }
-
     return null;
   }
 

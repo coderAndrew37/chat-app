@@ -22,14 +22,11 @@ const geistMono = Geist_Mono({
 
 // ─── SEO Metadata ─────────────────────────────────────────────────────────────
 
-
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
 
-  title: {
-    default: "VelloEarn — Earn Money Online in Kenya | Remote Work, M-Pesa Payouts",
-    template: "%s | VelloEarn",
-  },
+  // Simplified to a string to prevent title duplication on your articles
+  title: "VelloEarn — Earn Money Online in Kenya | Remote Work, M-Pesa Payouts",
 
   description:
     "VelloEarn is Kenya's #1 remote earning platform. Get paid to chat, train AI, complete surveys, write, and trade forex — all from your phone. Instant M-Pesa payouts.",
@@ -184,7 +181,7 @@ export default function RootLayout({
         </Suspense>
 
         {/* ── Ahrefs Web Analytics ────────────────── */}
-       <script src="https://analytics.ahrefs.com/analytics.js" data-key="oxt3DkRIHEroFVEUnKGCVQ" async></script>
+        <script src="https://analytics.ahrefs.com/analytics.js" data-key="oxt3DkRIHEroFVEUnKGCVQ" async></script>
 
         <LayoutClient>{children}</LayoutClient>
       </body>
