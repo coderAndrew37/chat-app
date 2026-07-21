@@ -266,7 +266,7 @@ function CtaButton({
 }) {
   const handleClick = () => {
     // 1. Fire Meta Pixel event dynamically based on selected country
-    fbq("InitiateCheckout", {
+    fbq("Lead", {
       content_name: "VelloEarn Account Activation",
       content_category: "Registration Flow",
       content_ids: [country.toLowerCase()],
