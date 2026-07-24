@@ -1,6 +1,5 @@
 "use client";
 
-import { ApplicationModal, SuccessState } from "@/app/components";
 import { TESTIMONIALS } from "@/app/components/LandingInteractive";
 import Requirements from "@/app/components/Requirements";
 import TestimonialSlider from "@/app/components/TestimonialSlider";
@@ -8,17 +7,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import EarnerStoriesCarousel from "@/app/components/EarnerStoriesGrid";
+import LiveAITraining from "@/app/components/LiveAITraining";
+
+const VELLOEARN_REGISTER_URL = "https://starhela.com/register?ref=velloearn";
 
 // --- Sub-components ---
 
-function SmartImage({ src, fallback, alt, fill, width, height, className, sizes, priority }: {
-  src: string; fallback: string; alt: string; fill?: boolean; width?: number; height?: number;
-  className?: string; sizes?: string; priority?: boolean;
-}) {
-  const [imgSrc, setImgSrc] = useState(src);
-  const props = { src: imgSrc, alt, className, onError: () => setImgSrc(fallback), sizes, priority };
-  return fill ? <Image {...props} fill unoptimized alt="" /> : <Image {...props} width={width ?? 400} height={height ?? 300} unoptimized alt=""/>;
-}
+
 
 function ObjAccordion({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
@@ -83,35 +78,36 @@ interface LocalizationConfig {
   universities: string;
   legitimacyNote: string;
   payoutRailsDetail: string;
-  heroSetupPricingNote: string;
-  finalCtaPricingNote: string;
+  heroSubText: string;
+  finalCtaSubText: string;
   finalCtaButtonLabel: string;
   howItWorks: WorkStep[];
   earningsTiers: { label: string; range: string; note: string }[];
   stories: { name: string; location: string; earned: string; story: string; image: { actualImage?: string; fallback: string } }[];
   objections: ObjectionItem[];
+  activeJobs: { title: string; company: string; rate: string; type: string; urgency: string }[];
 }
 
 export const LOCALIZATION_DATA: Record<string, LocalizationConfig> = {
   kenya: {
     countryName: "Kenya",
     currency: "KES",
-    payoutMethods: "M-Pesa withdrawals",
+    payoutMethods: "M-Pesa",
     rateRange: "KES 80–400",
     dialectNote: "Your Swahili, your slang, your clarity.",
     tasksSectionNote: "Your real responses help train it to understand how Kenyans talk natively.",
     networkProviders: "Safaricom, Airtel, or Telkom",
     universities: "University of Nairobi (UoN) or JKUAT",
-    heroSetupPricingNote: "One-time KES 550 setup · KES 200 welcome bonus back · No monthly charges",
-    finalCtaPricingNote: "One-time KES 550 setup · KES 200 welcome bonus back",
-    finalCtaButtonLabel: "Apply Now — KES 550 One-Time",
+    heroSubText: "Free to join · No fees · Instant M-Pesa payouts · No experience needed",
+    finalCtaSubText: "Free to join · No fees · Start earning today",
+    finalCtaButtonLabel: "Start Training — Free →",
     legitimacyNote: "Kenya's fast-growing digital economy and high English proficiency make Kenyan contributors prime candidates for training global AI models. All you need is a stable internet connection (Safaricom, Airtel, or Telkom) and a modern browser — no coding or technical background required.",
     payoutRailsDetail: "M-Pesa alongside standard bank transfers, converting cleanly into KES with minimal transaction friction",
     howItWorks: [
-      { title: "1. Apply and verify your details", body: "Fill in your name and WhatsApp number, then complete the one-time setup step. This confirms you're a real person and keeps the task pool free of bots and duplicate accounts." },
-      { title: "2. Complete paid foundational training", body: "Before real tasks, you go through a short guided training module — usually under an hour — that walks through how rating, rewriting, and labelling work. This training itself is compensated, not unpaid onboarding." },
+      { title: "1. Apply free", body: "Fill in your name and WhatsApp number. No fees, no CV, no interview. Your account is active immediately." },
+      { title: "2. Complete paid training", body: "Before real tasks, you go through a short guided training module — usually under an hour — that walks through how rating, rewriting, and labelling work. This training itself is compensated." },
       { title: "3. Start real micro-tasks", body: "You move into the live task queue: rating AI answers, rewriting weak ones, labelling content, or chatting with a model to probe its responses. Each task takes a few minutes and can be done from a smartphone or laptop." },
-      { title: "4. Quality review, not a pass/fail test", body: "A sample of your work is periodically checked against quality guidelines. If your ratings drift, you get specific feedback to recalibrate — it's a learning loop, not a one-strike system." },
+      { title: "4. Quality review", body: "A sample of your work is periodically checked against quality guidelines. If your ratings drift, you get specific feedback to recalibrate — it's a learning loop, not a one-strike system." },
       { title: "5. Withdraw to M-Pesa", body: "Once your balance clears, you cash out directly to M-Pesa. No waiting for a monthly payroll cycle — withdrawals process on your schedule." },
     ],
     earningsTiers: [
@@ -138,7 +134,7 @@ export const LOCALIZATION_DATA: Record<string, LocalizationConfig> = {
     objections: [
       {
         q: "Is AI data annotation available in Kenya?",
-        a: "Yes — 100% available across Nairobi, Mombasa, Kisumu, and every county in between. No VPN is required to access the platform, and beyond the one-time setup fee shown above there are no recurring registration or subscription charges."
+        a: "Yes — 100% available across Nairobi, Mombasa, Kisumu, and every county in between. No VPN is required to access the platform, and there are no recurring registration or subscription charges."
       },
       {
         q: "How do data annotation jobs work from home in Kenya?",
@@ -150,7 +146,7 @@ export const LOCALIZATION_DATA: Record<string, LocalizationConfig> = {
       },
       {
         q: "This sounds too good to be true — how do I know it's not a scam?",
-        a: "Fair question, and worth asking of any online earning platform. We publish real payout amounts, keep the setup fee one-time and clearly stated upfront (never hidden), and our task structure matches how legitimate global AI companies actually source human feedback — through verified micro-task platforms, not personal data requests or upfront investment schemes."
+        a: "Fair question, and worth asking of any online earning platform. We publish real payout amounts, keep everything free and clearly stated upfront, and our task structure matches how legitimate global AI companies actually source human feedback — through verified micro-task platforms, not personal data requests or upfront investment schemes."
       },
       {
         q: "Do I need a degree or prior tech experience?",
@@ -160,6 +156,14 @@ export const LOCALIZATION_DATA: Record<string, LocalizationConfig> = {
         q: "Can I do this alongside school or a full-time job?",
         a: "Yes. There's no fixed shift schedule — tasks stay in the queue and you complete them whenever you have time, whether that's 30 minutes between lectures or a couple of hours in the evening."
       },
+    ],
+    activeJobs: [
+      { title: "AI Response Rating - English", company: "Global Tech Corp", rate: "KES 120/task", type: "Remote", urgency: "Urgent" },
+      { title: "Data Labeling - Image Classification", company: "AI Research Lab", rate: "KES 150/task", type: "Remote", urgency: "High demand" },
+      { title: "Chatbot Conversation Training", company: "Tech Startup", rate: "KES 100/task", type: "Remote", urgency: "New" },
+      { title: "Swahili Text Rewriting", company: "Language AI", rate: "KES 200/task", type: "Remote", urgency: "Premium" },
+      { title: "Content Moderation - AI Training", company: "Social Platform", rate: "KES 90/task", type: "Remote", urgency: "Consistent" },
+      { title: "Academic Text Verification", company: "EdTech", rate: "KES 180/task", type: "Remote", urgency: "Skilled" },
     ]
   },
   uganda: {
@@ -171,16 +175,16 @@ export const LOCALIZATION_DATA: Record<string, LocalizationConfig> = {
     tasksSectionNote: "Your real responses help train it to understand localized phrases used across Uganda.",
     networkProviders: "MTN or Airtel",
     universities: "Makerere University or MUBS",
-    heroSetupPricingNote: "One-time UGX 15,000 setup · UGX 5,000 welcome bonus back · No monthly charges",
-    finalCtaPricingNote: "One-time UGX 15,000 setup · UGX 5,000 welcome bonus back",
-    finalCtaButtonLabel: "Apply Now — UGX 15,000 One-Time",
+    heroSubText: "Free to join · No fees · Instant Mobile Money payouts · No experience needed",
+    finalCtaSubText: "Free to join · No fees · Start earning today",
+    finalCtaButtonLabel: "Start Training — Free →",
     legitimacyNote: "Uganda's expanding digital transformation and strong English-language education make Ugandan contributors well-positioned to train AI models. All that's required is a reliable internet connection (MTN or Airtel) and a standard browser — no technical background needed.",
     payoutRailsDetail: "MTN Mobile Money and Airtel Money alongside standard bank transfers, converting cleanly into UGX with minimal transaction friction",
     howItWorks: [
-      { title: "1. Apply and verify your details", body: "Submit your name and WhatsApp number and complete the one-time setup step, which confirms you're a real applicant and keeps the task pool free of bots and duplicate accounts." },
-      { title: "2. Complete paid foundational training", body: "A short guided module — usually under an hour — walks through rating, rewriting, and labelling before you touch live tasks. This training is compensated, not unpaid onboarding." },
+      { title: "1. Apply free", body: "Submit your name and WhatsApp number. No fees, no CV, no interview. Your account is active immediately." },
+      { title: "2. Complete paid training", body: "A short guided module — usually under an hour — walks through rating, rewriting, and labelling before you touch live tasks. This training is compensated." },
       { title: "3. Start real micro-tasks", body: "You move into the live queue: rating AI answers, rewriting weak ones, labelling content, or chatting with a model to test its responses. Each task takes minutes and works on smartphone or laptop." },
-      { title: "4. Quality review, not a pass/fail test", body: "A sample of your work is periodically checked. If your ratings drift from the guidelines, you get specific feedback to recalibrate — it's a learning loop, not a one-strike system." },
+      { title: "4. Quality review", body: "A sample of your work is periodically checked. If your ratings drift from the guidelines, you get specific feedback to recalibrate — it's a learning loop, not a one-strike system." },
       { title: "5. Withdraw to Mobile Money", body: "Once your balance clears, cash out directly to MTN Mobile Money or Airtel Money on your own schedule, not a fixed monthly payroll date." },
     ],
     earningsTiers: [
@@ -200,7 +204,7 @@ export const LOCALIZATION_DATA: Record<string, LocalizationConfig> = {
     objections: [
       {
         q: "Is AI data annotation available in Uganda?",
-        a: "Yes — fully available across Kampala, Mbarara, Gulu, and the rest of the country. No VPN is needed to use the platform, and beyond the one-time setup fee shown above there are no recurring registration charges."
+        a: "Yes — fully available across Kampala, Mbarara, Gulu, and the rest of the country. No VPN is needed to use the platform, and there are no recurring registration charges."
       },
       {
         q: "How do data annotation jobs work from home in Uganda?",
@@ -212,7 +216,7 @@ export const LOCALIZATION_DATA: Record<string, LocalizationConfig> = {
       },
       {
         q: "This sounds too good to be true — how do I know it's not a scam?",
-        a: "A fair question for any online earning platform. We keep the setup fee one-time and clearly stated upfront, publish real payout figures, and structure tasks the way legitimate global AI companies actually source human feedback — through verified micro-task work, not personal data requests or investment schemes."
+        a: "A fair question for any online earning platform. We keep everything free and clearly stated upfront, publish real payout figures, and structure tasks the way legitimate global AI companies actually source human feedback — through verified micro-task work, not personal data requests or investment schemes."
       },
       {
         q: "Do I need a degree or prior tech experience?",
@@ -222,6 +226,12 @@ export const LOCALIZATION_DATA: Record<string, LocalizationConfig> = {
         q: "Can I do this alongside school or a full-time job?",
         a: "Yes. There's no fixed shift schedule — tasks sit in the queue and you complete them whenever you have time, whether that's between lectures or in the evening."
       },
+    ],
+    activeJobs: [
+      { title: "AI Response Rating - English", company: "Global Tech Corp", rate: "UGX 3,500/task", type: "Remote", urgency: "Urgent" },
+      { title: "Data Labeling - Image Classification", company: "AI Research Lab", rate: "UGX 4,500/task", type: "Remote", urgency: "High demand" },
+      { title: "Luganda Text Rewriting", company: "Language AI", rate: "UGX 6,000/task", type: "Remote", urgency: "Premium" },
+      { title: "Content Moderation - AI Training", company: "Social Platform", rate: "UGX 2,500/task", type: "Remote", urgency: "Consistent" },
     ]
   },
   ghana: {
@@ -233,16 +243,16 @@ export const LOCALIZATION_DATA: Record<string, LocalizationConfig> = {
     tasksSectionNote: "Your inputs train artificial intelligence layers to accurately process West African English and localized structural terms.",
     networkProviders: "MTN, Telecel, or AT",
     universities: "University of Ghana (UG Legon) or KNUST",
-    heroSetupPricingNote: "One-time GHS 60 setup · GHS 25 welcome bonus back · No monthly fees",
-    finalCtaPricingNote: "One-time GHS 60 setup · GHS 25 welcome bonus credit",
-    finalCtaButtonLabel: "Apply Now — GHS 60 One-Time Setup",
+    heroSubText: "Free to join · No fees · Instant Mobile Money payouts · No experience needed",
+    finalCtaSubText: "Free to join · No fees · Start earning today",
+    finalCtaButtonLabel: "Start Training — Free →",
     legitimacyNote: "Ghana's exceptional digital transformation pace, reliable fintech infrastructure, and high English fluency make Ghanaian youth and university students the absolute premier candidates for training AI models. All you need to scale up is a secure smartphone or laptop, a reliable browser, and an active connection on local data bundles — with completely zero code knowledge needed.",
     payoutRailsDetail: "MTN Mobile Money (MoMo) and Telecel Cash (formerly Vodafone Cash) alongside direct local bank routing, translating securely into Ghana Cedis (GHS) with near-zero transaction friction",
     howItWorks: [
-      { title: "1. Apply and verify your details", body: "Submit your name and WhatsApp number and complete the secure one-time setup step. This confirms you're a real applicant living inside Ghana and keeps the entire system safe from automated bots or duplicate farms." },
-      { title: "2. Complete paid foundational training", body: "Before you touch live systems, you walk through a guided online training module (takes under an hour) explaining how text rating and content labelling operate. Unlike other setups, this training phase is fully compensated." },
+      { title: "1. Apply free", body: "Submit your name and WhatsApp number. No fees, no CV, no interview. Your account is active immediately." },
+      { title: "2. Complete paid training", body: "Before you touch live systems, you walk through a guided online training module (takes under an hour) explaining how text rating and content labelling operate. This training phase is fully compensated." },
       { title: "3. Start real micro-tasks", body: "Gain immediate access to the live task matrix: scoring AI text accuracy, rewriting unnatural outputs, or stress-testing layout boundaries. Each task takes just 2 to 5 minutes right from a phone or PC." },
-      { title: "4. Quality review, not a pass/fail test", body: "A random selection of data points is evaluated against global quality scripts. If answers drift, you get transparent dashboard hints to realign your tracking — it's built as an engineering learning loop." },
+      { title: "4. Quality review", body: "A random selection of data points is evaluated against global quality scripts. If answers drift, you get transparent dashboard hints to realign your tracking — it's built as an engineering learning loop." },
       { title: "5. Withdraw instantly to Mobile Money", body: "The moment your verified milestone clears, cash out your earnings directly to your MTN MoMo or Telecel Cash wallet. You completely control your payroll timing." },
     ],
     earningsTiers: [
@@ -262,7 +272,7 @@ export const LOCALIZATION_DATA: Record<string, LocalizationConfig> = {
     objections: [
       {
         q: "Is AI data annotation available in Ghana?",
-        a: "Yes — data annotation jobs are 100% available and operational across Accra, Kumasi, Tamale, Cape Coast, and all regions in Ghana. No VPN is required to access your work panel, and beyond the transparent one-time setup fee listed above, there are absolutely zero hidden recurring costs or platform registration fees."
+        a: "Yes — data annotation jobs are 100% available and operational across Accra, Kumasi, Tamale, Cape Coast, and all regions in Ghana. No VPN is required to access your work panel, and there are absolutely zero hidden recurring costs or platform registration fees."
       },
       {
         q: "How do data annotation jobs work from home in Ghana?",
@@ -274,7 +284,7 @@ export const LOCALIZATION_DATA: Record<string, LocalizationConfig> = {
       },
       {
         q: "This sounds too good to be true — how do I know it's not a scam?",
-        a: "That is an essential question to ask given the volume of fake online jobs in Ghana. We establish complete trust by keeping the setup fee single, transparent, and up-front. We explicitly display real earner data, and our structure exactly matches how global platforms source distributed human review—relying on tangible micro-tasks, never tracking your private keys or demanding weird investment multi-level tiers."
+        a: "That is an essential question to ask given the volume of fake online jobs in Ghana. We establish complete trust by keeping everything free and transparent. We explicitly display real earner data, and our structure exactly matches how global platforms source distributed human review—relying on tangible micro-tasks, never tracking your private keys or demanding weird investment multi-level tiers."
       },
       {
         q: "Do I need a degree or prior tech experience?",
@@ -284,6 +294,12 @@ export const LOCALIZATION_DATA: Record<string, LocalizationConfig> = {
         q: "Can I do this alongside school or a full-time job?",
         a: "Absolutely. There are no mandatory shifts or strict clock-ins. The micro-task queue runs 24/7, meaning you can knock out tasks between lectures at KNUST or during your quiet evening hours at home."
       },
+    ],
+    activeJobs: [
+      { title: "AI Response Rating - English", company: "Global Tech Corp", rate: "GHS 15/task", type: "Remote", urgency: "Urgent" },
+      { title: "Data Labeling - Image Classification", company: "AI Research Lab", rate: "GHS 20/task", type: "Remote", urgency: "High demand" },
+      { title: "Twi Text Rewriting", company: "Language AI", rate: "GHS 25/task", type: "Remote", urgency: "Premium" },
+      { title: "Content Moderation - AI Training", company: "Social Platform", rate: "GHS 12/task", type: "Remote", urgency: "Consistent" },
     ]
   }
 };
@@ -295,10 +311,6 @@ interface AITrainingClientProps {
 }
 
 export default function AITrainingClient({ countryTarget = "kenya" }: AITrainingClientProps) {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [successData, setSuccessData] = useState<{ name: string; whatsapp: string } | null>(null);
-
-  // Safely extract localization context falling back gracefully
   const geo = LOCALIZATION_DATA[countryTarget] || LOCALIZATION_DATA.kenya;
 
   const TASK_TYPES = [
@@ -311,40 +323,128 @@ export default function AITrainingClient({ countryTarget = "kenya" }: AITraining
   return (
     <main className="bg-gray-50 min-h-screen">
       {/* ── Hero ── */}
-      <section className="relative pt-24 pb-20 overflow-hidden bg-gradient-to-br from-violet-50 via-white to-indigo-50">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 relative">
-          <div className="grid lg:grid-cols-2 gap-14 items-center">
+      <section className="relative pt-12 pb-16 sm:pt-20 sm:pb-20 overflow-hidden bg-gradient-to-br from-violet-50 via-white to-indigo-50">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-violet-200/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 relative">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-8 items-start lg:items-center">
             <div>
-              <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-600 mb-8 transition">
+              <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-600 mb-6 sm:mb-8 transition">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
                 Back to VelloEarn
               </Link>
               <div className="inline-flex items-center gap-2 bg-violet-50 border border-violet-100 text-violet-600 text-xs font-bold px-3 py-1.5 rounded-full mb-6 uppercase tracking-wider">
-                🤖 AI Training
+                🤖 AI Training · Fast Growing
               </div>
-              <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight tracking-tight mb-5">
-                The world&apos;s biggest companies<br />
-                <span className="text-violet-500">need your brain.</span>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight tracking-tight mb-5">
+                Train AI models
+                <br />
+                <span className="text-violet-500">from your phone.</span>
               </h1>
-              <p className="text-lg text-gray-500 leading-relaxed mb-8 max-w-lg">
-                AI systems learn from human feedback. Your judgment is the raw material. Earn {geo.rateRange} per task helping global tech companies improve their models.
+              <p className="text-base sm:text-lg text-gray-500 leading-relaxed mb-3 max-w-lg">
+                AI systems learn from human feedback. Your judgment is the raw material. 
+                Earn {geo.rateRange} per task helping global tech companies improve their models.
               </p>
-              <button onClick={() => setModalOpen(true)}
-                className="bg-violet-500 hover:bg-violet-600 text-white font-bold text-base px-8 py-4 rounded-full shadow-lg shadow-violet-200 transition-all hover:scale-105 active:scale-95">
-                Apply for This Track →
-              </button>
-              <p className="text-xs text-gray-400 mt-4">
-                {geo.heroSetupPricingNote}
+              <p className="text-sm sm:text-base text-gray-400 mb-8 max-w-lg">
+                {geo.heroSubText}
               </p>
+              <div className="flex flex-col sm:flex-row gap-3 mb-10">
+                <a
+                  href={VELLOEARN_REGISTER_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-violet-500 hover:bg-violet-600 text-white font-bold text-base px-8 py-4 rounded-full shadow-lg shadow-violet-200 transition-all hover:scale-105 active:scale-95 text-center"
+                >
+                  Start Training — Free →
+                </a>
+                <Link
+                  href="/blog/is-ai-training-a-scam-kenya"
+                  className="bg-white hover:bg-gray-50 text-gray-600 font-semibold text-base px-8 py-4 rounded-full border border-gray-200 shadow-sm transition-all hover:scale-105 active:scale-95 text-center"
+                >
+                  Is this legit? Read first →
+                </Link>
+              </div>
+              <div className="flex gap-8">
+                {[
+                  { v: geo.rateRange, l: "Per task" },
+                  { v: "No minimum", l: "Withdrawal" },
+                  { v: "Free", l: "To join" },
+                ].map((s) => (
+                  <div key={s.l}>
+                    <div className="text-lg font-extrabold text-gray-900">{s.v}</div>
+                    <div className="text-xs text-gray-400 mt-0.5">{s.l}</div>
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="relative hidden lg:block h-[420px] rounded-3xl overflow-hidden shadow-2xl">
-              <SmartImage src="/earn/ai-training.jpg" fallback="https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&h=840&fit=crop&auto=format"
-                alt="Person working on AI training task" fill priority className="object-cover" sizes="45vw" />
+            {/* Right Column - Active Jobs Board */}
+            <div className="mt-8 lg:mt-0">
+              <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
+                    <span className="text-sm font-semibold text-gray-900">Active AI Tasks</span>
+                    <span className="text-xs text-gray-400">· {geo.activeJobs.length} available</span>
+                  </div>
+                  <span className="text-xs text-violet-500 font-medium">New tasks daily</span>
+                </div>
+                <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2">
+                  {geo.activeJobs.map((job, i) => (
+                    <a
+                      key={i}
+                      href={VELLOEARN_REGISTER_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block bg-gray-50 hover:bg-violet-50 border border-gray-100 hover:border-violet-200 rounded-xl p-4 transition-all cursor-pointer group"
+                    >
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1">
+                            <h4 className="font-semibold text-gray-900 text-sm group-hover:text-violet-600 transition-colors">
+                              {job.title}
+                            </h4>
+                            <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
+                              job.urgency === 'Urgent' ? 'bg-red-100 text-red-600' :
+                              job.urgency === 'Premium' ? 'bg-amber-100 text-amber-600' :
+                              job.urgency === 'High demand' ? 'bg-orange-100 text-orange-600' :
+                              'bg-gray-100 text-gray-500'
+                            }`}>
+                              {job.urgency}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-3 text-xs text-gray-400">
+                            <span>{job.company}</span>
+                            <span>·</span>
+                            <span>{job.type}</span>
+                          </div>
+                        </div>
+                        <div className="text-right shrink-0 ml-4">
+                          <div className="text-sm font-bold text-emerald-600">{job.rate}</div>
+                          <div className="text-[10px] text-gray-400">per task</div>
+                        </div>
+                      </div>
+                    </a>
+                  ))}
+                </div>
+                <div className="mt-4 pt-3 border-t border-gray-100">
+                  <div className="flex items-center justify-between text-xs text-gray-400">
+                    <span>+{geo.activeJobs.length * 2} more tasks available</span>
+                    <a
+                      href={VELLOEARN_REGISTER_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-violet-500 font-medium hover:text-violet-600 transition-colors"
+                    >
+                      Apply to see all →
+                    </a>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
+      
       {/* ── What you actually do ── */}
       <section className="py-20 bg-white">
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
@@ -363,11 +463,13 @@ export default function AITrainingClient({ countryTarget = "kenya" }: AITraining
           </div>
         </div>
       </section>
+      
+      <LiveAITraining />
 
-      {/* Conversion Optimizer CTA Answering What, How Much, How to Pay */}
-      <Requirements onApply={() => setModalOpen(true)} />
+      {/* ── Requirements ── */}
+      <Requirements />
 
-      {/* ── NEW SECTION: How It Actually Works ── */}
+      {/* ── How It Actually Works ── */}
       <section className="py-20 bg-white border-t border-gray-100">
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
@@ -382,10 +484,20 @@ export default function AITrainingClient({ countryTarget = "kenya" }: AITraining
               </div>
             ))}
           </div>
+          <div className="mt-10 text-center">
+            <a
+              href={VELLOEARN_REGISTER_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block bg-violet-500 hover:bg-violet-600 text-white font-bold text-base px-10 py-4 rounded-full shadow-lg shadow-violet-200 transition-all hover:scale-105 active:scale-95"
+            >
+              Start Training — Free →
+            </a>
+          </div>
         </div>
       </section>
 
-      {/* ── Deep SEO Rich-Text Context (Google Index Fuel) ── */}
+      {/* ── Deep SEO Rich-Text Context ── */}
       <section className="py-16 bg-white border-t border-gray-100">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 text-left prose prose-violet">
           <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-6">
@@ -462,9 +574,6 @@ export default function AITrainingClient({ countryTarget = "kenya" }: AITraining
         </div>
       </section>
 
-      {/* Secondary Requirements block preserved explicitly as requested for downstream conversion anchoring */}
-      <Requirements onApply={() => setModalOpen(true)} />
-
       {/* ── Dynamic Local FAQs ── */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-2xl mx-auto px-4 sm:px-6">
@@ -473,9 +582,14 @@ export default function AITrainingClient({ countryTarget = "kenya" }: AITraining
             {geo.objections.map((o, i) => <ObjAccordion key={i} q={o.q} a={o.a} />)}
           </div>
           <div className="mt-8 text-center">
-            <button onClick={() => setModalOpen(true)} className="text-violet-600 font-semibold text-sm hover:text-violet-700 transition">
+            <a
+              href={VELLOEARN_REGISTER_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-violet-600 font-semibold text-sm hover:text-violet-700 transition inline-flex items-center gap-1"
+            >
               Still have questions? Ask us directly →
-            </button>
+            </a>
           </div>
         </div>
       </section>
@@ -485,27 +599,20 @@ export default function AITrainingClient({ countryTarget = "kenya" }: AITraining
         <div className="absolute inset-0 bg-violet-600" />
         <div className="relative z-10 max-w-xl mx-auto px-4">
           <h2 className="text-3xl font-extrabold text-white mb-6">Start your first task this week.</h2>
-          <p className="text-violet-200 text-sm mb-6">{geo.finalCtaPricingNote}</p>
-          <button onClick={() => setModalOpen(true)} className="bg-white text-violet-600 font-bold px-10 py-4 rounded-full shadow-xl hover:scale-105 active:scale-95 transition-all duration-150">
+          <p className="text-violet-200 text-sm mb-6">{geo.finalCtaSubText}</p>
+          <a
+            href={VELLOEARN_REGISTER_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block bg-white text-violet-600 font-bold px-10 py-4 rounded-full shadow-xl hover:scale-105 active:scale-95 transition-all duration-150"
+          >
             {geo.finalCtaButtonLabel}
-          </button>
+          </a>
+          <p className="text-violet-300 text-xs mt-4">
+            Free to join · No fees · Start earning today
+          </p>
         </div>
       </section>
-
-      {/* ── Handled State Overlay Interfaces ── */}
-      {modalOpen && (
-        <ApplicationModal 
-          onClose={() => setModalOpen(false)} 
-          track="AI Training" 
-        />
-      )}
-
-      {successData && (
-        <SuccessState 
-          data={successData} 
-          onClose={() => setSuccessData(null)} 
-        />
-      )}
     </main>
   );
 }

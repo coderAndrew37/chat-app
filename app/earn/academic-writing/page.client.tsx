@@ -1,9 +1,11 @@
 "use client";
 
-import { ApplicationModal, SuccessState } from "@/app/components";
+import LiveAcademicWriting from "@/app/components/LiveAcademicWriting";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+
+const VELLOEARN_REGISTER_URL = "https://starhela.com/register?ref=velloearn";
 
 // --- Components ---
 
@@ -16,8 +18,8 @@ function SmartImage({
   const [imgSrc, setImgSrc] = useState(src);
   const props = { src: imgSrc, alt, className, onError: () => setImgSrc(fallback), sizes, priority };
   return fill
-    ? <Image {...props} fill unoptimized alt=''/>
-    : <Image {...props} width={width ?? 400} height={height ?? 300} unoptimized alt=''/>;
+    ? <Image {...props} fill unoptimized alt="" />
+    : <Image {...props} width={width ?? 400} height={height ?? 300} unoptimized alt=""/>;
 }
 
 function ObjAccordion({ q, a }: { q: string; a: string }) {
@@ -58,12 +60,12 @@ const REGIONAL_CONFIGS = {
   kenya: {
     currency: "KES",
     paymentMethod: "M-Pesa",
-    minWithdrawal: "KES 500",
+    minWithdrawal: "KES 0",
     topEarnerPayout: "KES 70,000+",
     heroStats: [
       { v: "KES 500+", l: "Per essay" },
       { v: "KES 60,000+", l: "Max per dissertation" },
-      { v: "You choose", l: "Your subjects" },
+      { v: "Free", l: "To join" },
     ],
     writingTypes: [
       { icon: "📄", title: "Essays & coursework", pages: "2–10 pages", pay: "KES 500 – 2,500", body: "The bread and butter. Undergraduate essays, discussion posts, case studies, and short papers. High volume, fast turnaround." },
@@ -88,12 +90,12 @@ const REGIONAL_CONFIGS = {
   uganda: {
     currency: "UGX",
     paymentMethod: "MTN MoMo & Airtel Money",
-    minWithdrawal: "UGX 15,000",
+    minWithdrawal: "UGX 0",
     topEarnerPayout: "UGX 2,000,000+",
     heroStats: [
       { v: "UGX 15,000+", l: "Per essay" },
       { v: "UGX 1,800,000+", l: "Max per dissertation" },
-      { v: "You choose", l: "Your subjects" },
+      { v: "Free", l: "To join" },
     ],
     writingTypes: [
       { icon: "📄", title: "Essays & coursework", pages: "2–10 pages", pay: "UGX 15,000 – 75,000", body: "The bread and butter. Undergraduate essays, discussion posts, case studies, and short papers. High volume, fast turnaround." },
@@ -118,12 +120,12 @@ const REGIONAL_CONFIGS = {
   ghana: {
     currency: "GHS",
     paymentMethod: "Mobile Money (MTN / Vodafone)",
-    minWithdrawal: "GHS 60",
+    minWithdrawal: "GHS 0",
     topEarnerPayout: "GHS 7,500+",
     heroStats: [
       { v: "GHS 60+", l: "Per essay" },
       { v: "GHS 7,000+", l: "Max per dissertation" },
-      { v: "You choose", l: "Your subjects" },
+      { v: "Free", l: "To join" },
     ],
     writingTypes: [
       { icon: "📄", title: "Essays & coursework", pages: "2–10 pages", pay: "GHS 60 – 300", body: "The bread and butter. Undergraduate essays, discussion posts, case studies, and short papers. High volume, fast turnaround." },
@@ -149,16 +151,12 @@ const REGIONAL_CONFIGS = {
 
 // --- Main Page ---
 export default function AcademicWritingClient({ countryTarget }: AcademicWritingClientProps) {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [successData, setSuccessData] = useState<{ name: string; whatsapp: string } | null>(null);
-
   // Active geo configuration backup fallback to Kenya
   const config = REGIONAL_CONFIGS[countryTarget] || REGIONAL_CONFIGS.kenya;
 
-  const handleSuccess = (data: { name: string; whatsapp: string }) => {
-    setModalOpen(false);
-    setSuccessData(data);
-  };
+  // Images for hero collage
+  const writingImage = "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=800&h=600&fit=crop&auto=format";
+  const researchImage = "https://images.unsplash.com/photo-1507842217343-583bb72959d3?w=800&h=600&fit=crop&auto=format";
 
   // Remaining standard structural content
   const INVARIANT_OBJECTIONS = [
@@ -174,39 +172,54 @@ export default function AcademicWritingClient({ countryTarget }: AcademicWriting
     <main className="bg-gray-50 min-h-screen">
 
       {/* ── Hero ── */}
-      <section className="relative pt-24 pb-20 overflow-hidden bg-gradient-to-br from-emerald-50 via-white to-teal-50">
+      <section className="relative pt-12 pb-16 sm:pt-16 sm:pb-20 overflow-hidden bg-gradient-to-br from-emerald-50 via-white to-teal-50">
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-200/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 relative">
-          <div className="grid lg:grid-cols-2 gap-14 items-center">
+        
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 relative">
+          <div className="grid lg:grid-cols-2 gap-10 lg:gap-12 items-center">
+            
+            {/* Left - Content */}
             <div>
-              <Link
-                href="/"
-                className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-600 mb-8 transition"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
+              <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-600 mb-6 sm:mb-8 transition">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
                 Back to VelloEarn
               </Link>
+
               <div className="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-100 text-emerald-700 text-xs font-bold px-3 py-1.5 rounded-full mb-6 uppercase tracking-wider">
-                ✍️ Academic Writing
+                ✍️ Academic Writing · Highest Earning
               </div>
-              <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight tracking-tight mb-5">
-                Your degree is sitting<br />
-                <span className="text-emerald-600">idle. It shouldn&apos;t be.</span>
+
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight tracking-tight mb-4">
+                Your degree is sitting <br />
+                <span className="text-emerald-600">idle. It shouldn't be.</span>
               </h1>
-              <p className="text-lg text-gray-500 leading-relaxed mb-8 max-w-lg">
-                Students worldwide pay for quality academic writing. If you write well — in any subject — there&apos;s a queue of orders waiting. Get paid per paper, directly to {config.paymentMethod}, on your own schedule.
+
+              <p className="text-base sm:text-lg text-gray-600 leading-relaxed mb-4 max-w-lg">
+                Students worldwide pay for quality academic writing. If you write well — in any subject — there's a queue of orders waiting. Get paid per paper, directly to {config.paymentMethod}, on your own schedule.
               </p>
-              <div className="flex flex-col sm:flex-row gap-3">
-                <button
-                  onClick={() => setModalOpen(true)}
-                  className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-base px-8 py-4 rounded-full shadow-lg shadow-emerald-200 transition-all hover:scale-105 active:scale-95"
+
+              <p className="text-sm sm:text-base text-gray-400 mb-8 max-w-lg">
+                Free to join · No fees · Instant {config.paymentMethod} payouts · {config.topEarnerPayout} top earners
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-3 mb-10">
+                <a
+                  href={VELLOEARN_REGISTER_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-base px-8 py-4 rounded-full shadow-lg shadow-emerald-200 transition-all hover:scale-105 active:scale-95 text-center"
                 >
-                  Apply for This Track →
-                </button>
+                  Start Writing — Free →
+                </a>
+                <Link
+                  href="#how-it-works"
+                  className="bg-white hover:bg-gray-50 text-gray-600 font-semibold text-base px-8 py-4 rounded-full border border-gray-200 shadow-sm transition-all hover:scale-105 active:scale-95 text-center"
+                >
+                  See how it works
+                </Link>
               </div>
-              <div className="mt-10 flex gap-8">
+
+              <div className="flex gap-8">
                 {config.heroStats.map((s) => (
                   <div key={s.l}>
                     <div className="text-lg font-extrabold text-gray-900">{s.v}</div>
@@ -216,29 +229,71 @@ export default function AcademicWritingClient({ countryTarget }: AcademicWriting
               </div>
             </div>
 
-            {/* Hero image */}
-            <div className="relative hidden lg:block h-[420px] rounded-3xl overflow-hidden shadow-2xl">
-              <SmartImage
-                src="/earn/academic-writing.jpg"
-                fallback="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=800&h=840&fit=crop&auto=format"
-                alt="Person writing at a desk"
-                fill
-                priority
-                className="object-cover"
-                sizes="45vw"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-              <div className="absolute bottom-5 left-5 right-5 bg-white/90 backdrop-blur-sm rounded-2xl px-4 py-3">
-                <p className="text-xs text-gray-400 mb-1">Highest earning track</p>
-                <p className="text-sm font-bold text-gray-900">Top writers earn {config.topEarnerPayout} monthly</p>
-              </div>
+            {/* Right - Image Collage */}
+            <div className="relative grid grid-cols-2 gap-3 mt-8 lg:mt-0">
+              {/* Main Image - Writing */}
+              <Link
+                href={VELLOEARN_REGISTER_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="col-span-2 relative rounded-2xl overflow-hidden h-48 sm:h-56 shadow-xl group"
+              >
+                <Image
+                  src={writingImage}
+                  alt="Academic writing from home"
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-all duration-300" />
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
+                  <p className="text-white font-bold text-sm group-hover:text-emerald-300 transition-colors">✍️ Academic Writing</p>
+                  <p className="text-white/70 text-xs">KES 500+ per essay · Flexible hours →</p>
+                </div>
+              </Link>
+
+              {/* Bottom Left - Research */}
+              <Link
+                href={VELLOEARN_REGISTER_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative rounded-2xl overflow-hidden h-40 shadow-xl group"
+              >
+                <Image
+                  src={researchImage}
+                  alt="Research papers"
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-all duration-300" />
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-3">
+                  <p className="text-white font-bold text-xs group-hover:text-emerald-300 transition-colors">📚 Dissertations</p>
+                  <p className="text-white/60 text-[10px]">KES 15,000–60,000 each →</p>
+                </div>
+              </Link>
+
+              {/* Bottom Right - Stats Card */}
+              <Link
+                href={VELLOEARN_REGISTER_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative rounded-2xl overflow-hidden h-40 bg-gradient-to-br from-emerald-600 to-teal-600 flex items-center justify-center shadow-xl group hover:scale-105 transition-transform duration-300"
+              >
+                <div className="text-center text-white p-4">
+                  <div className="text-3xl font-extrabold group-hover:scale-110 transition-transform duration-300">{config.topEarnerPayout}</div>
+                  <div className="text-sm text-emerald-100">Top earners</div>
+                  <div className="text-xs text-emerald-200 mt-1 group-hover:text-white transition-colors">Start writing →</div>
+                </div>
+              </Link>
             </div>
+
           </div>
         </div>
       </section>
 
+    <LiveAcademicWriting />
+
       {/* ── What you write ── */}
-      <section className="py-20 bg-white">
+      <section className="py-16 bg-gray-50">
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
             <span className="text-emerald-600 font-semibold text-sm uppercase tracking-wider">What you&apos;ll write</span>
@@ -246,9 +301,9 @@ export default function AcademicWritingClient({ countryTarget }: AcademicWriting
               Four order types. Pick what you&apos;re good at.
             </h2>
           </div>
-          <div className="grid sm:grid-cols-2 gap-5 mb-10">
+          <div className="grid sm:grid-cols-2 gap-5">
             {config.writingTypes.map((t) => (
-              <div key={t.title} className="bg-gray-50 rounded-2xl p-6 border border-gray-100">
+              <div key={t.title} className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
                 <div className="flex items-start justify-between mb-3">
                   <span className="text-2xl">{t.icon}</span>
                   <div className="text-right">
@@ -261,7 +316,7 @@ export default function AcademicWritingClient({ countryTarget }: AcademicWriting
               </div>
             ))}
           </div>
-          <div className="bg-emerald-50 border border-emerald-100 rounded-2xl p-6 flex gap-4 items-start">
+          <div className="mt-8 bg-emerald-50 border border-emerald-100 rounded-2xl p-6 flex gap-4 items-start">
             <span className="text-2xl shrink-0">🎓</span>
             <div>
               <p className="font-bold text-gray-900 mb-1">Every subject is in demand</p>
@@ -274,20 +329,21 @@ export default function AcademicWritingClient({ countryTarget }: AcademicWriting
       </section>
 
       {/* ── How it works ── */}
-      <section className="py-20 bg-gray-50">
+      <section id="how-it-works" className="py-16 bg-white">
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-14">
             <span className="text-emerald-600 font-semibold text-sm uppercase tracking-wider">How it works</span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mt-2">Apply. Test. Write. Earn.</h2>
+            <p className="text-gray-500 mt-2">Free to join. Start earning today.</p>
           </div>
           <div className="space-y-5">
             {[
-              { step: "01", title: "Apply with your subject areas", body: "Tell us your degree, your strong subjects, and your writing experience. You don't need prior freelance history — your academic background is the credential. Processing takes 24–48 hours." },
+              { step: "01", title: "Apply free", body: "Tell us your degree, your strong subjects, and your writing experience. No fees, no CV, no interview. Processing takes 24–48 hours." },
               { step: "02", title: "Pass a short writing test", body: "You'll write a short sample (200–400 words) on an assigned topic. This is how we place you at the right pay grade from the start — higher-quality writers get higher-paying orders." },
-              { step: "03", title: "Claim orders from the queue", body: "You log in and browse available orders — topic, word count, deadline, and payout are shown upfront. You pick what suits your skills and schedule. No one assigns you work you didn't choose." },
-              { step: "04", title: "Submit, get approved, get paid", body: `You submit your work through the platform. Once reviewed and approved (usually within 12–24 hours), your balance updates. Request a ${config.paymentMethod} payout anytime from ${config.minWithdrawal} upward.` }
+              { step: "03", title: "Claim orders from the queue", body: "You log in and browse available orders — topic, word count, deadline, and payout are shown upfront. You pick what suits your skills and schedule." },
+              { step: "04", title: `Submit, get approved, get paid`, body: `You submit your work through the platform. Once reviewed and approved, your balance updates. Request a ${config.paymentMethod} payout anytime with no minimum.` }
             ].map((step, i) => (
-              <div key={i} className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm flex gap-5 items-start">
+              <div key={i} className="bg-gray-50 rounded-2xl p-6 border border-gray-100 shadow-sm flex gap-5 items-start hover:border-emerald-200 transition-colors">
                 <div className="shrink-0 w-12 h-12 rounded-2xl bg-emerald-600 text-white font-extrabold text-sm flex items-center justify-center">
                   {step.step}
                 </div>
@@ -298,11 +354,21 @@ export default function AcademicWritingClient({ countryTarget }: AcademicWriting
               </div>
             ))}
           </div>
+          <div className="mt-10 text-center">
+            <a
+              href={VELLOEARN_REGISTER_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-base px-10 py-4 rounded-full shadow-lg shadow-emerald-200 transition-all hover:scale-105 active:scale-95"
+            >
+              Start Writing — Free →
+            </a>
+          </div>
         </div>
       </section>
 
       {/* ── Earning potential ── */}
-      <section className="py-20 bg-white">
+      <section className="py-16 bg-gray-50">
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
             <span className="text-emerald-600 font-semibold text-sm uppercase tracking-wider">Earning potential</span>
@@ -320,8 +386,8 @@ export default function AcademicWritingClient({ countryTarget }: AcademicWriting
                 key={i}
                 className={`rounded-2xl p-6 border text-center ${
                   i === 2
-                    ? "bg-emerald-600 border-emerald-500 text-white"
-                    : "bg-gray-50 border-gray-100"
+                    ? "bg-emerald-600 border-emerald-500 text-white shadow-xl shadow-emerald-200"
+                    : "bg-white border-gray-100 shadow-sm"
                 }`}
               >
                 <p
@@ -336,17 +402,16 @@ export default function AcademicWritingClient({ countryTarget }: AcademicWriting
                 </p>
                 <p className={`text-xs ${i === 2 ? "text-emerald-200" : "text-gray-400"}`}>{tier.note}</p>
                 {i === 2 && (
-                  <p className="text-xs text-emerald-100 mt-2">Dissertation writers reach this regularly</p>
+                  <p className="text-xs text-emerald-100 mt-2">🏆 Dissertation writers reach this</p>
                 )}
               </div>
             ))}
           </div>
 
-          {/* Earner stories */}
           <h3 className="text-xl font-extrabold text-gray-900 mb-5">From writers already doing it</h3>
           <div className="grid sm:grid-cols-2 gap-5">
             {config.stories.map((s) => (
-              <div key={s.name} className="bg-gray-50 rounded-2xl p-6 border border-gray-100">
+              <div key={s.name} className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="relative w-11 h-11 rounded-full overflow-hidden bg-emerald-100 shrink-0">
                     <SmartImage
@@ -372,7 +437,7 @@ export default function AcademicWritingClient({ countryTarget }: AcademicWriting
       </section>
 
       {/* ── Objections ── */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-16 bg-white">
         <div className="max-w-2xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
             <span className="text-emerald-600 font-semibold text-sm uppercase tracking-wider">Real talk</span>
@@ -388,45 +453,49 @@ export default function AcademicWritingClient({ countryTarget }: AcademicWriting
         </div>
       </section>
 
-      {/* ── CTA ── */}
-      <section className="relative py-16 overflow-hidden">
-        <div className="absolute inset-0">
-          <SmartImage
-            src="/cta/background.jpg"
-            fallback="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1600&h=600&fit=crop&auto=format"
-            alt="background"
-            fill
-            className="object-cover"
-            sizes="100vw"
-          />
-          <div className="absolute inset-0 bg-gradient-to-br from-emerald-700/90 to-teal-700/90" />
-        </div>
-        <div className="relative z-10 max-w-xl mx-auto px-4 sm:px-6 text-center">
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4">
-            Your writing is worth serious money.
+      {/* ── FINAL CTA - Irresistible Offer ── */}
+      <section className="relative py-20 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-600 to-teal-600" />
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-white/10 rounded-full translate-x-1/3 -translate-y-1/2 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-white/10 rounded-full -translate-x-1/3 translate-y-1/3 pointer-events-none" />
+        
+        <div className="relative max-w-3xl mx-auto px-4 sm:px-6 text-center">
+          <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white text-sm font-semibold px-4 py-2 rounded-full mb-6">
+            ✍️ Join 1,200+ academic writers
+          </div>
+          
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white leading-tight mb-4">
+            Your writing is worth <br />
+            <span className="text-emerald-200">serious money.</span>
           </h2>
-          <p className="text-emerald-100 mb-8 leading-relaxed">
-            Apply today. Pass the writing test. Your first order could come within 48 hours.
+          
+          <p className="text-emerald-100 text-lg mb-8 max-w-xl mx-auto">
+            Free to join. Write essays, research papers, and dissertations. 
+            No experience needed. Get paid instantly to {config.paymentMethod}.
           </p>
-          <button
-            onClick={() => setModalOpen(true)}
-            className="inline-block bg-white text-emerald-700 font-bold text-base px-10 py-4 rounded-full shadow-xl hover:scale-105 active:scale-95 transition-all"
+
+          <div className="flex flex-wrap justify-center gap-6 mb-8 text-white/80 text-sm">
+            <span>✅ Free to join</span>
+            <span>💸 No fees ever</span>
+            <span>📱 Write from your phone</span>
+            <span>⚡ Instant {config.paymentMethod} payouts</span>
+          </div>
+
+          <a
+            href={VELLOEARN_REGISTER_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block bg-white text-emerald-600 hover:bg-emerald-50 font-extrabold text-xl px-12 py-5 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all"
           >
-            Apply for Academic Writing →
-          </button>
+            Start Writing — Free →
+          </a>
+          
+          <p className="text-emerald-200/70 text-sm mt-4">
+            No credit card · No payment required · Start earning instantly
+          </p>
         </div>
       </section>
 
-      {modalOpen && (
-        <ApplicationModal
-          onClose={() => setModalOpen(false)}
-          track="Academic Writing"
-        />
-      )}
-
-      {successData && (
-        <SuccessState data={successData} onClose={() => setSuccessData(null)} />
-      )}
     </main>
   );
 }

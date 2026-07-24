@@ -1,16 +1,15 @@
 "use client";
 
-import { ApplicationModal, SuccessState } from "@/app/components";
+import {  ProfilesGrid} from "@/app/components";
+import LiveForeignersOnline from "@/app/components/LiveForeignersOnline";
 import Requirements from "@/app/components/Requirements";
-import ProfilesGrid from "@/app/components/ProfilesGrid";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
-// ─── SmartImage ───────────────────────────────────────────────────────────────
-// Fixed: alt is no longer hardcoded to "" — it passes through correctly now.
-// Every image on this page has a descriptive alt for SEO and accessibility.
+const VELLOEARN_REGISTER_URL = "https://starhela.com/register?ref=velloearn";
 
+// ─── SmartImage ───────────────────────────────────────────────────────────────
 function SmartImage({
   src, fallback, alt, fill, width, height, className, sizes, priority,
 }: {
@@ -70,7 +69,7 @@ interface GeoContent {
 const GEO_CONTENT: Record<"kenya" | "uganda" | "ghana", GeoContent> = {
   kenya: {
     wallet: "M-Pesa",
-    minWithdrawal: "KES 500",
+    minWithdrawal: "KES 0",
     locationContext: "a matatu stage, or a café in Westlands",
     earnings: [
       { label: "Part-time (2–3 hrs/day)", range: "KES 6,000 – 12,000", note: "/ month" },
@@ -94,11 +93,11 @@ const GEO_CONTENT: Record<"kenya" | "uganda" | "ghana", GeoContent> = {
     objections: [
       {
         q: "How is this different from other 'chat and earn' scams in Kenya?",
-        a: "Most scam platforms ask for money before you earn — an activation fee, a registration charge, or a 'processing deposit.' We never ask for money. You apply free, you get activated free, you earn from real tasks, and you withdraw to M-Pesa whenever you want. If anyone claiming to be VelloEarn ever asks for payment before you've earned it, that is a scam. Report it to us immediately.",
+        a: "VelloEarn is 100% free to join. No registration fees, no activation charges, no hidden costs. You apply free, get approved, complete real tasks, and withdraw to M-Pesa instantly. If anyone ever asks for payment before you've earned, that is a scam. Report it immediately.",
       },
       {
         q: "When exactly does M-Pesa come?",
-        a: "You request a withdrawal from your dashboard. Minimum is KES 500. Most payments clear within 5–30 minutes depending on M-Pesa traffic. You'll see it in your M-Pesa messages directly.",
+        a: "You request a withdrawal from your dashboard. No minimum balance. Most payments clear within 5–30 minutes depending on M-Pesa traffic. You'll see it in your M-Pesa messages directly.",
       },
       {
         q: "Can I really earn KES 35,000+ per month?",
@@ -108,7 +107,7 @@ const GEO_CONTENT: Record<"kenya" | "uganda" | "ghana", GeoContent> = {
   },
   uganda: {
     wallet: "MTN MoMo / Airtel Money",
-    minWithdrawal: "UGX 15,000",
+    minWithdrawal: "UGX 0",
     locationContext: "a taxi park, or a café in Kampala",
     earnings: [
       { label: "Part-time (2–3 hrs/day)", range: "UGX 180,000 – 360,000", note: "/ month" },
@@ -132,7 +131,7 @@ const GEO_CONTENT: Record<"kenya" | "uganda" | "ghana", GeoContent> = {
     objections: [
       {
         q: "How is this different from other earn-online scams in Uganda?",
-        a: "We charge nothing upfront. No registration fee, no activation charge. You get verified via WhatsApp and withdraw real earnings directly to your MTN MoMo or Airtel Money number.",
+        a: "We charge nothing. No registration fee, no activation charge. You apply free, get verified, and withdraw real earnings directly to your MTN MoMo or Airtel Money number.",
       },
       {
         q: "When exactly does Mobile Money arrive?",
@@ -146,7 +145,7 @@ const GEO_CONTENT: Record<"kenya" | "uganda" | "ghana", GeoContent> = {
   },
   ghana: {
     wallet: "MTN MoMo / Telecel / Vodafone",
-    minWithdrawal: "GHS 50",
+    minWithdrawal: "GHS 0",
     locationContext: "a trotro station, or a spot in Osu",
     earnings: [
       { label: "Part-time (2–3 hrs/day)", range: "GHS 700 – 1,400", note: "/ month" },
@@ -220,140 +219,122 @@ interface ChattingClientProps {
 }
 
 export default function ChattingClient({ countryTarget }: ChattingClientProps) {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [successData, setSuccessData] = useState<{ name: string; whatsapp: string } | null>(null);
-
   const geo = GEO_CONTENT[countryTarget];
 
   const fullObjections = [
-    geo.objections[0],       // scam differentiator — most important, goes first
-    BASE_OBJECTIONS[0],      // experience question
-    BASE_OBJECTIONS[1],      // missed shifts
-    geo.objections[1],       // payout timing
-    geo.objections[2],       // earnings ceiling
+    geo.objections[0],
+    BASE_OBJECTIONS[0],
+    BASE_OBJECTIONS[1],
+    geo.objections[1],
+    geo.objections[2],
   ];
 
   const HOW_IT_WORKS = [
     {
       step: "01",
       title: "Apply free — 2 minutes",
-      body: "Submit your name and WhatsApp number. No CV, no interview, no fee. Our team reviews and responds within 24 hours.",
+      body: "Submit your name and WhatsApp number. No CV, no interview, no fee. Your account is active immediately.",
     },
     {
       step: "02",
-      title: "Get activated on WhatsApp",
-      body: "Activation instructions come directly to your WhatsApp. You get dashboard access, your task briefings, and your earning track.",
+      title: "Browse live profiles",
+      body: "See who's online right now. Browse profiles of lonely foreigners from USA, UK, Canada, Europe, and more.",
     },
     {
       step: "03",
-      title: "Claim a shift and start",
-      body: "Log into your dashboard, claim a shift — morning, afternoon, or evening. You decide how many hours. Scripts and templates are provided.",
+      title: "Start chatting",
+      body: "Tap any profile and start talking. Every conversation earns you money. No scripts needed — just be yourself.",
     },
     {
       step: "04",
-      title: `Earn and withdraw to ${geo.wallet}`,
-      body: `Every completed shift adds to your balance. Withdraw to ${geo.wallet} any time — minimum ${geo.minWithdrawal}, no waiting period.`,
+      title: `Withdraw to ${geo.wallet}`,
+      body: `Your earnings grow with every chat. Withdraw to ${geo.wallet} anytime — no minimum, no waiting period.`,
     },
   ];
 
   return (
     <main className="bg-gray-50 min-h-screen">
 
-      {/* ── 1. HERO ─────────────────────────────────────────────────────────── */}
-      {/*
-        SEO NOTE:
-        H1 now contains the primary keyword: "chat with foreigners in Kenya"
-        Sub-heading answers the two questions a skeptic has immediately:
-        what is the work, and how do I get paid.
-        Secondary CTA links to the scam blog post — visitors who aren't
-        ready to apply get funneled to high-intent content instead of lost.
-      */}
-      <section className="relative pt-24 pb-20 overflow-hidden bg-gradient-to-br from-rose-50 via-white to-orange-50">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-rose-200/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 relative">
-          <div className="grid lg:grid-cols-2 gap-14 items-center">
+   {/* ── 1. HERO ─────────────────────────────────────────────────────────── */}
+<section className="relative pt-12 pb-16 sm:pt-20 sm:pb-20 overflow-hidden bg-gradient-to-br from-rose-50 via-white to-orange-50">
+  <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-rose-200/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+  
+  <div className="max-w-6xl mx-auto px-4 sm:px-6 relative">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-8 items-start lg:items-center">
 
-            <div>
-              <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-600 mb-8 transition">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-                Back to VelloEarn
-              </Link>
+      {/* Left Column - Hero Content */}
+      <div>
+        <Link 
+          href="/" 
+          className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-600 mb-6 sm:mb-8 transition"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+          Back to VelloEarn
+        </Link>
 
-              <div className="inline-flex items-center gap-2 bg-rose-50 border border-rose-100 text-rose-600 text-xs font-bold px-3 py-1.5 rounded-full mb-6 uppercase tracking-wider">
-                💬 Remote Chatting · Most Popular
-              </div>
-
-              <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight tracking-tight mb-5">
-                Get paid to chat with foreigners —{" "}
-                <span className="text-rose-500">from Kenya.</span>
-              </h1>
-
-              <p className="text-lg text-gray-500 leading-relaxed mb-3 max-w-lg">
-                Real businesses need real humans to handle their conversations —
-                customer queries, community moderation, engagement tasks. You pick
-                your hours. We supply the work. {geo.wallet} pays you.
-              </p>
-              <p className="text-base text-gray-400 mb-8 max-w-lg">
-                Free to join. No experience needed. Your first shift could be today.
-              </p>
-
-              <div className="flex flex-col sm:flex-row gap-3 mb-10">
-                <button
-                  onClick={() => setModalOpen(true)}
-                  className="bg-rose-500 hover:bg-rose-600 text-white font-bold text-base px-8 py-4 rounded-full shadow-lg shadow-rose-200 transition-all hover:scale-105 active:scale-95"
-                >
-                  Apply for This Track →
-                </button>
-                <Link
-                  href="/blog/is-ai-training-a-scam-kenya"
-                  className="bg-white hover:bg-gray-50 text-gray-600 font-semibold text-base px-8 py-4 rounded-full border border-gray-200 shadow-sm transition-all hover:scale-105 active:scale-95 text-center"
-                >
-                  Is this legit? Read first →
-                </Link>
-              </div>
-
-              <div className="flex gap-8">
-                {[
-                  { v: "2–6 hrs", l: "Flexible daily hours" },
-                  { v: geo.minWithdrawal, l: "Min withdrawal" },
-                  { v: "Daily", l: "Tasks available" },
-                ].map((s) => (
-                  <div key={s.l}>
-                    <div className="text-lg font-extrabold text-gray-900">{s.v}</div>
-                    <div className="text-xs text-gray-400 mt-0.5">{s.l}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="relative hidden lg:block h-[420px] rounded-3xl overflow-hidden shadow-2xl">
-              <SmartImage
-                src="/earn/chatting.jpg"
-                fallback="https://images.unsplash.com/photo-1611746872915-64382b5c76da?w=800&h=840&fit=crop&auto=format"
-                alt="Young Kenyan woman earning money by chatting online from her phone"
-                fill priority className="object-cover" sizes="45vw"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-              <div className="absolute bottom-5 left-5 right-5 bg-white/90 backdrop-blur-sm rounded-2xl px-4 py-3">
-                <p className="text-xs text-gray-400 mb-1">Most popular earning method</p>
-                <p className="text-sm font-bold text-gray-900">Over 60% of our team earns through chatting</p>
-              </div>
-            </div>
-
-          </div>
+        <div className="inline-flex items-center gap-2 bg-rose-50 border border-rose-100 text-rose-600 text-xs font-bold px-3 py-1.5 rounded-full mb-6 uppercase tracking-wider">
+          💬 Remote Chatting · Most Popular
         </div>
-      </section>
+
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight tracking-tight mb-5">
+          Get paid to chat with foreigners —{" "}
+          <span className="text-rose-500">from your phone.</span>
+        </h1>
+
+        <p className="text-base sm:text-lg text-gray-500 leading-relaxed mb-3 max-w-lg">
+          Chat with lonely foreigners looking for conversation. Make friends, 
+          share your culture, and earn money instantly. No experience needed.
+        </p>
+
+        <p className="text-sm sm:text-base text-gray-400 mb-8 max-w-lg">
+          Free to join · No fees · Instant {geo.wallet} payouts · 50,000+ active chatters
+        </p>
+
+        <div className="flex flex-col sm:flex-row gap-3 mb-10">
+          <a
+            href={VELLOEARN_REGISTER_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-rose-500 hover:bg-rose-600 text-white font-bold text-base px-8 py-4 rounded-full shadow-lg shadow-rose-200 transition-all hover:scale-105 active:scale-95 text-center"
+          >
+            Start Chatting Now — Free →
+          </a>
+          <Link
+            href="/blog/is-ai-training-a-scam-kenya"
+            className="bg-white hover:bg-gray-50 text-gray-600 font-semibold text-base px-8 py-4 rounded-full border border-gray-200 shadow-sm transition-all hover:scale-105 active:scale-95 text-center"
+          >
+            Is this legit? Read first →
+          </Link>
+        </div>
+
+        <div className="flex gap-8">
+          {[
+            { v: "24/7", l: "Chat anytime" },
+            { v: "No minimum", l: "Withdrawal" },
+            { v: "Free", l: "To join" },
+          ].map((s) => (
+            <div key={s.l}>
+              <div className="text-lg font-extrabold text-gray-900">{s.v}</div>
+              <div className="text-xs text-gray-400 mt-0.5">{s.l}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Right Column - Live Chat Feed */}
+      <div className="mt-8 lg:mt-0">
+        <div className="w-full max-w-full mx-auto lg:mx-0">
+          <LiveForeignersOnline />
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
 
       {/* ── 2. WHAT THE WORK IS ─────────────────────────────────────────────── */}
-      {/*
-        SEO NOTE:
-        H2 "What remote chatting work actually involves" targets the query
-        "what is remote chatting work Kenya" — a real long-tail search.
-        Specific task descriptions make this section comprehensive enough
-        to satisfy that intent and reduce bounce.
-      */}
       <section className="py-20 bg-white">
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
@@ -364,7 +345,7 @@ export default function ChattingClient({ countryTarget }: ChattingClientProps) {
               What remote chatting work actually involves
             </h2>
             <p className="text-gray-500 max-w-lg mx-auto">
-              Not random chatting. Structured tasks with briefings, templates, and clear pay rates.
+              Not random chatting. Real conversations with real people looking for connection.
             </p>
           </div>
 
@@ -383,9 +364,8 @@ export default function ChattingClient({ countryTarget }: ChattingClientProps) {
             <div>
               <p className="font-bold text-gray-900 mb-1">Everything runs on your phone</p>
               <p className="text-sm text-gray-600 leading-relaxed">
-                No laptop needed. No office. No commute. Log in, claim a shift, complete
-                tasks, log out. You can do this from your house, {geo.locationContext}.
-                The platform is fully mobile.
+                No laptop needed. No office. No commute. Log in, browse profiles, start chatting.
+                You can do this from your house, {geo.locationContext}. The platform is fully mobile.
               </p>
             </div>
           </div>
@@ -393,15 +373,7 @@ export default function ChattingClient({ countryTarget }: ChattingClientProps) {
       </section>
 
       {/* ── 3. PROFILES GRID ────────────────────────────────────────────────── */}
-      {/*
-        SEO NOTE:
-        ProfilesGrid is reused from the homepage — no code duplication.
-        This is contextually honest here: real people ARE waiting to chat.
-        The FOMO is legitimate on this page. On the homepage it was misleading.
-        It also adds a visual break between the task description and how-it-works,
-        which keeps scroll depth high — a positive experience signal to Google.
-      */}
-      <ProfilesGrid onApplyClick={() => setModalOpen(true)} />
+      <ProfilesGrid/>
 
       {/* ── 4. HOW IT WORKS ─────────────────────────────────────────────────── */}
       <section className="py-20 bg-gray-50">
@@ -411,9 +383,9 @@ export default function ChattingClient({ countryTarget }: ChattingClientProps) {
               How it works
             </span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mt-2 mb-3">
-              From curious to earning in one day
+              From curious to earning in minutes
             </h2>
-            <p className="text-gray-500">Four steps. No tech skills. No startup costs.</p>
+            <p className="text-gray-500">Four simple steps. No tech skills. Free to join.</p>
           </div>
 
           <div className="space-y-5">
@@ -429,6 +401,17 @@ export default function ChattingClient({ countryTarget }: ChattingClientProps) {
               </div>
             ))}
           </div>
+
+          <div className="mt-10 text-center">
+            <a
+              href={VELLOEARN_REGISTER_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block bg-rose-500 hover:bg-rose-600 text-white font-bold text-base px-10 py-4 rounded-full shadow-lg shadow-rose-200 transition-all hover:scale-105 active:scale-95"
+            >
+              Start Chatting Now — Free →
+            </a>
+          </div>
         </div>
       </section>
 
@@ -443,8 +426,7 @@ export default function ChattingClient({ countryTarget }: ChattingClientProps) {
               Real numbers. No fluff.
             </h2>
             <p className="text-gray-500 max-w-xl mx-auto">
-              Based on actual team earnings. What you make depends on how many
-              shifts you claim and whether you build a team.
+              Based on actual team earnings. What you make depends on how much you chat.
             </p>
           </div>
 
@@ -470,47 +452,7 @@ export default function ChattingClient({ countryTarget }: ChattingClientProps) {
             ))}
           </div>
 
-          {/*
-            SEO NOTE:
-            Comparison table targets "chatting vs AI training Kenya" and
-            "best way to earn online Kenya" — comparison intent searchers
-            land here and find a complete answer. Comprehensive pages
-            rank higher than narrow ones for the same effort.
-          */}
-          <div className="bg-gray-50 rounded-2xl border border-gray-100 overflow-hidden mb-10">
-            <div className="px-6 py-4 border-b border-gray-100">
-              <h3 className="font-bold text-gray-900">How chatting compares to other methods</h3>
-            </div>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-gray-100">
-                    <th className="text-left px-6 py-3 text-gray-500 font-medium">Method</th>
-                    <th className="text-left px-6 py-3 text-gray-500 font-medium">Monthly (consistent)</th>
-                    <th className="text-left px-6 py-3 text-gray-500 font-medium">Skill needed</th>
-                    <th className="text-left px-6 py-3 text-gray-500 font-medium">Ceiling</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {[
-                    { method: "💬 Chatting", monthly: "KES 6K – 28K", skill: "Low", ceiling: "High", highlight: true },
-                    { method: "🤖 AI Training", monthly: "KES 10K – 20K", skill: "Low–Medium", ceiling: "Medium", highlight: false },
-                    { method: "📋 Surveys", monthly: "KES 2K – 6K", skill: "Very low", ceiling: "Low", highlight: false },
-                    { method: "🌍 Swahili Teaching", monthly: "KES 6K – 15K", skill: "Native speaker", ceiling: "Medium", highlight: false },
-                  ].map((row) => (
-                    <tr key={row.method} className={`border-b border-gray-50 ${row.highlight ? "bg-rose-50" : ""}`}>
-                      <td className={`px-6 py-3 font-medium ${row.highlight ? "text-rose-700" : "text-gray-900"}`}>{row.method}</td>
-                      <td className="px-6 py-3 text-gray-600">{row.monthly}</td>
-                      <td className="px-6 py-3 text-gray-600">{row.skill}</td>
-                      <td className="px-6 py-3 text-gray-600">{row.ceiling}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <Requirements onApply={() => setModalOpen(true)} />
+          <Requirements />
 
           <h3 className="text-xl font-extrabold text-gray-900 mb-5 mt-14">From people already doing it</h3>
           <div className="grid sm:grid-cols-2 gap-5">
@@ -557,13 +499,6 @@ export default function ChattingClient({ countryTarget }: ChattingClientProps) {
       </section>
 
       {/* ── 7. CROSS-FUNNEL BRIDGE ──────────────────────────────────────────── */}
-      {/*
-        SEO NOTE:
-        Visitors who aren't ready to apply get funneled laterally to other
-        earning pages rather than bouncing back to Google. This keeps time-on-site
-        high and passes internal authority to /earn/ai-training and the blog.
-        Every internal link here is a deliberate authority transfer.
-      */}
       <section className="py-16 bg-white">
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
           <p className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-6 text-center">
@@ -627,36 +562,24 @@ export default function ChattingClient({ countryTarget }: ChattingClientProps) {
         </div>
         <div className="relative z-10 max-w-xl mx-auto px-4 sm:px-6 text-center">
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4">
-            Ready to start chatting for money?
+            Ready to start chatting and earning?
           </h2>
           <p className="text-rose-100 mb-8 leading-relaxed">
-            Apply now. Get approved via WhatsApp. Your first shift could be today.
+            Free to join. No experience needed. Your first conversation could be your first payout.
           </p>
-          <button
-            onClick={() => setModalOpen(true)}
+          <a
+            href={VELLOEARN_REGISTER_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-block bg-white text-rose-500 font-bold text-base px-10 py-4 rounded-full shadow-xl hover:scale-105 active:scale-95 transition-all"
           >
-            Apply for Remote Chatting →
-          </button>
+            Start Chatting Now — Free →
+          </a>
           <p className="text-rose-200 text-xs mt-4">
-            Free to join · No experience needed · {geo.wallet} payouts
+            Free to join · No fees · Instant {geo.wallet} payouts · 50,000+ active chatters
           </p>
         </div>
       </section>
-
-      {/* ── Modals ──────────────────────────────────────────────────────────── */}
-      {modalOpen && (
-        <ApplicationModal
-          onClose={() => setModalOpen(false)}
-          track="Remote Chatting"
-        />
-      )}
-      {successData && (
-        <SuccessState
-          data={successData}
-          onClose={() => setSuccessData(null)}
-        />
-      )}
 
     </main>
   );

@@ -1,9 +1,11 @@
 "use client";
 
-import { ApplicationModal, SuccessState } from "@/app/components";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import LiveForeignersLearning from "@/app/components/LiveForeignersLearning";
+
+const VELLOEARN_REGISTER_URL = "https://starhela.com/register?ref=velloearn";
 
 // --- Components ---
 
@@ -60,11 +62,11 @@ const REGIONAL_DATA = {
     marketDesc: "Kenya is one of the fastest-growing consumer markets in Africa. International brands launching here, or studying African market behaviour, specifically need Kenyan respondents.",
     paymentMethod: "M-Pesa",
     currency: "KES",
-    minWithdrawal: "KES 500",
+    minWithdrawal: "KES 0",
     heroStats: [
       { v: "KES 80+", l: "Per survey" },
       { v: "KES 3,000+", l: "Focus groups" },
-      { v: "No shifts", l: "Fully async" },
+      { v: "Free", l: "To join" },
     ],
     taskTypes: [
       { icon: "📋", title: "Paid surveys", time: "5–20 min", pay: "KES 80–350 each", body: "Answer structured questions from global brands. Topics range from consumer habits to political sentiment to product feedback. Your Kenyan perspective is specifically what they're paying for." },
@@ -87,13 +89,13 @@ const REGIONAL_DATA = {
   uganda: {
     marketName: "Ugandan consumer",
     marketDesc: "Uganda represents an emerging market frontier across East Africa. International enterprises expanding services or studying consumer habits specifically require local Ugandan feedback arrays.",
-    paymentMethod: "Mobile Money (MTN / Airtel)",
+    paymentMethod: "Mobile Money",
     currency: "UGX",
-    minWithdrawal: "UGX 15,000",
+    minWithdrawal: "UGX 0",
     heroStats: [
       { v: "UGX 2,500+", l: "Per survey" },
       { v: "UGX 90,000+", l: "Focus groups" },
-      { v: "No shifts", l: "Fully async" },
+      { v: "Free", l: "To join" },
     ],
     taskTypes: [
       { icon: "📋", title: "Paid surveys", time: "5–20 min", pay: "UGX 2,500–10,000 each", body: "Answer structured questions from global brands. Topics range from consumer habits to political sentiment to product feedback. Your Ugandan perspective is specifically what they're paying for." },
@@ -116,13 +118,13 @@ const REGIONAL_DATA = {
   ghana: {
     marketName: "Ghanaian consumer",
     marketDesc: "Ghana is a major focal consumer hub across West Africa. Global entities launching brands or tracking retail trends look to verified local feedback loops to evaluate product viability.",
-    paymentMethod: "Mobile Money (MTN / Telecel)",
+    paymentMethod: "Mobile Money",
     currency: "GHS",
-    minWithdrawal: "GHS 50",
+    minWithdrawal: "GHS 0",
     heroStats: [
       { v: "GHS 10+", l: "Per survey" },
       { v: "GHS 350+", l: "Focus groups" },
-      { v: "No shifts", l: "Fully async" },
+      { v: "Free", l: "To join" },
     ],
     taskTypes: [
       { icon: "📋", title: "Paid surveys", time: "5–20 min", pay: "GHS 10–40 each", body: "Answer structured questions from global brands. Topics range from consumer habits to political sentiment to product feedback. Your Ghanaian perspective is specifically what they're paying for." },
@@ -145,37 +147,33 @@ const REGIONAL_DATA = {
 };
 
 export default function SurveysClient({ countryTarget }: SurveysClientProps) {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [successData, setSuccessData] = useState<{ name: string; whatsapp: string } | null>(null);
-
   // Fallback to kenya if parameter mismatch occurs
   const config = REGIONAL_DATA[countryTarget] || REGIONAL_DATA.kenya;
 
-  const handleSuccess = (data: { name: string; whatsapp: string }) => {
-    setModalOpen(false);
-    setSuccessData(data);
-  };
+  // Images for hero collage
+  const surveyImage = "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800&h=600&fit=crop&auto=format";
+  const focusGroupImage = "https://images.unsplash.com/photo-1528605248644-14dd04022da1?w=800&h=600&fit=crop&auto=format";
 
   const HOW_IT_WORKS = [
     {
       step: "01",
-      title: "Apply and set up your profile",
-      body: "Your profile captures your demographics — age, location, income bracket, education, consumer habits. This determines which surveys and studies you qualify for. More complete profile = more tasks.",
+      title: "Apply free",
+      body: "Create your account in 2 minutes. No fees, no CV, no interview. Complete your profile to start getting matched to tasks."
     },
     {
       step: "02",
       title: "Get matched to tasks",
-      body: "You're notified when a task you qualify for becomes available. First come, first served — most tasks have limited slots. So acting fast matters.",
+      body: "You're notified when a task you qualify for becomes available. First come, first served — most tasks have limited slots. Act fast."
     },
     {
       step: "03",
       title: "Complete the task honestly",
-      body: "Quality checks flag inconsistent or rushed responses. Answer genuinely — your demographic data is why brands chose you. Honest answers protect your account standing.",
+      body: "Quality checks flag inconsistent or rushed responses. Answer genuinely — your demographic data is why brands chose you."
     },
     {
       step: "04",
       title: `Get paid to ${config.paymentMethod}`,
-      body: `Payment releases after your response passes quality review — usually within 24 hours for surveys, 48–72 hours for more complex tasks. Minimum withdrawal: ${config.minWithdrawal}.`,
+      body: `Payment releases after your response passes quality review — usually within 24 hours. Withdraw to ${config.paymentMethod} with no minimum.`
     },
   ];
 
@@ -206,34 +204,54 @@ export default function SurveysClient({ countryTarget }: SurveysClientProps) {
     <main className="bg-gray-50 min-h-screen">
 
       {/* ── Hero ── */}
-      <section className="relative pt-24 pb-20 overflow-hidden bg-gradient-to-br from-amber-50 via-white to-orange-50">
+      <section className="relative pt-12 pb-16 sm:pt-16 sm:pb-20 overflow-hidden bg-gradient-to-br from-amber-50 via-white to-orange-50">
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-amber-200/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 relative">
-          <div className="grid lg:grid-cols-2 gap-14 items-center">
+        
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 relative">
+          <div className="grid lg:grid-cols-2 gap-10 lg:gap-12 items-center">
+            
+            {/* Left - Content */}
             <div>
-              <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-600 mb-8 transition">
+              <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-600 mb-6 sm:mb-8 transition">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
                 Back to VelloEarn
               </Link>
+
               <div className="inline-flex items-center gap-2 bg-amber-50 border border-amber-100 text-amber-600 text-xs font-bold px-3 py-1.5 rounded-full mb-6 uppercase tracking-wider">
-                📋 Surveys & Research
+                📋 Surveys & Research · Quick Start
               </div>
-              <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight tracking-tight mb-5">
-                Global brands are paying<br />
+
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight tracking-tight mb-4">
+                Global brands are paying <br />
                 <span className="text-amber-500">for your opinion.</span>
               </h1>
-              <p className="text-lg text-gray-500 leading-relaxed mb-8 max-w-lg">
-                Every product you buy, every app you use, every ad you scroll past — someone researched whether you&apos;d respond to it. That research pays. And it specifically needs people like you: a real {config.marketName}, with real opinions, in a market that&apos;s growing fast.
+
+              <p className="text-base sm:text-lg text-gray-600 leading-relaxed mb-4 max-w-lg">
+                Every product you buy, every app you use, every ad you scroll past — someone researched whether you&apos;d respond to it. That research pays. And it specifically needs people like you: a real {config.marketName}, with real opinions.
               </p>
-              <div className="flex flex-col sm:flex-row gap-3">
-                <button
-                  onClick={() => setModalOpen(true)}
-                  className="bg-amber-500 hover:bg-amber-600 text-white font-bold text-base px-8 py-4 rounded-full shadow-lg shadow-amber-200 transition-all hover:scale-105 active:scale-95"
+
+              <p className="text-sm sm:text-base text-gray-400 mb-8 max-w-lg">
+                Free to join · No fees · Instant {config.paymentMethod} payouts · No experience needed
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-3 mb-10">
+                <a
+                  href={VELLOEARN_REGISTER_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold text-base px-8 py-4 rounded-full shadow-lg shadow-amber-200 transition-all hover:scale-105 active:scale-95 text-center"
                 >
-                  Apply for This Track →
-                </button>
+                  Start Earning — Free →
+                </a>
+                <Link
+                  href="#how-it-works"
+                  className="bg-white hover:bg-gray-50 text-gray-600 font-semibold text-base px-8 py-4 rounded-full border border-gray-200 shadow-sm transition-all hover:scale-105 active:scale-95 text-center"
+                >
+                  See how it works
+                </Link>
               </div>
-              <div className="mt-10 flex gap-8">
+
+              <div className="flex gap-8">
                 {config.heroStats.map(s => (
                   <div key={s.l}>
                     <div className="text-lg font-extrabold text-gray-900">{s.v}</div>
@@ -243,33 +261,93 @@ export default function SurveysClient({ countryTarget }: SurveysClientProps) {
               </div>
             </div>
 
-            <div className="relative hidden lg:block h-[420px] rounded-3xl overflow-hidden shadow-2xl">
-              <SmartImage
-                src="/earn/surveys.jpg"
-                fallback="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800&h=840&fit=crop&auto=format"
-                alt="Person completing a survey on phone"
-                fill priority className="object-cover" sizes="45vw"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-              <div className="absolute bottom-5 left-5 right-5 bg-white/90 backdrop-blur-sm rounded-2xl px-4 py-3">
-                <p className="text-xs text-gray-400 mb-1">Quick start track</p>
-                <p className="text-sm font-bold text-gray-900">No experience needed — your honest opinion is enough</p>
-              </div>
+            {/* Right - Image Collage */}
+            <div className="relative grid grid-cols-2 gap-3 mt-8 lg:mt-0">
+              {/* Main Image - Surveys */}
+              <Link
+                href={VELLOEARN_REGISTER_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="col-span-2 relative rounded-2xl overflow-hidden h-48 sm:h-56 shadow-xl group"
+              >
+                <Image
+                  src={surveyImage}
+                  alt="Person completing paid surveys on phone"
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-all duration-300" />
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
+                  <p className="text-white font-bold text-sm group-hover:text-amber-300 transition-colors">📋 Paid surveys</p>
+                  <p className="text-white/70 text-xs">KES 80–350 each · 5–20 minutes →</p>
+                </div>
+              </Link>
+
+              {/* Bottom Left - Focus Groups */}
+              <Link
+                href={VELLOEARN_REGISTER_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative rounded-2xl overflow-hidden h-40 shadow-xl group"
+              >
+                <Image
+                  src={focusGroupImage}
+                  alt="Focus group discussion"
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-all duration-300" />
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-3">
+                  <p className="text-white font-bold text-xs group-hover:text-amber-300 transition-colors">🎙️ Focus groups</p>
+                  <p className="text-white/60 text-[10px]">KES 1,200–3,000 each →</p>
+                </div>
+              </Link>
+
+              {/* Bottom Right - Stats Card */}
+              <Link
+                href={VELLOEARN_REGISTER_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative rounded-2xl overflow-hidden h-40 bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-xl group hover:scale-105 transition-transform duration-300"
+              >
+                <div className="text-center text-white p-4">
+                  <div className="text-3xl font-extrabold group-hover:scale-110 transition-transform duration-300">KES 80+</div>
+                  <div className="text-sm text-amber-100">Per survey</div>
+                  <div className="text-xs text-amber-200 mt-1 group-hover:text-white transition-colors">Start earning →</div>
+                </div>
+              </Link>
             </div>
+
           </div>
         </div>
       </section>
 
+      {/* ── Live Foreigners Learning Section ── */}
+      <section className="py-16 bg-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-10">
+            <span className="text-amber-500 font-semibold text-sm uppercase tracking-wider">Live right now</span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mt-2 mb-3">
+              Foreigners waiting to learn Swahili
+            </h2>
+            <p className="text-gray-500 max-w-xl mx-auto">
+              Real students from around the world are actively looking for teachers. Start earning today.
+            </p>
+          </div>
+          <LiveForeignersLearning />
+        </div>
+      </section>
+
       {/* ── Task types ── */}
-      <section className="py-20 bg-white">
+      <section className="py-16 bg-gray-50">
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
-            <span className="text-amber-500 font-semibold text-sm uppercase tracking-wider">What you&apos;ll do</span>
+            <span className="text-amber-500 font-semibold text-sm uppercase tracking-wider">What you'll do</span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mt-2 mb-4">Four types of research tasks. All pay real money.</h2>
           </div>
-          <div className="grid sm:grid-cols-2 gap-5 mb-10">
+          <div className="grid sm:grid-cols-2 gap-5">
             {config.taskTypes.map(t => (
-              <div key={t.title} className="bg-gray-50 rounded-2xl p-6 border border-gray-100">
+              <div key={t.title} className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
                 <div className="flex items-start justify-between mb-3">
                   <span className="text-2xl">{t.icon}</span>
                   <div className="text-right">
@@ -282,7 +360,7 @@ export default function SurveysClient({ countryTarget }: SurveysClientProps) {
               </div>
             ))}
           </div>
-          <div className="bg-amber-50 border border-amber-100 rounded-2xl p-6 flex gap-4 items-start">
+          <div className="mt-8 bg-amber-50 border border-amber-100 rounded-2xl p-6 flex gap-4 items-start">
             <span className="text-2xl shrink-0">🎯</span>
             <div>
               <p className="font-bold text-gray-900 mb-1">Your {config.marketName} profile is in high demand</p>
@@ -293,15 +371,16 @@ export default function SurveysClient({ countryTarget }: SurveysClientProps) {
       </section>
 
       {/* ── How it works ── */}
-      <section className="py-20 bg-gray-50">
+      <section id="how-it-works" className="py-16 bg-white">
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-14">
             <span className="text-amber-500 font-semibold text-sm uppercase tracking-wider">How it works</span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mt-2">From sign-up to {config.paymentMethod}.</h2>
+            <p className="text-gray-500 mt-2">Free to join. Start earning today.</p>
           </div>
           <div className="space-y-5">
             {HOW_IT_WORKS.map((step, i) => (
-              <div key={i} className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm flex gap-5 items-start">
+              <div key={i} className="bg-gray-50 rounded-2xl p-6 border border-gray-100 shadow-sm flex gap-5 items-start hover:border-amber-200 transition-colors">
                 <div className="shrink-0 w-12 h-12 rounded-2xl bg-amber-500 text-white font-extrabold text-sm flex items-center justify-center">
                   {step.step}
                 </div>
@@ -312,30 +391,42 @@ export default function SurveysClient({ countryTarget }: SurveysClientProps) {
               </div>
             ))}
           </div>
+          <div className="mt-10 text-center">
+            <a
+              href={VELLOEARN_REGISTER_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block bg-amber-500 hover:bg-amber-600 text-white font-bold text-base px-10 py-4 rounded-full shadow-lg shadow-amber-200 transition-all hover:scale-105 active:scale-95"
+            >
+              Start Earning — Free →
+            </a>
+          </div>
         </div>
       </section>
 
       {/* ── Earning potential ── */}
-      <section className="py-20 bg-white">
+      <section className="py-16 bg-gray-50">
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
             <span className="text-amber-500 font-semibold text-sm uppercase tracking-wider">Earning potential</span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mt-2 mb-3">Stack surveys. Stack income.</h2>
+            <p className="text-gray-500">Real earnings from real members. What you make depends on how many tasks you complete.</p>
           </div>
-          <div className="grid sm:grid-cols-3 gap-4 mb-14">
+          <div className="grid sm:grid-cols-3 gap-4">
             {config.earnings.map((tier, i) => (
-              <div key={i} className={`rounded-2xl p-6 border text-center ${i === 2 ? "bg-amber-500 border-amber-400 text-white" : "bg-gray-50 border-gray-100"}`}>
+              <div key={i} className={`rounded-2xl p-6 border text-center ${i === 2 ? "bg-amber-500 border-amber-400 text-white shadow-xl shadow-amber-200" : "bg-white border-gray-100"}`}>
                 <p className={`text-xs font-semibold uppercase tracking-wider mb-3 ${i === 2 ? "text-amber-100" : "text-gray-400"}`}>{tier.label}</p>
                 <p className={`text-2xl font-extrabold mb-1 ${i === 2 ? "text-white" : "text-gray-900"}`}>{tier.range}</p>
                 <p className={`text-xs ${i === 2 ? "text-amber-100" : "text-gray-400"}`}>{tier.note}</p>
+                {i === 2 && <p className="text-xs text-amber-100 mt-2">🏆 Top earners combine methods</p>}
               </div>
             ))}
           </div>
 
-          <h3 className="text-xl font-extrabold text-gray-900 mb-5">From people already doing it</h3>
+          <h3 className="text-xl font-extrabold text-gray-900 mb-5 mt-14">From people already doing it</h3>
           <div className="grid sm:grid-cols-2 gap-5">
             {config.stories.map(s => (
-              <div key={s.name} className="bg-gray-50 rounded-2xl p-6 border border-gray-100">
+              <div key={s.name} className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="relative w-11 h-11 rounded-full overflow-hidden bg-amber-100 shrink-0">
                     <SmartImage src={s.img} fallback={s.fallback} alt={s.name} fill className="object-cover" sizes="44px" />
@@ -354,7 +445,7 @@ export default function SurveysClient({ countryTarget }: SurveysClientProps) {
       </section>
 
       {/* ── Objections ── */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-16 bg-white">
         <div className="max-w-2xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
             <span className="text-amber-500 font-semibold text-sm uppercase tracking-wider">Real talk</span>
@@ -366,36 +457,49 @@ export default function SurveysClient({ countryTarget }: SurveysClientProps) {
         </div>
       </section>
 
-      {/* ── CTA ── */}
-      <section className="relative py-16 overflow-hidden">
-        <div className="absolute inset-0">
-          <SmartImage src="/cta/background.jpg" fallback="https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=1600&h=600&fit=crop&auto=format"
-            alt="background" fill className="object-cover" sizes="100vw" />
-          <div className="absolute inset-0 bg-gradient-to-br from-amber-500/90 to-orange-600/90" />
-        </div>
-        <div className="relative z-10 max-w-xl mx-auto px-4 sm:px-6 text-center">
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4">Your opinion is worth money. Claim it.</h2>
-          <p className="text-amber-100 mb-8 leading-relaxed">Apply now. Complete your profile. Get matched to your first task within 48 hours.</p>
-          <button onClick={() => setModalOpen(true)}
-            className="inline-block bg-white text-amber-600 font-bold text-base px-10 py-4 rounded-full shadow-xl hover:scale-105 active:scale-95 transition-all">
-            Apply for Surveys & Research →
-          </button>
+      {/* ── FINAL CTA - Irresistible Offer ── */}
+      <section className="relative py-20 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-amber-500 to-orange-600" />
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-white/10 rounded-full translate-x-1/3 -translate-y-1/2 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-white/10 rounded-full -translate-x-1/3 translate-y-1/3 pointer-events-none" />
+        
+        <div className="relative max-w-3xl mx-auto px-4 sm:px-6 text-center">
+          <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white text-sm font-semibold px-4 py-2 rounded-full mb-6">
+            📋 Join 5,000+ survey takers
+          </div>
+          
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white leading-tight mb-4">
+            Your opinion is worth <br />
+            <span className="text-amber-200">real money.</span>
+          </h2>
+          
+          <p className="text-amber-100 text-lg mb-8 max-w-xl mx-auto">
+            Free to join. Complete surveys, test products, join focus groups. 
+            No experience needed. Get paid instantly to {config.paymentMethod}.
+          </p>
+
+          <div className="flex flex-wrap justify-center gap-6 mb-8 text-white/80 text-sm">
+            <span>✅ Free to join</span>
+            <span>💸 No fees ever</span>
+            <span>📱 Complete from your phone</span>
+            <span>⚡ Instant {config.paymentMethod} payouts</span>
+          </div>
+
+          <a
+            href={VELLOEARN_REGISTER_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block bg-white text-amber-600 hover:bg-amber-50 font-extrabold text-xl px-12 py-5 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all"
+          >
+            Start Earning — Free →
+          </a>
+          
+          <p className="text-amber-200/70 text-sm mt-4">
+            No credit card · No payment required · Start earning instantly
+          </p>
         </div>
       </section>
 
-      {modalOpen && (
-        <ApplicationModal 
-          onClose={() => setModalOpen(false)} 
-          track="Surveys & Research" 
-        />
-      )}
-
-      {successData && (
-        <SuccessState 
-          data={successData} 
-          onClose={() => setSuccessData(null)} 
-        />
-      )}
     </main>
   );
 }

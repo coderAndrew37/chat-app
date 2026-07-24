@@ -1,14 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
-import ApplicationModal, { ApplicationFormData } from "./CTAModal";
 import DeepDiveAccordion from "./DeepDiveAccordion";
+import LiveAITraining from "./LiveAITraining";
+import LiveForeignersLearning from "./LiveForeignersLearning";
+import LiveForeignersOnline from "./LiveForeignersOnline";
 import Requirements from "./Requirements";
 import SmartImage from "./SmartImage";
-import SuccessState from "./SuccessState";
 import TestimonialSlider from "./TestimonialSlider";
+
+const VELLOEARN_REGISTER_URL = "https://starhela.com/register?ref=velloearn";
 
 // ─── Data ────────────────────────────────────────────────────────────────────
 
@@ -71,11 +73,11 @@ const EARNING_METHODS = [
   {
     icon: "💬",
     title: "Remote chatting",
-    tagline: "Earn for every conversation you support.",
+    tagline: "Earn for every conversation you have.",
     detail:
-      "Real-time communication tasks, moderation, and engagement work. Structured shifts, clear payouts.",
+      "Chat with lonely foreigners from USA, UK, Europe. Make friends, share your culture, and earn money instantly.",
     href: "/earn/chatting",
-    badge: "Most popular",
+    badge: "🔥 Most popular",
     image: "/earn/chatting.jpg",
     unsplashFallback:
       "https://images.unsplash.com/photo-1611746872915-64382b5c76da?w=600&h=360&fit=crop&auto=format",
@@ -85,9 +87,9 @@ const EARNING_METHODS = [
     title: "AI training",
     tagline: "Help teach AI systems to understand humans better.",
     detail:
-      "Review, rate, and improve AI responses. Flexible tasks you can do from anywhere, any time.",
+      "Rate AI responses, label data, and help train the world's most advanced AI models. No tech background needed.",
     href: "/earn/ai-training",
-    badge: "High demand",
+    badge: "📈 High demand",
     image: "/earn/ai-training.jpg",
     unsplashFallback:
       "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=600&h=360&fit=crop&auto=format",
@@ -97,9 +99,9 @@ const EARNING_METHODS = [
     title: "Teach Swahili",
     tagline: "Foreigners pay to learn what you already speak fluently.",
     detail:
-      "Online one-on-one and group lessons for international learners. Your language is your income.",
+      "Online one-on-one and group lessons for international learners. Your language is your income stream.",
     href: "/earn/swahili-teaching",
-    badge: "Unique skill",
+    badge: "⭐ Unique skill",
     image: "/earn/swahili.jpg",
     unsplashFallback:
       "https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=600&h=360&fit=crop&auto=format",
@@ -109,9 +111,9 @@ const EARNING_METHODS = [
     title: "Surveys & research",
     tagline: "Your opinions have real value to global brands.",
     detail:
-      "Paid surveys, product testing, and consumer research tasks. Quick tasks, consistent payouts.",
+      "Paid surveys, product testing, and consumer research tasks. Quick tasks, consistent payouts to M-Pesa.",
     href: "/earn/surveys",
-    badge: "Quick start",
+    badge: "⚡ Quick start",
     image: "/earn/surveys.jpg",
     unsplashFallback:
       "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=600&h=360&fit=crop&auto=format",
@@ -121,9 +123,9 @@ const EARNING_METHODS = [
     title: "Forex trading",
     tagline: "Earn from global currency markets with expert guidance.",
     detail:
-      "Learn and participate in forex trading with real-time market insights and support. Flexible participation, potential for significant returns.",
+      "Learn and participate in forex trading with real-time market insights and support. High earning potential.",
     href: "/earn/forex",
-    badge: "High potential",
+    badge: "💰 High potential",
     image: "/earn/forex.jpg",
     unsplashFallback:
       "https://images.unsplash.com/photo-1556740749-887f6717d7e4?w=600&h=360&fit=crop&auto=format",
@@ -133,9 +135,9 @@ const EARNING_METHODS = [
     title: "Academic writing",
     tagline: "Help students with their assignments and research papers.",
     detail:
-      "Write essays, research papers, and other academic content. Flexible deadlines, competitive rates, and expert review.",
+      "Write essays, research papers, and other academic content. Flexible deadlines, competitive rates.",
     href: "/earn/academic-writing",
-    badge: "Expert skill",
+    badge: "🎓 Expert skill",
     image: "/earn/academic-writing.jpg",
     unsplashFallback:
       "https://images.unsplash.com/photo-1507842217343-583bb72959d3?w=600&h=360&fit=crop&auto=format",
@@ -146,62 +148,49 @@ const EARNING_METHODS = [
 
 export default function LandingInteractive() {
   const router = useRouter();
-  const [modalOpen, setModalOpen] = useState(false);
-  const [successData, setSuccessData] = useState<ApplicationFormData | null>(null);
-
-  const openModal = () => setModalOpen(true);
-
-  const handleSuccess = (data: ApplicationFormData) => {
-    setModalOpen(false);
-    setSuccessData(data);
-  };
-
-  const handleApplyClick = () => {
-    router.push("/join");
-  };
 
   return (
     <main className="bg-gray-50 min-h-screen">
 
       {/* ── Hero ─────────────────────────────────────────────────── */}
-      <section className="pt-20 pb-16 bg-linear-to-br from-rose-50 via-white to-pink-50 relative overflow-hidden">
+      <section className="pt-12 pb-16 sm:pt-16 sm:pb-20 bg-gradient-to-br from-rose-50 via-white to-pink-50 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-rose-200/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-pink-200/20 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 pointer-events-none" />
 
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 relative">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 relative">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
 
             {/* Left: copy */}
             <div className="text-center lg:text-left">
               <div className="inline-flex items-center gap-2 bg-white border border-gray-100 shadow-sm text-gray-700 text-sm font-medium px-4 py-1.5 rounded-full mb-8">
                 <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
-                Applications open — limited spots this week
+                61,000+ Kenyans already earning
               </div>
 
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight tracking-tight mb-5">
-                Join the Global{" "}
-                <span className="text-rose-500">Chatting &amp; Remote</span>
-                <br />Work Network.
+                Chat with{" "}
+                <span className="text-rose-500">lonely foreigners</span>
+                <br />— get paid instantly.
               </h1>
 
               <p className="text-lg sm:text-xl text-gray-500 leading-relaxed mb-4 max-w-xl mx-auto lg:mx-0">
-                We provide the training, the platform, and the payout infrastructure.{" "}
-                <strong className="text-gray-700 font-semibold">You provide the conversation.</strong>
+                No experience needed. Free to join. Chat with people from USA, UK, Europe
+                and earn money instantly to your M-Pesa.
               </p>
 
               <p className="text-base text-gray-400 mb-10 max-w-lg mx-auto lg:mx-0">
-                One-time KES 550 setup unlocks your dashboard. KES 200 welcome bonus back immediately.
-                M-Pesa notifications while you&apos;re out with friends. That&apos;s the goal — and it&apos;s what 
-                our team members are already doing.
+                Free to join · No fees · Instant M-Pesa payouts · 50,000+ active chatters
               </p>
 
               <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
-                <button
-                  onClick={handleApplyClick}
-                  className="bg-rose-500 hover:bg-rose-600 text-white font-bold text-base px-8 py-4 rounded-full shadow-lg shadow-rose-200 transition-all hover:scale-105 active:scale-95"
+                <a
+                  href={VELLOEARN_REGISTER_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold text-base px-8 py-4 rounded-full shadow-lg shadow-rose-200 transition-all hover:scale-105 active:scale-95"
                 >
-                  Apply to Join — KES 550 One-Time
-                </button>
+                  Start Chatting — Free →
+                </a>
                 <a
                   href="#what-we-do"
                   className="bg-white hover:bg-gray-50 text-gray-700 font-semibold text-base px-8 py-4 rounded-full border border-gray-200 shadow-sm transition-all hover:scale-105 active:scale-95"
@@ -213,7 +202,7 @@ export default function LandingInteractive() {
               {/* Social proof strip */}
               <div className="mt-12 flex flex-wrap items-center justify-center lg:justify-start gap-6 text-center lg:text-left">
                 {[
-                  { value: "KES 30K+", label: "Top monthly earner" },
+                  { value: "KES 35K+", label: "Top monthly earner" },
                   { value: "Instant", label: "M-Pesa payouts" },
                   { value: "6 ways", label: "To earn" },
                 ].map((s) => (
@@ -225,7 +214,7 @@ export default function LandingInteractive() {
               </div>
             </div>
 
-            {/* Right: image collage (unchanged) */}
+            {/* Right: Image collage */}
             <div className="hidden lg:flex flex-col gap-3 h-[500px]">
               <div className="flex gap-3 flex-1 min-h-0">
                 <div className="relative w-[56%] rounded-3xl overflow-hidden shadow-xl">
@@ -238,7 +227,7 @@ export default function LandingInteractive() {
                     className="object-cover"
                     sizes="25vw"
                   />
-                  <div className="absolute inset-0 bg-linear-to-t from-black/50 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
                   <div className="absolute bottom-4 left-3 right-3 bg-white/90 backdrop-blur-sm rounded-2xl px-3 py-2.5 flex items-center gap-2.5">
                     <div className="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center text-sm shrink-0">
                       💸
@@ -263,7 +252,7 @@ export default function LandingInteractive() {
                       className="object-cover"
                       sizes="15vw"
                     />
-                    <div className="absolute inset-0 bg-linear-to-t from-black/30 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
                   </div>
                   <div className="relative flex-1 rounded-2xl overflow-hidden shadow-lg">
                     <SmartImage
@@ -274,7 +263,7 @@ export default function LandingInteractive() {
                       className="object-cover"
                       sizes="15vw"
                     />
-                    <div className="absolute inset-0 bg-linear-to-t from-black/30 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
                   </div>
                 </div>
               </div>
@@ -311,24 +300,72 @@ export default function LandingInteractive() {
                 </div>
               </div>
             </div>
+
           </div>
         </div>
       </section>
 
+      {/* ── Live Foreigners Online Section ── */}
+      <section className="py-16 bg-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-10">
+            <span className="text-rose-500 font-semibold text-sm uppercase tracking-wider">Live right now</span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mt-2 mb-3">
+              Foreigners waiting to chat with you
+            </h2>
+            <p className="text-gray-500 max-w-xl mx-auto">
+              Real people from USA, UK, Europe looking for conversation. Start chatting and earning instantly.
+            </p>
+          </div>
+          <LiveForeignersOnline />
+        </div>
+      </section>
+
+      {/* ── Live Foreigners Learning Section ── */}
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-10">
+            <span className="text-emerald-500 font-semibold text-sm uppercase tracking-wider">Learn Swahili</span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mt-2 mb-3">
+              Foreigners waiting to learn Swahili
+            </h2>
+            <p className="text-gray-500 max-w-xl mx-auto">
+              Real students from around the world are actively looking for teachers. Teach Swahili and earn.
+            </p>
+          </div>
+          <LiveForeignersLearning />
+        </div>
+      </section>
+
+      {/* ── Live AI Training Section ── */}
+      <section className="py-16 bg-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-10">
+            <span className="text-violet-500 font-semibold text-sm uppercase tracking-wider">AI Training</span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mt-2 mb-3">
+              Live AI training tasks available now
+            </h2>
+            <p className="text-gray-500 max-w-xl mx-auto">
+              Real tasks from global tech companies. Rate AI responses, label data, and earn.
+            </p>
+          </div>
+          <LiveAITraining />
+        </div>
+      </section>
+
       {/* ── What We Do ───────────────────────────────────────────── */}
-      <section id="what-we-do" className="py-20 bg-white">
+      <section id="what-we-do" className="py-20 bg-gray-50">
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
             <span className="text-rose-500 font-semibold text-sm uppercase tracking-wider">
               What we do
             </span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mt-2 mb-4">
-              This isn&apos;t a hustle. It&apos;s an infrastructure.
+              Turn your phone into a <span className="text-rose-500">cash machine.</span>
             </h2>
             <p className="text-gray-500 max-w-xl mx-auto leading-relaxed">
-              VelloEarn connects skilled individuals with structured remote tasks — real-time communication
-              support, moderation, AI training, and data engagement. We built the system so you can focus
-              on earning.
+              VelloEarn connects Kenyans with lonely foreigners looking for conversation.
+              Chat, make friends, and earn money instantly. No experience needed. Free to join.
             </p>
           </div>
 
@@ -336,15 +373,15 @@ export default function LandingInteractive() {
             <SmartImage
               src="/about/lifestyle.jpg"
               fallback="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1200&h=500&fit=crop&auto=format"
-              alt="People working remotely in Nairobi"
+              alt="People working remotely in Kenya"
               fill
               className="object-cover"
               sizes="(max-width: 768px) 100vw, 768px"
             />
-            <div className="absolute inset-0 bg-linear-to-r from-rose-900/30 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-rose-900/30 to-transparent" />
             <div className="absolute inset-0 flex items-end p-6">
               <p className="text-white font-semibold text-sm drop-shadow">
-                Real people. Real payouts. From anywhere in Kenya.
+                61,000+ Kenyans already earning. From anywhere.
               </p>
             </div>
           </div>
@@ -352,22 +389,22 @@ export default function LandingInteractive() {
           <div className="grid sm:grid-cols-3 gap-5">
             {[
               {
-                icon: "🏗️",
-                title: "Professional infrastructure",
-                body: "Defined tasks, rate cards, and a team structure. You always know what you're doing and how much it pays.",
+                icon: "💬",
+                title: "Chat with foreigners",
+                body: "Real conversations with real people from USA, UK, Europe who are lonely and looking for connection.",
               },
               {
                 icon: "💸",
-                title: "Automated M-Pesa payouts",
-                body: "Direct integration. Request a withdrawal, get the money. No chasing, no waiting, no middlemen.",
+                title: "Instant M-Pesa payouts",
+                body: "Direct integration. Withdraw anytime. No minimum balance. Most payments clear within 30 minutes.",
               },
               {
-                icon: "📈",
-                title: "Team growth model",
-                body: "Earn not just for your work, but for the team you build. Your network compounds your income.",
+                icon: "📱",
+                title: "Work from your phone",
+                body: "No laptop needed. No office. No commute. Chat from your phone, earn from your phone.",
               },
             ].map((card) => (
-              <div key={card.title} className="bg-gray-50 rounded-2xl p-6 border border-gray-100">
+              <div key={card.title} className="bg-white rounded-2xl p-6 border border-gray-100 hover:border-rose-200 transition-colors shadow-sm hover:shadow-md">
                 <div className="text-2xl mb-3">{card.icon}</div>
                 <h3 className="font-bold text-gray-900 text-base mb-2">{card.title}</h3>
                 <p className="text-sm text-gray-500 leading-relaxed">{card.body}</p>
@@ -378,7 +415,7 @@ export default function LandingInteractive() {
       </section>
 
       {/* ── Earning Methods ──────────────────────────────────────── */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-white">
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-4">
             <span className="text-rose-500 font-semibold text-sm uppercase tracking-wider">
@@ -397,7 +434,7 @@ export default function LandingInteractive() {
               <Link
                 key={method.title}
                 href={method.href}
-                className="group bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md hover:border-rose-100 transition-all block overflow-hidden"
+                className="group bg-gray-50 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md hover:border-rose-100 transition-all block overflow-hidden"
               >
                 <div className="relative w-full h-36 overflow-hidden">
                   <SmartImage
@@ -408,7 +445,7 @@ export default function LandingInteractive() {
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                     sizes="(max-width: 640px) 100vw, 50vw"
                   />
-                  <div className="absolute inset-0 bg-linear-to-t from-black/50 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                   <span className="absolute top-3 right-3 text-xs bg-rose-500 text-white font-semibold px-2.5 py-1 rounded-full">
                     {method.badge}
                   </span>
@@ -429,7 +466,7 @@ export default function LandingInteractive() {
       </section>
 
       {/* ── Requirements ─────────────────────────────────────────── */}
-      <Requirements onApply={handleApplyClick} />
+      <Requirements />
 
       {/* ── Testimonials ─────────────────────────────────────────── */}
       <section className="py-20 bg-gray-50">
@@ -470,39 +507,45 @@ export default function LandingInteractive() {
         </div>
       </section>
 
-      {/* ── Bottom CTA ───────────────────────────────────────────── */}
-      <section className="relative py-16 overflow-hidden">
-        <div className="absolute inset-0">
-          <SmartImage
-            src="/cta/background.jpg"
-            fallback="https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=1600&h=600&fit=crop&auto=format"
-            alt="Remote workers in Kenya"
-            fill
-            className="object-cover"
-            sizes="100vw"
-          />
-          <div className="absolute inset-0 bg-linear-to-br from-rose-600/90 to-pink-600/90" />
-        </div>
-
-        <div className="relative z-10 max-w-xl mx-auto px-4 sm:px-6 text-center">
-          <p className="text-rose-200 font-semibold text-sm uppercase tracking-wider mb-3">
-            Ready?
-          </p>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4">
-            Your next M-Pesa notification could be from us.
+      {/* ── FINAL CTA - Irresistible Offer ── */}
+      <section className="relative py-20 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-rose-500 to-pink-600" />
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-white/10 rounded-full translate-x-1/3 -translate-y-1/2 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-white/10 rounded-full -translate-x-1/3 translate-y-1/3 pointer-events-none" />
+        
+        <div className="relative max-w-3xl mx-auto px-4 sm:px-6 text-center">
+          <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white text-sm font-semibold px-4 py-2 rounded-full mb-6">
+            🚀 Join 61,000+ active earners
+          </div>
+          
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white leading-tight mb-4">
+            Your first M-Pesa payout <br />
+            <span className="text-rose-200">could be today.</span>
           </h2>
-          <p className="text-rose-100 mb-8 leading-relaxed">
-            One-time KES 550 setup unlocks your dashboard. KES 200 welcome bonus back immediately.
-            Your first task could be live today.
+          
+          <p className="text-rose-100 text-lg mb-8 max-w-xl mx-auto">
+            Free to join. Chat with lonely foreigners. No experience needed. 
+            No fees. Start earning immediately.
           </p>
-          <button
-            onClick={handleApplyClick}
-            className="inline-block bg-white text-rose-500 font-bold text-base px-10 py-4 rounded-full shadow-xl hover:scale-105 active:scale-95 transition-all"
+
+          <div className="flex flex-wrap justify-center gap-6 mb-8 text-white/80 text-sm">
+            <span>✅ Free to join</span>
+            <span>💸 No fees ever</span>
+            <span>📱 Chat from your phone</span>
+            <span>⚡ Instant M-Pesa payouts</span>
+          </div>
+
+          <a
+            href={VELLOEARN_REGISTER_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block bg-white text-rose-500 hover:bg-rose-50 font-extrabold text-xl px-12 py-5 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all"
           >
-            Apply to Join — KES 550 One-Time →
-          </button>
-          <p className="text-rose-200 text-xs mt-4">
-            KES 200 welcome bonus back immediately · No monthly charges ever
+            Start Earning Now — Free →
+          </a>
+          
+          <p className="text-rose-200/70 text-sm mt-4">
+            No credit card · No payment required · Start earning instantly
           </p>
         </div>
       </section>
@@ -515,7 +558,6 @@ export default function LandingInteractive() {
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             {[
-            
               { label: "Remote chatting explained", href: "/earn/chatting" },
               { label: "Training AI from your phone", href: "/earn/ai-training" },
               { label: "Earn by teaching Swahili", href: "/earn/swahili-teaching" },
@@ -533,19 +575,6 @@ export default function LandingInteractive() {
         </div>
       </section>
 
-      {/* ── Modals ───────────────────────────────────────────────── */}
-      {modalOpen && (
-        <ApplicationModal
-          onClose={() => setModalOpen(false)}
-          onSuccess={handleSuccess}
-        />
-      )}
-      {successData && (
-        <SuccessState
-          data={successData}
-          onClose={() => setSuccessData(null)}
-        />
-      )}
     </main>
   );
 }

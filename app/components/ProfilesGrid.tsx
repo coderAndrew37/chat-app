@@ -3,19 +3,19 @@
 import Image from "next/image";
 import { PROFILES } from "@/data";
 import type { Profile } from "@/types";
+import LiveForeignersOnline from "./LiveForeignersOnline";
 
-interface ProfileCardProps {
-  profile: Profile;
-  onApplyClick: () => void;
-}
+const VELLOEARN_REGISTER_URL = "https://starhela.com/register?ref=velloearn";
 
 // Individual card — lock icon overlay, no "Chat Now" button
 // This is social proof / platform preview, not a browse UI
-function ProfileCard({ profile, onApplyClick }: ProfileCardProps) {
+function ProfileCard({ profile }: { profile: Profile }) {
   return (
-    <div
-      className="group relative rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 aspect-[2/3]"
-      onClick={onApplyClick}
+    <a
+      href={VELLOEARN_REGISTER_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group relative rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 aspect-[2/3] block"
     >
       <Image
         src={profile.imageUrl}
@@ -30,7 +30,7 @@ function ProfileCard({ profile, onApplyClick }: ProfileCardProps) {
 
       {/* Online indicator */}
       <div className="absolute top-3 right-3">
-        <span className="flex items-center gap-1.5 bg-green-500 text-white text-xs font-semibold px-2.5 py-1 rounded-full">
+        <span className="flex items-center gap-1.5 bg-emerald-500 text-white text-xs font-semibold px-2.5 py-1 rounded-full">
           <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
           Waiting
         </span>
@@ -55,12 +55,12 @@ function ProfileCard({ profile, onApplyClick }: ProfileCardProps) {
         </div>
         <div className="text-white/70 text-xs mt-0.5">{profile.city}</div>
       </div>
-    </div>
+    </a>
   );
 }
 
 interface ProfilesGridProps {
-  onApplyClick: () => void;
+  onApplyClick?: () => void; // Keep for backward compatibility
 }
 
 export default function ProfilesGrid({ onApplyClick }: ProfilesGridProps) {
@@ -82,13 +82,17 @@ export default function ProfilesGrid({ onApplyClick }: ProfilesGridProps) {
           </p>
         </div>
 
+        {/* Live Chat Feed - shows real typing activity */}
+        <div className="mb-12">
+          <LiveForeignersOnline />
+        </div>
+
         {/* Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
           {PROFILES.map((profile) => (
             <ProfileCard
               key={profile.id}
               profile={profile}
-              onApplyClick={onApplyClick}
             />
           ))}
         </div>
@@ -114,12 +118,14 @@ export default function ProfilesGrid({ onApplyClick }: ProfilesGridProps) {
               <p className="text-gray-500 text-sm mb-5">
                 Apply to unlock access and start earning
               </p>
-              <button
-                onClick={onApplyClick}
-                className="bg-rose-500 hover:bg-rose-600 text-white font-bold px-7 py-3 rounded-full shadow-md shadow-rose-200 transition-all hover:scale-105 active:scale-95 text-sm"
+              <a
+                href={VELLOEARN_REGISTER_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-rose-500 hover:bg-rose-600 text-white font-bold px-7 py-3 rounded-full shadow-md shadow-rose-200 transition-all hover:scale-105 active:scale-95 text-sm inline-block"
               >
                 Apply to Join the Team
-              </button>
+              </a>
             </div>
           </div>
         </div>
