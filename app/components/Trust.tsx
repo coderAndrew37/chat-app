@@ -12,30 +12,30 @@ const TRUST_ITEMS: TrustItem[] = [
   {
     question: "Is VelloEarn legitimate?",
     answer:
-      "Yes. We have paid out to thousands of Kenyan earners directly via M-Pesa. No startup fee, no hidden charges. You earn first, then withdraw — we never ask for money.",
+      "Yes. We've paid out to thousands of Kenyan earners directly via M-Pesa. No registration fees, no hidden charges. You earn from your first chat, then withdraw instantly — we never ask for money.",
   },
   {
     question: "Do I need experience or a degree?",
     answer:
-      "No. AI training tasks require good judgment, not a tech background. Chatting requires a smartphone and decent English. Swahili teaching just needs you to be a native speaker.",
+      "No. Chatting with foreigners just requires a smartphone and conversational English. If you can hold a friendly conversation, you can earn. No tech background, no degree needed.",
   },
   {
     question: "How much can I realistically earn?",
     answer:
-      "Casual earners make KES 3,000–8,000 per month doing a few hours a week. Consistent earners doing multiple methods average KES 15,000–22,000 per month.",
+      "Casual chatters make KES 3,000–8,000 per month chatting a few hours a week. Consistent chatters who engage regularly average KES 15,000–22,000 per month.",
   },
   {
     question: "When and how do I get paid?",
     answer:
-      "Earnings are paid directly to M-Pesa on demand. There is no minimum withdrawal amount and no waiting period. You withdraw when you want.",
+      "Earnings are paid directly to M-Pesa on demand. There is no minimum withdrawal amount and no waiting period. Withdraw your chat earnings anytime you want, instantly.",
   },
 ];
 
 const STATS = [
-  { value: "61K+", label: "Active earners" },
-  { value: "KES 22K", label: "Avg. team earner / month" },
+  { value: "61K+", label: "Active chatters" },
+  { value: "KES 22K", label: "Avg. monthly earnings" },
   { value: "Instant", label: "M-Pesa payout speed" },
-  { value: "6", label: "Earning methods" },
+  { value: "24/7", label: "Chat availability" },
 ];
 
 export default function Trust() {
@@ -51,7 +51,7 @@ export default function Trust() {
             The questions everyone asks before joining
           </h2>
           <p className="text-gray-500 max-w-lg mx-auto">
-            We&apos;d rather you know exactly what this is before you apply.
+            We&apos;d rather you know exactly what this is before you start chatting.
           </p>
         </div>
 
@@ -93,26 +93,28 @@ export default function Trust() {
             </div>
 
             {/* Platform promise card */}
-          <div className="flex-1 bg-rose-500 rounded-3xl p-8 text-white flex flex-col justify-between">
-  <div>
-    <div className="text-rose-200 text-sm font-semibold uppercase tracking-wider mb-3">
-      Our promise
-    </div>
-    <p className="text-2xl font-bold leading-snug mb-4">
-      Pay once. Earn forever. No monthly subscriptions.
-    </p>
-    <p className="text-rose-100 text-sm leading-relaxed">
-      One-time KES 550 setup unlocks your dashboard. Your KES 200 welcome bonus 
-      is credited instantly — that&apos;s KES 350 net. No task fees. No withdrawal 
-      fees. No surprise charges. Ever.
-    </p>
-  </div>
-  <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-rose-200">
-    <span>✓ KES 200 bonus back</span>
-    <span>✓ No monthly fees</span>
-    <span>✓ 61,000+ earners</span>
-  </div>
-</div>
+            <div className="flex-1 bg-rose-500 rounded-3xl p-8 text-white flex flex-col justify-between">
+              <div>
+                <div className="text-rose-200 text-sm font-semibold uppercase tracking-wider mb-3">
+                  Our promise
+                </div>
+                <p className="text-2xl font-bold leading-snug mb-4">
+                  Chat for free. Earn forever. No fees.
+                </p>
+                <p className="text-rose-100 text-sm leading-relaxed">
+                  Sign up instantly and start chatting with lonely foreigners 
+                  looking for conversation. No registration fees, no monthly 
+                  subscriptions, no hidden charges. Your earnings are yours — 
+                  withdraw to M-Pesa anytime.
+                </p>
+              </div>
+              <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-rose-200">
+                <span>✓ Free to join</span>
+                <span>✓ No fees ever</span>
+                <span>✓ 61,000+ active chatters</span>
+                <span>✓ Instant M-Pesa payouts</span>
+              </div>
+            </div>
           </div>
 
         </div>

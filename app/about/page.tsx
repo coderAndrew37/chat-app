@@ -2,18 +2,17 @@ import { BASE_URL } from "@/lib/config";
 import type { Metadata } from "next";
 import Link from "next/link";
 
-
 export const metadata: Metadata = {
-  title: "About VelloEarn — Connecting African Talent to Global Technology Work",
+  title: "About VelloEarn — Chat with Foreigners & Get Paid in Kenya",
   description:
-    "VelloEarn bridges East and West African freelancers with global technology firms needing AI training data, Swahili instruction, and localised research. Instant M-Pesa and MTN MoMo payouts. No international bank transfers.",
+    "VelloEarn connects Kenyans with lonely foreigners looking for conversation. Chat, make friends, and earn M-Pesa instantly. No fees, no experience needed. Join 61,000+ active chatters.",
   alternates: {
     canonical: `${BASE_URL}/about`,
   },
   openGraph: {
-    title: "About VelloEarn — African Talent, Global Reach",
+    title: "About VelloEarn — Chat & Earn in Kenya",
     description:
-      "How VelloEarn connects Kenyan, Ugandan, and Ghanaian freelancers to global tech work — with instant local mobile money payouts.",
+      "How VelloEarn connects Kenyans to lonely foreigners for paid conversations — with instant M-Pesa payouts. Free to join.",
     type: "website",
     locale: "en_KE",
     siteName: "VelloEarn",
@@ -21,9 +20,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "About VelloEarn — African Talent, Global Reach",
+    title: "About VelloEarn — Chat & Earn in Kenya",
     description:
-      "How VelloEarn connects Kenyan, Ugandan, and Ghanaian freelancers to global tech work — with instant local mobile money payouts.",
+      "How VelloEarn connects Kenyans to lonely foreigners for paid conversations — with instant M-Pesa payouts. Free to join.",
   },
 };
 
@@ -34,7 +33,7 @@ const jsonLd = {
   "@type": "AboutPage",
   name: "About VelloEarn",
   description:
-    "VelloEarn is a remote micro-task and digital talent platform operating across East and West Africa. We connect Kenyan, Ugandan, and Ghanaian freelancers with global technology firms requiring AI training datasets, localized market research, Swahili instruction, and conversational AI development. Earnings are distributed instantly via M-Pesa and MTN Mobile Money.",
+    "VelloEarn is a platform that connects Kenyans with lonely foreigners looking for conversation. Users chat with foreigners and earn money via M-Pesa. No registration fees, no experience needed.",
   url: `${BASE_URL}/about`,
   mainEntity: {
     "@type": "Organization",
@@ -44,14 +43,13 @@ const jsonLd = {
       "@type": "Place",
       name: "Nairobi, Kenya",
     },
-    areaServed: ["Kenya", "Uganda", "Ghana"],
+    areaServed: ["Kenya"],
     knowsAbout: [
-      "AI training data",
-      "Data annotation",
-      "Swahili language instruction",
-      "Localized market research",
-      "Remote micro-tasks",
+      "Chat with foreigners",
+      "Paid conversations",
       "M-Pesa payouts",
+      "Remote chatting",
+      "Earn money online",
     ],
   },
 };
@@ -65,12 +63,12 @@ interface StatItem {
 }
 
 const STATS: StatItem[] = [
-  { value: "61K+", label: "Active earners", sub: "Across KE · UG · GH" },
-  { value: "KES 1.2M+", label: "Paid this month", sub: "Direct to mobile wallets" },
-  { value: "< 30 min", label: "Avg. payout time", sub: "M-Pesa & MTN MoMo" },
-  { value: "6", label: "Earning verticals", sub: "AI · Chat · Swahili · More" },
-  { value: "3", label: "Countries active", sub: "Kenya · Uganda · Ghana" },
-  { value: "0", label: "Bank transfers", sub: "100% local mobile money" },
+  { value: "61K+", label: "Active chatters", sub: "Across Kenya" },
+  { value: "KES 1.2M+", label: "Paid this month", sub: "Direct to M-Pesa" },
+  { value: "< 30 min", label: "Avg. payout time", sub: "M-Pesa instant" },
+  { value: "50K+", label: "Foreigners online", sub: "Looking to chat" },
+  { value: "24/7", label: "Chat availability", sub: "Chat anytime" },
+  { value: "0", label: "Registration fees", sub: "100% free to join" },
 ];
 
 interface ProblemSolutionItem {
@@ -84,28 +82,28 @@ interface ProblemSolutionItem {
 const PROBLEM_SOLUTION: ProblemSolutionItem[] = [
   {
     side: "problem",
-    eyebrow: "The corporate challenge",
-    headline: "Global AI companies can't get African data at scale.",
+    eyebrow: "The loneliness epidemic",
+    headline: "Millions of foreigners are lonely and looking for conversation.",
     body:
-      "Artificial intelligence systems trained exclusively on Western datasets consistently underperform for African users. Accents go unrecognised. Idioms get mistranslated. Cultural context disappears entirely. The problem is not ambition — it's access.",
+      "In today's digital world, loneliness has become a global crisis. Millions of people, especially in Western countries, crave genuine human connection. They turn to chat platforms to find someone to talk to, share their day with, and feel heard.",
     points: [
-      "Swahili and local dialect training data is critically scarce",
-      "International payment infrastructure creates prohibitive onboarding friction",
-      "Traditional outsourcing firms lack genuine regional fluency",
-      "Regulatory complexity slows direct hiring across African markets",
+      "Over 60% of adults report feeling lonely regularly",
+      "Traditional social connections have declined dramatically",
+      "People are willing to pay for meaningful conversations",
+      "Cultural exchange is highly valued by lonely foreigners",
     ],
   },
   {
     side: "solution",
     eyebrow: "The VelloEarn model",
-    headline: "We mobilise local talent. We eliminate payout friction.",
+    headline: "We connect Kenyan chatters with lonely foreigners. Everyone benefits.",
     body:
-      "VelloEarn acts as the operational bridge. We handle task structuring, quality assurance, worker onboarding, and the payment architecture — routing earnings directly to the mobile wallets that Kenyan, Ugandan, and Ghanaian workers already use every day.",
+      "VelloEarn acts as the bridge between Kenyans looking to earn extra income and foreigners seeking genuine conversation. Our platform handles the matching, ensures quality interactions, and routes earnings directly to your M-Pesa.",
     points: [
-      "Verified talent pool across three high-literacy African markets",
-      "M-Pesa and MTN MoMo replace slow international bank transfers",
-      "Task quality frameworks built for AI training standards",
-      "No worker needs a bank account, PayPal, or Payoneer",
+      "Free to join — no registration fees ever",
+      "Chat with foreigners from USA, UK, Europe & more",
+      "Earn money from every conversation",
+      "Withdraw to M-Pesa instantly with no minimum",
     ],
   },
 ];
@@ -119,45 +117,45 @@ interface VerticalItem {
 
 const VERTICALS: VerticalItem[] = [
   {
-    icon: "🤖",
-    title: "AI training & annotation",
+    icon: "💬",
+    title: "One-on-one chatting",
     description:
-      "Rating AI responses, labelling data, testing conversational models. The highest-volume category on the platform, driven by global demand for African-contextualised training data.",
+      "The most popular category. Chat with lonely foreigners looking for conversation. Earn money for every message. Simple, rewarding, and always in demand.",
     demand: "Very high demand",
   },
   {
-    icon: "💬",
-    title: "Remote chatting & moderation",
+    icon: "👥",
+    title: "Group conversations",
     description:
-      "Customer support, community moderation, and brand engagement tasks for international platforms. Structured shifts, approved scripts, real-time task assignment.",
+      "Join group chats with multiple foreigners. Engage in lively discussions, share Kenyan culture, and earn from group interactions. Great for outgoing personalities.",
     demand: "High demand",
   },
   {
-    icon: "🌍",
-    title: "Swahili language services",
+    icon: "🎓",
+    title: "Language exchange",
     description:
-      "Transcription, translation verification, and language data collection for AI language models. Native Swahili speakers are a scarce global resource — Kenyan workers have a structural advantage.",
+      "Teach foreigners Swahili or Kenyan slang while they help you improve your English. Earn while building cross-cultural friendships. Premium rates for language teaching.",
     demand: "Premium rates",
   },
   {
-    icon: "📋",
-    title: "Market research & surveys",
+    icon: "🌍",
+    title: "Cultural sharing",
     description:
-      "Brand research, consumer sentiment, and product testing tasks for companies entering or expanding in African markets. Your lived experience is the product.",
+      "Share Kenyan culture, traditions, and daily life with curious foreigners. Be a cultural ambassador and get paid for sharing what makes Kenya special.",
     demand: "Consistent volume",
   },
   {
-    icon: "✍️",
-    title: "Academic & content writing",
+    icon: "🤝",
+    title: "Friend matching",
     description:
-      "Structured writing tasks for qualified writers. The highest per-hour earning rate on the platform, accessible to university graduates with strong academic English.",
+      "Long-term friendship matching with foreigners seeking genuine Kenyan friends. Build meaningful connections that pay off. Highest rated category on the platform.",
     demand: "High rates",
   },
   {
-    icon: "📊",
-    title: "Forex & financial education",
+    icon: "📱",
+    title: "Voice & video chats",
     description:
-      "Structured currency trading guidance with platform support. Higher ceiling for workers willing to invest in financial skill development alongside task income.",
+      "Premium voice and video conversations. Higher pay rates for more personal interactions. Available for chatters with good English speaking skills.",
     demand: "Advanced track",
   },
 ];
@@ -171,23 +169,23 @@ interface TrustItem {
 const TRUST_FLOW: TrustItem[] = [
   {
     step: "01",
-    title: "Global firm posts a task requirement",
-    body: "A technology company needs AI training data, localised research, or language services. They fund the task batch through VelloEarn's verified business infrastructure.",
+    title: "Sign up for free",
+    body: "Create your account in 2 minutes. No registration fees, no CV, no interview. Your account is active immediately and ready for chatting.",
   },
   {
     step: "02",
-    title: "VelloEarn structures and assigns work",
-    body: "Tasks are broken into verifiable micro-units with clear guidelines, quality checkpoints, and fair rate cards. Workers receive assignments through their dashboard.",
+    title: "Browse live profiles",
+    body: "See who's online and looking to chat. Browse profiles of lonely foreigners from USA, UK, Europe, and more. Tap any profile to start.",
   },
   {
     step: "03",
-    title: "Workers complete verified tasks",
-    body: "Earners complete tasks on their own schedule. Quality assurance runs automatically and through periodic human review. Verified completions credit earnings in real time.",
+    title: "Chat and earn",
+    body: "Start conversations. Share your day, learn about their culture, and build connections. Every conversation earns you money.",
   },
   {
     step: "04",
-    title: "M-Pesa or MTN MoMo pays out directly",
-    body: "Withdrawal requests trigger a direct mobile money transfer to the worker's registered number. No bank account needed. Most payments clear within 30 minutes.",
+    title: "Withdraw to M-Pesa instantly",
+    body: "Your earnings accumulate with every chat. Withdraw to M-Pesa anytime with no minimum balance. Most payouts clear within 30 minutes.",
   },
 ];
 
@@ -201,27 +199,27 @@ interface FAQItem {
 const FAQS: FAQItem[] = [
   {
     q: "How much does it cost to join VelloEarn?",
-    a: "VelloEarn charges a one-time KES 550 account setup fee. Your KES 200 welcome bonus is credited immediately after activation, so your real net investment is KES 350. There are no monthly fees, no withdrawal fees, and no hidden charges — ever.",
+    a: "VelloEarn is completely free to join. No registration fees, no monthly subscriptions, no hidden charges — ever. You earn from your first conversation and withdraw your earnings instantly.",
   },
   {
     q: "Do I need a bank account to receive payments?",
-    a: "No. All earnings are paid directly to your mobile money wallet — M-Pesa in Kenya, MTN MoMo and Airtel Money in Uganda, and MTN MoMo and Vodafone Cash in Ghana. No bank account, PayPal, or international payment processor is required.",
+    a: "No. All earnings are paid directly to your M-Pesa wallet. No bank account, PayPal, or international payment processor is required. You just need a phone with M-Pesa.",
   },
   {
-    q: "What kind of tasks will I be doing?",
-    a: "VelloEarn offers six earning verticals: AI training & annotation, remote chatting & moderation, Swahili language services, market research & surveys, academic & content writing, and forex & financial education. Most members start with one track and add more as they build their routine.",
+    q: "Who will I be chatting with?",
+    a: "You'll chat with lonely foreigners from countries like the USA, UK, Canada, Australia, and Europe. They're looking for genuine conversation, friendship, and cultural exchange. Most are middle-aged or elderly and value connecting with people from different cultures.",
   },
   {
     q: "How long does it take to start earning?",
-    a: "After completing your one-time KES 550 setup, your dashboard is activated immediately. You can start working on available tasks the same day. Most members receive their first M-Pesa payout within their first week of consistent task completion.",
+    a: "Immediately. After signing up for free, you can browse live profiles and start chatting right away. Most members earn their first KES within their first hour of chatting.",
   },
   {
     q: "Is this available outside Kenya?",
-    a: "Yes. VelloEarn currently operates in Kenya, Uganda, and Ghana, with plans to expand to additional African markets. Each country has localised payment methods — M-Pesa in Kenya, MTN MoMo and Airtel Money in Uganda, and MTN MoMo and Vodafone Cash in Ghana.",
+    a: "Currently, VelloEarn operates primarily in Kenya. We're planning to expand to other African countries like Uganda, Ghana, and Nigeria soon. Kenyan chatters are the most active and highest-rated on the platform.",
   },
   {
-    q: "What if I have trouble during registration or payment?",
-    a: "Our support team is available via WhatsApp to assist with registration, activation, and any payment issues. We typically respond within a few minutes during business hours. Your activation instructions are sent directly to your WhatsApp after signup.",
+    q: "Do I need experience or perfect English?",
+    a: "No. You just need conversational English and a friendly personality. If you can hold a friendly conversation, you can earn. No degrees, no experience, no CV needed.",
   },
 ];
 
@@ -251,34 +249,33 @@ export default function AboutPage() {
               {/* Left: editorial headline */}
               <div>
                 <div className="inline-flex items-center gap-2 bg-white border border-gray-100 shadow-sm rounded-full px-4 py-2 mb-8 text-sm text-gray-600">
-                  <span className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-pulse" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                   About VelloEarn
                 </div>
 
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.08] tracking-tight text-gray-900 mb-6">
-                  Democratising{" "}
-                  <span className="text-rose-500">global remote</span>
-                  {" "}opportunities for African talent.
+                  Chat with{" "}
+                  <span className="text-rose-500">lonely foreigners</span>
+                  {" "}and earn M-Pesa instantly.
                 </h1>
 
                 <p className="text-lg text-gray-500 leading-relaxed mb-8 max-w-lg">
-                  VelloEarn connects skilled freelancers across Kenya, Uganda, and Ghana
-                  with global technology companies that need what Africa uniquely offers —
-                  native language fluency, localised market insight, and authentic human judgment.
-                  We handle everything except the work itself.
+                  VelloEarn connects Kenyans with lonely foreigners looking for conversation.
+                  No experience needed. No registration fees. Start chatting immediately and
+                  earn money from every conversation.
                 </p>
 
                 <div className="flex flex-wrap gap-3">
-                  {["Kenya", "Uganda", "Ghana"].map((country) => (
+                  {["Free to join", "M-Pesa payouts", "24/7 chat", "No experience needed"].map((tag) => (
                     <span
-                      key={country}
+                      key={tag}
                       className="bg-white border border-gray-200 text-gray-600 text-sm px-4 py-1.5 rounded-full"
                     >
-                      {country}
+                      {tag}
                     </span>
                   ))}
                   <span className="bg-rose-50 border border-rose-200 text-rose-600 text-sm px-4 py-1.5 rounded-full">
-                    M-Pesa · MTN MoMo
+                    61,000+ active chatters
                   </span>
                 </div>
               </div>
@@ -308,17 +305,19 @@ export default function AboutPage() {
             <div className="bg-gray-50 border border-gray-100 rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
               <div>
                 <p className="text-sm text-gray-600">
-                  <span className="text-rose-500 font-semibold">KES 550</span> one-time setup ·{" "}
-                  <span className="text-emerald-600 font-semibold">KES 200</span> welcome bonus back
+                  <span className="text-rose-500 font-semibold">Free</span> to join ·
+                  <span className="text-emerald-600 font-semibold"> Instant</span> M-Pesa payouts
                 </p>
-                <p className="text-xs text-gray-400">No monthly fees · M-Pesa payouts · Start today</p>
+                <p className="text-xs text-gray-400">No fees · Start chatting today · 61,000+ active chatters</p>
               </div>
-              <Link
-                href="/join"
+              <a
+                href="https://starhela.com/register?ref=velloearn"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="shrink-0 bg-rose-500 hover:bg-rose-600 text-white font-bold text-sm px-8 py-3 rounded-full transition-all hover:scale-105 active:scale-95 shadow-lg shadow-rose-200"
               >
-                Activate My Account →
-              </Link>
+                Start Chatting Now →
+              </a>
             </div>
           </div>
         </section>
@@ -329,10 +328,10 @@ export default function AboutPage() {
 
             <div className="text-center mb-14">
               <p className="text-xs font-mono text-gray-400 uppercase tracking-widest mb-3">
-                The market gap we close
+                The opportunity we unlock
               </p>
               <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-gray-900">
-                There is a mismatch at the heart of global AI development.
+                Solving loneliness while earning money.
               </h2>
             </div>
 
@@ -411,30 +410,29 @@ export default function AboutPage() {
               {/* Left: copy */}
               <div className="lg:sticky lg:top-24">
                 <p className="text-xs font-mono text-gray-400 uppercase tracking-widest mb-4">
-                  Payment transparency
+                  How it works
                 </p>
                 <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-gray-900 mb-5">
-                  Exactly how your earnings move from{" "}
-                  <span className="text-rose-500">global client</span>{" "}
-                  to your phone.
+                  From your phone to your{" "}
+                  <span className="text-rose-500">M-Pesa</span> in 4 steps.
                 </h2>
                 <p className="text-gray-500 leading-relaxed mb-8">
-                  The most common question we receive is: &ldquo;Where does the money actually come from?&rdquo;
-                  The answer is straightforward — and we think transparency about this is more
-                  important than any marketing claim we could make.
+                  The most common question we receive is: &ldquo;How does this actually work?&rdquo;
+                  The answer is straightforward — and we believe transparency is more important
+                  than any marketing claim.
                 </p>
 
                 {/* Promise card */}
                 <div className="bg-gray-50 border border-gray-100 rounded-2xl p-6">
                   <p className="text-xs font-mono text-gray-400 uppercase tracking-widest mb-4">
-                    Our commitment
+                    Our promise
                   </p>
                   <div className="space-y-3">
                     {[
-                      { icon: "✓", text: "One-time KES 550 account setup — KES 200 credited back immediately" },
-                      { icon: "✓", text: "No monthly fees, no withdrawal fees, no hidden charges ever" },
-                      { icon: "✓", text: "Every shilling after setup flows toward you, not away from you" },
-                      { icon: "✓", text: "If anyone asks for additional payment, that is fraud — report it" },
+                      { icon: "✓", text: "100% free to join — no registration fees ever" },
+                      { icon: "✓", text: "No hidden charges, no monthly subscriptions" },
+                      { icon: "✓", text: "Every chat earns you money" },
+                      { icon: "✓", text: "Instant M-Pesa payouts with no minimum" },
                     ].map((item) => (
                       <div key={item.text} className="flex items-start gap-3 text-sm">
                         <span className="w-5 h-5 rounded-full bg-rose-100 text-rose-500 flex items-center justify-center shrink-0 mt-0.5 text-xs">
@@ -480,7 +478,7 @@ export default function AboutPage() {
                   </div>
                   <div>
                     <p className="text-emerald-700 font-bold text-sm">
-                      M-Pesa · MTN MoMo · Airtel Money
+                      M-Pesa Instant Payout
                     </p>
                     <p className="text-gray-500 text-xs mt-0.5">
                       Direct to your mobile wallet · Typically within 30 minutes
@@ -488,7 +486,7 @@ export default function AboutPage() {
                   </div>
                   <div className="ml-auto text-right shrink-0">
                     <p className="font-mono text-emerald-600 font-bold text-lg">+KES 2,400</p>
-                    <p className="text-gray-400 text-xs">example payout</p>
+                    <p className="text-gray-400 text-xs">example earnings</p>
                   </div>
                 </div>
               </div>
@@ -500,14 +498,16 @@ export default function AboutPage() {
         <section className="py-12 bg-gray-50 border-t border-gray-100">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <div className="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm">
-              <p className="text-gray-500 text-sm mb-2">Already convinced?</p>
-              <Link
-                href="/join"
+              <p className="text-gray-500 text-sm mb-2">Ready to start chatting?</p>
+              <a
+                href="https://starhela.com/register?ref=velloearn"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-block bg-rose-500 hover:bg-rose-600 text-white font-bold text-base px-10 py-4 rounded-full transition-all hover:scale-105 active:scale-95 shadow-lg shadow-rose-200"
               >
-                Activate Your Account — KES 550 One-Time
-              </Link>
-              <p className="text-gray-400 text-xs mt-3">KES 200 welcome bonus back immediately · No monthly fees</p>
+                Start Chatting Now — Free
+              </a>
+              <p className="text-gray-400 text-xs mt-3">No registration fees · Instant M-Pesa payouts</p>
             </div>
           </div>
         </section>
@@ -518,14 +518,14 @@ export default function AboutPage() {
 
             <div className="text-center mb-14">
               <p className="text-xs font-mono text-gray-400 uppercase tracking-widest mb-3">
-                What earners do
+                Ways to earn
               </p>
               <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-gray-900 mb-4">
-                Six verticals. One platform. One M-Pesa number.
+                Six ways to chat and earn.
               </h2>
               <p className="text-gray-500 max-w-xl mx-auto">
-                All earning tracks are accessible from one account. Most members start with
-                one method and add a second once they&apos;ve established a routine.
+                All earning methods are accessible from one free account. Most members start with
+                one and add more as they build their routine.
               </p>
             </div>
 
@@ -551,145 +551,56 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* ── GEOGRAPHIC FOOTPRINT ─────────────────────────────────────────── */}
+        {/* ── E-E-A-T TRUST SIGNALS ─────────────────────────────────────────── */}
         <section className="py-20 bg-gray-50 border-t border-gray-100">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
-            <div className="grid lg:grid-cols-3 gap-6">
-              {[
-                {
-                  country: "Kenya",
-                  flag: "🇰🇪",
-                  payment: "M-Pesa",
-                  paymentColor: "text-emerald-600",
-                  bgColor: "bg-emerald-50",
-                  borderColor: "border-emerald-200",
-                  highlights: [
-                    "Largest active earner base",
-                    "Highest Swahili task volume",
-                    "AI training primary market",
-                    "M-Pesa instant settlement",
-                  ],
-                  status: "Primary market",
-                  statusColor: "bg-emerald-100 text-emerald-700 border-emerald-200",
-                },
-                {
-                  country: "Uganda",
-                  flag: "🇺🇬",
-                  payment: "MTN MoMo · Airtel Money",
-                  paymentColor: "text-amber-600",
-                  bgColor: "bg-amber-50",
-                  borderColor: "border-amber-200",
-                  highlights: [
-                    "Fast-growing earner community",
-                    "English + Luganda tasks",
-                    "AI training high demand",
-                    "MTN MoMo settlement",
-                  ],
-                  status: "Active market",
-                  statusColor: "bg-amber-100 text-amber-700 border-amber-200",
-                },
-                {
-                  country: "Ghana",
-                  flag: "🇬🇭",
-                  payment: "MTN MoMo · Vodafone Cash",
-                  paymentColor: "text-indigo-600",
-                  bgColor: "bg-indigo-50",
-                  borderColor: "border-indigo-200",
-                  highlights: [
-                    "West African expansion hub",
-                    "English proficiency advantage",
-                    "Survey & research demand",
-                    "MTN MoMo settlement",
-                  ],
-                  status: "Growing market",
-                  statusColor: "bg-indigo-100 text-indigo-700 border-indigo-200",
-                },
-              ].map((market) => (
-                <div
-                  key={market.country}
-                  className={`bg-white border ${market.borderColor} rounded-3xl p-7 shadow-sm`}
-                >
-                  <div className="flex items-center gap-3 mb-5">
-                    <span className="text-3xl">{market.flag}</span>
-                    <div>
-                      <p className="font-bold text-gray-900 text-lg">{market.country}</p>
-                      <p className={`text-xs font-mono ${market.paymentColor}`}>
-                        {market.payment}
-                      </p>
-                    </div>
-                  </div>
-                  <span
-                    className={`inline-block text-xs font-semibold px-3 py-1 rounded-full border ${market.statusColor}`}
-                  >
-                    {market.status}
-                  </span>
-                  <ul className="space-y-2.5 mt-5">
-                    {market.highlights.map((h) => (
-                      <li key={h} className="flex items-center gap-2.5 text-sm text-gray-600">
-                        <span className="w-1 h-1 rounded-full bg-gray-300 shrink-0" />
-                        {h}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ── E-E-A-T TRUST SIGNALS ─────────────────────────────────────────── */}
-        <section className="py-20 bg-white border-t border-gray-100">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-
-            <div className="bg-gray-50 border border-gray-100 rounded-3xl p-8 sm:p-12">
+            <div className="bg-white border border-gray-100 rounded-3xl p-8 sm:p-12">
               <div className="grid lg:grid-cols-2 gap-12 items-center">
                 <div>
                   <p className="text-xs font-mono text-gray-400 uppercase tracking-widest mb-4">
-                    Who we are
+                    Why VelloEarn
                   </p>
                   <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900 mb-5">
-                    Built for Africa, not retrofitted to it.
+                    Built for Kenyan chatters, by Kenyans.
                   </h2>
                   <p className="text-gray-500 leading-relaxed mb-5">
-                    VelloEarn was designed from the ground up for the specific operational
-                    realities of African freelance markets — mobile-first workers, M-Pesa as
-                    the dominant financial infrastructure, and the genuine global demand for
-                    African voices in AI development.
+                    VelloEarn was designed specifically for the Kenyan context — mobile-first workers,
+                    M-Pesa as the dominant financial infrastructure, and the genuine global demand
+                    for Kenyan voices in conversation.
                   </p>
                   <p className="text-gray-500 leading-relaxed">
-                    We are not a generic gig platform with an Africa toggle. The task types,
-                    the payment rails, the rate structures, and the quality frameworks are
-                    built specifically for this context — because that specificity is what
-                    produces quality that global clients actually pay for.
+                    We are not a generic chat platform with an Africa toggle. The chat types, payment
+                    rails, and rate structures are built specifically for this context — because that
+                    specificity is what produces quality that chatters actually get paid for.
                   </p>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   {[
                     {
                       icon: "🏗️",
-                      title: "Infrastructure built locally",
-                      body: "M-Pesa and MTN MoMo integration is not an afterthought — it is the architecture.",
+                      title: "Built for Kenyans",
+                      body: "M-Pesa integration is not an afterthought — it is the architecture.",
                     },
                     {
                       icon: "🔒",
-                      title: "One-time fee model",
-                      body: "KES 550 setup. KES 200 back immediately. No recurring charges. Full transparency.",
+                      title: "100% free to join",
+                      body: "No registration fees. No recurring charges. Full transparency.",
                     },
                     {
                       icon: "🎯",
-                      title: "Task quality frameworks",
-                      body: "Accuracy scores, quality checkpoints, and verified completions protect client data standards.",
+                      title: "Quality conversations",
+                      body: "Chat quality frameworks ensure meaningful interactions and consistent earnings.",
                     },
                     {
                       icon: "🌐",
-                      title: "Global client demand",
-                      body: "Technology companies need what African workers have. We make the connection efficient.",
+                      title: "Global demand",
+                      body: "Lonely foreigners worldwide want to chat with Kenyans. We make it happen.",
                     },
                   ].map((card) => (
                     <div
                       key={card.title}
-                      className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm"
+                      className="bg-gray-50 border border-gray-100 rounded-2xl p-5 shadow-sm"
                     >
                       <span className="text-2xl mb-3 block">{card.icon}</span>
                       <p className="font-semibold text-gray-900 text-sm mb-1.5">{card.title}</p>
@@ -703,7 +614,7 @@ export default function AboutPage() {
         </section>
 
         {/* ── FAQ SECTION ───────────────────────────────────────────────────── */}
-        <section className="py-20 bg-gray-50 border-t border-gray-100">
+        <section className="py-20 bg-white border-t border-gray-100">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-14">
               <p className="text-xs font-mono text-gray-400 uppercase tracking-widest mb-3">
@@ -719,13 +630,13 @@ export default function AboutPage() {
               {FAQS.map((faq, index) => (
                 <details
                   key={index}
-                  className="group bg-white border border-gray-200 hover:border-rose-200 rounded-2xl transition-colors duration-200 shadow-sm"
+                  className="group bg-gray-50 border border-gray-200 hover:border-rose-200 rounded-2xl transition-colors duration-200"
                 >
                   <summary className="flex items-center justify-between cursor-pointer list-none p-6">
                     <span className="font-semibold text-gray-900 text-sm sm:text-base pr-4">
                       {faq.q}
                     </span>
-                    <span className="shrink-0 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 group-open:bg-rose-100 group-open:text-rose-500 transition-all">
+                    <span className="shrink-0 w-8 h-8 rounded-full bg-white flex items-center justify-center text-gray-400 group-open:bg-rose-100 group-open:text-rose-500 transition-all">
                       <svg
                         className="w-4 h-4 transition-transform duration-200 group-open:rotate-45"
                         fill="none"
@@ -747,7 +658,7 @@ export default function AboutPage() {
             <div className="mt-10 text-center">
               <p className="text-gray-500 text-sm mb-4">Still have questions?</p>
               <a
-                href="https://wa.me/2547107445114?text=Hi%2C%20I%20have%20a%20question%20about%20VelloEarn"
+                href="https://wa.me/2547107445114?text=Hi%2C%20I%20want%20to%20start%20chatting%20with%20foreigners.%20How%20do%20I%20get%20started%3F"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 font-semibold text-sm px-6 py-3 rounded-full transition-all shadow-sm"
@@ -762,7 +673,7 @@ export default function AboutPage() {
         </section>
 
         {/* ── FINAL CONVERSION CTA ──────────────────────────────────────────── */}
-        <section className="py-20 bg-white border-t border-gray-100">
+        <section className="py-20 bg-gray-50 border-t border-gray-100">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
 
             <div className="bg-gradient-to-br from-rose-50 to-pink-50 border border-rose-100 rounded-3xl p-10 sm:p-16 relative overflow-hidden">
@@ -776,33 +687,35 @@ export default function AboutPage() {
                 <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-gray-900 mb-5">
                   Your phone is already capable of this.
                   <br />
-                  <span className="text-rose-500">You just haven&apos;t activated it.</span>
+                  <span className="text-rose-500">Start chatting and earning today.</span>
                 </h2>
                 <p className="text-gray-600 max-w-xl mx-auto mb-8 leading-relaxed">
-                  KES 550 one-time setup. KES 200 welcome bonus back immediately.
-                  Task dashboard live the same day. First M-Pesa this week.
+                  Free to join. No experience needed. Chat with lonely foreigners.
+                  Your first M-Pesa payout could be today.
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
-                  <Link
-                    href="/join"
+                  <a
+                    href="https://starhela.com/register?ref=velloearn"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 bg-rose-500 hover:bg-rose-600 text-white font-bold text-base px-10 py-4 rounded-full transition-all hover:scale-105 active:scale-95 shadow-lg shadow-rose-200"
                   >
-                    Activate my account →
-                  </Link>
+                    Start Chatting Now →
+                  </a>
                   <Link
-                    href="/earn/ai-training"
+                    href="/how-it-works"
                     className="inline-flex items-center gap-2 bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 font-semibold text-base px-8 py-4 rounded-full transition-all hover:scale-105 active:scale-95 shadow-sm"
                   >
-                    See how AI training works
+                    See how it works
                   </Link>
                 </div>
 
                 <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-gray-500">
-                  <span>✓ No monthly fee</span>
+                  <span>✓ Free to join</span>
                   <span>✓ M-Pesa payouts</span>
                   <span>✓ No bank account needed</span>
-                  <span>✓ Transparent fee structure</span>
+                  <span>✓ No hidden fees</span>
                 </div>
               </div>
             </div>
@@ -810,14 +723,13 @@ export default function AboutPage() {
         </section>
 
         {/* ── NAV LINKS ─────────────────────────────────────────────────────── */}
-        <div className="border-t border-gray-100 py-6 bg-gray-50">
+        <div className="border-t border-gray-100 py-6 bg-white">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap justify-center gap-5 text-xs text-gray-400">
             <Link href="/" className="hover:text-gray-600 transition-colors">← Home</Link>
             <Link href="/earn/chatting" className="hover:text-gray-600 transition-colors">Chatting track</Link>
-            <Link href="/earn/ai-training" className="hover:text-gray-600 transition-colors">AI training track</Link>
-            <Link href="/earn/swahili-teaching" className="hover:text-gray-600 transition-colors">Swahili track</Link>
-            <Link href="/blog/is-ai-training-a-scam-kenya" className="hover:text-gray-600 transition-colors">Is this legit?</Link>
-            <Link href="/join" className="hover:text-gray-600 transition-colors">Activate account</Link>
+            <Link href="/how-it-works" className="hover:text-gray-600 transition-colors">How it works</Link>
+            <Link href="/faq" className="hover:text-gray-600 transition-colors">FAQ</Link>
+            <a href="https://starhela.com/register?ref=velloearn" target="_blank" rel="noopener noreferrer" className="hover:text-gray-600 transition-colors">Start chatting</a>
           </div>
         </div>
 

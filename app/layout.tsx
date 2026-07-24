@@ -1,4 +1,3 @@
-// app/layout.tsx
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -25,23 +24,19 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
 
-  // Simplified to a string to prevent title duplication on your articles
-  title: "VelloEarn — Earn Money Online in Kenya | Remote Work, M-Pesa Payouts",
+  title: "VelloEarn — Chat with Foreigners & Earn M-Pesa Instantly in Kenya",
 
   description:
-    "VelloEarn is Kenya's #1 remote earning platform. Get paid to chat, train AI, complete surveys, write, and trade forex — all from your phone. Instant M-Pesa payouts.",
+    "Chat with lonely foreigners and earn M-Pesa instantly. Free to join. No fees. 61,000+ active chatters. Start earning today from your phone.",
 
   keywords: [
-    "earn money online Kenya",
-    "remote work Kenya",
-    "mpesa earnings",
-    "online jobs Kenya",
     "chat and earn Kenya",
-    "academic writing jobs Kenya",
-    "forex trading Kenya",
-    "AI training jobs Kenya",
-    "paid surveys Kenya",
-    "work from phone Kenya",
+    "earn money chatting",
+    "chat with foreigners",
+    "mpesa earnings Kenya",
+    "online chat jobs Kenya",
+    "paid chat platforms Kenya",
+    "remote chat jobs",
     "VelloEarn",
   ],
 
@@ -49,29 +44,41 @@ export const metadata: Metadata = {
   creator: "VelloEarn",
   publisher: "VelloEarn",
 
+  // ─── PWA specific metadata ───────────────────────────────────────────────
+  applicationName: "VelloEarn",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "VelloEarn",
+  },
+  formatDetection: {
+    telephone: true,
+  },
+  themeColor: "#f43f5e",
+
   openGraph: {
     type: "website",
     locale: "en_KE",
     url: BASE_URL,
     siteName: "VelloEarn",
-    title: "VelloEarn — Earn Money Online in Kenya",
+    title: "VelloEarn — Chat with Foreigners & Earn M-Pesa",
     description:
-      "Get paid to chat, train AI, complete surveys, write, and trade forex. Instant M-Pesa payouts. Apply free today.",
+      "Chat with lonely foreigners and earn M-Pesa instantly. Free to join. No fees. Start today.",
     images: [
       {
         url: "/og-cover.png",
         width: 1200,
         height: 630,
-        alt: "VelloEarn — Kenya's remote earning platform",
+        alt: "VelloEarn — Chat & Earn in Kenya",
       },
     ],
   },
 
   twitter: {
     card: "summary_large_image",
-    title: "VelloEarn — Earn Money Online in Kenya",
+    title: "VelloEarn — Chat with Foreigners & Earn M-Pesa",
     description:
-      "Get paid to chat, train AI, complete surveys, write, and trade forex. Instant M-Pesa payouts.",
+      "Chat with lonely foreigners and earn M-Pesa instantly. Free to join. No fees.",
     images: ["/og-cover.png"],
     site: "@VelloEarnke",
     creator: "@VelloEarnke",
@@ -94,8 +101,16 @@ export const metadata: Metadata = {
       { url: "/favicon.ico" },
       { url: "/icon-16.png", sizes: "16x16", type: "image/png" },
       { url: "/icon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/icons/icon-192x192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icons/icon-384x384.png", sizes: "384x384", type: "image/png" },
+      { url: "/icons/icon-512x512.png", sizes: "512x512", type: "image/png" },
     ],
-    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180" },
+      { url: "/icons/icon-192x192.png", sizes: "192x192" },
+      { url: "/icons/icon-384x384.png", sizes: "384x384" },
+      { url: "/icons/icon-512x512.png", sizes: "512x512" },
+    ],
     shortcut: "/favicon.ico",
   },
 
@@ -111,6 +126,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
+  userScalable: true,
 };
 
 // ─── Root Layout ──────────────────────────────────────────────────────────────
@@ -120,7 +136,6 @@ const GOOGLE_ADS_ID = process.env.NEXT_PUBLIC_GOOGLE_ADS_ID;
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-
   const corporateJsonLd = {
     "@context": "https://schema.org",
     "@graph": [
@@ -129,8 +144,8 @@ export default function RootLayout({
         "@id": `${BASE_URL}/#website`,
         "url": BASE_URL,
         "name": "VelloEarn",
-        "description": "Kenya's #1 remote earning micro-task engine.",
-        "publisher": { "@id": `${BASE_URL}/#organization` }
+        "description": "Chat with lonely foreigners and earn M-Pesa instantly.",
+        "publisher": { "@id": `${BASE_URL}/#organization` },
       },
       {
         "@type": "Organization",
@@ -139,17 +154,27 @@ export default function RootLayout({
         "url": BASE_URL,
         "logo": {
           "@type": "ImageObject",
-          "url": `${BASE_URL}/logo.jpg`
+          "url": `${BASE_URL}/logo.jpg`,
         },
-        "sameAs": [
-          "https://twitter.com/VelloEarnke"
-        ]
-      }
-    ]
+        "sameAs": ["https://twitter.com/VelloEarnke"],
+      },
+    ],
   };
 
   return (
     <html lang="en">
+      <head>
+        {/* ─── PWA Meta Tags ────────────────────────────────────────────── */}
+        <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="theme-color" content="#f43f5e" />
+        <link rel="manifest" href="/site.webmanifest" />
+        
+        {/* Preload PWA assets */}
+        <link rel="preload" href="/site.webmanifest" as="fetch" crossOrigin="anonymous" />
+      </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <script
           type="application/ld+json"
@@ -181,7 +206,12 @@ export default function RootLayout({
         </Suspense>
 
         {/* ── Ahrefs Web Analytics ────────────────── */}
-        <script src="https://analytics.ahrefs.com/analytics.js" data-key="oxt3DkRIHEroFVEUnKGCVQ" async></script>
+        <Script
+          src="https://analytics.ahrefs.com/analytics.js"
+          data-key="oxt3DkRIHEroFVEUnKGCVQ"
+          strategy="afterInteractive"
+          async
+        />
 
         <LayoutClient>{children}</LayoutClient>
       </body>

@@ -15,25 +15,25 @@ const STEPS: Step[] = [
   {
     number: 1,
     icon: "📝",
-    title: "Apply & activate",
+    title: "Sign up & verify",
     description:
-      "Fill in your details and pay the one-time KES 550 setup fee. Your KES 200 welcome bonus is credited instantly. No CV, no interview, no hidden charges.",
-    highlight: "KES 550 one-time",
+      "Create your account and verify your phone number. No fees, no CV, no interview. Your account is active immediately and ready to start earning.",
+    highlight: "Free to join",
   },
   {
     number: 2,
     icon: "💬",
-    title: "Get your dashboard",
+    title: "Start chatting",
     description:
-      "You receive access to your task dashboard immediately after activation. Your earning tracks, task list, and M-Pesa withdrawal system are all ready to go.",
-    highlight: "Instant access",
+      "Browse live profiles of lonely foreigners looking for conversation. Tap any profile to start chatting. Earn money for every conversation you have.",
+    highlight: "Start instantly",
   },
   {
     number: 3,
     icon: "💸",
     title: "Earn & withdraw",
     description:
-      "Complete tasks — chatting, AI training, surveys, and more. Your earnings accumulate in your dashboard. Withdraw to M-Pesa anytime with no minimum.",
+      "Your earnings accumulate with every chat. Withdraw to M-Pesa instantly — no minimum balance, no waiting periods. Cash out anytime you want.",
     highlight: "M-Pesa payouts",
   },
 ];
@@ -71,12 +71,12 @@ export default function HowItWorks() {
 
         <div className="text-center mb-16">
           <span className="text-rose-500 font-semibold text-sm uppercase tracking-wider">
-            The process
+            How it works
           </span>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mt-2 mb-3">
-            How you go from curious to earning
+            Start earning by chatting today
           </h2>
-          <p className="text-gray-500">Three simple steps. KES 550 one-time setup unlocks everything.</p>
+          <p className="text-gray-500">Three simple steps. No fees. Start earning immediately.</p>
         </div>
 
         <div className="relative grid grid-cols-1 sm:grid-cols-3 gap-12 sm:gap-8">
@@ -88,13 +88,15 @@ export default function HowItWorks() {
         {/* CTA buttons below steps */}
         <div className="mt-14 flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
-            href="/join"
+            href="https://starhela.com/register?ref=velloearn"
+            target="_blank"
+            rel="noopener noreferrer"
             className="bg-rose-500 hover:bg-rose-600 text-white font-bold px-8 py-4 rounded-full shadow-lg shadow-rose-200 transition-all hover:scale-105 active:scale-95 text-center"
           >
-            Apply Now — KES 550 One-Time
+            Start Chatting Now — Free
           </Link>
           <a
-            href={`https://wa.me/${whatsappNumber}?text=Hi%2C%20I%20have%20questions%20about%20the%20KES%20550%20setup%20fee%20and%20how%20VelloEarn%20works.`}
+            href={`https://wa.me/${whatsappNumber}?text=Hi%2C%20I%20want%20to%20start%20chatting%20with%20foreigners%20and%20earn%20money.%20How%20do%20I%20get%20started%3F`}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-white hover:bg-gray-50 text-gray-700 font-semibold px-6 py-4 rounded-full border border-gray-200 shadow-sm transition-all hover:scale-105 active:scale-95"
@@ -108,10 +110,11 @@ export default function HowItWorks() {
 
         {/* Trust signals below CTA */}
         <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-gray-400">
-          <span>✅ KES 200 welcome bonus back</span>
-          <span>💸 No monthly charges</span>
-          <span>📱 Work from any phone</span>
-          <span>🔒 One-time payment only</span>
+          <span>✅ Free to join</span>
+          <span>💸 No fees ever</span>
+          <span>📱 Chat from any phone</span>
+          <span>💰 Instant M-Pesa payouts</span>
+          <span>🌍 50,000+ active chatters</span>
         </div>
       </div>
     </section>

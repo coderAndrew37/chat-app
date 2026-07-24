@@ -12,6 +12,7 @@ import {
 } from ".";
 import EarnMethods from "./EarnMethods";
 import Trust from "./Trust";
+import LiveForeignersOnline from "./LiveForeignersOnline";
 
 interface ApplicationFormData {
   name: string;
@@ -22,7 +23,6 @@ export default function HomePageClient() {
   const [modalOpen, setModalOpen] = useState(false);
   const [successData, setSuccessData] = useState<ApplicationFormData | null>(null);
 
-  const openApply = () => setModalOpen(true);
 
 
 
@@ -36,6 +36,8 @@ export default function HomePageClient() {
 
         {/* 2. How it works — apply → pick method → earn to M-Pesa */}
         <HowItWorks />
+
+        <LiveForeignersOnline />
 
         {/* 3. Earn methods — internal link hub for all 6 earning pages */}
         <EarnMethods />
