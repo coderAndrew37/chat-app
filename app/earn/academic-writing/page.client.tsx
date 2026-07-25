@@ -1,6 +1,7 @@
 "use client";
 
 import LiveAcademicWriting from "@/app/components/LiveAcademicWriting";
+import TrainingChannelBanner from "@/app/components/TrainingChannelBanner";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -327,6 +328,8 @@ export default function AcademicWritingClient({ countryTarget }: AcademicWriting
           </div>
         </div>
       </section>
+
+        <TrainingChannelBanner />
 
       {/* ── How it works ── */}
       <section id="how-it-works" className="py-16 bg-white">

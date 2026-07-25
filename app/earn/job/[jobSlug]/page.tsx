@@ -17,6 +17,7 @@ import {
 import type { Metadata } from "next";
 import Link from "next/link";
 import Script from "next/script";
+import TrainingChannelBanner from "@/app/components/TrainingChannelBanner";
 
 interface PageProps {
   params: Promise<{ jobSlug: string }>;
@@ -272,6 +273,8 @@ export default function GlobalJobPage({ params }: PageProps) {
             </div>
           </div>
         </section>
+
+          <TrainingChannelBanner />
 
         {/* ── Core Structural Overview (SEO Content Engine) ────────── */}
         <section className="py-16 bg-white">

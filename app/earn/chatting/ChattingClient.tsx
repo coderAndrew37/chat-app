@@ -3,6 +3,7 @@
 import {  ProfilesGrid} from "@/app/components";
 import LiveForeignersOnline from "@/app/components/LiveForeignersOnline";
 import Requirements from "@/app/components/Requirements";
+import TrainingChannelBanner from "@/app/components/TrainingChannelBanner";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -333,6 +334,8 @@ export default function ChattingClient({ countryTarget }: ChattingClientProps) {
     </div>
   </div>
 </section>
+
+  <TrainingChannelBanner />
 
       {/* ── 2. WHAT THE WORK IS ─────────────────────────────────────────────── */}
       <section className="py-20 bg-white">

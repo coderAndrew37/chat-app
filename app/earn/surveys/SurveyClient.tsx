@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import LiveForeignersLearning from "@/app/components/LiveForeignersLearning";
+import TrainingChannelBanner from "@/app/components/TrainingChannelBanner";
 
 const VELLOEARN_REGISTER_URL = "https://starhela.com/register?ref=velloearn";
 
@@ -337,6 +338,8 @@ export default function SurveysClient({ countryTarget }: SurveysClientProps) {
           <LiveForeignersLearning />
         </div>
       </section>
+
+        <TrainingChannelBanner />
 
       {/* ── Task types ── */}
       <section className="py-16 bg-gray-50">

@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import LiveForeignersLearning from "@/app/components/LiveForeignersLearning";
 import SwahiliJobListings from "@/app/components/SwahiliJobListings";
+import TrainingChannelBanner from "@/app/components/TrainingChannelBanner";
 
 const VELLOEARN_REGISTER_URL = "https://starhela.com/register?ref=velloearn";
 
@@ -271,6 +272,8 @@ export default function SwahiliClient() {
           </div>
         </div>
       </section>
+
+        <TrainingChannelBanner />
 
       {/* ── Available Teaching Jobs ── */}
       <section className="py-16 bg-white">

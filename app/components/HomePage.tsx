@@ -13,6 +13,7 @@ import {
 import EarnMethods from "./EarnMethods";
 import Trust from "./Trust";
 import LiveForeignersOnline from "./LiveForeignersOnline";
+import TrainingChannelBanner from "./TrainingChannelBanner";
 
 interface ApplicationFormData {
   name: string;
@@ -33,6 +34,7 @@ export default function HomePageClient() {
       <main>
         {/* 1. Hero — platform statement, chat + AI training, funnel CTA */}
         <Hero />
+        <TrainingChannelBanner />
 
         {/* 2. How it works — apply → pick method → earn to M-Pesa */}
         <HowItWorks />

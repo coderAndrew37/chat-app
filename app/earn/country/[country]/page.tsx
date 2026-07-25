@@ -20,6 +20,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import Script from "next/script";
 import { use } from "react";
+import TrainingChannelBanner from "@/app/components/TrainingChannelBanner";
 import LiveForeignersOnline from "@/app/components/LiveForeignersOnline";
 
 const VELLOEARN_REGISTER_URL = "https://starhela.com/register?ref=velloearn";
@@ -280,6 +281,8 @@ export default function CountryPage({ params }: PageProps) {
         </section>
 
         <LiveForeignersOnline/>
+        
+          <TrainingChannelBanner />
 
         {/* ── 60/40 Split: Chatting & AI Training ── */}
         <section id="how-it-works" className="py-16 bg-white">

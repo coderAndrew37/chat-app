@@ -9,6 +9,7 @@ import LiveForeignersOnline from "./LiveForeignersOnline";
 import Requirements from "./Requirements";
 import SmartImage from "./SmartImage";
 import TestimonialSlider from "./TestimonialSlider";
+import TrainingChannelBanner from "./TrainingChannelBanner";
 
 const VELLOEARN_REGISTER_URL = "https://starhela.com/register?ref=velloearn";
 
@@ -320,6 +321,8 @@ export default function LandingInteractive() {
           <LiveForeignersOnline />
         </div>
       </section>
+
+        <TrainingChannelBanner />
 
       {/* ── Live Foreigners Learning Section ── */}
       <section className="py-16 bg-gray-50">

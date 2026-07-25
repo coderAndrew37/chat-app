@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useState } from "react";
 import EarnerStoriesCarousel from "@/app/components/EarnerStoriesGrid";
 import LiveAITraining from "@/app/components/LiveAITraining";
+import TrainingChannelBanner from "@/app/components/TrainingChannelBanner";
 
 const VELLOEARN_REGISTER_URL = "https://starhela.com/register?ref=velloearn";
 
@@ -465,6 +466,11 @@ export default function AITrainingClient({ countryTarget = "kenya" }: AITraining
       </section>
       
       <LiveAITraining />
+
+      <div className="m-2.5 sm:m-4 md:m-6 lg:m-8 xl:m-10 2xl:m-12">
+
+        <TrainingChannelBanner />
+        </div>
 
       {/* ── Requirements ── */}
       <Requirements />

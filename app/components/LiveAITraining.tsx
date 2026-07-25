@@ -15,16 +15,16 @@ type AITask = {
 };
 
 const AI_TASKS: AITask[] = [
-  { id: "1", title: "Rate AI Response - Accuracy", company: "OpenAI", rate: "KES 120/task", type: "Rating", urgency: "High", logo: "🤖" },
-  { id: "2", title: "Data Labeling - Images", company: "Google AI", rate: "KES 150/task", type: "Labeling", urgency: "High", logo: "📷" },
-  { id: "3", title: "Chatbot Conversation Training", company: "Meta AI", rate: "KES 100/task", type: "Chat", urgency: "Medium", logo: "💬" },
-  { id: "4", title: "Text Rewriting - Natural Language", company: "Anthropic", rate: "KES 180/task", type: "Writing", urgency: "High", logo: "✍️" },
-  { id: "5", title: "Content Moderation - AI Training", company: "TikTok", rate: "KES 90/task", type: "Moderation", urgency: "Medium", logo: "🛡️" },
-  { id: "6", title: "Swahili Text Verification", company: "Google AI", rate: "KES 200/task", type: "Language", urgency: "Premium", logo: "🌍" },
-  { id: "7", title: "AI Response Ranking", company: "Microsoft", rate: "KES 130/task", type: "Rating", urgency: "High", logo: "📊" },
-  { id: "8", title: "Video Description Labeling", company: "YouTube", rate: "KES 160/task", type: "Labeling", urgency: "Medium", logo: "🎥" },
-  { id: "9", title: "Academic Text Verification", company: "EdTech", rate: "KES 180/task", type: "Verification", urgency: "Skilled", logo: "📚" },
-  { id: "10", title: "Voice Recording - AI Training", company: "Amazon", rate: "KES 140/task", type: "Voice", urgency: "High", logo: "🎙️" },
+  { id: "1", title: "Rate AI Response - Accuracy", company: "OpenAI", rate: "KES 1200/task", type: "Rating", urgency: "High", logo: "🤖" },
+  { id: "2", title: "Data Labeling - Images", company: "Google AI", rate: "KES 1500/task", type: "Labeling", urgency: "High", logo: "📷" },
+  { id: "3", title: "Chatbot Conversation Training", company: "Meta AI", rate: "KES 1000/task", type: "Chat", urgency: "Medium", logo: "💬" },
+  { id: "4", title: "Text Rewriting - Natural Language", company: "Anthropic", rate: "KES 1800/task", type: "Writing", urgency: "High", logo: "✍️" },
+  { id: "5", title: "Content Moderation - AI Training", company: "TikTok", rate: "KES 900/task", type: "Moderation", urgency: "Medium", logo: "🛡️" },
+  { id: "6", title: "Swahili Text Verification", company: "Google AI", rate: "KES 2000/task", type: "Language", urgency: "Premium", logo: "🌍" },
+  { id: "7", title: "AI Response Ranking", company: "Microsoft", rate: "KES 1300/task", type: "Rating", urgency: "High", logo: "📊" },
+  { id: "8", title: "Video Description Labeling", company: "YouTube", rate: "KES 1600/task", type: "Labeling", urgency: "Medium", logo: "🎥" },
+  { id: "9", title: "Academic Text Verification", company: "EdTech", rate: "KES 1800/task", type: "Verification", urgency: "Skilled", logo: "📚" },
+  { id: "10", title: "Voice Recording - AI Training", company: "Amazon", rate: "KES 1400/task", type: "Voice", urgency: "High", logo: "🎙️" },
 ];
 
 const MAX_CONCURRENT_TASKS = 4;
