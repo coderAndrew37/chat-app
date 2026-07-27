@@ -1,9 +1,10 @@
 "use client";
+import { VELLOEARN_REGISTER_URL } from "@/lib/constants";
 
 export default function CTABanner() {
   const handleStartChat = () => {
     // Direct link to chat platform - no modal
-    window.location.href = "https://starhela.com/register?ref=velloearn";
+    window.location.href = VELLOEARN_REGISTER_URL;
   };
 
   return (

@@ -3,6 +3,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { MessageCircle, BookOpen, Users, Globe } from "lucide-react";
+import { VELLOEARN_REGISTER_URL } from "@/lib/constants";
 
 type Learner = {
   id: string;
@@ -106,7 +107,7 @@ function LiveForeignersLearning() {
   }, []);
 
   const handleLearnerClick = () => {
-    window.location.href = "https://starhela.com/register?ref=velloearn";
+    window.location.href = VELLOEARN_REGISTER_URL;
   };
 
   return (

@@ -2,8 +2,9 @@
 
 import Image from "next/image";
 import { REQUIREMENTS } from "@/lib/constants";
+import { VELLOEARN_REGISTER_URL } from "@/lib/constants"; // Import the constant
+import Link from "next/link";
 
-const VELLOEARN_REGISTER_URL = "https://starhela.com/register?ref=velloearn";
 
 interface RequirementsProps {
   onApply?: () => void; // Keep for backward compatibility
@@ -53,14 +54,13 @@ export default function Requirements({ onApply }: RequirementsProps) {
         </div>
 
         <div className="text-center mt-8 sm:mt-10">
-          <a
+          <Link
             href={VELLOEARN_REGISTER_URL}
-            target="_blank"
             rel="noopener noreferrer"
             className="inline-block bg-rose-500 hover:bg-rose-600 text-white font-bold text-base px-8 py-4 rounded-full shadow-lg shadow-rose-200 transition-all hover:scale-105 active:scale-95"
           >
             I qualify — Apply Now →
-          </a>
+          </Link>
           <p className="text-gray-600 text-xs sm:text-sm mt-3">
             Free to join · No fees · Start earning today
           </p>

@@ -11,3 +11,4 @@ export const REQUIREMENTS: RequirementItem[] = [
 ];
 
 export const WA_NUMBER = "254107445114"; 
+export const VELLOEARN_REGISTER_URL = "/join/register";

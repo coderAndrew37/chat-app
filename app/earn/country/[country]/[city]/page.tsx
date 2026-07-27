@@ -20,8 +20,8 @@ import Link from "next/link";
 import Image from "next/image";
 import Script from "next/script";
 import LiveForeignersOnline from "@/app/components/LiveForeignersOnline";
+import { VELLOEARN_REGISTER_URL } from "@/lib/constants";
 
-const VELLOEARN_REGISTER_URL = "https://starhela.com/register?ref=velloearn";
 
 // Define the unified Promise-based params type
 interface PageProps {
@@ -171,14 +171,14 @@ export default function CityPage({ params }: PageProps) {
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-3">
-                  <a
+                  <Link
                     href={VELLOEARN_REGISTER_URL}
-                    target="_blank"
+                    
                     rel="noopener noreferrer"
                     className="bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold text-base px-8 py-4 rounded-full shadow-lg shadow-rose-200 transition-all hover:scale-105 active:scale-95 text-center"
                   >
                     Start Earning Now — Free →
-                  </a>
+                  </Link>
                   <Link
                     href="#how-it-works"
                     className="bg-white hover:bg-gray-50 text-gray-600 font-semibold text-base px-8 py-4 rounded-full border border-gray-200 shadow-sm transition-all hover:scale-105 active:scale-95 text-center"
@@ -236,7 +236,7 @@ export default function CityPage({ params }: PageProps) {
   {/* Bottom Right - Stats Card (links to join) */}
   <Link
     href={VELLOEARN_REGISTER_URL}
-    target="_blank"
+    
     rel="noopener noreferrer"
     className="relative rounded-2xl overflow-hidden h-40 bg-gradient-to-br from-rose-500 to-pink-600 flex items-center justify-center shadow-xl group hover:scale-105 transition-transform duration-300"
   >
@@ -307,14 +307,14 @@ export default function CityPage({ params }: PageProps) {
                       <span className="text-emerald-500">✓</span> Earn {avgEarning}/month part-time
                     </li>
                   </ul>
-                  <a
+                  <Link
                     href={VELLOEARN_REGISTER_URL}
-                    target="_blank"
+                    
                     rel="noopener noreferrer"
                     className="inline-block bg-rose-500 hover:bg-rose-600 text-white font-bold px-6 py-3 rounded-full transition-all hover:scale-105 text-sm"
                   >
                     Start Chatting — Free →
-                  </a>
+                  </Link>
                 </div>
               </div>
 
@@ -342,14 +342,14 @@ export default function CityPage({ params }: PageProps) {
                       <span className="text-emerald-500">✓</span> Earn {avgEarning}/month part-time
                     </li>
                   </ul>
-                  <a
+                  <Link
                     href={VELLOEARN_REGISTER_URL}
-                    target="_blank"
+                    
                     rel="noopener noreferrer"
                     className="inline-block bg-violet-500 hover:bg-violet-600 text-white font-bold px-6 py-3 rounded-full transition-all hover:scale-105 text-sm"
                   >
                     Start AI Training — Free →
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -466,14 +466,14 @@ export default function CityPage({ params }: PageProps) {
               <span>⚡ Instant {payment} payouts</span>
             </div>
 
-            <a
+            <Link
               href={VELLOEARN_REGISTER_URL}
-              target="_blank"
+              
               rel="noopener noreferrer"
               className="inline-block bg-white text-rose-500 hover:bg-rose-50 font-extrabold text-xl px-12 py-5 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all"
             >
               Start Earning Now — Free →
-            </a>
+            </Link>
             
             <p className="text-rose-200/70 text-sm mt-4">
               No credit card · No payment required · Start earning instantly

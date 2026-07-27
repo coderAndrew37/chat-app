@@ -1,12 +1,11 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { STATS } from "@/data";
-import { whatsappNumber } from "@/lib/constants";
+import { VELLOEARN_REGISTER_URL, whatsappNumber } from "@/lib/constants";
 import type { Stat } from "@/types";
 import { MessageCircle } from "lucide-react";
+import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 
 function StatCard({ stat }: { stat: Stat }) {
   return (
@@ -33,46 +32,46 @@ const unsplash = (photoId: string) =>
 
 // Generate more profiles with diverse names and countries
 const PROFILES: Profile[] = [
-  { id: "1", name: "Margaret W.", age: 58, country: "USA", flag: "US", avatar: unsplash("photo-1566616213894-2d4e1baee5d8"), link: "https://starhela.com/register?ref=velloearn" },
-  { id: "2", name: "Robert H.", age: 62, country: "UK", flag: "GB", avatar: unsplash("photo-1544694032-19eb3ee39243"), link: "https://starhela.com/register?ref=velloearn" },
-  { id: "3", name: "Helga S.", age: 55, country: "Germany", flag: "DE", avatar: unsplash("photo-1543430720-fa600c67e423"), link: "https://starhela.com/register?ref=velloearn" },
-  { id: "4", name: "James M.", age: 64, country: "Canada", flag: "CA", avatar: unsplash("photo-1515515957482-9bfec374dbc4"), link: "https://starhela.com/register?ref=velloearn" },
-  { id: "5", name: "Karen P.", age: 51, country: "Australia", flag: "AU", avatar: unsplash("photo-1616286608358-0e1b143f7d2f"), link: "https://starhela.com/register?ref=velloearn" },
-  { id: "6", name: "Lars E.", age: 60, country: "Sweden", flag: "SE", avatar: unsplash("photo-1590074251929-76f7c465a3bd"), link: "https://starhela.com/register?ref=velloearn" },
-  { id: "7", name: "Ingrid O.", age: 57, country: "Norway", flag: "NO", avatar: unsplash("photo-1446161543652-83eaa65fddab"), link: "https://starhela.com/register?ref=velloearn" },
-  { id: "8", name: "Pierre D.", age: 63, country: "France", flag: "FR", avatar: unsplash("photo-1620894177222-b3d04146f00d"), link: "https://starhela.com/register?ref=velloearn" },
-  { id: "9", name: "Sofia R.", age: 54, country: "Italy", flag: "IT", avatar: unsplash("photo-1634552516330-ab1ccc0f605e"), link: "https://starhela.com/register?ref=velloearn" },
-  { id: "10", name: "Anouk V.", age: 56, country: "Netherlands", flag: "NL", avatar: unsplash("photo-1627622718888-1c8f96aadbbe"), link: "https://starhela.com/register?ref=velloearn" },
-  { id: "11", name: "William T.", age: 67, country: "USA", flag: "US", avatar: unsplash("photo-1613061886834-92a52edf31f0"), link: "https://starhela.com/register?ref=velloearn" },
-  { id: "12", name: "Diane K.", age: 59, country: "UK", flag: "GB", avatar: unsplash("photo-1665062173657-3912ae7991e0"), link: "https://starhela.com/register?ref=velloearn" },
-  { id: "13", name: "Carlos R.", age: 61, country: "Spain", flag: "ES", avatar: unsplash("photo-1507003211169-0a1dd7228f2d"), link: "https://starhela.com/register?ref=velloearn" },
-  { id: "14", name: "Maria L.", age: 53, country: "Portugal", flag: "PT", avatar: unsplash("photo-1494790108377-be9c29b29330"), link: "https://starhela.com/register?ref=velloearn" },
-  { id: "15", name: "Hans M.", age: 66, country: "Austria", flag: "AT", avatar: unsplash("photo-1500648767791-00dcc994a43e"), link: "https://starhela.com/register?ref=velloearn" },
-  { id: "16", name: "Elena K.", age: 52, country: "Greece", flag: "GR", avatar: unsplash("photo-1438761681033-6461ffad8d80"), link: "https://starhela.com/register?ref=velloearn" },
-  { id: "17", name: "David C.", age: 65, country: "Ireland", flag: "IE", avatar: unsplash("photo-1506794778202-cad84cf45f1d"), link: "https://starhela.com/register?ref=velloearn" },
-  { id: "18", name: "Anna S.", age: 50, country: "Poland", flag: "PL", avatar: unsplash("photo-1489424731084-a5d8b219a5bb"), link: "https://starhela.com/register?ref=velloearn" },
-  { id: "19", name: "Michael B.", age: 68, country: "Switzerland", flag: "CH", avatar: unsplash("photo-1472099645785-5658abf4ff4e"), link: "https://starhela.com/register?ref=velloearn" },
-  { id: "20", name: "Sarah J.", age: 56, country: "Belgium", flag: "BE", avatar: unsplash("photo-1544005313-94ddf0286df2"), link: "https://starhela.com/register?ref=velloearn" },
-  { id: "21", name: "Thomas W.", age: 63, country: "Denmark", flag: "DK", avatar: unsplash("photo-1507003211169-0a1dd7228f2d"), link: "https://starhela.com/register?ref=velloearn" },
-  { id: "22", name: "Emma L.", age: 54, country: "Finland", flag: "FI", avatar: unsplash("photo-1494790108377-be9c29b29330"), link: "https://starhela.com/register?ref=velloearn" },
-  { id: "23", name: "Oliver P.", age: 60, country: "New Zealand", flag: "NZ", avatar: unsplash("photo-1500648767791-00dcc994a43e"), link: "https://starhela.com/register?ref=velloearn" },
-  { id: "24", name: "Sophie M.", age: 57, country: "Ireland", flag: "IE", avatar: unsplash("photo-1438761681033-6461ffad8d80"), link: "https://starhela.com/register?ref=velloearn" },
-  { id: "25", name: "Daniel K.", age: 62, country: "South Africa", flag: "ZA", avatar: unsplash("photo-1506794778202-cad84cf45f1d"), link: "https://starhela.com/register?ref=velloearn" },
-  { id: "26", name: "Natalie R.", age: 55, country: "Russia", flag: "RU", avatar: unsplash("photo-1489424731084-a5d8b219a5bb"), link: "https://starhela.com/register?ref=velloearn" },
-  { id: "27", name: "Andreas G.", age: 64, country: "Greece", flag: "GR", avatar: unsplash("photo-1472099645785-5658abf4ff4e"), link: "https://starhela.com/register?ref=velloearn" },
-  { id: "28", name: "Isabella C.", age: 51, country: "Italy", flag: "IT", avatar: unsplash("photo-1544005313-94ddf0286df2"), link: "https://starhela.com/register?ref=velloearn" },
-  { id: "29", name: "Jonathan D.", age: 66, country: "UK", flag: "GB", avatar: unsplash("photo-1507003211169-0a1dd7228f2d"), link: "https://starhela.com/register?ref=velloearn" },
-  { id: "30", name: "Mia F.", age: 53, country: "Sweden", flag: "SE", avatar: unsplash("photo-1494790108377-be9c29b29330"), link: "https://starhela.com/register?ref=velloearn" },
-  { id: "31", name: "Gabriel S.", age: 59, country: "Brazil", flag: "BR", avatar: unsplash("photo-1500648767791-00dcc994a43e"), link: "https://starhela.com/register?ref=velloearn" },
-  { id: "32", name: "Victoria N.", age: 58, country: "Nigeria", flag: "NG", avatar: unsplash("photo-1438761681033-6461ffad8d80"), link: "https://starhela.com/register?ref=velloearn" },
-  { id: "33", name: "Alexander M.", age: 67, country: "Russia", flag: "RU", avatar: unsplash("photo-1506794778202-cad84cf45f1d"), link: "https://starhela.com/register?ref=velloearn" },
-  { id: "34", name: "Elizabeth W.", age: 52, country: "Canada", flag: "CA", avatar: unsplash("photo-1489424731084-a5d8b219a5bb"), link: "https://starhela.com/register?ref=velloearn" },
-  { id: "35", name: "Christopher B.", age: 65, country: "Australia", flag: "AU", avatar: unsplash("photo-1472099645785-5658abf4ff4e"), link: "https://starhela.com/register?ref=velloearn" },
-  { id: "36", name: "Grace P.", age: 54, country: "New Zealand", flag: "NZ", avatar: unsplash("photo-1544005313-94ddf0286df2"), link: "https://starhela.com/register?ref=velloearn" },
-  { id: "37", name: "Matthew H.", age: 61, country: "USA", flag: "US", avatar: unsplash("photo-1507003211169-0a1dd7228f2d"), link: "https://starhela.com/register?ref=velloearn" },
-  { id: "38", name: "Chloe D.", age: 50, country: "France", flag: "FR", avatar: unsplash("photo-1494790108377-be9c29b29330"), link: "https://starhela.com/register?ref=velloearn" },
-  { id: "39", name: "Andrew T.", age: 63, country: "Germany", flag: "DE", avatar: unsplash("photo-1500648767791-00dcc994a43e"), link: "https://starhela.com/register?ref=velloearn" },
-  { id: "40", name: "Hannah K.", age: 56, country: "Norway", flag: "NO", avatar: unsplash("photo-1438761681033-6461ffad8d80"), link: "https://starhela.com/register?ref=velloearn" },
+  { id: "1", name: "Margaret W.", age: 58, country: "USA", flag: "US", avatar: unsplash("photo-1566616213894-2d4e1baee5d8"), link: VELLOEARN_REGISTER_URL},
+  { id: "2", name: "Robert H.", age: 62, country: "UK", flag: "GB", avatar: unsplash("photo-1544694032-19eb3ee39243"), link: VELLOEARN_REGISTER_URL },
+  { id: "3", name: "Helga S.", age: 55, country: "Germany", flag: "DE", avatar: unsplash("photo-1543430720-fa600c67e423"), link: VELLOEARN_REGISTER_URL },
+  { id: "4", name: "James M.", age: 64, country: "Canada", flag: "CA", avatar: unsplash("photo-1515515957482-9bfec374dbc4"), link: VELLOEARN_REGISTER_URL },
+  { id: "5", name: "Karen P.", age: 51, country: "Australia", flag: "AU", avatar: unsplash("photo-1616286608358-0e1b143f7d2f"), link: VELLOEARN_REGISTER_URL },
+  { id: "6", name: "Lars E.", age: 60, country: "Sweden", flag: "SE", avatar: unsplash("photo-1590074251929-76f7c465a3bd"), link: VELLOEARN_REGISTER_URL },
+  { id: "7", name: "Ingrid O.", age: 57, country: "Norway", flag: "NO", avatar: unsplash("photo-1446161543652-83eaa65fddab"), link: VELLOEARN_REGISTER_URL },
+  { id: "8", name: "Pierre D.", age: 63, country: "France", flag: "FR", avatar: unsplash("photo-1620894177222-b3d04146f00d"), link: VELLOEARN_REGISTER_URL },
+  { id: "9", name: "Sofia R.", age: 54, country: "Italy", flag: "IT", avatar: unsplash("photo-1634552516330-ab1ccc0f605e"), link: VELLOEARN_REGISTER_URL },
+  { id: "10", name: "Anouk V.", age: 56, country: "Netherlands", flag: "NL", avatar: unsplash("photo-1627622718888-1c8f96aadbbe"), link: VELLOEARN_REGISTER_URL },
+  { id: "11", name: "William T.", age: 67, country: "USA", flag: "US", avatar: unsplash("photo-1613061886834-92a52edf31f0"), link: VELLOEARN_REGISTER_URL },
+  { id: "12", name: "Diane K.", age: 59, country: "UK", flag: "GB", avatar: unsplash("photo-1665062173657-3912ae7991e0"), link: VELLOEARN_REGISTER_URL },
+  { id: "13", name: "Carlos R.", age: 61, country: "Spain", flag: "ES", avatar: unsplash("photo-1507003211169-0a1dd7228f2d"), link: VELLOEARN_REGISTER_URL },
+  { id: "14", name: "Maria L.", age: 53, country: "Portugal", flag: "PT", avatar: unsplash("photo-1494790108377-be9c29b29330"), link: VELLOEARN_REGISTER_URL },
+  { id: "15", name: "Hans M.", age: 66, country: "Austria", flag: "AT", avatar: unsplash("photo-1500648767791-00dcc994a43e"), link: VELLOEARN_REGISTER_URL },
+  { id: "16", name: "Elena K.", age: 52, country: "Greece", flag: "GR", avatar: unsplash("photo-1438761681033-6461ffad8d80"), link: VELLOEARN_REGISTER_URL },
+  { id: "17", name: "David C.", age: 65, country: "Ireland", flag: "IE", avatar: unsplash("photo-1506794778202-cad84cf45f1d"), link: VELLOEARN_REGISTER_URL },
+  { id: "18", name: "Anna S.", age: 50, country: "Poland", flag: "PL", avatar: unsplash("photo-1489424731084-a5d8b219a5bb"), link: VELLOEARN_REGISTER_URL },
+  { id: "19", name: "Michael B.", age: 68, country: "Switzerland", flag: "CH", avatar: unsplash("photo-1472099645785-5658abf4ff4e"), link: VELLOEARN_REGISTER_URL },
+  { id: "20", name: "Sarah J.", age: 56, country: "Belgium", flag: "BE", avatar: unsplash("photo-1544005313-94ddf0286df2"), link: VELLOEARN_REGISTER_URL },
+  { id: "21", name: "Thomas W.", age: 63, country: "Denmark", flag: "DK", avatar: unsplash("photo-1507003211169-0a1dd7228f2d"), link: VELLOEARN_REGISTER_URL },
+  { id: "22", name: "Emma L.", age: 54, country: "Finland", flag: "FI", avatar: unsplash("photo-1494790108377-be9c29b29330"), link: VELLOEARN_REGISTER_URL },
+  { id: "23", name: "Oliver P.", age: 60, country: "New Zealand", flag: "NZ", avatar: unsplash("photo-1500648767791-00dcc994a43e"), link: VELLOEARN_REGISTER_URL },
+  { id: "24", name: "Sophie M.", age: 57, country: "Ireland", flag: "IE", avatar: unsplash("photo-1438761681033-6461ffad8d80"), link: VELLOEARN_REGISTER_URL },
+  { id: "25", name: "Daniel K.", age: 62, country: "South Africa", flag: "ZA", avatar: unsplash("photo-1506794778202-cad84cf45f1d"), link: VELLOEARN_REGISTER_URL },
+  { id: "26", name: "Natalie R.", age: 55, country: "Russia", flag: "RU", avatar: unsplash("photo-1489424731084-a5d8b219a5bb"), link: VELLOEARN_REGISTER_URL },
+  { id: "27", name: "Andreas G.", age: 64, country: "Greece", flag: "GR", avatar: unsplash("photo-1472099645785-5658abf4ff4e"), link: VELLOEARN_REGISTER_URL },
+  { id: "28", name: "Isabella C.", age: 51, country: "Italy", flag: "IT", avatar: unsplash("photo-1544005313-94ddf0286df2"), link: VELLOEARN_REGISTER_URL },
+  { id: "29", name: "Jonathan D.", age: 66, country: "UK", flag: "GB", avatar: unsplash("photo-1507003211169-0a1dd7228f2d"), link: VELLOEARN_REGISTER_URL },
+  { id: "30", name: "Mia F.", age: 53, country: "Sweden", flag: "SE", avatar: unsplash("photo-1494790108377-be9c29b29330"), link: VELLOEARN_REGISTER_URL },
+  { id: "31", name: "Gabriel S.", age: 59, country: "Brazil", flag: "BR", avatar: unsplash("photo-1500648767791-00dcc994a43e"), link: VELLOEARN_REGISTER_URL },
+  { id: "32", name: "Victoria N.", age: 58, country: "Nigeria", flag: "NG", avatar: unsplash("photo-1438761681033-6461ffad8d80"), link: VELLOEARN_REGISTER_URL },
+  { id: "33", name: "Alexander M.", age: 67, country: "Russia", flag: "RU", avatar: unsplash("photo-1506794778202-cad84cf45f1d"), link: VELLOEARN_REGISTER_URL },
+  { id: "34", name: "Elizabeth W.", age: 52, country: "Canada", flag: "CA", avatar: unsplash("photo-1489424731084-a5d8b219a5bb"), link: VELLOEARN_REGISTER_URL },
+  { id: "35", name: "Christopher B.", age: 65, country: "Australia", flag: "AU", avatar: unsplash("photo-1472099645785-5658abf4ff4e"), link: VELLOEARN_REGISTER_URL },
+  { id: "36", name: "Grace P.", age: 54, country: "New Zealand", flag: "NZ", avatar: unsplash("photo-1544005313-94ddf0286df2"), link: VELLOEARN_REGISTER_URL },
+  { id: "37", name: "Matthew H.", age: 61, country: "USA", flag: "US", avatar: unsplash("photo-1507003211169-0a1dd7228f2d"), link: VELLOEARN_REGISTER_URL },
+  { id: "38", name: "Chloe D.", age: 50, country: "France", flag: "FR", avatar: unsplash("photo-1494790108377-be9c29b29330"), link: VELLOEARN_REGISTER_URL },
+  { id: "39", name: "Andrew T.", age: 63, country: "Germany", flag: "DE", avatar: unsplash("photo-1500648767791-00dcc994a43e"), link: VELLOEARN_REGISTER_URL },
+  { id: "40", name: "Hannah K.", age: 56, country: "Norway", flag: "NO", avatar: unsplash("photo-1438761681033-6461ffad8d80"), link: VELLOEARN_REGISTER_URL },
 ];
 
 // More concurrent typers for a busier feel
@@ -145,7 +144,7 @@ function LiveChatFeed() {
   }, []);
 
   const handleProfileClick = (link: string) => {
-    window.location.href = link;
+    window.location.assign(link);
   };
 
   return (
@@ -210,7 +209,7 @@ function LiveChatFeed() {
         <div className="flex items-center justify-between text-xs">
           <span className="text-gray-400">+18 more active</span>
           <button 
-            onClick={() => window.location.href = "https://starhela.com/register?ref=velloearn"}
+            onClick={() => window.location.href = VELLOEARN_REGISTER_URL}
             className="text-emerald-500 font-medium hover:text-emerald-600 transition-colors flex items-center gap-1"
           >
             join to chat →
@@ -232,11 +231,10 @@ function TypingDots() {
 }
 
 export default function Hero() {
-  const router = useRouter();
 
   const handleStartChat = () => {
     // Direct link to chat platform - no modal
-    window.location.href = "https://starhela.com/register?ref=velloearn";
+    window.location.href = VELLOEARN_REGISTER_URL;
   };
 
   return (

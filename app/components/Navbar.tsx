@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { VELLOEARN_REGISTER_URL } from "@/lib/constants";
 
 interface NavLink {
   label: string;
@@ -45,7 +46,7 @@ export default function Navbar() {
 
   // Handle Apply button click - navigate to join page
   const handleApplyClick = () => {
-    router.push("/join");
+    router.push(VELLOEARN_REGISTER_URL);
   };
 
   return (

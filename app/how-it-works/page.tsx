@@ -1,8 +1,8 @@
 import { BASE_URL } from "@/lib/config";
+import { Award, Clock, MessageCircle, Shield, Users, Zap } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { MessageCircle, Users, Clock, Shield, Zap, Award } from "lucide-react";
-import Image from "next/image";
+import { VELLOEARN_REGISTER_URL } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "How It Works — Chat with Foreigners & Earn M-Pesa | VelloEarn",
@@ -207,14 +207,13 @@ export default function HowItWorks() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
-                href="https://starhela.com/register?ref=velloearn"
-                target="_blank"
+              <Link
+                href={VELLOEARN_REGISTER_URL}
                 rel="noopener noreferrer"
                 className="bg-rose-500 hover:bg-rose-600 text-white font-bold text-base px-8 py-4 rounded-full shadow-lg shadow-rose-200 transition-all hover:scale-105 active:scale-95"
               >
                 Start Chatting Now — Free
-              </a>
+              </Link>
               <Link
                 href="#steps"
                 className="bg-white hover:bg-gray-50 text-gray-700 font-semibold text-base px-8 py-4 rounded-full border border-gray-200 shadow-sm transition-all hover:scale-105 active:scale-95"
@@ -289,14 +288,13 @@ export default function HowItWorks() {
 
             {/* CTA after steps */}
             <div className="mt-12 text-center">
-              <a
-                href="https://starhela.com/register?ref=velloearn"
-                target="_blank"
+              <Link
+                href={VELLOEARN_REGISTER_URL}
                 rel="noopener noreferrer"
                 className="inline-block bg-rose-500 hover:bg-rose-600 text-white font-bold text-base px-10 py-4 rounded-full transition-all hover:scale-105 active:scale-95 shadow-lg shadow-rose-200"
               >
                 Start Your Free Account →
-              </a>
+              </Link>
               <p className="text-gray-400 text-sm mt-3">No registration fees · No hidden charges</p>
             </div>
           </div>
@@ -436,14 +434,13 @@ export default function HowItWorks() {
             <p className="text-rose-100 text-lg mb-10 leading-relaxed max-w-xl mx-auto">
               Free to join. No experience needed. Your first M-Pesa payout could be today.
             </p>
-            <a
-              href="https://starhela.com/register?ref=velloearn"
-              target="_blank"
+            <Link
+              href={VELLOEARN_REGISTER_URL}
               rel="noopener noreferrer"
               className="inline-block bg-white hover:bg-rose-50 text-rose-500 font-bold text-base px-10 py-4 rounded-full shadow-xl transition-all hover:scale-105 active:scale-95"
             >
               Start Chatting Now — Free →
-            </a>
+            </Link>
             <p className="text-rose-200 text-xs mt-5">
               No registration fees · Instant M-Pesa payouts · 61,000+ active chatters
             </p>
@@ -457,7 +454,7 @@ export default function HowItWorks() {
             <Link href="/about" className="hover:text-gray-600 transition-colors">About</Link>
             <Link href="/earn/chatting" className="hover:text-gray-600 transition-colors">Chatting track</Link>
             <Link href="/faq" className="hover:text-gray-600 transition-colors">FAQ</Link>
-            <a href="https://starhela.com/register?ref=velloearn" target="_blank" rel="noopener noreferrer" className="hover:text-gray-600 transition-colors">Start chatting</a>
+            <Link href={VELLOEARN_REGISTER_URL} rel="noopener noreferrer" className="hover:text-gray-600 transition-colors">Start chatting</Link>
           </div>
         </div>
 

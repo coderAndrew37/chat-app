@@ -1,6 +1,7 @@
 // app/components/LiveAITraining.tsx
 "use client";
 
+import { VELLOEARN_REGISTER_URL } from "@/lib/constants";
 import { TrendingUp } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
@@ -92,7 +93,7 @@ function LiveAITraining() {
   }, []);
 
   const handleTaskClick = () => {
-    window.location.href = "https://starhela.com/register?ref=velloearn";
+    window.location.href = VELLOEARN_REGISTER_URL;
   };
 
   const urgencyColors = {

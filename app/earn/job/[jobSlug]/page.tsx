@@ -18,6 +18,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Script from "next/script";
 import TrainingChannelBanner from "@/app/components/TrainingChannelBanner";
+import { VELLOEARN_REGISTER_URL } from "@/lib/constants";
 
 interface PageProps {
   params: Promise<{ jobSlug: string }>;
@@ -259,7 +260,7 @@ export default function GlobalJobPage({ params }: PageProps) {
 
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link
-                href={`/join`}
+                href={VELLOEARN_REGISTER_URL}
                 className="bg-rose-500 hover:bg-rose-600 text-white font-bold text-base px-8 py-4 rounded-full shadow-lg shadow-rose-200 transition-all hover:scale-105"
               >
                 Apply for {title} Jobs →
@@ -465,7 +466,7 @@ export default function GlobalJobPage({ params }: PageProps) {
               Apply free in 2 minutes. Onboarding queues are processed daily. Lock your operational dashboard slots now.
             </p>
             <Link
-              href={`/join`}
+              href={VELLOEARN_REGISTER_URL}
               className="inline-block bg-white text-rose-500 font-bold text-base px-10 py-4 rounded-full shadow-xl hover:scale-105 transition-all"
             >
               Initialize Free Application Now

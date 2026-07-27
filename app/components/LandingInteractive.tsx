@@ -10,8 +10,9 @@ import Requirements from "./Requirements";
 import SmartImage from "./SmartImage";
 import TestimonialSlider from "./TestimonialSlider";
 import TrainingChannelBanner from "./TrainingChannelBanner";
+import { VELLOEARN_REGISTER_URL } from "@/lib/constants";
 
-const VELLOEARN_REGISTER_URL = "https://starhela.com/register?ref=velloearn";
+
 
 // ─── Data ────────────────────────────────────────────────────────────────────
 
@@ -184,14 +185,14 @@ export default function LandingInteractive() {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
-                <a
+                <Link
                   href={VELLOEARN_REGISTER_URL}
-                  target="_blank"
+               
                   rel="noopener noreferrer"
                   className="bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold text-base px-8 py-4 rounded-full shadow-lg shadow-rose-200 transition-all hover:scale-105 active:scale-95"
                 >
                   Start Chatting — Free →
-                </a>
+                </Link>
                 <a
                   href="#what-we-do"
                   className="bg-white hover:bg-gray-50 text-gray-700 font-semibold text-base px-8 py-4 rounded-full border border-gray-200 shadow-sm transition-all hover:scale-105 active:scale-95"
@@ -538,14 +539,14 @@ export default function LandingInteractive() {
             <span>⚡ Instant M-Pesa payouts</span>
           </div>
 
-          <a
+          <Link
             href={VELLOEARN_REGISTER_URL}
-            target="_blank"
+         
             rel="noopener noreferrer"
             className="inline-block bg-white text-rose-500 hover:bg-rose-50 font-extrabold text-xl px-12 py-5 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all"
           >
             Start Earning Now — Free →
-          </a>
+          </Link>
           
           <p className="text-rose-200/70 text-sm mt-4">
             No credit card · No payment required · Start earning instantly

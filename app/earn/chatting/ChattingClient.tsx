@@ -7,8 +7,7 @@ import TrainingChannelBanner from "@/app/components/TrainingChannelBanner";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-
-const VELLOEARN_REGISTER_URL = "https://starhela.com/register?ref=velloearn";
+import { VELLOEARN_REGISTER_URL } from "@/lib/constants";
 
 // ─── SmartImage ───────────────────────────────────────────────────────────────
 function SmartImage({
@@ -294,14 +293,14 @@ export default function ChattingClient({ countryTarget }: ChattingClientProps) {
         </p>
 
         <div className="flex flex-col sm:flex-row gap-3 mb-10">
-          <a
+          <Link
             href={VELLOEARN_REGISTER_URL}
-            target="_blank"
+            
             rel="noopener noreferrer"
             className="bg-rose-500 hover:bg-rose-600 text-white font-bold text-base px-8 py-4 rounded-full shadow-lg shadow-rose-200 transition-all hover:scale-105 active:scale-95 text-center"
           >
             Start Chatting Now — Free →
-          </a>
+          </Link>
           <Link
             href="/blog/is-ai-training-a-scam-kenya"
             className="bg-white hover:bg-gray-50 text-gray-600 font-semibold text-base px-8 py-4 rounded-full border border-gray-200 shadow-sm transition-all hover:scale-105 active:scale-95 text-center"
@@ -406,14 +405,14 @@ export default function ChattingClient({ countryTarget }: ChattingClientProps) {
           </div>
 
           <div className="mt-10 text-center">
-            <a
+            <Link
               href={VELLOEARN_REGISTER_URL}
-              target="_blank"
+              
               rel="noopener noreferrer"
               className="inline-block bg-rose-500 hover:bg-rose-600 text-white font-bold text-base px-10 py-4 rounded-full shadow-lg shadow-rose-200 transition-all hover:scale-105 active:scale-95"
             >
               Start Chatting Now — Free →
-            </a>
+            </Link>
           </div>
         </div>
       </section>
@@ -570,14 +569,14 @@ export default function ChattingClient({ countryTarget }: ChattingClientProps) {
           <p className="text-rose-100 mb-8 leading-relaxed">
             Free to join. No experience needed. Your first conversation could be your first payout.
           </p>
-          <a
+          <Link
             href={VELLOEARN_REGISTER_URL}
-            target="_blank"
+            
             rel="noopener noreferrer"
             className="inline-block bg-white text-rose-500 font-bold text-base px-10 py-4 rounded-full shadow-xl hover:scale-105 active:scale-95 transition-all"
           >
             Start Chatting Now — Free →
-          </a>
+          </Link>
           <p className="text-rose-200 text-xs mt-4">
             Free to join · No fees · Instant {geo.wallet} payouts · 50,000+ active chatters
           </p>

@@ -6,19 +6,8 @@ import Link from "next/link";
 import LiveForeignersLearning from "@/app/components/LiveForeignersLearning";
 import SwahiliJobListings from "@/app/components/SwahiliJobListings";
 import TrainingChannelBanner from "@/app/components/TrainingChannelBanner";
+import { VELLOEARN_REGISTER_URL } from "@/lib/constants";
 
-const VELLOEARN_REGISTER_URL = "https://starhela.com/register?ref=velloearn";
-
-// --- Sub-components ---
-
-function SmartImage({ src, fallback, alt, fill, width, height, className, sizes, priority }: {
-  src: string; fallback: string; alt: string; fill?: boolean; width?: number; height?: number;
-  className?: string; sizes?: string; priority?: boolean;
-}) {
-  const [imgSrc, setImgSrc] = useState(src);
-  const props = { src: imgSrc, alt, className, onError: () => setImgSrc(fallback), sizes, priority };
-  return fill ? <Image {...props} fill unoptimized /> : <Image {...props} width={width ?? 400} height={height ?? 300} unoptimized />;
-}
 
 function ObjAccordion({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
@@ -144,14 +133,13 @@ export default function SwahiliClient() {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-3 mb-10">
-                <a
+                <Link
                   href={VELLOEARN_REGISTER_URL}
-                  target="_blank"
                   rel="noopener noreferrer"
                   className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold text-base px-8 py-4 rounded-full shadow-lg shadow-emerald-200 transition-all hover:scale-105 active:scale-95 text-center"
                 >
                   Start Teaching — Free →
-                </a>
+                </Link>
                 <Link
                   href="#how-it-works"
                   className="bg-white hover:bg-gray-50 text-gray-600 font-semibold text-base px-8 py-4 rounded-full border border-gray-200 shadow-sm transition-all hover:scale-105 active:scale-95 text-center"
@@ -179,7 +167,6 @@ export default function SwahiliClient() {
               {/* Main Image - Teaching */}
               <Link
                 href={VELLOEARN_REGISTER_URL}
-                target="_blank"
                 rel="noopener noreferrer"
                 className="col-span-2 relative rounded-2xl overflow-hidden h-48 sm:h-56 shadow-xl group"
               >
@@ -199,7 +186,6 @@ export default function SwahiliClient() {
               {/* Bottom Left - Students */}
               <Link
                 href={VELLOEARN_REGISTER_URL}
-                target="_blank"
                 rel="noopener noreferrer"
                 className="relative rounded-2xl overflow-hidden h-40 shadow-xl group"
               >
@@ -219,7 +205,6 @@ export default function SwahiliClient() {
               {/* Bottom Right - Stats Card */}
               <Link
                 href={VELLOEARN_REGISTER_URL}
-                target="_blank"
                 rel="noopener noreferrer"
                 className="relative rounded-2xl overflow-hidden h-40 bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-xl group hover:scale-105 transition-transform duration-300"
               >
@@ -332,14 +317,13 @@ export default function SwahiliClient() {
             ))}
           </div>
           <div className="mt-10 text-center">
-            <a
+            <Link
               href={VELLOEARN_REGISTER_URL}
-              target="_blank"
               rel="noopener noreferrer"
               className="inline-block bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-base px-10 py-4 rounded-full shadow-lg shadow-emerald-200 transition-all hover:scale-105 active:scale-95"
             >
               Start Teaching — Free →
-            </a>
+            </Link>
           </div>
         </div>
       </section>
@@ -406,14 +390,13 @@ export default function SwahiliClient() {
             <span>⚡ Instant M-Pesa payouts</span>
           </div>
 
-          <a
+          <Link
             href={VELLOEARN_REGISTER_URL}
-            target="_blank"
             rel="noopener noreferrer"
             className="inline-block bg-white text-emerald-600 hover:bg-emerald-50 font-extrabold text-xl px-12 py-5 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all"
           >
             Start Teaching — Free →
-          </a>
+          </Link>
           
           <p className="text-emerald-200/70 text-sm mt-4">
             No credit card · No payment required · Start earning instantly

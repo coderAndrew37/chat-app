@@ -2,7 +2,7 @@
 
 import { useState, type ReactNode, useEffect } from "react";
 import { Footer, Navbar, ApplicationModal } from "./components";
-import { toast } from "sonner";
+import { toast, Toaster } from "sonner";
 import WhatsAppWidget from "./components/WhatsappWidget";
 import { whatsappNumber } from "@/lib/constants";
 import AntiScrapeShield from "./components/AntiScrapeShield";
@@ -45,6 +45,9 @@ export default function LayoutClient({ children }: LayoutClientProps) {
       <DevToolsDefender />
       <InstallPrompt />
       <PWARegister />
+
+      {/* Sonner Toast Container */}
+      <Toaster position="top-center" richColors closeButton />
 
       {isApplyModalOpen && (
         <ApplicationModal

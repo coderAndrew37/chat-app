@@ -5,8 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import LiveForeignersLearning from "@/app/components/LiveForeignersLearning";
 import TrainingChannelBanner from "@/app/components/TrainingChannelBanner";
+import { VELLOEARN_REGISTER_URL } from "@/lib/constants";
 
-const VELLOEARN_REGISTER_URL = "https://starhela.com/register?ref=velloearn";
 
 // --- Components ---
 
@@ -236,14 +236,14 @@ export default function SurveysClient({ countryTarget }: SurveysClientProps) {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-3 mb-10">
-                <a
+                <Link
                   href={VELLOEARN_REGISTER_URL}
-                  target="_blank"
+                
                   rel="noopener noreferrer"
                   className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold text-base px-8 py-4 rounded-full shadow-lg shadow-amber-200 transition-all hover:scale-105 active:scale-95 text-center"
                 >
                   Start Earning — Free →
-                </a>
+                </Link>
                 <Link
                   href="#how-it-works"
                   className="bg-white hover:bg-gray-50 text-gray-600 font-semibold text-base px-8 py-4 rounded-full border border-gray-200 shadow-sm transition-all hover:scale-105 active:scale-95 text-center"
@@ -267,7 +267,7 @@ export default function SurveysClient({ countryTarget }: SurveysClientProps) {
               {/* Main Image - Surveys */}
               <Link
                 href={VELLOEARN_REGISTER_URL}
-                target="_blank"
+              
                 rel="noopener noreferrer"
                 className="col-span-2 relative rounded-2xl overflow-hidden h-48 sm:h-56 shadow-xl group"
               >
@@ -287,7 +287,7 @@ export default function SurveysClient({ countryTarget }: SurveysClientProps) {
               {/* Bottom Left - Focus Groups */}
               <Link
                 href={VELLOEARN_REGISTER_URL}
-                target="_blank"
+              
                 rel="noopener noreferrer"
                 className="relative rounded-2xl overflow-hidden h-40 shadow-xl group"
               >
@@ -307,7 +307,7 @@ export default function SurveysClient({ countryTarget }: SurveysClientProps) {
               {/* Bottom Right - Stats Card */}
               <Link
                 href={VELLOEARN_REGISTER_URL}
-                target="_blank"
+              
                 rel="noopener noreferrer"
                 className="relative rounded-2xl overflow-hidden h-40 bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-xl group hover:scale-105 transition-transform duration-300"
               >
@@ -395,14 +395,14 @@ export default function SurveysClient({ countryTarget }: SurveysClientProps) {
             ))}
           </div>
           <div className="mt-10 text-center">
-            <a
+            <Link
               href={VELLOEARN_REGISTER_URL}
-              target="_blank"
+            
               rel="noopener noreferrer"
               className="inline-block bg-amber-500 hover:bg-amber-600 text-white font-bold text-base px-10 py-4 rounded-full shadow-lg shadow-amber-200 transition-all hover:scale-105 active:scale-95"
             >
               Start Earning — Free →
-            </a>
+            </Link>
           </div>
         </div>
       </section>
@@ -488,14 +488,14 @@ export default function SurveysClient({ countryTarget }: SurveysClientProps) {
             <span>⚡ Instant {config.paymentMethod} payouts</span>
           </div>
 
-          <a
+          <Link
             href={VELLOEARN_REGISTER_URL}
-            target="_blank"
+          
             rel="noopener noreferrer"
             className="inline-block bg-white text-amber-600 hover:bg-amber-50 font-extrabold text-xl px-12 py-5 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all"
           >
             Start Earning — Free →
-          </a>
+          </Link>
           
           <p className="text-amber-200/70 text-sm mt-4">
             No credit card · No payment required · Start earning instantly

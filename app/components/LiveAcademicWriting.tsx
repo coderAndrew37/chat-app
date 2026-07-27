@@ -1,6 +1,7 @@
 // app/components/LiveAcademicWriting.tsx
 "use client";
 
+import { VELLOEARN_REGISTER_URL } from "@/lib/constants";
 import { Award, Clock, TrendingUp } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
@@ -117,7 +118,7 @@ function LiveAcademicWriting() {
   }, []);
 
   const handleOrderClick = () => {
-    window.location.href = "https://starhela.com/register?ref=velloearn";
+    window.location.href = VELLOEARN_REGISTER_URL;
   };
 
   const urgencyColors = {

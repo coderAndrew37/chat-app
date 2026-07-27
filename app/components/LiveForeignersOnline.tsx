@@ -2,6 +2,8 @@
 
 import { useEffect, useState, useRef } from "react";
 import { MessageCircle } from "lucide-react";
+import { VELLOEARN_REGISTER_URL } from "@/lib/constants";
+import Link from "next/link";
 
 type Profile = {
   id: string;
@@ -16,7 +18,7 @@ type Profile = {
 const unsplash = (photoId: string) =>
   `https://images.unsplash.com/${photoId}?auto=format&fit=crop&w=200&h=200&q=80`;
 
-const PLACEHOLDER_LINK = "https://starhela.com/register?ref=velloearn"; // Replace with actual chat link if available
+const PLACEHOLDER_LINK = VELLOEARN_REGISTER_URL; // Replace with actual chat link if available
 
 const PROFILES: Profile[] = [
   { id: "1", name: "Margaret W.", age: 58, country: "USA", flag: "US", avatar: unsplash("photo-1566616213894-2d4e1baee5d8"), link: PLACEHOLDER_LINK },
@@ -122,12 +124,12 @@ export default function LiveForeignersOnline() {
         </div>
 
         <div className="mt-8 text-center">
-          <a
+          <Link
             href={PLACEHOLDER_LINK}
             className="inline-flex items-center gap-1 text-sm font-medium text-teal-700 underline decoration-teal-300 underline-offset-4 hover:text-teal-800"
           >
             👉 + 58 more active — join to chat
-          </a>
+          </Link>
         </div>
       </div>
     </div>
@@ -174,12 +176,12 @@ function ProfileCard({ profile, isTyping }: { profile: Profile; isTyping: boolea
           </div>
 
           <div className="mt-2 flex items-center gap-2">
-            <a
+            <Link
               href={profile.link}
               className="rounded-full bg-teal-700 px-4 py-1.5 text-sm font-medium text-white hover:bg-teal-800 transition-colors"
             >
               Start
-            </a>
+            </Link>
             <a
               href={profile.link}
               className="rounded-full border border-slate-200 px-4 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors"

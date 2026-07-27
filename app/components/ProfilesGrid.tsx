@@ -5,15 +5,16 @@ import { PROFILES } from "@/data";
 import type { Profile } from "@/types";
 import LiveForeignersOnline from "./LiveForeignersOnline";
 
-const VELLOEARN_REGISTER_URL = "https://starhela.com/register?ref=velloearn";
+import { VELLOEARN_REGISTER_URL } from "@/lib/constants"; // Import the constant
+import Link from "next/link";
 
 // Individual card — lock icon overlay, no "Chat Now" button
 // This is social proof / platform preview, not a browse UI
 function ProfileCard({ profile }: { profile: Profile }) {
   return (
-    <a
+    <Link
       href={VELLOEARN_REGISTER_URL}
-      target="_blank"
+   
       rel="noopener noreferrer"
       className="group relative rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 aspect-[2/3] block"
     >
@@ -55,7 +56,7 @@ function ProfileCard({ profile }: { profile: Profile }) {
         </div>
         <div className="text-white/70 text-xs mt-0.5">{profile.city}</div>
       </div>
-    </a>
+    </Link>
   );
 }
 
@@ -120,7 +121,7 @@ export default function ProfilesGrid({ onApplyClick }: ProfilesGridProps) {
               </p>
               <a
                 href={VELLOEARN_REGISTER_URL}
-                target="_blank"
+             
                 rel="noopener noreferrer"
                 className="bg-rose-500 hover:bg-rose-600 text-white font-bold px-7 py-3 rounded-full shadow-md shadow-rose-200 transition-all hover:scale-105 active:scale-95 text-sm inline-block"
               >

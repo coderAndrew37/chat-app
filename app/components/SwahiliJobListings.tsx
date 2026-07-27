@@ -1,9 +1,10 @@
 // app/components/SwahiliJobListings.tsx
 "use client";
 
-import { BookOpen, Clock, Users, Star, TrendingUp } from "lucide-react";
+import { VELLOEARN_REGISTER_URL } from "@/lib/constants";
+import { BookOpen, Clock, TrendingUp, Users } from "lucide-react";
+import Link from "next/link";
 
-const VELLOEARN_REGISTER_URL = "https://starhela.com/register?ref=velloearn";
 
 interface TeachingJob {
   id: string;
@@ -165,14 +166,13 @@ export default function SwahiliJobListings() {
       <div className="mt-4 pt-3 border-t border-gray-100">
         <div className="flex items-center justify-between text-xs text-gray-400">
           <span>+{TEACHING_JOBS.length * 2} more students waiting</span>
-          <a
+          <Link
             href={VELLOEARN_REGISTER_URL}
-            target="_blank"
             rel="noopener noreferrer"
             className="text-emerald-500 font-medium hover:text-emerald-600 transition-colors flex items-center gap-1"
           >
             Apply to teach →
-          </a>
+          </Link>
         </div>
       </div>
     </div>

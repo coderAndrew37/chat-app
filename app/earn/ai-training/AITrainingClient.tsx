@@ -1,16 +1,14 @@
 "use client";
 
+import EarnerStoriesCarousel from "@/app/components/EarnerStoriesGrid";
 import { TESTIMONIALS } from "@/app/components/LandingInteractive";
+import LiveAITraining from "@/app/components/LiveAITraining";
 import Requirements from "@/app/components/Requirements";
 import TestimonialSlider from "@/app/components/TestimonialSlider";
-import Image from "next/image";
+import TrainingChannelBanner from "@/app/components/TrainingChannelBanner";
+import { VELLOEARN_REGISTER_URL } from "@/lib/constants";
 import Link from "next/link";
 import { useState } from "react";
-import EarnerStoriesCarousel from "@/app/components/EarnerStoriesGrid";
-import LiveAITraining from "@/app/components/LiveAITraining";
-import TrainingChannelBanner from "@/app/components/TrainingChannelBanner";
-
-const VELLOEARN_REGISTER_URL = "https://starhela.com/register?ref=velloearn";
 
 // --- Sub-components ---
 
@@ -349,14 +347,14 @@ export default function AITrainingClient({ countryTarget = "kenya" }: AITraining
                 {geo.heroSubText}
               </p>
               <div className="flex flex-col sm:flex-row gap-3 mb-10">
-                <a
+                <Link
                   href={VELLOEARN_REGISTER_URL}
-                  target="_blank"
+                 
                   rel="noopener noreferrer"
                   className="bg-violet-500 hover:bg-violet-600 text-white font-bold text-base px-8 py-4 rounded-full shadow-lg shadow-violet-200 transition-all hover:scale-105 active:scale-95 text-center"
                 >
                   Start Training — Free →
-                </a>
+                </Link>
                 <Link
                   href="/blog/is-ai-training-a-scam-kenya"
                   className="bg-white hover:bg-gray-50 text-gray-600 font-semibold text-base px-8 py-4 rounded-full border border-gray-200 shadow-sm transition-all hover:scale-105 active:scale-95 text-center"
@@ -390,10 +388,10 @@ export default function AITrainingClient({ countryTarget = "kenya" }: AITraining
                 </div>
                 <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2">
                   {geo.activeJobs.map((job, i) => (
-                    <a
+                    <Link
                       key={i}
                       href={VELLOEARN_REGISTER_URL}
-                      target="_blank"
+                     
                       rel="noopener noreferrer"
                       className="block bg-gray-50 hover:bg-violet-50 border border-gray-100 hover:border-violet-200 rounded-xl p-4 transition-all cursor-pointer group"
                     >
@@ -423,20 +421,20 @@ export default function AITrainingClient({ countryTarget = "kenya" }: AITraining
                           <div className="text-[10px] text-gray-400">per task</div>
                         </div>
                       </div>
-                    </a>
+                    </Link>
                   ))}
                 </div>
                 <div className="mt-4 pt-3 border-t border-gray-100">
                   <div className="flex items-center justify-between text-xs text-gray-400">
                     <span>+{geo.activeJobs.length * 2} more tasks available</span>
-                    <a
+                    <Link
                       href={VELLOEARN_REGISTER_URL}
-                      target="_blank"
+                     
                       rel="noopener noreferrer"
                       className="text-violet-500 font-medium hover:text-violet-600 transition-colors"
                     >
                       Apply to see all →
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -491,14 +489,14 @@ export default function AITrainingClient({ countryTarget = "kenya" }: AITraining
             ))}
           </div>
           <div className="mt-10 text-center">
-            <a
+            <Link
               href={VELLOEARN_REGISTER_URL}
-              target="_blank"
+             
               rel="noopener noreferrer"
               className="inline-block bg-violet-500 hover:bg-violet-600 text-white font-bold text-base px-10 py-4 rounded-full shadow-lg shadow-violet-200 transition-all hover:scale-105 active:scale-95"
             >
               Start Training — Free →
-            </a>
+            </Link>
           </div>
         </div>
       </section>
@@ -588,14 +586,14 @@ export default function AITrainingClient({ countryTarget = "kenya" }: AITraining
             {geo.objections.map((o, i) => <ObjAccordion key={i} q={o.q} a={o.a} />)}
           </div>
           <div className="mt-8 text-center">
-            <a
+            <Link
               href={VELLOEARN_REGISTER_URL}
-              target="_blank"
+             
               rel="noopener noreferrer"
               className="text-violet-600 font-semibold text-sm hover:text-violet-700 transition inline-flex items-center gap-1"
             >
               Still have questions? Ask us directly →
-            </a>
+            </Link>
           </div>
         </div>
       </section>
@@ -606,14 +604,14 @@ export default function AITrainingClient({ countryTarget = "kenya" }: AITraining
         <div className="relative z-10 max-w-xl mx-auto px-4">
           <h2 className="text-3xl font-extrabold text-white mb-6">Start your first task this week.</h2>
           <p className="text-violet-200 text-sm mb-6">{geo.finalCtaSubText}</p>
-          <a
+          <Link
             href={VELLOEARN_REGISTER_URL}
-            target="_blank"
+           
             rel="noopener noreferrer"
             className="inline-block bg-white text-violet-600 font-bold px-10 py-4 rounded-full shadow-xl hover:scale-105 active:scale-95 transition-all duration-150"
           >
             {geo.finalCtaButtonLabel}
-          </a>
+          </Link>
           <p className="text-violet-300 text-xs mt-4">
             Free to join · No fees · Start earning today
           </p>

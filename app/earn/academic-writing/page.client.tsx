@@ -2,11 +2,12 @@
 
 import LiveAcademicWriting from "@/app/components/LiveAcademicWriting";
 import TrainingChannelBanner from "@/app/components/TrainingChannelBanner";
+import { VELLOEARN_REGISTER_URL } from "@/lib/constants";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
-const VELLOEARN_REGISTER_URL = "https://starhela.com/register?ref=velloearn";
+
 
 // --- Components ---
 
@@ -192,11 +193,11 @@ export default function AcademicWritingClient({ countryTarget }: AcademicWriting
 
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight tracking-tight mb-4">
                 Your degree is sitting <br />
-                <span className="text-emerald-600">idle. It shouldn't be.</span>
+                <span className="text-emerald-600">idle. It shouldn&apos;t be.</span>
               </h1>
 
               <p className="text-base sm:text-lg text-gray-600 leading-relaxed mb-4 max-w-lg">
-                Students worldwide pay for quality academic writing. If you write well — in any subject — there's a queue of orders waiting. Get paid per paper, directly to {config.paymentMethod}, on your own schedule.
+                Students worldwide pay for quality academic writing. If you write well — in any subject — there&apos;s a queue of orders waiting. Get paid per paper, directly to {config.paymentMethod}, on your own schedule.
               </p>
 
               <p className="text-sm sm:text-base text-gray-400 mb-8 max-w-lg">
@@ -204,14 +205,14 @@ export default function AcademicWritingClient({ countryTarget }: AcademicWriting
               </p>
 
               <div className="flex flex-col sm:flex-row gap-3 mb-10">
-                <a
+                <Link
                   href={VELLOEARN_REGISTER_URL}
-                  target="_blank"
+               
                   rel="noopener noreferrer"
                   className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-base px-8 py-4 rounded-full shadow-lg shadow-emerald-200 transition-all hover:scale-105 active:scale-95 text-center"
                 >
                   Start Writing — Free →
-                </a>
+                </Link>
                 <Link
                   href="#how-it-works"
                   className="bg-white hover:bg-gray-50 text-gray-600 font-semibold text-base px-8 py-4 rounded-full border border-gray-200 shadow-sm transition-all hover:scale-105 active:scale-95 text-center"
@@ -235,7 +236,7 @@ export default function AcademicWritingClient({ countryTarget }: AcademicWriting
               {/* Main Image - Writing */}
               <Link
                 href={VELLOEARN_REGISTER_URL}
-                target="_blank"
+             
                 rel="noopener noreferrer"
                 className="col-span-2 relative rounded-2xl overflow-hidden h-48 sm:h-56 shadow-xl group"
               >
@@ -255,7 +256,7 @@ export default function AcademicWritingClient({ countryTarget }: AcademicWriting
               {/* Bottom Left - Research */}
               <Link
                 href={VELLOEARN_REGISTER_URL}
-                target="_blank"
+             
                 rel="noopener noreferrer"
                 className="relative rounded-2xl overflow-hidden h-40 shadow-xl group"
               >
@@ -275,7 +276,7 @@ export default function AcademicWritingClient({ countryTarget }: AcademicWriting
               {/* Bottom Right - Stats Card */}
               <Link
                 href={VELLOEARN_REGISTER_URL}
-                target="_blank"
+             
                 rel="noopener noreferrer"
                 className="relative rounded-2xl overflow-hidden h-40 bg-gradient-to-br from-emerald-600 to-teal-600 flex items-center justify-center shadow-xl group hover:scale-105 transition-transform duration-300"
               >
@@ -358,14 +359,14 @@ export default function AcademicWritingClient({ countryTarget }: AcademicWriting
             ))}
           </div>
           <div className="mt-10 text-center">
-            <a
+            <Link
               href={VELLOEARN_REGISTER_URL}
-              target="_blank"
+           
               rel="noopener noreferrer"
               className="inline-block bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-base px-10 py-4 rounded-full shadow-lg shadow-emerald-200 transition-all hover:scale-105 active:scale-95"
             >
               Start Writing — Free →
-            </a>
+            </Link>
           </div>
         </div>
       </section>
@@ -484,14 +485,14 @@ export default function AcademicWritingClient({ countryTarget }: AcademicWriting
             <span>⚡ Instant {config.paymentMethod} payouts</span>
           </div>
 
-          <a
+          <Link
             href={VELLOEARN_REGISTER_URL}
-            target="_blank"
+         
             rel="noopener noreferrer"
             className="inline-block bg-white text-emerald-600 hover:bg-emerald-50 font-extrabold text-xl px-12 py-5 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all"
           >
             Start Writing — Free →
-          </a>
+          </Link>
           
           <p className="text-emerald-200/70 text-sm mt-4">
             No credit card · No payment required · Start earning instantly

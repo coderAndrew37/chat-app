@@ -1,6 +1,6 @@
 // No "use client" needed — pure presentational
 
-import { whatsappNumber } from "@/lib/constants";
+import { VELLOEARN_REGISTER_URL, whatsappNumber } from "@/lib/constants";
 import Link from "next/link";
 
 interface Step {
@@ -88,7 +88,7 @@ export default function HowItWorks() {
         {/* CTA buttons below steps */}
         <div className="mt-14 flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
-            href="https://starhela.com/register?ref=velloearn"
+            href={VELLOEARN_REGISTER_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="bg-rose-500 hover:bg-rose-600 text-white font-bold px-8 py-4 rounded-full shadow-lg shadow-rose-200 transition-all hover:scale-105 active:scale-95 text-center"

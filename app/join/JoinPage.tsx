@@ -8,10 +8,9 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import Image from "next/image";
-import { whatsappNumber } from "@/lib/constants";
+import { VELLOEARN_REGISTER_URL, whatsappNumber } from "@/lib/constants";
 import { useSearchParams } from "next/navigation";
 
-const VELLOEARN_REGISTER_URL = "https://starhela.com/register?ref=velloearn";
 import { fbq } from "@/app/components/pixels/MetaPixel";
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
@@ -227,9 +226,8 @@ function CtaButton({
 
   if (variant === "secondary") {
     return (
-      <a
+      <Link
         href={VELLOEARN_REGISTER_URL}
-        target="_blank"
         rel="noopener noreferrer"
         onClick={handleClick}
         className={`group flex items-center justify-center gap-2 bg-white hover:bg-gray-50 text-gray-700 font-semibold text-base px-8 py-4 rounded-full border border-gray-200 shadow-sm transition-all hover:scale-105 active:scale-95 ${className}`}
@@ -238,14 +236,13 @@ function CtaButton({
         <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
         </svg>
-      </a>
+      </Link>
     );
   }
 
   return (
-    <a
+    <Link
       href={VELLOEARN_REGISTER_URL}
-      target="_blank"
       rel="noopener noreferrer"
       onClick={handleClick}
       className={`group flex items-center justify-center gap-2 bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-extrabold text-lg px-10 py-5 rounded-full shadow-2xl shadow-rose-200 transition-all hover:scale-105 active:scale-95 ${className}`}
@@ -254,7 +251,7 @@ function CtaButton({
       <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
       </svg>
-    </a>
+    </Link>
   );
 }
 
@@ -710,14 +707,13 @@ export default function JoinPage() {
                 <h3 className="font-extrabold text-gray-900 text-base mb-1 group-hover:text-rose-500 transition-colors">{m.title}</h3>
                 <p className="text-emerald-600 font-bold text-sm mb-3">{m.pay}</p>
                 <p className="text-xs text-gray-500 leading-relaxed mb-4">{m.body}</p>
-                <a
+                <Link
                   href={VELLOEARN_REGISTER_URL}
-                  target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1 text-rose-500 font-semibold text-xs hover:gap-2 transition-all"
                 >
                   {m.cta} →
-                </a>
+                </Link>
               </div>
             ))}
           </div>
@@ -837,17 +833,16 @@ export default function JoinPage() {
           </div>
 
           <div className="mb-6">
-            <a
+            <Link
               href={VELLOEARN_REGISTER_URL}
-              target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-3 bg-white hover:bg-rose-50 text-rose-500 font-extrabold text-xl px-14 py-6 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all w-full sm:w-auto group"
             >
-              Start Chatting Now — It's Free
+              Start Chatting Now — It&apos;s Free
               <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
-            </a>
+            </Link>
           </div>
 
           <p className="text-rose-200/70 text-sm">
