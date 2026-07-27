@@ -6,10 +6,13 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/client";
 import { fbq } from "@/app/components/pixels/MetaPixel";
+import { X } from "lucide-react";
 
+// ─── Constants ──────────────────────────────────────────────────────────────
 const ACTIVATION_AMOUNT = 200;
 const POCHI_PHONE_NUMBER = "0746577838";
 
+// ─── Validation ─────────────────────────────────────────────────────────────
 const mpesaCodeSchema = z.object({
   mpesaCode: z
     .string()
@@ -19,6 +22,7 @@ const mpesaCodeSchema = z.object({
     .regex(/^[A-Z0-9]{10}$/, "Invalid M-Pesa transaction code format"),
 });
 
+// ─── Types ─────────────────────────────────────────────────────────────────
 interface UserProfile {
   id: string;
   username: string;
@@ -27,6 +31,98 @@ interface UserProfile {
   is_activated: boolean;
 }
 
+// ─── Floating M‑Pesa Ping Component ──────────────────────────────────────
+const MpesaPing = () => {
+  const [visible, setVisible] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const sampleMessages = [
+    "NG Ifeoma from Nigeria withdrew $215 via M-Pesa",
+    "KE Brian from Kenya withdrew KES 12,500 via M-Pesa",
+    "GH Ama from Ghana withdrew GHS 450 via M-Pesa",
+    "UG Sarah from Uganda withdrew UGX 120,000 via M-Pesa",
+    "TZ John from Tanzania withdrew TZS 85,000 via M-Pesa",
+    "ZA Thabo from South Africa withdrew ZAR 3,200 via M-Pesa",
+    "ZM Mutale from Zambia withdrew ZMW 2,100 via M-Pesa",
+    "BW Tshepo from Botswana withdrew BWP 1,800 via M-Pesa",
+    "KE Wanjiru from Kenya withdrew KES 8,200 via M-Pesa",
+    "NG Chidi from Nigeria withdrew $310 via M-Pesa",
+  ];
+
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+
+    const showNext = () => {
+      const randomIndex = Math.floor(Math.random() * sampleMessages.length);
+      setMessage(sampleMessages[randomIndex]);
+      setVisible(true);
+
+      // Hide after 5 seconds
+      timeout = setTimeout(() => {
+        setVisible(false);
+        // Schedule next after 3-8 seconds
+        const nextDelay = 3000 + Math.random() * 5000;
+        setTimeout(showNext, nextDelay);
+      }, 5000);
+    };
+
+    // Start first ping after 2 seconds
+    const initialDelay = setTimeout(showNext, 2000);
+
+    return () => {
+      clearTimeout(initialDelay);
+      clearTimeout(timeout);
+    };
+  }, []);
+
+  if (!visible) return null;
+
+return (
+  /* Positioned top-right and kept compact with max-w-xs */
+  <div className="fixed top-4 right-4 sm:top-6 sm:right-6 z-50 max-w-xs animate-in slide-in-from-top-5 fade-in duration-300">
+    <div className="bg-white rounded-xl shadow-xl border border-emerald-100 p-3 flex items-center gap-2.5">
+      
+      {/* M-Pesa Icon Badge */}
+      <div className="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center shrink-0">
+        <span className="text-emerald-600 text-sm font-extrabold">M</span>
+      </div>
+
+      {/* Message with Highlighted Amount */}
+      <div className="flex-1 min-w-0">
+        <p className="text-xs font-semibold text-slate-900 leading-snug">
+          {(() => {
+            // Regex to find and highlight currency amounts (e.g., $215, KES 12,500, GHS 450)
+            const parts = message.split(/(withdrew\s+)([\$\w\s\d,]+)(\s+via)/i);
+            if (parts.length >= 4) {
+              return (
+                <>
+                  <span className="truncate block">{parts[0]} withdrew</span>
+                  <span className="inline-block mt-0.5 px-1.5 py-0.5 bg-emerald-100 text-emerald-800 font-extrabold text-[11px] rounded-md border border-emerald-200/60 shadow-xs">
+                    {parts[2]}
+                  </span>{" "}
+                  <span className="text-slate-500 font-medium">{parts[3].trim()}</span>
+                </>
+              );
+            }
+            return message;
+          })()}
+        </p>
+        <p className="text-[10px] text-slate-400 font-medium mt-0.5">Just now</p>
+      </div>
+
+      {/* Close Button */}
+      <button
+        onClick={() => setVisible(false)}
+        className="text-slate-300 hover:text-slate-500 transition-colors p-0.5"
+      >
+        <X className="w-3.5 h-3.5" />
+      </button>
+    </div>
+  </div>
+);
+};
+
+// ─── Main Page ─────────────────────────────────────────────────────────────
 export default function ActivatePage() {
   const router = useRouter();
   const supabase = createClient();
@@ -36,15 +132,8 @@ export default function ActivatePage() {
   const [verifying, setVerifying] = useState(false);
   const [mpesaCode, setMpesaCode] = useState("");
   const [codeError, setCodeError] = useState<string | null>(null);
-  const [copied, setCopied] = useState(false);
 
-const handleCopyNumber = () => {
-  navigator.clipboard.writeText(POCHI_PHONE_NUMBER);
-  setCopied(true);
-  toast.success("Phone number copied to clipboard!");
-  setTimeout(() => setCopied(false), 2000);
-};
-
+  // ── Load user & check activation ──
   useEffect(() => {
     async function loadUser() {
       try {
@@ -61,7 +150,7 @@ const handleCopyNumber = () => {
 
         const { data: profileData, error: profileError } = await supabase
           .from("profiles")
-          .select("id, username, phone,  is_activated")
+          .select("id, username, phone, is_activated")
           .eq("id", user.id)
           .single();
 
@@ -83,7 +172,7 @@ const handleCopyNumber = () => {
           email: user.email || "",
           is_activated: profileData.is_activated,
         });
-      } catch (err: unknown) {
+      } catch {
         toast.error("Failed to load user information.");
       } finally {
         setLoading(false);
@@ -93,6 +182,7 @@ const handleCopyNumber = () => {
     loadUser();
   }, [router, supabase]);
 
+  // ── Verify M‑Pesa code ──
   const handleVerifyCode = async (e: React.FormEvent) => {
     e.preventDefault();
     setCodeError(null);
@@ -134,17 +224,14 @@ const handleCopyNumber = () => {
       toast.success("Code submitted! Verification in progress...");
       setMpesaCode("");
       router.push("/dashboard");
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        toast.error(err.message);
-      } else {
-        toast.error("An error occurred during verification. Please try again.");
-      }
+    } catch {
+      toast.error("An error occurred during verification. Please try again.");
     } finally {
       setVerifying(false);
     }
   };
 
+  // ── Loading state ──
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center text-slate-800">
@@ -154,24 +241,28 @@ const handleCopyNumber = () => {
     );
   }
 
+  // ── Render ──
   return (
     <main className="min-h-screen bg-slate-50 text-slate-900 pt-28 pb-16 px-4 sm:px-6 lg:px-8 overflow-y-auto">
+      {/* Floating M-Pesa Ping */}
+      <MpesaPing />
+
       <div className="max-w-md mx-auto">
         
-        {/* Header Title */}
-        <div className="text-center mb-6">
-          <h1 className="text-2xl font-black text-slate-900 tracking-tight uppercase">
-            ACCOUNT ACTIVATION
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
+            Activate Your Account
           </h1>
-          <p className="text-xs text-slate-600 mt-1">
-            Complete activation for: <span className="text-rose-600 font-bold">{profile?.username}</span>
+          <p className="text-sm text-slate-500 mt-1">
+            One‑time payment of <span className="font-bold text-rose-600">KES {ACTIVATION_AMOUNT}</span> unlocks your dashboard.
           </p>
         </div>
 
         {/* User Summary Card */}
-        <div className="bg-white rounded-3xl p-6 shadow-xl border border-slate-200/80 mb-6">
+        <div className="bg-white rounded-3xl p-6 shadow-lg border border-slate-200/80 mb-6">
           <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
-            Account Details Summary
+            Account Details
           </h2>
           <div className="grid grid-cols-2 gap-3 text-sm">
             <div className="bg-slate-50 p-3 rounded-2xl border border-slate-100">
@@ -190,36 +281,32 @@ const handleCopyNumber = () => {
         </div>
 
         {/* Payment Instructions Card */}
-        <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl border border-slate-200/80">
-          <div className="bg-rose-50 rounded-2xl p-4 border border-rose-100 mb-6 text-sm">
-            <h3 className="font-bold text-rose-600 text-xs uppercase tracking-wider mb-2">
-              Payment via Pochi la Biashara
+        <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-lg border border-slate-200/80">
+          <div className="bg-rose-50 rounded-2xl p-5 border border-rose-100 mb-6">
+            <h3 className="font-bold text-rose-600 text-sm uppercase tracking-wider mb-3">
+              💳 How to Activate your account via M‑Pesa
             </h3>
-            <ol className="space-y-1.5 text-slate-700 text-xs font-medium list-decimal list-inside leading-relaxed">
+            <ol className="space-y-2 text-slate-700 text-sm font-medium list-decimal list-inside leading-relaxed">
               <li>Open <strong className="text-slate-900">M-Pesa</strong> on your phone</li>
               <li>Select <strong className="text-slate-900">Lipa na M-Pesa</strong> → <strong className="text-rose-600">Pochi la Biashara</strong></li>
-            <li className="flex items-center flex-wrap gap-1.5">
-  <span>Phone:</span>
-  <button
-    type="button"
-    onClick={handleCopyNumber}
-    className="inline-flex items-center gap-1.5 bg-white hover:bg-slate-100 active:scale-95 px-2.5 py-1 rounded-lg border border-slate-200 text-slate-900 font-mono font-bold text-xs shadow-sm transition-all group"
-    title="Click to copy number"
-  >
-    <span>{POCHI_PHONE_NUMBER}</span>
-    <span className="text-[10px] text-slate-400 group-hover:text-rose-500 font-sans font-medium">
-      {copied ? "✓ Copied!" : "📋 Copy"}
-    </span>
-  </button>
-  <span className="text-slate-500 font-medium">(Melissa)</span>
-</li>
+              <li>
+                Phone:{" "}
+                <strong className="bg-white px-3 py-1 rounded-lg border border-slate-200 text-slate-900 font-mono">
+                  {POCHI_PHONE_NUMBER}
+                </strong>
+                <span className="text-slate-400 text-xs ml-1">(Melissa)</span>
+              </li>
+              <li>
+                Amount:{" "}
+                <strong className="text-rose-600 text-base">KES {ACTIVATION_AMOUNT}</strong>
+              </li>
             </ol>
           </div>
 
-          <form onSubmit={handleVerifyCode} className="space-y-4">
+          <form onSubmit={handleVerifyCode} className="space-y-5">
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                Enter M-Pesa Code
+              <label className="block text-sm font-bold text-slate-700 mb-1.5">
+                M‑Pesa Transaction Code
               </label>
               <input
                 type="text"
@@ -230,26 +317,33 @@ const handleCopyNumber = () => {
                 }}
                 placeholder="e.g. QLI3FQOGVJ"
                 maxLength={10}
-                className={`w-full px-4 py-3 bg-slate-50 border rounded-xl text-slate-900 font-mono placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 uppercase tracking-widest transition ${
+                className={`w-full px-5 py-4 bg-slate-50 border-2 rounded-2xl text-slate-900 font-mono placeholder-slate-400 text-lg focus:outline-none focus:ring-2 focus:ring-rose-500 uppercase tracking-widest transition ${
                   codeError ? "border-rose-500" : "border-slate-200"
                 }`}
               />
               {codeError && (
-                <p className="mt-1 text-xs text-rose-500 font-medium">{codeError}</p>
+                <p className="mt-1 text-sm text-rose-500 font-medium">{codeError}</p>
               )}
             </div>
 
             <button
               type="submit"
               disabled={verifying}
-              className="w-full py-4 px-6 rounded-full bg-rose-500 hover:bg-rose-600 text-white font-extrabold text-sm tracking-wide shadow-lg shadow-rose-500/20 transition-all hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:pointer-events-none uppercase"
+              className="w-full py-5 px-6 rounded-2xl bg-rose-500 hover:bg-rose-600 text-white font-bold text-lg tracking-wide shadow-lg shadow-rose-500/20 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
             >
-              {verifying ? "Confirming..." : "CONFIRM ACTIVATION"}
+              {verifying ? (
+                <span className="flex items-center justify-center gap-3">
+                  <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  Verifying…
+                </span>
+              ) : (
+                `Activate Now — KES ${ACTIVATION_AMOUNT}`
+              )}
             </button>
           </form>
 
-          <p className="mt-4 text-[11px] text-slate-500 text-center leading-relaxed">
-            Your account will be instantly verified once total payments reach Ksh {ACTIVATION_AMOUNT}.
+          <p className="mt-5 text-xs text-slate-400 text-center leading-relaxed">
+            Your account will be live within minutes after verification.
           </p>
         </div>
 
