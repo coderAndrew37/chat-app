@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { fbq } from "@/app/components/pixels/MetaPixel";
 import { createClient } from "@/lib/supabase/client";
 import { registerSchema, type RegisterInput } from "@/lib/validations/auth";
+import { getStoredClickIds } from "@/lib/tracking";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -39,7 +40,6 @@ export default function RegisterPage() {
     setLoading(false);
     setFieldErrors({});
 
-    // 1. Zod Client Validation (Enforcing Kenya as default country)
     const validationResult = registerSchema.safeParse({
       ...formData,
       country: "kenya",
@@ -61,7 +61,6 @@ export default function RegisterPage() {
     try {
       const { username, email, password, phone } = validationResult.data;
 
-      // 2. Pre-check if Username already exists
       const { data: existingUser } = await supabase
         .from("profiles")
         .select("username")
@@ -78,7 +77,6 @@ export default function RegisterPage() {
         return;
       }
 
-      // 3. Instant Supabase Sign Up
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email,
         password,
@@ -100,45 +98,46 @@ export default function RegisterPage() {
         return;
       }
 
-     if (authData.user) {
-  // 4. Save profile details
-  const { error: profileError } = await supabase.from("profiles").upsert(
-    {
-      id: authData.user.id,
-      email,
-      username,
-      phone,
-      is_activated: false,
-    },
-    { onConflict: "id" }
-  );
+      if (authData.user) {
+        const { fbclid, gclid } = getStoredClickIds();
 
-  if (profileError) {
-    console.error("Profile Upsert Error:", profileError);
-    
-    // Handle duplicate phone error (Postgres unique constraint violation)
-    if (profileError.code === "23505" || profileError.message?.includes("phone")) {
-      setFieldErrors((prev) => ({
-        ...prev,
-        phone: "This phone number is already registered.",
-      }));
-      toast.error("This phone number is already in use.");
-    } else {
-      toast.error("Account created, but failed to initialize profile.");
-    }
-    setLoading(false);
-    return;
-  }
+        const { error: profileError } = await supabase.from("profiles").upsert(
+          {
+            id: authData.user.id,
+            email,
+            username,
+            phone,
+            is_activated: false,
+            fbclid,
+            gclid,
+          },
+          { onConflict: "id" }
+        );
 
-  // 5. Pixel Track & Redirect
-  fbq("CompleteRegistration", {
-    content_name: "VelloEarn Free Registration",
-    status: "success",
-  });
+        if (profileError) {
+          console.error("Profile Upsert Error:", profileError);
 
-  toast.success("Account created! Redirecting to activation...");
-  router.push("/join/activate");
-}
+          if (profileError.code === "23505" || profileError.message?.includes("phone")) {
+            setFieldErrors((prev) => ({
+              ...prev,
+              phone: "This phone number is already registered.",
+            }));
+            toast.error("This phone number is already in use.");
+          } else {
+            toast.error("Account created, but failed to initialize profile.");
+          }
+          setLoading(false);
+          return;
+        }
+
+        fbq("CompleteRegistration", {
+          content_name: "VelloEarn Free Registration",
+          status: "success",
+        });
+
+        toast.success("Account created! Redirecting to activation...");
+        router.push("/join/activate");
+      }
     } catch (err: unknown) {
       if (err instanceof Error) {
         toast.error(err.message);
@@ -153,7 +152,6 @@ export default function RegisterPage() {
   return (
     <main className="min-h-screen bg-slate-50 text-slate-900 pt-28 pb-16 px-4 sm:px-6 lg:px-8 overflow-y-auto">
       <div className="max-w-md mx-auto">
-        {/* Header */}
         <div className="text-center mb-8">
           <Link href="/join" className="inline-flex items-center gap-2 mb-4">
             <div className="w-10 h-10 bg-rose-500 rounded-2xl flex items-center justify-center font-bold text-xl text-white shadow-lg shadow-rose-500/20">
@@ -177,10 +175,8 @@ export default function RegisterPage() {
           </p>
         </div>
 
-        {/* Form Container */}
         <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl border border-slate-200/80">
           <form className="space-y-4" onSubmit={handleRegister} noValidate>
-            {/* Username */}
             <div>
               <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
                 Username
@@ -196,13 +192,10 @@ export default function RegisterPage() {
                 }`}
               />
               {fieldErrors.username && (
-                <p className="mt-1 text-xs text-rose-500 font-semibold">
-                  {fieldErrors.username}
-                </p>
+                <p className="mt-1 text-xs text-rose-500 font-semibold">{fieldErrors.username}</p>
               )}
             </div>
 
-            {/* Email */}
             <div>
               <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
                 Email address
@@ -218,13 +211,10 @@ export default function RegisterPage() {
                 }`}
               />
               {fieldErrors.email && (
-                <p className="mt-1 text-xs text-rose-500 font-semibold">
-                  {fieldErrors.email}
-                </p>
+                <p className="mt-1 text-xs text-rose-500 font-semibold">{fieldErrors.email}</p>
               )}
             </div>
 
-            {/* Phone Number */}
             <div>
               <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
                 Phone Number (M-Pesa)
@@ -240,13 +230,10 @@ export default function RegisterPage() {
                 }`}
               />
               {fieldErrors.phone && (
-                <p className="mt-1 text-xs text-rose-500 font-semibold">
-                  {fieldErrors.phone}
-                </p>
+                <p className="mt-1 text-xs text-rose-500 font-semibold">{fieldErrors.phone}</p>
               )}
             </div>
 
-            {/* Password */}
             <div>
               <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
                 Password
@@ -262,13 +249,10 @@ export default function RegisterPage() {
                 }`}
               />
               {fieldErrors.password && (
-                <p className="mt-1 text-xs text-rose-500 font-semibold">
-                  {fieldErrors.password}
-                </p>
+                <p className="mt-1 text-xs text-rose-500 font-semibold">{fieldErrors.password}</p>
               )}
             </div>
 
-            {/* Submit Button */}
             <button
               type="submit"
               disabled={loading}
