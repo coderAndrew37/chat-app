@@ -231,7 +231,7 @@ const components: PortableTextComponents = {
             
           </div>
           <Link
-            href={value.url || "https://www.velloearn.co.ke/join"}
+            href={"https://starhela.com/register?ref=velloearn" }
             className="shrink-0 px-6 py-3 bg-white text-rose-500 rounded-full font-bold text-sm hover:bg-rose-50 transition-colors shadow-md"
           >
             {value.buttonText || "Join Now"}
