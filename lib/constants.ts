@@ -11,4 +11,4 @@ export const REQUIREMENTS: RequirementItem[] = [
 ];
 
 export const WA_NUMBER = "254107445114"; 
-export const VELLOEARN_REGISTER_URL = "https://starhela.com/register?ref=velloearn";
+export const VELLOEARN_REGISTER_URL = "https://mulaearn.com/register.php?ref=velloearn";
