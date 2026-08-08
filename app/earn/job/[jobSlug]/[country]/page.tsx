@@ -7,7 +7,6 @@ import { use } from "react"; // 👈 Required to unpack the async params stream 
 import { notFound } from "next/navigation"; // 👈 Gracefully redirects missing slugs instead of throwing errors
 import type { Metadata } from "next";
 import Link from "next/link";
-import Script from "next/script";
 import {
   getMarket,
   getJobType,
@@ -114,8 +113,8 @@ export default function JobCountryPage({ params }: PageProps) {
 
   const schemas = [
     breadcrumbSchema([
-      { name: "Home",                        href: "/"                                       },
-      { name: `Online Jobs in ${country}`,   href: `/earn/country/${market.slug}`                    },
+      { name: "Home",                        href: "/"                                    },
+      { name: `Online Jobs in ${country}`,   href: `/earn/country/${market.slug}`            },
       { name: `${title} Jobs in ${country}`, href: `/earn/job/${jobSlug}/${market.slug}` },
     ]),
     faqSchema(faqs),
@@ -133,9 +132,8 @@ export default function JobCountryPage({ params }: PageProps) {
   return (
     <>
       {schemas.map((s, i) => (
-        <Script
+        <script
           key={i}
-          id={`schema-job-${i}`}
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(s) }}
         />
@@ -243,7 +241,7 @@ export default function JobCountryPage({ params }: PageProps) {
               ))}
             </div>
             <div className="text-center mt-8">
-              <ApplyButton  label="Apply Free — Takes 2 Minutes" />
+              <ApplyButton label="Apply Free — Takes 2 Minutes" />
             </div>
           </div>
         </section>
@@ -323,7 +321,6 @@ export default function JobCountryPage({ params }: PageProps) {
               Apply free in 2 minutes. Activation on WhatsApp. Payout to {payment}.
             </p>
             <ApplyButton
-            
               label={`Apply for ${title} Jobs — ${country}`}
               className="inline-block bg-white text-rose-500 font-bold text-base px-10 py-4 rounded-full shadow-xl hover:scale-105 transition-all"
             />
