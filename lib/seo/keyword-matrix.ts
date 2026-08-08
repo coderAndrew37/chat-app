@@ -218,6 +218,17 @@ export const JOB_TYPES: JobType[] = [
     searchVolumeTier: "high",
   },
   {
+    slug: "chat-moderation",
+    title: "Chat Moderation",
+    shortTitle: "chat moderation",
+    icon: "💬",
+    tagline: "Moderate chats and manage online community messages.",
+    description:
+      "Manage customer tickets, moderate live text chats, and process platform queries 24/7.",
+    badge: "24/7 Shifts",
+    searchVolumeTier: "high",
+  },
+  {
     slug: "ai-training",
     title: "AI Training",
     shortTitle: "AI training",
@@ -229,15 +240,15 @@ export const JOB_TYPES: JobType[] = [
     searchVolumeTier: "high",
   },
   {
-    slug: "swahili-teaching",
-    title: "Teach Swahili Online",
-    shortTitle: "Swahili teaching",
-    icon: "🌍",
-    tagline: "Foreigners pay to learn what you already speak fluently.",
+    slug: "ai-annotation",
+    title: "AI Data Annotation",
+    shortTitle: "AI annotation",
+    icon: "🏷️",
+    tagline: "Label data, audio, and images to power next-gen AI.",
     description:
-      "One-on-one and group lessons for international learners via video or chat. Your mother tongue is your income.",
-    badge: "Unique skill",
-    searchVolumeTier: "medium",
+      "Perform high-speed bounding box, sentiment, and entity tagging for machine learning models.",
+    badge: "Top Pick",
+    searchVolumeTier: "high",
   },
   {
     slug: "surveys",
@@ -249,6 +260,28 @@ export const JOB_TYPES: JobType[] = [
       "Paid surveys, product testing, and consumer research tasks from global companies. Quick to start, consistent payouts.",
     badge: "Quick start",
     searchVolumeTier: "high",
+  },
+  {
+    slug: "foreigners",
+    title: "Expat & Foreigner Micro-Jobs",
+    shortTitle: "foreigner jobs",
+    icon: "🌐",
+    tagline: "Location-independent micro-tasks for foreign residents.",
+    description:
+      "Remote task opportunities open to non-citizens, expatriates, and international remote workers.",
+    badge: "Global Access",
+    searchVolumeTier: "medium",
+  },
+  {
+    slug: "swahili-teaching",
+    title: "Teach Swahili Online",
+    shortTitle: "Swahili teaching",
+    icon: "🌍",
+    tagline: "Foreigners pay to learn what you already speak fluently.",
+    description:
+      "One-on-one and group lessons for international learners via video or chat. Your mother tongue is your income.",
+    badge: "Unique skill",
+    searchVolumeTier: "medium",
   },
   {
     slug: "academic-writing",
@@ -272,6 +305,19 @@ export const JOB_TYPES: JobType[] = [
     badge: "High potential",
     searchVolumeTier: "medium",
   },
+  // lib/seo/keyword-matrix.ts -> inside JOB_TYPES array
+
+{
+  slug: "setswana-teaching",
+  title: "Teach Setswana Online",
+  shortTitle: "Setswana teaching",
+  icon: "🗣️",
+  tagline: "Get paid to help foreign expats and tourists practice Setswana.",
+  description:
+    "Host informal remote conversational lessons for international learners. Earn daily payouts directly to Orange Money, MyZaka, or bank transfer.",
+  badge: "Native Language",
+  searchVolumeTier: "medium",
+},
 ];
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────

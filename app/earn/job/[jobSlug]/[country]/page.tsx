@@ -184,7 +184,7 @@ export default function JobCountryPage({ params }: PageProps) {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <ApplyButton track={title} label={`Apply for ${title} Jobs →`} />
+              <ApplyButton label={`Apply for ${title} Jobs →`} />
               <Link
                 href={`/earn/country/${market.slug}`}
                 className="bg-white text-gray-700 font-semibold text-base px-8 py-4 rounded-full border border-gray-200 shadow-sm transition-all hover:scale-105"
@@ -243,7 +243,7 @@ export default function JobCountryPage({ params }: PageProps) {
               ))}
             </div>
             <div className="text-center mt-8">
-              <ApplyButton track={title} label="Apply Free — Takes 2 Minutes" />
+              <ApplyButton  label="Apply Free — Takes 2 Minutes" />
             </div>
           </div>
         </section>
@@ -323,7 +323,7 @@ export default function JobCountryPage({ params }: PageProps) {
               Apply free in 2 minutes. Activation on WhatsApp. Payout to {payment}.
             </p>
             <ApplyButton
-              track={title}
+            
               label={`Apply for ${title} Jobs — ${country}`}
               className="inline-block bg-white text-rose-500 font-bold text-base px-10 py-4 rounded-full shadow-xl hover:scale-105 transition-all"
             />

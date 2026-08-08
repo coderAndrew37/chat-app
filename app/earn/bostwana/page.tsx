@@ -1,178 +1,249 @@
-
 import { CategoryCard } from "@/app/components/CategoryCard";
 import { FaqAccordion } from "@/app/components/FaqAccordion";
+import LiveAITraining from "@/app/components/LiveAITraining";
+import LiveForeignersOnline from "@/app/components/LiveForeignersOnline";
+import LiveLocalLanguage from "@/app/components/LiveLocalLanguage";
 import { LiveTaskCounter } from "@/app/components/LiveTaskCounter";
 import { TrustBadges } from "@/app/components/TrustBadges";
+import { VELLOEARN_REGISTER_URL } from "@/lib/constants";
 import { generateCountryMetadata } from "@/lib/seo/countries";
 import {
-    Award,
-    Briefcase,
-    Clock,
-    TrendingUp,
-    Users,
-    Wallet,
-    Zap
+  ArrowRight,
+  Award,
+  BookOpen,
+  MessageSquare,
+  Sparkles,
+  TrendingUp,
+  Users,
+  Wallet,
+  Zap,
 } from "lucide-react";
 import { Metadata } from "next";
-import Link from "next/link";
 
-// --- Metadata ---
 export const metadata: Metadata = generateCountryMetadata({
   country: "Botswana",
   countryCode: "BW",
   path: "/earn/botswana",
-  title: "Latest Online Jobs in Botswana (Updated Today) | Pay Daily",
+  title: "Latest Online Jobs in Botswana (August 2026) | Daily Pula Payouts",
   description:
-    "Find high-paying online jobs in Botswana – surveys, AI training, chat moderation & more. Earn up to P500/day. Updated for August 2026. Free to join.",
+    "Find high-paying remote online jobs in Botswana. Earn P150–P500/day completing paid surveys, AI data annotation, and chat moderation. Fast payouts via Orange Money & FNB eWallet.",
   keywords:
-    "jobs botswana in the last 3 days, online paying jobs in botswana, high paying jobs in botswana, paid surveys in botswana, jobs in botswana for foreigners, how to earn money online in botswana",
+    "online jobs in botswana, paid surveys botswana, earn pula online, jobs in gaborone, remote jobs botswana, online work for students in botswana, orange money online jobs",
 });
 
-// --- Page Component ---
 export default function BotswanaHubPage() {
-  const currentDate = new Date();
-  const formattedDate = currentDate.toLocaleDateString("en-BW", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+  const todayDateFormatted = "August 2026";
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden px-4 py-12 sm:py-20 lg:py-28">
-        <div className="absolute inset-0 bg-emerald-500/5 dark:bg-emerald-500/10" />
-        <div className="relative mx-auto max-w-7xl">
+    <main className="min-h-screen bg-gray-50 text-gray-900">
+      {/* ── 1. HERO SECTION ──────────────────────────────────────────────── */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-rose-50 via-white to-orange-50 pt-12 pb-16 sm:pt-20 sm:pb-24">
+        {/* Radial background glow */}
+        <div className="pointer-events-none absolute top-0 right-0 h-[500px] w-[500px] -translate-y-1/2 translate-x-1/3 rounded-full bg-rose-200/20 blur-3xl" />
+
+        <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
           <div className="text-center">
-            <div className="inline-flex items-center gap-2 rounded-full bg-emerald-100/80 dark:bg-emerald-900/30 px-4 py-1.5 text-sm font-medium text-emerald-700 dark:text-emerald-300 backdrop-blur-sm">
-              <Zap className="h-4 w-4" />
-              <span>Updated for {formattedDate}</span>
+            {/* Recency Badge */}
+            <div className="inline-flex items-center gap-2 rounded-full border border-rose-100 bg-rose-50 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-rose-600">
+              <Zap className="h-3.5 w-3.5 text-rose-500" />
+              <span>Verified Daily Openings • {todayDateFormatted}</span>
             </div>
-            <h1 className="mt-6 text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-5xl lg:text-6xl">
+
+            {/* Core H1 Keyword Heading */}
+            <h1 className="mt-6 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-gray-900 leading-tight">
               Latest Online Jobs in{" "}
-              <span className="bg-gradient-to-r from-emerald-500 to-indigo-500 bg-clip-text text-transparent">
-                Botswana
-              </span>
+              <span className="text-rose-500">Botswana</span>
             </h1>
-            <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-600 dark:text-slate-300">
-              Earn up to <strong className="text-emerald-600 dark:text-emerald-400">P150 – P500/day</strong> with
-              flexible micro‑tasks. No experience needed – start today.
+
+            {/* Subtitle with Currency & Local Triggers */}
+            <p className="mx-auto mt-5 max-w-2xl text-base sm:text-lg text-gray-500 leading-relaxed">
+              Earn between <strong className="font-bold text-gray-900">P150 – P500 per day</strong> completing verified micro-tasks, surveys, and AI evaluation. 
+              Get paid straight to <span className="font-semibold text-gray-800">Orange Money, MyZaka, or Bank Transfer</span>.
             </p>
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-              <Link
-                href="/register"
-                className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-indigo-500 px-6 py-3 font-semibold text-white shadow-lg shadow-emerald-500/25 transition-all hover:scale-105 hover:shadow-xl active:scale-95"
+
+            {/* CTAs */}
+            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+              <a
+                href={VELLOEARN_REGISTER_URL}
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full bg-rose-500 px-8 py-4 text-base font-bold text-white shadow-lg shadow-rose-500/25 transition-all hover:bg-rose-600 hover:shadow-rose-500/35"
               >
-                <Users className="h-5 w-5" />
-                Start Earning Now
-              </Link>
-              <Link
+                <span>Start Earning Pulas Now</span>
+                <ArrowRight className="h-5 w-5" />
+              </a>
+              <a
                 href="#categories"
-                className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/80 px-6 py-3 font-semibold text-slate-700 backdrop-blur-sm transition-all hover:bg-slate-50 dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full border border-gray-200 bg-white px-8 py-4 text-base font-semibold text-gray-700 shadow-sm transition-all hover:bg-gray-50 hover:text-gray-900"
               >
-                <Briefcase className="h-5 w-5" />
-                Browse Jobs
-              </Link>
+                Browse Categories
+              </a>
             </div>
-            {/* Live counter badge */}
-            <div className="mt-6 flex justify-center">
+
+            {/* Social Proof */}
+            <div className="mt-10 pt-8 border-t border-gray-200/60 max-w-2xl mx-auto">
               <LiveTaskCounter />
             </div>
           </div>
         </div>
       </section>
 
-      {/* Trust Banner */}
-      <section className="border-y border-slate-200/80 bg-white/50 dark:border-white/5 dark:bg-white/5 backdrop-blur-sm">
-        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+      {/* ── 2. TRUST BADGES ────────────────────────────────────────────────── */}
+      <section className="border-y border-gray-100 bg-white py-8">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <TrustBadges />
         </div>
       </section>
 
-      {/* Recency / Search Intent Banner */}
-      <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        <div className="rounded-2xl border border-emerald-200/50 bg-emerald-50/50 p-4 dark:border-emerald-800/30 dark:bg-emerald-900/10">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <Clock className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
-              <span className="font-medium text-slate-800 dark:text-white">
-                New tasks posted within the last 3 days
-              </span>
+      {/* ── 3. FEATURED LIVE MODULES ───────────────────────────────────────── */}
+      <section className="py-12 bg-gray-50/50">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <div className="flex flex-col gap-8">
+            {/* Live Foreigners Chat Component */}
+            <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl shadow-gray-200/50 border border-gray-100">
+              <div className="mb-6 flex items-center gap-3 border-b border-gray-100 pb-4">
+                <div className="p-2.5 bg-rose-50 text-rose-500 rounded-2xl">
+                  <MessageSquare className="h-6 w-6" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900">
+                    Paid Foreigner Chat
+                  </h3>
+                  <p className="text-xs text-gray-500">
+                    Connect with affluent individuals for remote companionship.
+                  </p>
+                </div>
+              </div>
+              <LiveForeignersOnline />
             </div>
-            <Link
-              href="/tasks?fresh=true"
-              className="inline-flex items-center gap-1 rounded-full bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-emerald-700"
-            >
-              View fresh tasks
-              <TrendingUp className="h-4 w-4" />
-            </Link>
+
+            {/* Dedicated Teaching Setswana Component */}
+            <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl shadow-gray-200/50 border border-gray-100">
+              <div className="mb-6 flex items-center gap-3 border-b border-gray-100 pb-4">
+                <div className="p-2.5 bg-amber-50 text-amber-600 rounded-2xl">
+                  <BookOpen className="h-6 w-6" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900">
+                    Teach Setswana to Foreigners
+                  </h3>
+                  <p className="text-xs text-gray-500">
+                    Earn Pulas by hosting conversational Setswana lessons for expats, tourists, and international students.
+                  </p>
+                </div>
+              </div>
+              <LiveLocalLanguage
+                languageName="Setswana"
+                countryName="Botswana"
+                currencySymbol="P"
+              />
+            </div>
+
+            {/* Live AI Training Tasks Component */}
+            <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl shadow-gray-200/50 border border-gray-100">
+              <div className="mb-6 flex items-center gap-3 border-b border-gray-100 pb-4">
+                <div className="p-2.5 bg-violet-50 text-violet-500 rounded-2xl">
+                  <Sparkles className="h-6 w-6" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900">
+                    Real-time AI Training Stream
+                  </h3>
+                  <p className="text-xs text-gray-500">
+                    Train global machine learning models on-demand.
+                  </p>
+                </div>
+              </div>
+              <LiveAITraining />
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Category Cards Grid */}
-      <section id="categories" className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
-          Popular Job Categories in Botswana
-        </h2>
-        <p className="mt-2 text-slate-600 dark:text-slate-300">
-          Start earning today with these high‑demand remote tasks.
-        </p>
-        <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      {/* ── 4. JOB CATEGORIES SECTION ─────────────────────────────────────── */}
+      <section id="categories" className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+        <div className="text-center max-w-2xl mx-auto mb-12">
+          <span className="text-rose-500 font-semibold text-sm uppercase tracking-wider">
+            Opportunities
+          </span>
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mt-2 mb-3">
+            Popular Job Categories in Botswana
+          </h2>
+          <p className="text-gray-500">
+            Choose high-demand micro-jobs based on your schedule and equipment.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
           <CategoryCard
-            icon={<Wallet className="h-8 w-8" />}
+            icon={<Wallet className="h-6 w-6" />}
             title="Paid Surveys Botswana"
-            description="Share your opinion and earn P10‑P50 per survey. 10‑15 min each."
+            description="Complete consumer research surveys. Earn P15–P60 per completed questionnaire."
             href="/earn/job/surveys/botswana"
-            badge="High paying"
+            badge="Pula Paid"
           />
           <CategoryCard
-            icon={<TrendingUp className="h-8 w-8" />}
-            title="AI Data Annotation & Training"
-            description="Label images, transcribe audio, train AI models. No degree required."
+            icon={<TrendingUp className="h-6 w-6" />}
+            title="AI Data Annotation"
+            description="Help train machine learning models by labeling images and text. High hourly output."
             href="/earn/job/ai-annotation/botswana"
-            badge="Remote"
+            badge="Top Pick"
           />
           <CategoryCard
-            icon={<Users className="h-8 w-8" />}
-            title="Chat & Moderation Micro‑tasks"
-            description="Chat with users, moderate content, earn per message. Flexible hours."
+            icon={<Users className="h-6 w-6" />}
+            title="Chat & Moderation"
+            description="Manage online communities and customer query tickets. Flexible 24/7 shifts."
             href="/earn/job/chat-moderation/botswana"
-            badge="24/7"
+            badge="24/7 Shifts"
           />
           <CategoryCard
-            icon={<Award className="h-8 w-8" />}
-            title="Remote Work for Non‑Citizens"
-            description="Online jobs open to foreigners in Botswana. Work from anywhere."
+  icon={<BookOpen className="h-6 w-6" />}
+  title="Teach Setswana Online"
+  description="Host informal conversational Setswana lessons for foreign expats & tourists. Earn per session."
+  href="/earn/job/setswana-teaching/botswana"
+  badge="High Payout"
+/>
+          <CategoryCard
+            icon={<Award className="h-6 w-6" />}
+            title="Non-Citizen & Expat Jobs"
+            description="Remote micro-tasks open to foreign residents living within Botswana."
             href="/earn/job/foreigners/botswana"
-            badge="Global"
+            badge="Global Access"
           />
         </div>
       </section>
 
-      {/* FAQ Component */}
-      <section className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8">
-        <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
-          Frequently Asked Questions
-        </h2>
-        <div className="mt-6">
+      {/* ── 5. FAQ SECTION ────────────────────────────────────────────────── */}
+      <section className="bg-white border-t border-gray-100 py-16">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-extrabold text-gray-900">
+              Frequently Asked Questions
+            </h2>
+            <p className="mt-2 text-gray-500">
+              Everything you need to know about starting online work in Botswana.
+            </p>
+          </div>
           <FaqAccordion
             items={[
               {
-                question: "How do I withdraw earnings in Botswana?",
+                question: "How can I start earning online in Botswana?",
                 answer:
-                  "We support Orange Money, FNB eWallet, PayPal, M‑Pesa, and Airtel Money. Withdrawals are processed within 24 hours, and you'll receive your money directly to your mobile wallet or bank account.",
+                  "Create a free VelloEarn account, complete your profile, and browse available micro-job categories such as paid surveys, AI data annotation, and chat moderation."
               },
               {
-                question: "Do I need previous experience?",
+                question: "What payout methods are available in Botswana?",
                 answer:
-                  "No. Most tasks are designed for beginners with clear instructions. Our platform provides training materials and 24/7 support to help you get started.",
+                  "Most opportunities pay via Orange Money, MyZaka, FNB eWallet, bank transfer, or other local cash-out methods supported by the task provider."
               },
               {
-                question: "Are these jobs legitimate and free to join?",
+                question: "Do I need special skills to get started?",
                 answer:
-                  "Absolutely. VelloEarn is a trusted platform with thousands of active users. There are no hidden fees – you can register and start earning immediately.",
+                  "No. Many beginner-friendly tasks only require a smartphone, laptop, stable internet connection, and the ability to follow simple instructions."
               },
+              {
+                question: "Are these online jobs available for students or expats?",
+                answer:
+                  "Yes. Students, remote workers, and foreign residents in Botswana can apply to opportunities that accept flexible schedules and location-independent work."
+              }
             ]}
           />
         </div>

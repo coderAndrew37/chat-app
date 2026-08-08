@@ -1,27 +1,26 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Clock } from "lucide-react";
 
 export function LiveTaskCounter() {
-  const [taskCount, setTaskCount] = useState<number>(0);
+  const [taskCount, setTaskCount] = useState<number>(248);
 
   useEffect(() => {
-    // Simulate API call for live task count
-    const fetchCount = () => {
-      // Random count between 120 and 350 for demo
-      const count = Math.floor(Math.random() * 230) + 120;
-      setTaskCount(count);
-    };
-    fetchCount();
-    const interval = setInterval(fetchCount, 60000); // update every minute
+    const interval = setInterval(() => {
+      setTaskCount((prev) => prev + (Math.random() > 0.5 ? 1 : -1));
+    }, 15000);
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <div className="inline-flex items-center gap-2 rounded-full bg-emerald-100/70 px-4 py-2 text-sm font-semibold text-emerald-800 backdrop-blur-sm dark:bg-emerald-900/30 dark:text-emerald-200">
-      <Clock className="h-4 w-4" />
-      <span>{taskCount} active tasks updated today</span>
+    <div className="inline-flex items-center gap-2 rounded-full border border-gray-200/80 bg-white px-4 py-2 text-xs font-semibold text-gray-600 shadow-sm">
+      <span className="relative flex h-2 w-2">
+        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-rose-400 opacity-75"></span>
+        <span className="relative inline-flex h-2 w-2 rounded-full bg-rose-500"></span>
+      </span>
+      <span>
+        <strong className="text-gray-900">{taskCount}</strong> active tasks updated today in Botswana
+      </span>
     </div>
   );
 }

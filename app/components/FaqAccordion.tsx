@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDown } from "lucide-react";
 
 export interface FaqItem {
   question: string;
@@ -13,41 +12,49 @@ interface FaqAccordionProps {
 }
 
 export function FaqAccordion({ items }: FaqAccordionProps) {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   const toggle = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
   };
 
   return (
-    <div className="space-y-2">
-      {items.map((item, index) => (
-        <div
-          key={index}
-          className="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm transition-all dark:border-white/10 dark:bg-white/5"
-        >
-          <button
-            onClick={() => toggle(index)}
-            className="flex w-full items-center justify-between px-5 py-4 text-left font-medium text-slate-900 transition hover:bg-slate-50/50 dark:text-white dark:hover:bg-white/5"
-          >
-            <span>{item.question}</span>
-            <ChevronDown
-              className={`h-5 w-5 text-slate-500 transition-transform duration-200 ${
-                openIndex === index ? "rotate-180" : ""
-              }`}
-            />
-          </button>
+    <div className="space-y-4">
+      {items.map((item, index) => {
+        const isOpen = openIndex === index;
+        return (
           <div
-            className={`overflow-hidden transition-all duration-300 ${
-              openIndex === index ? "max-h-96" : "max-h-0"
-            }`}
+            key={index}
+            className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm"
           >
-            <div className="px-5 pb-5 text-sm text-slate-600 dark:text-slate-300">
-              {item.answer}
-            </div>
+            <button
+              onClick={() => toggle(index)}
+              className="flex w-full items-center justify-between px-5 py-4 text-left transition-colors hover:bg-gray-50"
+              aria-expanded={isOpen}
+            >
+              <span className="font-semibold text-gray-900 text-sm sm:text-base pr-4">
+                {item.question}
+              </span>
+              <span
+                className={`shrink-0 w-7 h-7 rounded-full flex items-center justify-center transition-all duration-200 ${
+                  isOpen ? "bg-rose-500 text-white rotate-45" : "bg-gray-100 text-gray-500"
+                }`}
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+              </span>
+            </button>
+            {isOpen && (
+              <div className="px-5 pb-5 animate-in fade-in slide-in-from-top-1 duration-200">
+                <p className="text-sm text-gray-500 leading-relaxed">
+                  {item.answer}
+                </p>
+              </div>
+            )}
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }

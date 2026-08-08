@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 
 interface CategoryCardProps {
   icon: React.ReactNode;
@@ -12,16 +13,31 @@ export function CategoryCard({ icon, title, description, href, badge }: Category
   return (
     <Link
       href={href}
-      className="group relative rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm transition-all hover:scale-[1.02] hover:border-emerald-300/50 hover:shadow-md dark:border-white/10 dark:bg-white/5 dark:hover:border-emerald-500/30"
+      className="group flex flex-col justify-between rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-rose-200 hover:shadow-md"
     >
-      <div className="mb-4 text-emerald-600 dark:text-emerald-400">{icon}</div>
-      <h3 className="text-lg font-bold text-slate-900 dark:text-white">{title}</h3>
-      <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">{description}</p>
-      {badge && (
-        <span className="mt-3 inline-block rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-semibold text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300">
-          {badge}
-        </span>
-      )}
+      <div>
+        <div className="flex items-center justify-between">
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-rose-50 text-rose-500">
+            {icon}
+          </div>
+          {badge && (
+            <span className="rounded-full bg-rose-50 border border-rose-100 px-2.5 py-0.5 text-xs font-bold text-rose-600">
+              {badge}
+            </span>
+          )}
+        </div>
+        <h3 className="mt-5 text-base font-bold text-gray-900 group-hover:text-rose-500 transition-colors">
+          {title}
+        </h3>
+        <p className="mt-2 text-sm leading-relaxed text-gray-500">
+          {description}
+        </p>
+      </div>
+
+      <div className="mt-6 flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-rose-500">
+        <span>Explore Jobs</span>
+        <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+      </div>
     </Link>
   );
 }

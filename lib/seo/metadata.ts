@@ -221,6 +221,10 @@ export function jobPostingSchema(opts: {
     },
     employmentType: "CONTRACTOR",
     jobLocationType: "TELECOMMUTE",
+    applicantLocationRequirements: {
+      "@type": "Country",
+      name: opts.country,
+    },
     baseSalary: {
       "@type": "MonetaryAmount",
       currency: opts.currency,
