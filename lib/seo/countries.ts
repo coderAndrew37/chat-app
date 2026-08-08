@@ -1,4 +1,5 @@
-import { Metadata } from "next";
+import type { Metadata } from "next";
+import { MARKETS } from "./keyword-matrix";
 
 export interface SeoParams {
   country: string;
@@ -10,28 +11,28 @@ export interface SeoParams {
 }
 
 /**
- * Generates metadata with canonical and hreflang links for country-specific pages.
- * Supports en-BW, en-KE, and x-default.
+ * Generates metadata with canonical and dynamic hreflang links for all supported markets.
  */
 export function generateCountryMetadata({
   country,
-  countryCode,
   path,
   title,
   description,
   keywords,
 }: SeoParams): Metadata {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://www.velloearn.co.ke";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.velloearn.co.ke";
   const canonicalUrl = `${baseUrl}${path}`;
 
-  // Build hreflang alternatives
-  const alternatives: Record<string, string> = {
-    "en-BW": `${baseUrl}/earn/country/botswana`,
-    "en-KE": `${baseUrl}/earn/country/kenya`,
-    "x-default": `${baseUrl}/earn`,
-  };
+  // Dynamically map all active markets to their locale keys and URLs
+  const languages: Record<string, string> = {};
+  
+  MARKETS.forEach((market) => {
+    languages[market.locale] = `${baseUrl}/earn/country/${market.slug}`;
+  });
 
-  // Build metadata
+  // Fallback default
+  languages["x-default"] = `${baseUrl}/earn`;
+
   return {
     title: title || `Online Jobs in ${country} | VelloEarn`,
     description:
@@ -42,19 +43,14 @@ export function generateCountryMetadata({
       `jobs ${country}, online paying jobs ${country}, earn money online ${country}, paid surveys ${country}`,
     alternates: {
       canonical: canonicalUrl,
-      languages: {
-        "en-BW": alternatives["en-BW"],
-        "en-KE": alternatives["en-KE"],
-        "x-default": alternatives["x-default"],
-      },
+      languages,
     },
     openGraph: {
       title: `Online Jobs in ${country} – Start Earning Today`,
       description:
-        `Earn money online in ${country} with flexible tasks. No experience needed. Payouts via local eWallets.`,
+        `Earn money online in ${country} with flexible tasks. No experience needed. Direct payouts to local wallets.`,
       url: canonicalUrl,
       siteName: "VelloEarn",
-      locale: "en_BW",
       type: "website",
     },
     robots: {
@@ -63,10 +59,3 @@ export function generateCountryMetadata({
     },
   };
 }
-
-// Example usage in page.tsx:
-// export const metadata = generateCountryMetadata({
-//   country: "Botswana",
-//   countryCode: "BW",
-//   path: "/earn/country/botswana",
-// });

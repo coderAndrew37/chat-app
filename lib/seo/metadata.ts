@@ -13,29 +13,31 @@ const BASE_URL  = process.env.NEXT_PUBLIC_SITE_URL ?? "https://velloearn.co.ke";
 
 export function homepageMetadata(): Metadata {
   return {
-    title: "VelloEarn — Legit Online Jobs in Kenya, Uganda & Ghana | M-Pesa Payouts",
+    title: "VelloEarn — Legit Online Jobs in Kenya, Uganda, Tanzania & Nigeria | Mobile Money Payouts",
     description:
-      "Join 5,000+ Africans earning from their phones. Remote chatting, AI training, paid surveys, Swahili teaching & more. Paid directly to M-Pesa, MTN MoMo, or Airtel Money.",
+      "Join 10,000+ Africans earning from their phones. Remote chatting, AI training, paid surveys, Swahili teaching & more. Paid directly to M-Pesa, MTN MoMo, OPay, Airtel Money, or Orange Money.",
     keywords: [
       "online jobs Kenya",
       "online jobs Uganda",
       "online jobs Ghana",
-      "earn from phone Kenya",
+      "online jobs Tanzania",
+      "online jobs Nigeria",
+      "earn from phone Africa",
       "remote work M-Pesa",
-      "work from home Kenya",
+      "work from home Nigeria OPay",
       "legit online jobs Africa",
     ],
     openGraph: {
-      title: "VelloEarn — Earn Online from Kenya, Uganda & Ghana",
+      title: "VelloEarn — Earn Online Across Africa",
       description:
-        "Remote chatting, AI training, surveys & more. Direct M-Pesa payouts. No laptop needed.",
+        "Remote chatting, AI training, surveys & more. Direct mobile wallet payouts. No laptop needed.",
       url: BASE_URL,
       siteName: SITE_NAME,
       type: "website",
     },
     twitter: {
       card: "summary_large_image",
-      title: "VelloEarn — Legit Online Jobs | M-Pesa Payouts",
+      title: "VelloEarn — Legit Online Jobs | Local Mobile Payouts",
       description: "Earn from your phone. Remote chatting, AI training, surveys & more.",
     },
     alternates: { canonical: BASE_URL },
@@ -45,13 +47,13 @@ export function homepageMetadata(): Metadata {
 // ─── Country page: /earn/[country] ───────────────────────────────────────────
 
 export function countryPageMetadata(market: Market): Metadata {
-  const { country, payment, currency, topEarning } = market;
+  const { country, payment, currency, topEarning, demonym } = market;
   const url = `${BASE_URL}/earn/${market.slug}`;
 
   return {
     title: `Online Jobs in ${country} That Pay via ${payment} (2026) — VelloEarn`,
     description:
-      `Find legit online jobs in ${country} paying directly to ${payment}. Remote chatting, AI training, paid surveys & more. Top earners make ${topEarning}/month. Free to apply — no laptop needed.`,
+      `Find legit online jobs in ${country} paying directly to ${payment}. Remote chatting, AI training, paid surveys & more. Top earners make ${topEarning}/month. Free to apply — no experience needed.`,
     keywords: [
       `online jobs ${country}`,
       `work from home ${country}`,
@@ -72,7 +74,7 @@ export function countryPageMetadata(market: Market): Metadata {
     twitter: {
       card: "summary_large_image",
       title: `Online Jobs in ${country} | ${payment} Payouts`,
-      description: `Earn ${currency} from your phone. Legit remote work for ${country}ns.`,
+      description: `Earn ${currency} from your phone. Legit remote work for ${demonym}.`,
     },
     alternates: { canonical: url },
   };
@@ -81,7 +83,7 @@ export function countryPageMetadata(market: Market): Metadata {
 // ─── City page: /earn/[country]/[city] ───────────────────────────────────────
 
 export function cityPageMetadata(market: Market, city: City): Metadata {
-  const { country, payment, currency } = market;
+  const { country, payment } = market;
   const url = `${BASE_URL}/earn/${market.slug}/${city.slug}`;
 
   return {

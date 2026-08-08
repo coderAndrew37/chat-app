@@ -1,29 +1,29 @@
 // app/earn/country/[country]/page.tsx
 // ─── Country landing page ─────────────────────────────────────────────────────
-// Route: /earn/country/kenya  /earn/country/uganda  /earn/country/ghana  /earn/country/botswana
+// Route: /earn/country/[country]
 // SEO targets: "vetted online jobs [country]", "earn via [payment] [country]", etc.
 
 import {
-    ALL_COUNTRY_SLUGS,
-    JOB_TYPES,
-    MARKETS
+  ALL_COUNTRY_SLUGS,
+  JOB_TYPES,
+  MARKETS,
+  Market,
 } from "@/lib/seo/keyword-matrix";
 import {
-    breadcrumbSchema,
-    countryPageMetadata,
-    faqSchema,
-    jobPostingSchema,
+  breadcrumbSchema,
+  countryPageMetadata,
+  faqSchema,
+  jobPostingSchema,
 } from "@/lib/seo/metadata";
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import Script from "next/script";
-import { use } from "react";
 import TrainingChannelBanner from "@/app/components/TrainingChannelBanner";
 import LiveForeignersOnline from "@/app/components/LiveForeignersOnline";
+import { VELLOEARN_REGISTER_URL } from "@/lib/constants";
 
-const VELLOEARN_REGISTER_URL = "https://starhela.com/register?ref=velloearn";
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
@@ -33,7 +33,7 @@ interface PageProps {
 
 // ─── Helper: get market data directly from MARKETS ──────────────────────────
 
-function getMarketData(countrySlug: string) {
+function getMarketData(countrySlug: string): Market | null {
   return MARKETS.find((m) => m.slug === countrySlug) || null;
 }
 
@@ -55,7 +55,7 @@ export async function generateMetadata({
 
 // ─── Per-market FAQ content ──────────────────────────────────────────────────
 
-function getMarketFAQs(market: any) {
+function getMarketFAQs(market: Market) {
   const {
     country,
     demonym,
@@ -68,35 +68,35 @@ function getMarketFAQs(market: any) {
   return [
     {
       question: `What are the best ways to earn online in ${country} right now?`,
-      answer: `The two biggest earners on VelloEarn are: 1) Chatting with foreigners — earn money having real conversations with people from USA, UK, Europe who are lonely and looking for connection. 2) AI training — rate AI responses, label data, and help train the world's most advanced AI models. Both pay directly to your ${payment}.`
+      answer: `The two biggest earners on VelloEarn are: 1) Chatting with foreigners — earn money having real conversations with people from USA, UK, Europe who are lonely and looking for connection. 2) AI training — rate AI responses, label data, and help train the world's most advanced AI models. Both pay directly to your ${payment}.`,
     },
     {
       question: `How much can I realistically earn from online jobs in ${country}?`,
-      answer: `New members typically earn ${avgEarning}/month within their first 30 days. Top performers consistently earn ${topEarning}/month combining chatting and AI training. The more you chat, the more you earn — it's that simple.`
+      answer: `New members typically earn ${avgEarning}/month within their first 30 days. Top performers consistently earn ${topEarning}/month combining chatting and AI training. The more you chat, the more you earn — it's that simple.`,
     },
     {
       question: `Is VelloEarn free to join?`,
-      answer: `Yes! VelloEarn is 100% free to join. No registration fees, no hidden charges, no monthly subscriptions. You earn from your first conversation and withdraw instantly to your ${payment}.`
+      answer: `Yes! VelloEarn is 100% free to join. No registration fees, no hidden charges, no monthly subscriptions. You earn from your first conversation and withdraw instantly to your ${payment}.`,
     },
     {
       question: `Do I need a laptop to work with VelloEarn in ${country}?`,
-      answer: `No. All VelloEarn tasks are optimized for smartphone use. A stable internet connection and a ${payment}-enabled phone number are all you need to start earning immediately.`
+      answer: `No. All VelloEarn tasks are optimized for smartphone use. A stable internet connection and a ${payment}-enabled phone number are all you need to start earning immediately.`,
     },
     {
       question: `How does ${payment} payout work for ${demonym}?`,
-      answer: `Earnings accumulate in real-time on your VelloEarn dashboard. When you request a payout, the amount is sent directly to your registered ${payment} number via ${mobileOperator}. Most withdrawals complete within 30 minutes — no bank account required.`
+      answer: `Earnings accumulate in real-time on your VelloEarn dashboard. When you request a payout, the amount is sent directly to your registered ${payment} number via ${mobileOperator}. Most withdrawals complete within 30 minutes — no bank account required.`,
     },
     {
       question: `Is VelloEarn a legitimate opportunity for ${demonym}?`,
-      answer: `Yes. VelloEarn is a verified remote work platform with active teams across ${country}. We've paid out millions in earnings to ${demonym} since launch. All tasks are legitimate, and all payout channels are direct to ${payment}.`
+      answer: `Yes. VelloEarn is a verified remote work platform with active teams across ${country}. We've paid out millions in earnings to ${demonym} since launch. All tasks are legitimate, and all payout channels are direct to ${payment}.`,
     },
   ];
 }
 
 // ─── Page Component ──────────────────────────────────────────────────────────
 
-export default function CountryPage({ params }: PageProps) {
-  const resolvedParams = use(params);
+export default async function CountryPage({ params }: PageProps) {
+  const resolvedParams = await params;
 
   if (!resolvedParams?.country) {
     notFound();
@@ -120,9 +120,9 @@ export default function CountryPage({ params }: PageProps) {
 
   const faqs = getMarketFAQs(market);
 
-  // Extract numeric values for schema
-  const avgNumeric = parseInt(avgEarning.replace(/[^0-9]/g, ""));
-  const topNumeric = parseInt(topEarning.replace(/[^0-9]/g, ""));
+  // Extract numeric values safely for job posting schema
+  const avgNumeric = parseInt(avgEarning.replace(/[^0-9]/g, ""), 10) || 0;
+  const topNumeric = parseInt(topEarning.replace(/[^0-9]/g, ""), 10) || 0;
 
   // Structured data
   const schemas = [
@@ -159,7 +159,6 @@ export default function CountryPage({ params }: PageProps) {
       ))}
 
       <main className="bg-gray-50 min-h-screen">
-
         {/* ── Breadcrumb ── */}
         <nav
           aria-label="breadcrumb"
@@ -175,7 +174,7 @@ export default function CountryPage({ params }: PageProps) {
         {/* ── HERO ── */}
         <section className="relative pt-12 pb-16 sm:pt-16 sm:pb-20 overflow-hidden bg-gradient-to-br from-rose-50 via-white to-pink-50">
           <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-rose-200/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
-          
+
           <div className="max-w-6xl mx-auto px-4 sm:px-6 relative">
             <div className="grid lg:grid-cols-2 gap-10 lg:gap-12 items-center">
               
@@ -191,7 +190,7 @@ export default function CountryPage({ params }: PageProps) {
                 </h1>
 
                 <p className="text-base sm:text-lg text-gray-600 leading-relaxed mb-4 max-w-lg">
-                  No experience? No problem. 61,000+ Kenyans are already earning by 
+                  No experience? No problem. Thousands of {demonym} are already earning by 
                   chatting with lonely foreigners and training AI. Free to join. 
                   {payment} payouts daily.
                 </p>
@@ -199,7 +198,7 @@ export default function CountryPage({ params }: PageProps) {
                 {/* Stats */}
                 <div className="flex flex-wrap gap-6 mb-6">
                   <div>
-                    <div className="text-2xl font-extrabold text-gray-900">61K+</div>
+                    <div className="text-2xl font-extrabold text-gray-900">10K+</div>
                     <div className="text-xs text-gray-400">Active earners</div>
                   </div>
                   <div>
@@ -237,7 +236,7 @@ export default function CountryPage({ params }: PageProps) {
                   <span>✅ Free to join</span>
                   <span>💸 No fees ever</span>
                   <span>📱 Chat from your phone</span>
-                  <span>🌍 50K+ active chatters</span>
+                  <span>🌍 Direct {payment} payouts</span>
                 </div>
               </div>
 
@@ -264,12 +263,12 @@ export default function CountryPage({ params }: PageProps) {
                   />
                   <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-3">
                     <p className="text-white font-bold text-xs">🤖 Train AI</p>
-                    <p className="text-white/60 text-[10px]">KES 80-400/task</p>
+                    <p className="text-white/60 text-[10px]">Flexible micro-tasks</p>
                   </div>
                 </div>
                 <div className="relative rounded-2xl overflow-hidden h-40 bg-rose-500 flex items-center justify-center shadow-xl">
                   <div className="text-center text-white p-4">
-                    <div className="text-3xl font-extrabold">61K+</div>
+                    <div className="text-3xl font-extrabold">10K+</div>
                     <div className="text-sm text-rose-100">Active earners</div>
                     <div className="text-xs text-rose-200 mt-1">Join them today</div>
                   </div>
@@ -280,9 +279,9 @@ export default function CountryPage({ params }: PageProps) {
           </div>
         </section>
 
-        <LiveForeignersOnline/>
+        <LiveForeignersOnline />
         
-          <TrainingChannelBanner />
+        <TrainingChannelBanner />
 
         {/* ── 60/40 Split: Chatting & AI Training ── */}
         <section id="how-it-works" className="py-16 bg-white">
@@ -320,7 +319,7 @@ export default function CountryPage({ params }: PageProps) {
                       <span className="text-emerald-500">✓</span> 24/7 — chat whenever you want
                     </li>
                     <li className="flex items-center gap-2 text-gray-600">
-                      <span className="text-emerald-500">✓</span> Earn {avgEarning}/month part-time
+                      <span className="text-emerald-500">✓</span> Earn ~{avgEarning}/month part-time
                     </li>
                   </ul>
                   <a
@@ -346,16 +345,16 @@ export default function CountryPage({ params }: PageProps) {
                   <p className="text-gray-600 mb-4">Rate AI responses, label data, and help train the world&apos;s most advanced AI models. No tech background needed — just your judgment.</p>
                   <ul className="space-y-2 mb-6 text-sm">
                     <li className="flex items-center gap-2 text-gray-600">
-                      <span className="text-emerald-500">✓</span> KES 80-400 per task
+                      <span className="text-emerald-500">✓</span> Competitive per-task rates
                     </li>
                     <li className="flex items-center gap-2 text-gray-600">
-                      <span className="text-emerald-500">✓</span> Work from your phone
+                      <span className="text-emerald-500">✓</span> Work entirely from your phone
                     </li>
                     <li className="flex items-center gap-2 text-gray-600">
                       <span className="text-emerald-500">✓</span> Paid training included
                     </li>
                     <li className="flex items-center gap-2 text-gray-600">
-                      <span className="text-emerald-500">✓</span> Earn {avgEarning}/month part-time
+                      <span className="text-emerald-500">✓</span> Earn ~{avgEarning}/month part-time
                     </li>
                   </ul>
                   <a
@@ -387,18 +386,18 @@ export default function CountryPage({ params }: PageProps) {
                 {
                   icon: "📝",
                   title: "Sign up — free",
-                  description: "Create your account in 2 minutes. No fees, no CV, no interview."
+                  description: "Create your account in 2 minutes. No fees, no CV, no interview.",
                 },
                 {
                   icon: "💬",
                   title: "Start chatting or training",
-                  description: "Browse live profiles or start rating AI responses. Earn from your first conversation."
+                  description: "Browse live profiles or start rating AI responses. Earn from your first conversation.",
                 },
                 {
                   icon: "💸",
                   title: `Withdraw to ${payment}`,
-                  description: `Your earnings accumulate instantly. Withdraw to ${payment} anytime. No minimum.`
-                }
+                  description: `Your earnings accumulate instantly. Withdraw to ${payment} anytime. No minimum.`,
+                },
               ].map((step, i) => (
                 <div key={i} className="bg-white rounded-2xl p-6 border border-gray-100 text-center shadow-sm hover:shadow-md transition-shadow">
                   <div className="w-16 h-16 bg-rose-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -484,32 +483,32 @@ export default function CountryPage({ params }: PageProps) {
                 {
                   icon: "✅",
                   title: "Free to join",
-                  body: "No registration fees. No monthly subscriptions. No hidden charges. Ever."
+                  body: "No registration fees. No monthly subscriptions. No hidden charges. Ever.",
                 },
                 {
                   icon: "📱",
                   title: "Chat from your phone",
-                  body: `Everything is designed for smartphone use. No laptop required — just your phone and an internet connection.`
+                  body: "Everything is designed for smartphone use. No laptop required — just your phone and an internet connection.",
                 },
                 {
                   icon: "💸",
                   title: `Instant ${payment} payouts`,
-                  body: `Earnings go straight to your ${payment} number. Most withdrawals complete in under 30 minutes.`
+                  body: `Earnings go straight to your ${payment} number. Most withdrawals complete in under 30 minutes.`,
                 },
                 {
                   icon: "🌍",
                   title: "Chat with real people",
-                  body: "Real conversations with foreigners from USA, UK, Europe who are lonely and looking for connection."
+                  body: "Real conversations with foreigners from USA, UK, Europe who are lonely and looking for connection.",
                 },
                 {
                   icon: "🤖",
                   title: "Train AI from home",
-                  body: "Rate AI responses, label data, and help train the world's most advanced AI models."
+                  body: "Rate AI responses, label data, and help train the world's most advanced AI models.",
                 },
                 {
                   icon: "🏆",
-                  title: "61,000+ active earners",
-                  body: `Join a thriving community of ${demonym} earning money online. You're not alone.`
+                  title: "Thriving Community",
+                  body: `Join a thriving community of ${demonym} earning money online. You're not alone.`,
                 },
               ].map((card) => (
                 <div key={card.title} className="bg-gray-50 rounded-2xl p-5 border border-gray-100 hover:border-rose-200 transition-colors">
@@ -546,17 +545,17 @@ export default function CountryPage({ params }: PageProps) {
           <div className="absolute inset-0 bg-gradient-to-br from-rose-500 to-pink-600" />
           <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-white/10 rounded-full translate-x-1/3 -translate-y-1/2 pointer-events-none" />
           <div className="absolute bottom-0 left-0 w-80 h-80 bg-white/10 rounded-full -translate-x-1/3 translate-y-1/3 pointer-events-none" />
-          
+
           <div className="relative max-w-3xl mx-auto px-4 sm:px-6 text-center">
             <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white text-sm font-semibold px-4 py-2 rounded-full mb-6">
-              🚀 61,000+ {demonym} already earning
+              🚀 Thousands of {demonym} already earning
             </div>
-            
+
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white leading-tight mb-4">
               Your first {payment} payout could be <br />
               <span className="text-rose-200">today.</span>
             </h2>
-            
+
             <p className="text-rose-100 text-lg mb-8 max-w-xl mx-auto">
               Free to join. Chat with foreigners or train AI. No experience needed. 
               No fees. Start earning immediately.
@@ -577,7 +576,7 @@ export default function CountryPage({ params }: PageProps) {
             >
               Start Earning Now — Free →
             </a>
-            
+
             <p className="text-rose-200/70 text-sm mt-4">
               No credit card · No payment required · Start earning instantly
             </p>
@@ -603,7 +602,6 @@ export default function CountryPage({ params }: PageProps) {
             </div>
           </div>
         </section>
-
       </main>
     </>
   );

@@ -7,15 +7,17 @@
 export type Market = {
   country: string;           // "Kenya"
   countryCode: string;       // "ke"
+  demonym: string;           // "Kenyans"
   slug: string;              // "kenya"
   currency: string;          // "KES"
   payment: string;           // "M-Pesa"
   paymentSlug: string;       // "mpesa"
   mobileOperator: string;    // "Safaricom"
-  cities: City[];
-  topEarning: string;        // "KES 30,000"
+  activationFee: string;     // "KES 450"
+  topEarning: string;        // "KES 55,000"
   avgEarning: string;        // "KES 15,000"
   locale: string;            // "en-KE"
+  cities: City[];
 };
 
 export type City = {
@@ -36,7 +38,7 @@ export type JobType = {
 
 // ─── Markets ─────────────────────────────────────────────────────────────────
 
-export const MARKETS = [
+export const MARKETS: Market[] = [
   {
     slug: "kenya",
     country: "Kenya",
@@ -54,8 +56,8 @@ export const MARKETS = [
       { name: "Nairobi", slug: "nairobi" },
       { name: "Mombasa", slug: "mombasa" },
       { name: "Kisumu", slug: "kisumu" },
-      { name: "Nakuru", slug: "nakuru" }
-    ]
+      { name: "Nakuru", slug: "nakuru" },
+    ],
   },
   {
     slug: "ghana",
@@ -74,8 +76,8 @@ export const MARKETS = [
       { name: "Accra", slug: "accra" },
       { name: "Kumasi", slug: "kumasi" },
       { name: "Tamale", slug: "tamale" },
-      { name: "Takoradi", slug: "takoradi" }
-    ]
+      { name: "Takoradi", slug: "takoradi" },
+    ],
   },
   {
     slug: "uganda",
@@ -83,7 +85,7 @@ export const MARKETS = [
     countryCode: "ug",
     demonym: "Ugandans",
     currency: "UGX",
-    payment: "MTN MoMo",
+    payment: "MTN MoMo & Airtel Money",
     paymentSlug: "mtn-momo",
     mobileOperator: "MTN or Airtel",
     activationFee: "UGX 15,000",
@@ -94,8 +96,8 @@ export const MARKETS = [
       { name: "Kampala", slug: "kampala" },
       { name: "Entebbe", slug: "entebbe" },
       { name: "Jinja", slug: "jinja" },
-      { name: "Mbarara", slug: "mbarara" }
-    ]
+      { name: "Mbarara", slug: "mbarara" },
+    ],
   },
   {
     slug: "botswana",
@@ -114,9 +116,91 @@ export const MARKETS = [
       { name: "Gaborone", slug: "gaborone" },
       { name: "Francistown", slug: "francistown" },
       { name: "Molepolole", slug: "molepolole" },
-      { name: "Maun", slug: "maun" }
-    ]
-  }
+      { name: "Maun", slug: "maun" },
+    ],
+  },
+  {
+    slug: "tanzania",
+    country: "Tanzania",
+    countryCode: "tz",
+    demonym: "Tanzanians",
+    currency: "TZS",
+    payment: "M-Pesa & Tigo Pesa",
+    paymentSlug: "m-pesa-tigo",
+    mobileOperator: "Vodacom or Tigo",
+    activationFee: "TZS 10,000",
+    avgEarning: "TZS 350,000",
+    topEarning: "TZS 1,200,000",
+    locale: "sw-TZ",
+    cities: [
+      { name: "Dar es Salaam", slug: "dar-es-salaam" },
+      { name: "Arusha", slug: "arusha" },
+      { name: "Mwanza", slug: "mwanza" },
+      { name: "Dodoma", slug: "dodoma" },
+      { name: "Zanzibar", slug: "zanzibar" },
+    ],
+  },
+  {
+    slug: "zambia",
+    country: "Zambia",
+    countryCode: "zm",
+    demonym: "Zambians",
+    currency: "ZMW",
+    payment: "MTN & Airtel Money",
+    paymentSlug: "mtn-airtel-zm",
+    mobileOperator: "MTN or Airtel",
+    activationFee: "ZMW 80",
+    avgEarning: "ZMW 2,500",
+    topEarning: "ZMW 8,500",
+    locale: "en-ZM",
+    cities: [
+      { name: "Lusaka", slug: "lusaka" },
+      { name: "Ndola", slug: "ndola" },
+      { name: "Kitwe", slug: "kitwe" },
+      { name: "Livingstone", slug: "livingstone" },
+    ],
+  },
+  {
+    slug: "nigeria",
+    country: "Nigeria",
+    countryCode: "ng",
+    demonym: "Nigerians",
+    currency: "NGN",
+    payment: "OPay & PalmPay",
+    paymentSlug: "opay-palmpay",
+    mobileOperator: "MTN or Airtel",
+    activationFee: "NGN 2,000",
+    avgEarning: "NGN 120,000",
+    topEarning: "NGN 450,000",
+    locale: "en-NG",
+    cities: [
+      { name: "Lagos", slug: "lagos" },
+      { name: "Abuja", slug: "abuja" },
+      { name: "Port Harcourt", slug: "port-harcourt" },
+      { name: "Ibadan", slug: "ibadan" },
+      { name: "Kano", slug: "kano" },
+    ],
+  },
+  {
+    slug: "cameroon",
+    country: "Cameroon",
+    countryCode: "cm",
+    demonym: "Cameroonians",
+    currency: "XAF",
+    payment: "MTN MoMo & Orange Money",
+    paymentSlug: "mtn-orange-cm",
+    mobileOperator: "MTN or Orange",
+    activationFee: "XAF 2,000",
+    avgEarning: "XAF 85,000",
+    topEarning: "XAF 300,000",
+    locale: "en-CM",
+    cities: [
+      { name: "Douala", slug: "douala" },
+      { name: "Yaoundé", slug: "yaounde" },
+      { name: "Bamenda", slug: "bamenda" },
+      { name: "Garoua", slug: "garoua" },
+    ],
+  },
 ];
 
 // ─── Job Types ────────────────────────────────────────────────────────────────
@@ -129,7 +213,7 @@ export const JOB_TYPES: JobType[] = [
     icon: "💬",
     tagline: "Get paid for every conversation you handle.",
     description:
-      "Real-time text-based communication work for international platforms. Structured shifts, clear rate cards, M-Pesa payouts.",
+      "Real-time text-based communication work for international platforms. Structured shifts, clear rate cards, direct mobile payouts.",
     badge: "Most popular",
     searchVolumeTier: "high",
   },
