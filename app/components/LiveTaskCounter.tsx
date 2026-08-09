@@ -2,7 +2,11 @@
 
 import { useEffect, useState } from "react";
 
-export function LiveTaskCounter() {
+interface LiveTaskCounterProps {  
+  country?: string ;
+}
+
+export function LiveTaskCounter({ country }: LiveTaskCounterProps) {
   const [taskCount, setTaskCount] = useState<number>(248);
 
   useEffect(() => {
@@ -19,7 +23,7 @@ export function LiveTaskCounter() {
         <span className="relative inline-flex h-2 w-2 rounded-full bg-rose-500"></span>
       </span>
       <span>
-        <strong className="text-gray-900">{taskCount}</strong> active tasks updated today in Botswana
+        <strong className="text-gray-900">{taskCount}</strong> active tasks updated today in {country ? country : "your country"}
       </span>
     </div>
   );

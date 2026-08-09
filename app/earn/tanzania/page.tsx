@@ -1,16 +1,21 @@
-
 import { CategoryCard } from "@/app/components/CategoryCard";
 import { FaqAccordion } from "@/app/components/FaqAccordion";
+import LiveForeignersLearning from "@/app/components/LiveForeignersLearning";
+import LiveForeignersOnline from "@/app/components/LiveForeignersOnline";
 import { LiveTaskCounter } from "@/app/components/LiveTaskCounter";
 import { TrustBadges } from "@/app/components/TrustBadges";
+import { VELLOEARN_REGISTER_URL } from "@/lib/constants";
 import { generateHreflangMetadata } from "@/lib/seo/hreflang";
 import {
     Award,
-    Globe,
+    BookOpen,
+    CheckCircle2,
+    Languages,
     MapPin,
+    MessageCircle,
+    MessageSquare,
     Smartphone,
     TrendingUp,
-    Users,
     Wallet,
     Zap
 } from "lucide-react";
@@ -24,9 +29,9 @@ export const metadata: Metadata = generateHreflangMetadata({
   path: "/earn/country/tanzania",
   title: "Online Jobs in Tanzania Paying via M-Pesa & Tigo Pesa (Kazi za Mtandaoni)",
   description:
-    "Pata kazi za mtandaoni Tanzania na kulipwa kupitia M-Pesa, Tigo Pesa, na Airtel Money. Earn daily with surveys, AI tasks, and more. No fees, no experience needed. | Find online jobs in Tanzania with instant M-Pesa payouts.",
+    "Pata kazi za mtandaoni Tanzania na kulipwa kupitia M-Pesa, Tigo Pesa, na Airtel Money. Earn daily teaching Swahili, chatting, surveys, and AI tasks. No fees.",
   keywords:
-    "online jobs in tanzania, kazi za mtandaoni tanzania, m-pesa jobs tanzania, tigo pesa jobs, earn money tanzania, paid surveys tanzania, no experience jobs tanzania",
+    "online jobs in tanzania, kazi za mtandaoni tanzania, m-pesa jobs tanzania, tigo pesa jobs, teach swahili online, chat operator jobs tanzania, earn money tanzania, paid surveys tanzania",
 });
 
 // --- Page Component ---
@@ -34,157 +39,375 @@ export default function TanzaniaHubPage() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden px-4 py-12 sm:py-20 lg:py-28">
-        <div className="absolute inset-0 bg-emerald-500/5 dark:bg-emerald-500/10" />
-        <div className="relative mx-auto max-w-7xl">
+    <main className="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+      {/* Hero Section (Clean slate/dark neutral styles without green) */}
+      <section className="border-b border-slate-200 bg-white px-4 py-12 sm:py-20 lg:py-24 dark:border-slate-800 dark:bg-slate-900">
+        <div className="mx-auto max-w-7xl">
           <div className="text-center">
-            <div className="inline-flex items-center gap-2 rounded-full bg-emerald-100/80 dark:bg-emerald-900/30 px-4 py-1.5 text-sm font-medium text-emerald-700 dark:text-emerald-300 backdrop-blur-sm">
-              <Zap className="h-4 w-4" />
+            <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-100 px-4 py-1.5 text-sm font-medium text-slate-800 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
+              <Zap className="h-4 w-4 text-slate-600 dark:text-slate-400" />
               <span>Updated for {currentYear} · Hakuna Ada | 100% Free</span>
             </div>
-            <h1 className="mt-6 text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-5xl lg:text-6xl">
+
+            <h1 className="mt-6 text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl lg:text-6xl dark:text-white">
               <span className="block">Kazi za Mtandaoni</span>
-              <span className="block bg-gradient-to-r from-emerald-500 to-indigo-500 bg-clip-text text-transparent">
+              <span className="block text-slate-700 dark:text-slate-300">
                 Tanzania
               </span>
             </h1>
-            <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-600 dark:text-slate-300">
-              <span className="font-semibold text-emerald-600 dark:text-emerald-400">
+
+            <p className="mx-auto mt-4 max-w-3xl text-lg text-slate-600 dark:text-slate-300">
+              <span className="font-semibold text-slate-900 dark:text-white">
                 Pata TZS 10,000 – 60,000 kwa siku
               </span>{" "}
-              | Earn daily via{" "}
-              <strong className="text-indigo-600 dark:text-indigo-400">M-Pesa</strong>,{" "}
-              <strong className="text-indigo-600 dark:text-indigo-400">Tigo Pesa</strong>, or{" "}
-              <strong className="text-indigo-600 dark:text-indigo-400">Airtel Money</strong>.
+              | Earn daily teaching Swahili, chatting, completing AI tasks, and filling micro-surveys. Direct mobile payouts to{" "}
+              <strong className="text-slate-900 dark:text-white">Vodacom M-Pesa</strong>,{" "}
+              <strong className="text-slate-900 dark:text-white">Tigo Pesa</strong>, or{" "}
+              <strong className="text-slate-900 dark:text-white">Airtel Money</strong>.
             </p>
-            <p className="mx-auto mt-1 text-sm text-slate-500 dark:text-slate-400">
-              No experience required · Hakuna uzoefu unaohitajika
+
+            <p className="mx-auto mt-2 text-sm text-slate-500 dark:text-slate-400">
+              No registration fees · Hakuna mtaji wala uzoefu unaohitajika
             </p>
+
             <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
               <Link
-                href="/register"
-                className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-indigo-500 px-6 py-3 font-semibold text-white shadow-lg shadow-emerald-500/25 transition-all hover:scale-105 hover:shadow-xl active:scale-95"
+                href={VELLOEARN_REGISTER_URL}
+                className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-7 py-3.5 font-semibold text-white shadow-lg transition-all hover:bg-slate-800 active:scale-95 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white"
               >
                 <Smartphone className="h-5 w-5" />
                 Anza Kupata | Start Earning
               </Link>
               <Link
                 href="#categories"
-                className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/80 px-6 py-3 font-semibold text-slate-700 backdrop-blur-sm transition-all hover:bg-slate-50 dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10"
+                className="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-7 py-3.5 font-semibold text-slate-700 shadow-sm transition-all hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
               >
-                <TrendingUp className="h-5 w-5" />
+                <TrendingUp className="h-5 w-5 text-slate-500" />
                 Tazama Kazi | Browse Jobs
               </Link>
             </div>
+
             {/* Live counter */}
-            <div className="mt-6 flex justify-center">
+            <div className="mt-8 flex justify-center">
               <LiveTaskCounter />
             </div>
           </div>
         </div>
       </section>
 
-      {/* Trust Banner with Tanzania-specific payment badges */}
-      <section className="border-y border-slate-200/80 bg-white/50 dark:border-white/5 dark:bg-white/5 backdrop-blur-sm">
-        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+      {/* Trust Banner with Tanzania Payment Systems */}
+      <section className="border-b border-slate-200 bg-slate-100/60 py-6 dark:border-slate-800 dark:bg-slate-900/50">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <TrustBadges
             paymentMethods={[
-              { name: "M-Pesa (TZ)", icon: "📱" },
-              { name: "Tigo Pesa", icon: "📲" },
-              { name: "Airtel Money (TZ)", icon: "📳" },
-              { name: "PayPal", icon: "💳" },
+              { name: "Vodacom M-Pesa", badge: "M-Pesa" },
+              { name: "Tigo Pesa", badge: "Tigo Pesa" },
+              { name: "Airtel Money (TZ)", badge: "Airtel Money" },
+              { name: "Halopesa", badge: "HaloPesa" },
             ]}
-            extraText="Pato la papo kwa papo | Instant withdrawals"
+            extraText="Malipo ya papo kwa papo bila makatato | Instant zero-fee mobile payouts"
           />
         </div>
       </section>
 
-      {/* Major Cities Hub Section */}
-      <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        <h2 className="text-xl font-semibold text-slate-800 dark:text-white">
-          <MapPin className="mr-2 inline h-5 w-5 text-emerald-500" />
-          Miji Mikubwa | Major Cities
-        </h2>
+      {/* Major Cities Hub Navigation */}
+      <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+        <div className="flex items-center gap-2 text-slate-900 dark:text-white">
+          <MapPin className="h-5 w-5 text-slate-600 dark:text-slate-400" />
+          <h2 className="text-xl font-bold">Miji Inayoshiriki | Popular Regions in Tanzania</h2>
+        </div>
+        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+          Work remotely from anywhere with a smartphone and internet bundle.
+        </p>
         <div className="mt-4 flex flex-wrap gap-3">
-          {["Dar es Salaam", "Arusha", "Mwanza", "Dodoma", "Zanzibar", "Mbeya"].map((city) => (
+          {[
+            { name: "Dar es Salaam", jobs: "1,240+ Active Tasks" },
+            { name: "Arusha", jobs: "820+ Active Tasks" },
+            { name: "Mwanza", jobs: "650+ Active Tasks" },
+            { name: "Dodoma", jobs: "540+ Active Tasks" },
+            { name: "Zanzibar", jobs: "490+ Active Tasks" },
+            { name: "Mbeya", jobs: "380+ Active Tasks" },
+            { name: "Morogoro", jobs: "290+ Active Tasks" },
+            { name: "Tanga", jobs: "210+ Active Tasks" },
+          ].map((city) => (
             <Link
-              key={city}
-              href={`/earn/country/tanzania?city=${city.toLowerCase().replace(/\s/g, "-")}`}
-              className="rounded-full border border-slate-200 bg-white/60 px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-emerald-300 hover:bg-emerald-50 dark:border-white/10 dark:bg-white/5 dark:text-slate-300 dark:hover:border-emerald-500/30"
+              key={city.name}
+              href={`/earn/country/tanzania?city=${city.name.toLowerCase().replace(/\s/g, "-")}`}
+              className="group flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:border-slate-400 hover:text-slate-900 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-slate-600 dark:hover:text-white"
             >
-              {city}
+              <span>{city.name}</span>
+              <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] text-slate-500 dark:bg-slate-800 dark:text-slate-400">
+                {city.jobs}
+              </span>
             </Link>
           ))}
         </div>
       </section>
 
-      {/* Task Verticals Grid */}
-      <section id="categories" className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
-          Aina za Kazi | Job Categories
-        </h2>
-        <p className="mt-2 text-slate-600 dark:text-slate-300">
-          Chagua kazi inayokufaa · Choose tasks that pay via mobile money.
-        </p>
-        <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          <CategoryCard
-            icon={<Award className="h-8 w-8" />}
-            title="AI Training & Swahili Data Annotation"
-            description="Label images, transcribe Swahili audio, train AI models. TZS 5,000‑20,000 / hour."
-            href="/earn/job/ai-training/tanzania"
-            badge="Hot in Dar"
-          />
-          <CategoryCard
-            icon={<Wallet className="h-8 w-8" />}
-            title="Micro Surveys & Instant Payout"
-            description="Jibu maswali na upate TZS 2,000‑10,000 kwa dakika 5‑10."
-            href="/earn/job/surveys/tanzania"
-            badge="Papo kwa Papo"
-          />
-          <CategoryCard
-            icon={<Users className="h-8 w-8" />}
-            title="Chat & Text Moderation"
-            description="Moderate content, chat with users, earn per task. 24/7 flexible."
-            href="/earn/job/chat-moderation/tanzania"
-            badge="24/7"
-          />
-          <CategoryCard
-            icon={<Globe className="h-8 w-8" />}
-            title="Student Jobs (Bila Mtaji)"
-            description="No capital required. Work on your phone between classes."
-            href="/earn/job/students/tanzania"
-            badge="100% Free"
-          />
+      {/* In-Depth Feature 1: Swahili Teaching Opportunity */}
+      <section className="border-y border-slate-200 bg-white py-12 sm:py-16 dark:border-slate-800 dark:bg-slate-900">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:items-center">
+            <div className="lg:col-span-6">
+              <div className="inline-flex items-center gap-2 rounded-md bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-800 dark:bg-slate-800 dark:text-slate-200">
+                <Languages className="h-4 w-4" />
+                <span>Kazi ya Fundi wa Kiswahili</span>
+              </div>
+              <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl dark:text-white">
+                Fundisha Kiswahili kwa Wageni Mtandaoni (Teach Swahili to Foreigners)
+              </h2>
+              <p className="mt-4 text-base leading-relaxed text-slate-600 dark:text-slate-300">
+                As a native Swahili speaker from Tanzania, your natural fluency is in high demand worldwide. Thousands of international travelers, researchers, students, and tourists are eager to learn authentic Swahili conversation.
+              </p>
+
+              <div className="mt-6 space-y-3">
+                <div className="flex items-start gap-3">
+                  <CheckCircle2 className="mt-1 h-5 w-5 shrink-0 text-slate-700 dark:text-slate-300" />
+                  <div>
+                    <strong className="text-slate-900 dark:text-white">High Hourly Pay:</strong> Earn TZS 15,000 to TZS 45,000 per session conducting informal conversations.
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <CheckCircle2 className="mt-1 h-5 w-5 shrink-0 text-slate-700 dark:text-slate-300" />
+                  <div>
+                    <strong className="text-slate-900 dark:text-white">No Teaching Degree Required:</strong> Learners want natural conversational practice, pronunciation correction, and cultural context.
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <CheckCircle2 className="mt-1 h-5 w-5 shrink-0 text-slate-700 dark:text-slate-300" />
+                  <div>
+                    <strong className="text-slate-900 dark:text-white">Flexible Schedules:</strong> Accept student booking requests whenever you are free directly on your mobile device.
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-8">
+                <Link
+                  href={VELLOEARN_REGISTER_URL}
+                  className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-6 py-3 font-semibold text-white transition hover:bg-slate-800 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white"
+                >
+                  <BookOpen className="h-5 w-5" />
+                  Anza Kufundisha Kiswahili
+                </Link>
+              </div>
+            </div>
+
+            {/* Embedded Live Swahili Learners Component */}
+            <div className="lg:col-span-6">
+              <LiveForeignersLearning />
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* FAQ Accordion */}
-      <section className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8">
-        <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
-          Maswali Yanayoulizwa Sana | FAQs
-        </h2>
-        <div className="mt-6">
-          <FaqAccordion
-            items={[
-              {
-                question: "How do I withdraw earnings directly to Vodacom M-Pesa or Tigo Pesa?",
-                answer:
-                  "Once you complete a task, your earnings are credited to your VelloEarn wallet. Withdraw anytime – choose Vodacom M-Pesa, Tigo Pesa, or Airtel Money. Funds arrive within minutes. No bank account needed. / Baada ya kumaliza kazi, malipo yako yanaingia kwenye wallet yako. Toa pesa wakati wowote – chagua M-Pesa, Tigo Pesa, au Airtel Money. Pesa inafika ndani ya dakika chache.",
-              },
-              {
-                question: "Do I need previous experience or registration fees?",
-                answer:
-                  "No. All tasks are designed for beginners with clear instructions. Registration is 100% free – no hidden charges. / Hapana. Kazi zote zimeundwa kwa ajili ya wanaoanza na maelekezo wazi. Usajili ni bure kabisa – hakuna ada za ziada.",
-              },
-              {
-                question: "What is the minimum payout amount in TZS?",
-                answer:
-                  "The minimum withdrawal amount is TZS 5,000. You can withdraw as soon as you reach that threshold, and the transfer to your mobile money is free. / Kiwango cha chini cha kutoa pesa ni TZS 5,000. Unaweza kutoa mara tu unapofikia kiwango hicho, na uhamisho kwa mobile money yako ni bure.",
-              },
-            ]}
-          />
+      {/* In-Depth Feature 2: Paid Chat & Text Moderation */}
+      <section className="py-12 sm:py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:items-center">
+            {/* Embedded Live Chat Component */}
+            <div className="order-2 lg:order-1 lg:col-span-6">
+              <LiveForeignersOnline />
+            </div>
+
+            <div className="order-1 lg:order-2 lg:col-span-6">
+              <div className="inline-flex items-center gap-2 rounded-md bg-slate-200 px-3 py-1 text-xs font-semibold text-slate-800 dark:bg-slate-800 dark:text-slate-200">
+                <MessageSquare className="h-4 w-4" />
+                <span>Kazi za Ku-Chat Mtandaoni</span>
+              </div>
+              <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl dark:text-white">
+                Paid Text Chat & Customer Messaging Operator
+              </h2>
+              <p className="mt-4 text-base leading-relaxed text-slate-600 dark:text-slate-300">
+                Connect with global clients and international platforms as a dedicated chat operator. Assist clients with general inquiries, offer friendship, practice language exchange, or moderate active platform communities.
+              </p>
+
+              <div className="mt-6 space-y-4">
+                <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                  <h3 className="font-bold text-slate-900 dark:text-white">Lipwa kwa Kila Ujumbe (Paid Per Message)</h3>
+                  <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
+                    Earn guaranteed rates for every processed reply. Complete 100 to 300 messages per day to unlock tier bonuses paid straight to M-Pesa.
+                  </p>
+                </div>
+
+                <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                  <h3 className="font-bold text-slate-900 dark:text-white">Ulinzi na Usiri (100% Anonymous & Secure)</h3>
+                  <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
+                    Your personal contact numbers and physical identity are never revealed to clients. Operate comfortably through our secure web portal.
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-8">
+                <Link
+                  href={VELLOEARN_REGISTER_URL}
+                  className="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-6 py-3 font-semibold text-slate-800 shadow-sm transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+                >
+                  <MessageCircle className="h-5 w-5" />
+                  Jiunge na Kazi za Chat
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Primary Category Grid */}
+      <section id="categories" className="border-t border-slate-200 bg-white py-12 sm:py-16 dark:border-slate-800 dark:bg-slate-900">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl dark:text-white">
+              Aina Zote za Kazi za Mtandaoni Tanzania
+            </h2>
+            <p className="mx-auto mt-2 max-w-2xl text-slate-600 dark:text-slate-400">
+              Chagua aina ya kazi inayokufaa kulingana na muda wako na kifaa ulichonacho.
+            </p>
+          </div>
+
+          <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <CategoryCard
+              icon={<Languages className="h-8 w-8 text-slate-800 dark:text-slate-200" />}
+              title="Teach Swahili Online"
+              description="Fundisha Swahili kwa wageni. Earn TZS 15,000 - 45,000 per student hour with flexible booking times."
+              href="/earn/job/swahili-teaching/tanzania"
+              badge="High Earnings"
+            />
+            <CategoryCard
+              icon={<MessageSquare className="h-8 w-8 text-slate-800 dark:text-slate-200" />}
+              title="Chat & Messaging Jobs"
+              description="Jibu ujumbe wa wateja wa kimataifa. Earn per reply sent directly through your phone."
+              href="/earn/job/chat-moderation/tanzania"
+              badge="Hot & Instant"
+            />
+            <CategoryCard
+              icon={<Award className="h-8 w-8 text-slate-800 dark:text-slate-200" />}
+              title="AI & Swahili Data Annotation"
+              description="Sikiliza na uandike sauti za Kiswahili (Audio Transcription) au lebo picha kusaidia AI."
+              href="/earn/job/ai-training/tanzania"
+              badge="Tech Opportunity"
+            />
+            <CategoryCard
+              icon={<Wallet className="h-8 w-8 text-slate-800 dark:text-slate-200" />}
+              title="Micro-Surveys & App Testing"
+              description="Jibu tafiti fupi na upewe maoni kuhusu App mpya. Earn TZS 2,000 – 10,000 per completed survey."
+              href="/earn/job/surveys/tanzania"
+              badge="Quick Cash"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Step-by-Step Guide for Tanzanian Earners */}
+      <section className="py-12 sm:py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
+              Jinsi ya Kuanza na Kupata Pesa (Step-by-Step Guide)
+            </h2>
+            <p className="mt-2 text-slate-600 dark:text-slate-400">
+              Hatua tatu rahisi za kuanza kupokea pesa kwenye simu yako leo.
+            </p>
+          </div>
+
+          <div className="mt-10 grid grid-cols-1 gap-8 md:grid-cols-3">
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-900 font-bold text-white dark:bg-slate-100 dark:text-slate-900">
+                1
+              </div>
+              <h3 className="mt-4 text-xl font-bold text-slate-900 dark:text-white">Fungua Akaunti Libre</h3>
+              <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                Register with your valid Tanzanian phone number. Registration is 100% free with zero deposit required.
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-900 font-bold text-white dark:bg-slate-100 dark:text-slate-900">
+                2
+              </div>
+              <h3 className="mt-4 text-xl font-bold text-slate-900 dark:text-white">Chagua na Ufanye Kazi</h3>
+              <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                Select tasks from Swahili teaching, text chatting, survey completion, or data entry matching your spare time.
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-900 font-bold text-white dark:bg-slate-100 dark:text-slate-900">
+                3
+              </div>
+              <h3 className="mt-4 text-xl font-bold text-slate-900 dark:text-white">Pata Pesa kwa M-Pesa / Tigo Pesa</h3>
+              <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                Request instant payouts starting from TZS 5,000 directly to Vodacom M-Pesa, Tigo Pesa, or Airtel Money.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Comprehensive FAQs Section */}
+      <section className="border-t border-slate-200 bg-white py-12 sm:py-16 dark:border-slate-800 dark:bg-slate-900">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
+              Maswali Yanayoulizwa Mara kwa Mara (FAQs)
+            </h2>
+            <p className="mt-2 text-slate-600 dark:text-slate-400">
+              Everything you need to know about earning online in Tanzania.
+            </p>
+          </div>
+
+          <div className="mt-8">
+            <FaqAccordion
+              items={[
+                {
+                  question: "Je, nitatumiwaje pesa zangu zikishafika kwenye akaunti ya VelloEarn?",
+                  answer:
+                    "Pesa zako zikifikisha kiasi cha kutoa (Kuanzia TZS 5,000), unabonyeza 'Withdraw'. Unachagua mtandao wako wa simu (Vodacom M-Pesa, Tigo Pesa, Airtel Money, au Halopesa) na pesa inaingia moja kwa moja kwenye simu yako ndani ya dakika 5 hadi 15.",
+                },
+                {
+                  question: "Je, ninahitaji kulipia ada yoyote ili kuanza kufanya kazi?",
+                  answer:
+                    "Hapana! Usajili ni bure 100%. Hatutombi ada yoyote ya usajili, mtaji, au kiingilio. Kazi zote ziko wazi bure kabisa.",
+                },
+                {
+                  question: "Je, nawezaje kufundisha Kiswahili ikiwa sina cheti cha ualimu?",
+                  answer:
+                    "Wanafunzi wengi wageni hawatafuti sarufi ngumu ya darasani; wanataka mazoezi ya kuzungumza (Conversational Swahili). Kama unazungumza Kiswahili fasaha na una subira ya kukosoa matamshi yao, unavigezo vyote vinavyohitajika.",
+                },
+                {
+                  question: "Je, naweza kutumia simu ya mkononi (Smartphone) tu?",
+                  answer:
+                    "Ndiyo! Kazi zote zikiwemo za Chat, Tafiti, na Kufundisha Kiswahili zimeboreshwa kufanya kazi vizuri sana kwenye simu yoyote ya smartphone yenye intaneti.",
+                },
+                {
+                  question: "Kiwango cha chini cha kutoa pesa (Minimum Withdrawal) ni kiasi gani?",
+                  answer:
+                    "Kiwango cha chini kabisa cha kutoa pesa ni TZS 5,000 tu. Pesa inapotumwa kwenye simu yako hakuna makatato ya ziada kutoka kwetu.",
+                },
+              ]}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Bottom Conversion CTA Banner */}
+      <section className="bg-slate-900 px-4 py-12 text-center text-white dark:bg-slate-950">
+        <div className="mx-auto max-w-4xl">
+          <h2 className="text-3xl font-extrabold sm:text-4xl">
+            Aanza Kupata Kipato cha Mtandaoni Leo
+          </h2>
+          <p className="mt-3 text-slate-300">
+            Join thousands of Tanzanians earning daily from Dar es Salaam, Arusha, Mwanza, Dodoma, and Zanzibar.
+          </p>
+          <div className="mt-6 flex justify-center">
+            <Link
+              href={VELLOEARN_REGISTER_URL
+                
+              }
+              className="inline-flex items-center gap-2 rounded-full bg-white px-8 py-3.5 text-base font-bold text-slate-900 shadow-lg transition hover:bg-slate-100"
+            >
+              <Smartphone className="h-5 w-5" />
+              Sajili Akaunti Bure Now
+            </Link>
+          </div>
         </div>
       </section>
     </main>

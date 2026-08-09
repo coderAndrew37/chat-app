@@ -284,6 +284,17 @@ export const JOB_TYPES: JobType[] = [
     searchVolumeTier: "medium",
   },
   {
+    slug: "luganda-teaching",
+    title: "Teach Luganda Online",
+    shortTitle: "Luganda teaching",
+    icon: "🗣️",
+    tagline: "Help foreign expats and tourists practice Luganda online.",
+    description:
+      "Host informal remote conversational lessons and audio translation for international learners. Earn daily payouts directly to MTN MoMo or Airtel Money.",
+    badge: "Native Language",
+    searchVolumeTier: "medium",
+  },
+  {
     slug: "academic-writing",
     title: "Academic Writing",
     shortTitle: "academic writing",
@@ -305,19 +316,28 @@ export const JOB_TYPES: JobType[] = [
     badge: "High potential",
     searchVolumeTier: "medium",
   },
-  // lib/seo/keyword-matrix.ts -> inside JOB_TYPES array
-
-{
-  slug: "setswana-teaching",
-  title: "Teach Setswana Online",
-  shortTitle: "Setswana teaching",
-  icon: "🗣️",
-  tagline: "Get paid to help foreign expats and tourists practice Setswana.",
-  description:
-    "Host informal remote conversational lessons for international learners. Earn daily payouts directly to Orange Money, MyZaka, or bank transfer.",
-  badge: "Native Language",
-  searchVolumeTier: "medium",
-},
+  {
+    slug: "students",
+    title: "Student Side Hustles",
+    shortTitle: "student jobs",
+    icon: "🎓",
+    tagline: "Flexible remote micro-tasks designed for university students.",
+    description:
+      "Zero capital required. Earn money between classes completing simple phone tasks, data entry, and online research.",
+    badge: "No Capital",
+    searchVolumeTier: "high",
+  },
+  {
+    slug: "setswana-teaching",
+    title: "Teach Setswana Online",
+    shortTitle: "Setswana teaching",
+    icon: "🗣️",
+    tagline: "Get paid to help foreign expats and tourists practice Setswana.",
+    description:
+      "Host informal remote conversational lessons for international learners. Earn daily payouts directly to Orange Money, MyZaka, or bank transfer.",
+    badge: "Native Language",
+    searchVolumeTier: "medium",
+  },
 ];
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
