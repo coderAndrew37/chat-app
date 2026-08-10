@@ -31,9 +31,383 @@ export interface TargetTopic {
   paymentMethods: string;
   topic: string;
   category: string;
+  keywords: string[];
 }
 
-// Portable Text Formatter
+// Queue containing remaining items starting from #48 to #93
+const fullBatchQueue: TargetTopic[] = [
+  // Index 47 -> Item 48
+  {
+    country: "Tanzania",
+    countryCode: "TZ",
+    paymentMethods: "M-Pesa, Tigo Pesa, Airtel Money",
+    topic: "How to Teach Swahili to Tourists Visiting Zanzibar and Serengeti",
+    category: "Online Teaching & Tutoring",
+    keywords: ["teach swahili tourists zanzibar", "swahili tutor serengeti", "make money teaching swahili tanzania"],
+  },
+  {
+    country: "Tanzania",
+    countryCode: "TZ",
+    paymentMethods: "M-Pesa, Tigo Pesa, NMB Bank",
+    topic: "Best Online Platforms to Offer Swahili Classes in Tanzania",
+    category: "Online Teaching & Tutoring",
+    keywords: ["swahili tutoring platforms tanzania", "teach kiswahili online tanzania", "earn money teaching swahili Dar es Salaam"],
+  },
+  {
+    country: "Tanzania",
+    countryCode: "TZ",
+    paymentMethods: "M-Pesa, Bank Wire, Halopesa",
+    topic: "Setting Your Rates for Kiswahili Tutoring in Dar es Salaam",
+    category: "Freelance Rates & Business Strategy",
+    keywords: ["swahili tutor hourly rates tanzania", "how much to charge swahili lessons", "kiswahili tutoring business tanzania"],
+  },
+  {
+    country: "Tanzania",
+    countryCode: "TZ",
+    paymentMethods: "M-Pesa, Tigo Pesa, CRDB Bank",
+    topic: "Creating Beginner Kiswahili Curriculum for Expatriates in Tanzania",
+    category: "Curriculum & Course Design",
+    keywords: ["swahili lesson plan beginners", "teach expats swahili tanzania", "kiswahili curriculum guide"],
+  },
+  {
+    country: "Uganda",
+    countryCode: "UG",
+    paymentMethods: "MTN Mobile Money, Airtel Money",
+    topic: "Monetizing Swahili Language Skills as a Ugandan Freelancer",
+    category: "Online Teaching & Tutoring",
+    keywords: ["teach swahili uganda", "earn money swahili uganda", "mtn mobile money swahili tutoring"],
+  },
+  {
+    country: "Uganda",
+    countryCode: "UG",
+    paymentMethods: "MTN Mobile Money, Airtel Money, Bank Transfer",
+    topic: "Teaching Kiswahili Online to Regional Business Professionals in East Africa",
+    category: "Corporate Language Training",
+    keywords: ["business swahili lessons uganda", "corporate swahili tutor kampala", "regional swahili training"],
+  },
+  {
+    country: "Rwanda",
+    countryCode: "RW",
+    paymentMethods: "MTN Mobile Money Rwanda, Airtel Money",
+    topic: "How to Offer Kiswahili Lessons in Kigali to Expats and NGOs",
+    category: "Online Teaching & Tutoring",
+    keywords: ["teach swahili kigali", "swahili tutor rwanda", "swahili for ngo workers rwanda"],
+  },
+  {
+    country: "DRC",
+    countryCode: "CD",
+    paymentMethods: "M-Pesa DRC, Airtel Money, Orange Money",
+    topic: "Teaching Conversational Kingwana/Swahili to International Workers in DRC",
+    category: "Online Teaching & Tutoring",
+    keywords: ["teach swahili drc", "kingwana tutor goma", "swahili lessons congo"],
+  },
+  {
+    country: "Kenya",
+    countryCode: "KE",
+    paymentMethods: "M-Pesa, Pesalink, Equity Bank",
+    topic: "How to Market Your Swahili Teaching Business on Instagram and TikTok",
+    category: "Marketing & Student Acquisition",
+    keywords: ["market swahili classes social media", "get swahili students instagram", "tiktok swahili teacher kenya"],
+  },
+  {
+    country: "Kenya",
+    countryCode: "KE",
+    paymentMethods: "M-Pesa, PayPal, Wise",
+    topic: "Teaching Swahili via Zoom vs Preply: Which Pays Better in Kenya?",
+    category: "Online Teaching & Tutoring",
+    keywords: ["zoom swahili tutoring kenya", "preply swahili teacher kenya", "italki vs direct students swahili"],
+  },
+  {
+    country: "Kenya",
+    countryCode: "KE",
+    paymentMethods: "M-Pesa, Pesalink",
+    topic: "How to Structure Medical Swahili Courses for International Volunteers",
+    category: "Specialized Swahili Training",
+    keywords: ["medical swahili course kenya", "teach doctors swahili kenya", "volunteer swahili training"],
+  },
+  {
+    country: "Kenya",
+    countryCode: "KE",
+    paymentMethods: "M-Pesa, Bank Transfer",
+    topic: "Building an Automated Swahili Learning E-Book or Digital Mini-Course",
+    category: "Passive Income & Digital Products",
+    keywords: ["sell swahili course online", "swahili ebook passive income", "digital swahili products kenya"],
+  },
+  {
+    country: "Global / Diaspora",
+    countryCode: "US",
+    paymentMethods: "M-Pesa Global, Wise, Remitly",
+    topic: "Teaching Swahili to Second-Generation African Diaspora Children",
+    category: "Diaspora & Cultural Education",
+    keywords: ["teach diaspora kids swahili", "swahili lessons for heritage learners", "online swahili kids teacher"],
+  },
+  {
+    country: "Tanzania",
+    countryCode: "TZ",
+    paymentMethods: "M-Pesa, Tigo Pesa",
+    topic: "How to Conduct Group Kiswahili Workshops for Safari Tour Guides",
+    category: "Corporate Language Training",
+    keywords: ["swahili training tourism tanzania", "safari guide swahili course", "group swahili lessons Dar"],
+  },
+  {
+    country: "Kenya",
+    countryCode: "KE",
+    paymentMethods: "M-Pesa, Equity Bank",
+    topic: "Overcoming Common Tech and Payment Setup Challenges for Kenyan Tutors",
+    category: "Freelance Rates & Business Strategy",
+    keywords: ["receive international payment swahili tutor", "wise mpesa swahili teacher", "paypal mpesa swahili tutoring"],
+  },
+  {
+    country: "Uganda",
+    countryCode: "UG",
+    paymentMethods: "MTN Mobile Money, Airtel Money",
+    topic: "Teaching Conversational Swahili for Cross-Border Traders in East Africa",
+    category: "Corporate Language Training",
+    keywords: ["cross border swahili trade", "business kiswahili uganda", "swahili tutor border trade"],
+  },
+  {
+    country: "Rwanda",
+    countryCode: "RW",
+    paymentMethods: "MTN Mobile Money Rwanda",
+    topic: "A Complete Guide to Swahili Pronunciation and Phonetics for English Speakers",
+    category: "Curriculum & Course Design",
+    keywords: ["swahili pronunciation guide", "teach swahili phonetics", "swahili sounds for beginners"],
+  },
+  {
+    country: "Kenya",
+    countryCode: "KE",
+    paymentMethods: "M-Pesa, Bank Transfer",
+    topic: "How to Draft a Professional Contract for Private Swahili Lessons",
+    category: "Freelance Rates & Business Strategy",
+    keywords: ["swahili tutoring contract kenya", "private tutor agreement template", "cancellation policy swahili tutor"],
+  },
+  {
+    country: "Tanzania",
+    countryCode: "TZ",
+    paymentMethods: "M-Pesa, CRDB Bank",
+    topic: "Teaching Advanced Kiswahili Grammar and Literature to Academic Researchers",
+    category: "Specialized Swahili Training",
+    keywords: ["advanced swahili grammar tutor", "swahili literature for researchers", "academic kiswahili tanzania"],
+  },
+  {
+    country: "Global / Diaspora",
+    countryCode: "UK",
+    paymentMethods: "Wise, WorldRemit, M-Pesa",
+    topic: "How to Get Certified as an International Kiswahili Instructor",
+    category: "Career & Skill Development",
+    keywords: ["swahili teaching certification", "certified kiswahili instructor", "how to become certified swahili teacher"],
+  },
+  {
+    country: "Kenya",
+    countryCode: "KE",
+    paymentMethods: "M-Pesa, Airtel Money",
+    topic: "Using Flashcards and Anki to Accelerate Vocabulary Building for Swahili Students",
+    category: "Curriculum & Course Design",
+    keywords: ["anki swahili flashcards", "swahili vocabulary methods", "tech tools swahili teaching"],
+  },
+  {
+    country: "Kenya",
+    countryCode: "KE",
+    paymentMethods: "M-Pesa, Wise",
+    topic: "How to Build a High-Converting Landing Page for Your Private Swahili Coaching",
+    category: "Marketing & Student Acquisition",
+    keywords: ["swahili tutor website", "landing page swahili course", "get private swahili clients"],
+  },
+  {
+    country: "Tanzania",
+    countryCode: "TZ",
+    paymentMethods: "M-Pesa, Tigo Pesa",
+    topic: "Essential Swahili Cultural Etiquette Every Foreign Student Must Learn First",
+    category: "Curriculum & Course Design",
+    keywords: ["swahili cultural etiquette", "teaching swahili customs", "shikamoo and respectful swahili"],
+  },
+  {
+    country: "Uganda",
+    countryCode: "UG",
+    paymentMethods: "MTN Mobile Money, Bank Wire",
+    topic: "How to Partner with Local Universities to Offer Conversational Swahili Clubs",
+    category: "Marketing & Student Acquisition",
+    keywords: ["swahili club kampala", "university swahili tutoring uganda", "swahili conversational group"],
+  },
+  {
+    country: "Kenya",
+    countryCode: "KE",
+    paymentMethods: "M-Pesa, PayPal",
+    topic: "Retaining Language Students: How to Keep Swahili Learners Engaged Month After Month",
+    category: "Online Teaching & Tutoring",
+    keywords: ["student retention language teaching", "keep swahili students engaged", "long term language tutoring"],
+  },
+  {
+    country: "Kenya",
+    countryCode: "KE",
+    paymentMethods: "M-Pesa, Bank Transfer",
+    topic: "Teaching Swahili Proverbs (Misemo & Methali) to Intermediate and Advanced Learners",
+    category: "Specialized Swahili Training",
+    keywords: ["swahili methali teaching", "misemo ya kiswahili course", "advanced swahili proverbs"],
+  },
+  {
+    country: "Rwanda",
+    countryCode: "RW",
+    paymentMethods: "MTN Mobile Money Rwanda",
+    topic: "How to Use Audio Lessons and Podcasts to Teach Kiswahili Remotely",
+    category: "Curriculum & Course Design",
+    keywords: ["swahili podcast lessons", "audio swahili course", "teach swahili listening skills"],
+  },
+  {
+    country: "Tanzania",
+    countryCode: "TZ",
+    paymentMethods: "M-Pesa, NMB Bank",
+    topic: "Creating Swahili Immersion Trips and Cultural Retreats for Foreign Learners",
+    category: "Passive Income & Digital Products",
+    keywords: ["swahili immersion retreat zanzibar", "cultural swahili trip tanzania", "swahili language tourism"],
+  },
+  {
+    country: "Global / Diaspora",
+    countryCode: "CA",
+    paymentMethods: "Wise, Remitly, M-Pesa",
+    topic: "How to Scale From 1-on-1 Swahili Tutoring to Cohort-Based Group Classes",
+    category: "Freelance Rates & Business Strategy",
+    keywords: ["cohort swahili course", "group swahili tutoring business", "scale language teaching income"],
+  },
+  {
+    country: "Kenya",
+    countryCode: "KE",
+    paymentMethods: "M-Pesa, Wise",
+    topic: "Teaching Swahili for Diplomatic Personnel and Embassy Staff in Nairobi",
+    category: "Corporate Language Training",
+    keywords: ["swahili for diplomats nairobi", "embassy swahili training", "corporate language tutor nairobi"],
+  },
+  {
+    country: "Kenya",
+    countryCode: "KE",
+    paymentMethods: "M-Pesa, Pesalink",
+    topic: "How to Offer Swahili Proofreading and Subtitling Services alongside Teaching",
+    category: "Career & Skill Development",
+    keywords: ["swahili subtitling jobs", "swahili proofreading freelance", "swahili language translation kenya"],
+  },
+  {
+    country: "Tanzania",
+    countryCode: "TZ",
+    paymentMethods: "M-Pesa, Airtel Money",
+    topic: "Top 10 Free Resources Every Kiswahili Teacher Should Include in Their Syllabus",
+    category: "Curriculum & Course Design",
+    keywords: ["free swahili teaching materials", "swahili teacher syllabus tools", "kiswahili learning resources"],
+  },
+  {
+    country: "Uganda",
+    countryCode: "UG",
+    paymentMethods: "MTN Mobile Money, Airtel Money",
+    topic: "How to Collect Testimonials and Video Reviews from Your Swahili Students",
+    category: "Marketing & Student Acquisition",
+    keywords: ["language teacher reviews", "swahili student testimonials", "build social proof tutoring"],
+  },
+  {
+    country: "DRC",
+    countryCode: "CD",
+    paymentMethods: "M-Pesa DRC, Bank Wire",
+    topic: "Teaching Swahili to Humanitarian Responders in Eastern Congo",
+    category: "Specialized Swahili Training",
+    keywords: ["swahili for aid workers congo", "humanitarian swahili course goma", "practical swahili drc"],
+  },
+  {
+    country: "Kenya",
+    countryCode: "KE",
+    paymentMethods: "M-Pesa, PayPal, Wise",
+    topic: "How to Deal with Last-Minute Cancellations and Unpaid Invoices as a Swahili Tutor",
+    category: "Freelance Rates & Business Strategy",
+    keywords: ["tutor cancellation policy", "unpaid tutoring invoices kenya", "freelance tutor business rules"],
+  },
+  {
+    country: "Kenya",
+    countryCode: "KE",
+    paymentMethods: "M-Pesa, Bank Transfer",
+    topic: "Combining Swahili Culture, Cooking, and Music into Your Online Lessons",
+    category: "Curriculum & Course Design",
+    keywords: ["swahili culture lessons", "interactive swahili classes", "fun swahili teaching methods"],
+  },
+  {
+    country: "Global / Diaspora",
+    countryCode: "US",
+    paymentMethods: "Wise, PayPal, M-Pesa",
+    topic: "How to Self-Publish Your Own Swahili Learning Workbook on Amazon KDP",
+    category: "Passive Income & Digital Products",
+    keywords: ["publish swahili workbook amazon kdp", "sell swahili books online", "swahili author self publishing"],
+  },
+  {
+    country: "Tanzania",
+    countryCode: "TZ",
+    paymentMethods: "M-Pesa, Tigo Pesa",
+    topic: "Navigating Swahili Dialects: Teaching Standard Kiunguja vs Regional Variations",
+    category: "Curriculum & Course Design",
+    keywords: ["swahili dialectskiunguja", "teaching standard swahili", "zanzibar vs coastal swahili"],
+  },
+  {
+    country: "Kenya",
+    countryCode: "KE",
+    paymentMethods: "M-Pesa, Pesalink",
+    topic: "How to Conduct Effective Placement Tests for New Swahili Students",
+    category: "Online Teaching & Tutoring",
+    keywords: ["swahili placement test", "assess student swahili level", "swahili diagnostic assessment"],
+  },
+  {
+    country: "Kenya",
+    countryCode: "KE",
+    paymentMethods: "M-Pesa, Wise",
+    topic: "Building a Youtube Channel Focused on Bite-Sized Swahili Language Tips",
+    category: "Marketing & Student Acquisition",
+    keywords: ["youtube swahili teacher", "learn swahili youtube channel", "monetize swahili content youtube"],
+  },
+  {
+    country: "Rwanda",
+    countryCode: "RW",
+    paymentMethods: "MTN Mobile Money Rwanda",
+    topic: "How to Teach Swahili Noun Classes (Ngeli) Without Confusing Beginners",
+    category: "Curriculum & Course Design",
+    keywords: ["swahili ngeli easy guide", "teach swahili noun classes", "kiswahili grammar simplified"],
+  },
+  {
+    country: "Uganda",
+    countryCode: "UG",
+    paymentMethods: "MTN Mobile Money, Airtel Money",
+    topic: "Creating Homework and Practice Worksheets for Online Swahili Students",
+    category: "Curriculum & Course Design",
+    keywords: ["swahili practice worksheets", "swahili homework generator", "online language assignments"],
+  },
+  {
+    country: "Kenya",
+    countryCode: "KE",
+    paymentMethods: "M-Pesa, Bank Transfer",
+    topic: "Tax and Business Registration Basics for Independent Tutors in Kenya",
+    category: "Freelance Rates & Business Strategy",
+    keywords: ["kra pin tutor income", "register tutoring business kenya", "freelance tax kenya"],
+  },
+  {
+    country: "Tanzania",
+    countryCode: "TZ",
+    paymentMethods: "M-Pesa, CRDB Bank",
+    topic: "Teaching Business Email Writing and Formal Correspondence in Swahili",
+    category: "Corporate Language Training",
+    keywords: ["formal swahili email writing", "business kiswahili correspondence", "swahili professional communication"],
+  },
+  {
+    country: "Global / Diaspora",
+    countryCode: "EU",
+    paymentMethods: "Wise, PayPal, M-Pesa",
+    topic: "How to Use AI Tools (ChatGPT, Claude) to Build Custom Lesson Plans for Swahili",
+    category: "Career & Skill Development",
+    keywords: ["ai tools language teacher", "chatgpt swahili lesson plan", "prompts for swahili tutors"],
+  },
+  {
+    country: "Kenya",
+    countryCode: "KE",
+    paymentMethods: "M-Pesa, Pesalink, Equity Bank",
+    topic: "The Ultimate Checklist for Starting a Full-Time Swahili Teaching Career in East Africa",
+    category: "Career & Skill Development",
+    keywords: ["full time swahili teacher guide", "swahili career roadmap", "start teaching swahili today"],
+  },
+];
+
+// Helper: Format JSON content array into Portable Text Blocks
 function formatPortableText(blocks: { style?: string; text: string }[]) {
   return blocks.map((block) => ({
     _type: "block",
@@ -75,42 +449,58 @@ async function getOrCreateRef(type: string, name: string) {
   return created._id;
 }
 
+// Delay helper to prevent burst rate limits
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+/**
+ * Generate and post comprehensive Swahili teaching blogs
+ */
 async function generateAndPostBlog(target: TargetTopic, index: number, total: number) {
-  console.log(`\n[${index + 1}/${total}] 🤖 Generating for ${target.country}: "${target.topic}"...`);
+  console.log(`\n[${index + 1}/${total}] 🤖 Generating Swahili Blog for ${target.country}: "${target.topic}"...`);
 
   const prompt = `
-  You are an expert SEO copywriter specializing in African gig economy, online jobs, and micro-tasks.
-  Write a comprehensive, engaging, search-optimized blog post tailored specifically for workers in ${target.country}.
+  You are a top-tier SEO copywriter, linguist, and online monetization specialist in East Africa.
+  Write a comprehensive, highly detailed, in-depth search-optimized blog post (minimum 1,200 words equivalent depth) about teaching Kiswahili to foreigners/expats/online learners.
 
   Topic: "${target.topic}"
-  Primary Payment Methods to feature: ${target.paymentMethods}
+  Category: "${target.category}"
+  Target Region/City: ${target.country}
+  Primary Payment Methods: ${target.paymentMethods}
+  Target Keywords to naturally incorporate: ${target.keywords.join(", ")}
+
+  Provide deep, practical advice including pricing strategies (hourly USD/KES/TZS rates), platforms (iTalki, Preply, PixChat, DeniChat, local networks), curriculum outline for beginners ("Wazungu"), local cultural nuances, and receiving international payments via M-Pesa / Mobile Money / Bank Transfer.
 
   Return strictly valid JSON matching this schema:
   {
-    "title": "Clear, engaging headline",
-    "seoTitle": "Max 60 chars meta title",
-    "excerpt": "Max 150 chars meta description",
+    "title": "Clear, catchy, keyword-rich headline",
+    "seoTitle": "Max 60 chars meta title containing primary keyword",
+    "excerpt": "Max 150 chars meta description summarizing the post",
     "tags": ["Tag1", "Tag2", "Tag3"],
     "content": [
-      { "style": "h2", "text": "Introduction & Local Context in ${target.country}" },
-      { "style": "normal", "text": "Detailed informative paragraph..." },
-      { "style": "h2", "text": "Top Platforms & Strategies for ${target.topic}" },
-      { "style": "normal", "text": "Detailed actionable steps..." },
-      { "style": "h2", "text": "How to Withdraw Earnings via ${target.paymentMethods}" },
-      { "style": "normal", "text": "Step-by-step local payment guide..." },
-      { "style": "h2", "text": "Essential Tips to Avoid Scams" },
-      { "style": "normal", "text": "Practical safety advice..." }
+      { "style": "h2", "text": "1. Introduction & The Surging Global Demand for Kiswahili" },
+      { "style": "normal", "text": "In-depth opening introducing the local market context..." },
+      { "style": "h2", "text": "2. Why Foreigners ('Wazungu') & Expats Are Eager to Learn Kiswahili" },
+      { "style": "normal", "text": "Comprehensive analysis of tourist, researcher, diplomat, and business demand..." },
+      { "style": "h2", "text": "3. Step-by-Step Guide to Teaching Kiswahili in ${target.country}" },
+      { "style": "normal", "text": "Actionable steps on setting up lessons, lesson plans, and platforms..." },
+      { "style": "h2", "text": "4. Top Teaching Platforms & Local Networks (Online & In-Person)" },
+      { "style": "normal", "text": "Detailed breakdown of platforms including Preply, iTalki, PixChat, DeniChat, and direct local referrals..." },
+      { "style": "h2", "text": "5. Pricing Your Lessons & Withdrawing Earnings via ${target.paymentMethods}" },
+      { "style": "normal", "text": "Specific pricing models (e.g. $10-$30/hr) and how to convert payments to local mobile money..." },
+      { "style": "h2", "text": "6. Essential Tips for Success and Student Retention" },
+      { "style": "normal", "text": "Key teaching tools, engagement tactics, and avoiding platform scams..." }
     ]
   }
   `;
 
   try {
+    // Switched to llama-3.1-8b-instant to stay clear of daily token limits
     const response = await groq.chat.completions.create({
-      model: "llama-3.3-70b-versatile",
+      model: "llama-3.1-8b-instant",
       messages: [
         {
           role: "system",
-          content: "You are a JSON generator. Output strictly raw valid JSON.",
+          content: "You are a JSON generator. Output strictly raw valid JSON. Do not include markdown code block backticks.",
         },
         { role: "user", content: prompt },
       ],
@@ -127,10 +517,10 @@ async function generateAndPostBlog(target: TargetTopic, index: number, total: nu
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/(^-|-$)+/g, "");
 
-    const authorId = await getOrCreateRef("author", "VelloEarn Editorial");
+    const authorId = await getOrCreateRef("author", "Swahili Tech & Career Hub");
     const categoryId = await getOrCreateRef("category", target.category);
     const tagIds = await Promise.all(
-      (data.tags || [target.country]).map((t: string) => getOrCreateRef("tag", t))
+      (data.tags || target.keywords).map((t: string) => getOrCreateRef("tag", t))
     );
 
     const doc = {
@@ -158,151 +548,22 @@ async function generateAndPostBlog(target: TargetTopic, index: number, total: nu
   }
 }
 
-// --- 120 UNIQUE TOPICS QUEUE (20 PER COUNTRY) ---
-const fullBatchQueue: TargetTopic[] = [
-  // ================= GHANA (20) =================
-  { country: "Ghana", countryCode: "GH", paymentMethods: "MTN MoMo, Telecel Cash, Vodafone Cash", category: "Online Jobs Ghana", topic: "Legit Online Jobs for Legon & KNUST University Students in Ghana" },
-  { country: "Ghana", countryCode: "GH", paymentMethods: "MTN MoMo, Telecel Cash", category: "Online Jobs Ghana", topic: "Best Paid Survey Websites in Ghana That Payout via MTN Mobile Money" },
-  { country: "Ghana", countryCode: "GH", paymentMethods: "MTN MoMo, Bank Transfer", category: "Online Jobs Ghana", topic: "How to Start Freelance Copywriting in Accra with Zero Experience" },
-  { country: "Ghana", countryCode: "GH", paymentMethods: "MTN MoMo, Telecel Cash", category: "Online Jobs Ghana", topic: "Top Data Entry Remote Jobs in Kumasi Paying Daily via Mobile Money" },
-  { country: "Ghana", countryCode: "GH", paymentMethods: "MTN MoMo", category: "Online Jobs Ghana", topic: "Micro-task Apps That Pay Ghanaians Money for Testing Sites" },
-  { country: "Ghana", countryCode: "GH", paymentMethods: "MTN MoMo, Telecel Cash", category: "Online Jobs Ghana", topic: "How to Become a Virtual Assistant in Takoradi Working for Foreign Clients" },
-  { country: "Ghana", countryCode: "GH", paymentMethods: "MTN MoMo", category: "Online Jobs Ghana", topic: "Genuine Audio Transcription Jobs in Ghana for Fast Typists" },
-  { country: "Ghana", countryCode: "GH", paymentMethods: "MTN MoMo, Telecel Cash", category: "Online Jobs Ghana", topic: "High Paying Remote Graphic Design Freelancing in Tema & Spintex" },
-  { country: "Ghana", countryCode: "GH", paymentMethods: "MTN MoMo", category: "Online Jobs Ghana", topic: "Earn Money Online in Cape Coast Doing Social Media Management" },
-  { country: "Ghana", countryCode: "GH", paymentMethods: "MTN MoMo, Telecel Cash", category: "Online Jobs Ghana", topic: "Online Tutoring Jobs in Ghana: Teach English & Math Online" },
-  { country: "Ghana", countryCode: "GH", paymentMethods: "MTN MoMo", category: "Online Jobs Ghana", topic: "How to Monetize a WhatsApp Status in Ghana with Local Affiliate Offers" },
-  { country: "Ghana", countryCode: "GH", paymentMethods: "MTN MoMo, Telecel Cash", category: "Online Jobs Ghana", topic: "Best Smartphone Apps to Make Money Online in Ghana Without Investment" },
-  { country: "Ghana", countryCode: "GH", paymentMethods: "MTN MoMo", category: "Online Jobs Ghana", topic: "Proofreading & Editing Remote Jobs for Ghanaian Graduates" },
-  { country: "Ghana", countryCode: "GH", paymentMethods: "MTN MoMo, Telecel Cash", category: "Online Jobs Ghana", topic: "How to Sell Digital Products in Ghana using Paystack & Mobile Money" },
-  { country: "Ghana", countryCode: "GH", paymentMethods: "MTN MoMo", category: "Online Jobs Ghana", topic: "Work-From-Home Customer Support Representative Opportunities in Ghana" },
-  { country: "Ghana", countryCode: "GH", paymentMethods: "MTN MoMo, Telecel Cash", category: "Online Jobs Ghana", topic: "Canva Freelancing Jobs in Ghana: Earn Money Designing Social Assets" },
-  { country: "Ghana", countryCode: "GH", paymentMethods: "MTN MoMo", category: "Online Jobs Ghana", topic: "How to Avoid Online Job Scams in Ghana: Red Flags to Watch For" },
-  { country: "Ghana", countryCode: "GH", paymentMethods: "MTN MoMo, Telecel Cash", category: "Online Jobs Ghana", topic: "Daily Withdrawal Remote Micro Jobs for High School Graduates in Sunyani" },
-  { country: "Ghana", countryCode: "GH", paymentMethods: "MTN MoMo", category: "Online Jobs Ghana", topic: "Remote AI Data Annotation Jobs Available for Workers in Ghana" },
-  { country: "Ghana", countryCode: "GH", paymentMethods: "MTN MoMo, Telecel Cash", category: "Online Jobs Ghana", topic: "Complete Guide to Cashing Out Foreign Freelance Earnings via MTN MoMo" },
-
-  // ================= UGANDA (20) =================
-  { country: "Uganda", countryCode: "UG", paymentMethods: "MTN Mobile Money, Airtel Money", category: "Online Jobs Uganda", topic: "Legit Online Jobs in Kampala That Pay Daily via MTN MoMo" },
-  { country: "Uganda", countryCode: "UG", paymentMethods: "MTN Mobile Money, Airtel Money", category: "Online Jobs Uganda", topic: "Best Online Hustles for Makerere & Kyambogo University Students" },
-  { country: "Uganda", countryCode: "UG", paymentMethods: "Airtel Money, MTN Mobile Money", category: "Online Jobs Uganda", topic: "Top Paying Online Survey Platforms Working in Uganda" },
-  { country: "Uganda", countryCode: "UG", paymentMethods: "MTN Mobile Money, Airtel Money", category: "Online Jobs Uganda", topic: "How to Get Remote Data Entry Jobs in Mbarara & Jinja" },
-  { country: "Uganda", countryCode: "UG", paymentMethods: "MTN Mobile Money", category: "Online Jobs Uganda", topic: "Freelance Content Writing Jobs in Uganda for Beginners" },
-  { country: "Uganda", countryCode: "UG", paymentMethods: "MTN Mobile Money, Airtel Money", category: "Online Jobs Uganda", topic: "Micro-task Micro-job Websites That Pay Ugandans via Mobile Money" },
-  { country: "Uganda", countryCode: "UG", paymentMethods: "Airtel Money, MTN Mobile Money", category: "Online Jobs Uganda", topic: "How to Work as a Virtual Assistant from Gulu & Entebbe" },
-  { country: "Uganda", countryCode: "UG", paymentMethods: "MTN Mobile Money, Airtel Money", category: "Online Jobs Uganda", topic: "Online English Teaching Jobs in Uganda with Weekly Pay" },
-  { country: "Uganda", countryCode: "UG", paymentMethods: "MTN Mobile Money", category: "Online Jobs Uganda", topic: "Smartphone Remote Jobs in Uganda: Earn Money with Your Phone" },
-  { country: "Uganda", countryCode: "UG", paymentMethods: "MTN Mobile Money, Airtel Money", category: "Online Jobs Uganda", topic: "Audio Transcription Jobs for Ugandans with Fast Typing Speed" },
-  { country: "Uganda", countryCode: "UG", paymentMethods: "MTN Mobile Money", category: "Online Jobs Uganda", topic: "How to Monetize TikTok & Instagram Accounts in Kampala" },
-  { country: "Uganda", countryCode: "UG", paymentMethods: "MTN Mobile Money, Airtel Money", category: "Online Jobs Uganda", topic: "Affiliate Marketing Guide for Ugandans: Earn Commissions Daily" },
-  { country: "Uganda", countryCode: "UG", paymentMethods: "Airtel Money, MTN Mobile Money", category: "Online Jobs Uganda", topic: "Canva Design Freelancing in Uganda: Simple Graphics for Local Clients" },
-  { country: "Uganda", countryCode: "UG", paymentMethods: "MTN Mobile Money", category: "Online Jobs Uganda", topic: "Remote Customer Care & Chat Agent Jobs for Ugandans" },
-  { country: "Uganda", countryCode: "UG", paymentMethods: "MTN Mobile Money, Airtel Money", category: "Online Jobs Uganda", topic: "AI Training & Data Labeling Micro-Tasks in Uganda" },
-  { country: "Uganda", countryCode: "UG", paymentMethods: "MTN Mobile Money", category: "Online Jobs Uganda", topic: "Website Usability Testing Jobs for Ugandans" },
-  { country: "Uganda", countryCode: "UG", paymentMethods: "MTN Mobile Money, Airtel Money", category: "Online Jobs Uganda", topic: "How to Safely Receive Upwork & Fiverr Money in Uganda via Mobile Money" },
-  { country: "Uganda", countryCode: "UG", paymentMethods: "Airtel Money", category: "Online Jobs Uganda", topic: "Weekend Online Side Hustles for Full-Time Workers in Kampala" },
-  { country: "Uganda", countryCode: "UG", paymentMethods: "MTN Mobile Money, Airtel Money", category: "Online Jobs Uganda", topic: "Online Proofreading & Copyediting Jobs for Ugandan Teachers" },
-  { country: "Uganda", countryCode: "UG", paymentMethods: "MTN Mobile Money", category: "Online Jobs Uganda", topic: "How to Spot and Avoid Online Fraud & Scam Work in Uganda" },
-
-  // ================= TANZANIA (20) =================
-  { country: "Tanzania", countryCode: "TZ", paymentMethods: "Vodacom M-Pesa, Tigo Pesa, Airtel Money", category: "Online Jobs Tanzania", topic: "Jinsi ya Kutengeneza Pesa Mtandaoni Dar es Salaam kwa Kujibu Tafiti" },
-  { country: "Tanzania", countryCode: "TZ", paymentMethods: "Vodacom M-Pesa, Tigo Pesa", category: "Online Jobs Tanzania", topic: "Kazi za Mtandaoni kwa Wanafunzi wa Chuo Kikuu Cha Dar es Salaam (UDSM)" },
-  { country: "Tanzania", countryCode: "TZ", paymentMethods: "Vodacom M-Pesa, Tigo Pesa, Airtel Money", category: "Online Jobs Tanzania", topic: "Njia za Uhakika za Kupata Hela Mtandaoni Arusha na Mwanza" },
-  { country: "Tanzania", countryCode: "TZ", paymentMethods: "Vodacom M-Pesa", category: "Online Jobs Tanzania", topic: "Kazi za Data Entry Mtandaoni Tanzania Zinazolipa kwa M-Pesa" },
-  { country: "Tanzania", countryCode: "TZ", paymentMethods: "Vodacom M-Pesa, Tigo Pesa", category: "Online Jobs Tanzania", topic: "Jinsi ya Kuwa Freelance Writer Tanzania na Kupata Wateja wa Nje" },
-  { country: "Tanzania", countryCode: "TZ", paymentMethods: "Vodacom M-Pesa, Airtel Money", category: "Online Jobs Tanzania", topic: "App za Simu Zinazolipa Pesa za Kitanzania Bila Wekeza Chochote" },
-  { country: "Tanzania", countryCode: "TZ", paymentMethods: "Vodacom M-Pesa, Tigo Pesa", category: "Online Jobs Tanzania", topic: "Kazi za Kutafsiri Lugha ya Kiswahili Mtandaoni kwa Kompyuta au Simu" },
-  { country: "Tanzania", countryCode: "TZ", paymentMethods: "Vodacom M-Pesa", category: "Online Jobs Tanzania", topic: "Jinsi ya Kuwa Virtual Assistant Ukiwa Dodoma au Zanzibar" },
-  { country: "Tanzania", countryCode: "TZ", paymentMethods: "Vodacom M-Pesa, Tigo Pesa", category: "Online Jobs Tanzania", topic: "Kazi za Social Media Manager Tanzania: Ongeza Kipato kwa Simu" },
-  { country: "Tanzania", countryCode: "TZ", paymentMethods: "Vodacom M-Pesa", category: "Online Jobs Tanzania", topic: "Kazi za Micro-tasks na Testing za Website Zinazolipa Watanzania" },
-  { country: "Tanzania", countryCode: "TZ", paymentMethods: "Vodacom M-Pesa, Tigo Pesa", category: "Online Jobs Tanzania", topic: "Jinsi ya Kuanza Affiliate Marketing Tanzania na Kuingiza Pesa Mfukoni" },
-  { country: "Tanzania", countryCode: "TZ", paymentMethods: "Vodacom M-Pesa", category: "Online Jobs Tanzania", topic: "Graphic Design za Canva: Pata Wateja na Ulipwe kwa Tigo Pesa" },
-  { country: "Tanzania", countryCode: "TZ", paymentMethods: "Vodacom M-Pesa, Tigo Pesa", category: "Online Jobs Tanzania", topic: "Kazi za Kutfundisha Kiswahili Mtandaoni kwa Wageni" },
-  { country: "Tanzania", countryCode: "TZ", paymentMethods: "Vodacom M-Pesa", category: "Online Jobs Tanzania", topic: "Jinsi ya Kutengeneza Pesa kwa WhatsApp Status Tanzania" },
-  { country: "Tanzania", countryCode: "TZ", paymentMethods: "Vodacom M-Pesa, Tigo Pesa", category: "Online Jobs Tanzania", topic: "Kazi za AI Training na Labeling za Data kwa Watanzania" },
-  { country: "Tanzania", countryCode: "TZ", paymentMethods: "Vodacom M-Pesa", category: "Online Jobs Tanzania", topic: "Kazi za Remote Customer Support Zinazopatikana Tanzania" },
-  { country: "Tanzania", countryCode: "TZ", paymentMethods: "Vodacom M-Pesa, Tigo Pesa", category: "Online Jobs Tanzania", topic: "Jinsi ya Kutoa Hela ya Fiverr na Upwork Kwenda M-Pesa Tanzania" },
-  { country: "Tanzania", countryCode: "TZ", paymentMethods: "Vodacom M-Pesa", category: "Online Jobs Tanzania", topic: "Kazi za Proofreading za Vitabu na Makala Mtandaoni Tanzania" },
-  { country: "Tanzania", countryCode: "TZ", paymentMethods: "Vodacom M-Pesa, Tigo Pesa", category: "Online Jobs Tanzania", topic: "Tahadhari: Jinsi ya Kuepuka Utapeli wa Kazi za Mtandaoni Tanzania" },
-  { country: "Tanzania", countryCode: "TZ", paymentMethods: "Vodacom M-Pesa", category: "Online Jobs Tanzania", topic: "Miradi ya Weekend ya Mtandaoni kwa Wafanyakazi wa Maofisini Dar" },
-
-  // ================= ZAMBIA (20) =================
-  { country: "Zambia", countryCode: "ZM", paymentMethods: "MTN Mobile Money, Airtel Money", category: "Online Jobs Zambia", topic: "Best Online Jobs in Lusaka That Pay via MTN Mobile Money" },
-  { country: "Zambia", countryCode: "ZM", paymentMethods: "MTN Mobile Money, Airtel Money", category: "Online Jobs Zambia", topic: "Legit Online Hustles for UNZA & CBU University Students in Zambia" },
-  { country: "Zambia", countryCode: "ZM", paymentMethods: "Airtel Money, MTN Mobile Money", category: "Online Jobs Zambia", topic: "Top Paid Online Survey Websites Available for Zambians" },
-  { country: "Zambia", countryCode: "ZM", paymentMethods: "MTN Mobile Money, Airtel Money", category: "Online Jobs Zambia", topic: "Data Entry Remote Jobs in Ndola & Kitwe with Weekly Payouts" },
-  { country: "Zambia", countryCode: "ZM", paymentMethods: "MTN Mobile Money", category: "Online Jobs Zambia", topic: "How to Get Started as a Freelance Article Writer in Zambia" },
-  { country: "Zambia", countryCode: "ZM", paymentMethods: "MTN Mobile Money, Airtel Money", category: "Online Jobs Zambia", topic: "Smartphone Micro-task Apps to Earn Kwacha Online in Zambia" },
-  { country: "Zambia", countryCode: "ZM", paymentMethods: "Airtel Money, MTN Mobile Money", category: "Online Jobs Zambia", topic: "Virtual Assistant Remote Work Opportunities for Zambian Jobseekers" },
-  { country: "Zambia", countryCode: "ZM", paymentMethods: "MTN Mobile Money", category: "Online Jobs Zambia", topic: "Online English Tutoring Jobs for Zambian Graduates" },
-  { country: "Zambia", countryCode: "ZM", paymentMethods: "MTN Mobile Money, Airtel Money", category: "Online Jobs Zambia", topic: "Audio Transcription Jobs in Zambia: Earn Money Typing at Home" },
-  { country: "Zambia", countryCode: "ZM", paymentMethods: "MTN Mobile Money", category: "Online Jobs Zambia", topic: "Social Media Freelancing Jobs for Youth in Livingstone & Kabwe" },
-  { country: "Zambia", countryCode: "ZM", paymentMethods: "MTN Mobile Money, Airtel Money", category: "Online Jobs Zambia", topic: "How to Earn Money with Affiliate Marketing in Zambia" },
-  { country: "Zambia", countryCode: "ZM", paymentMethods: "Airtel Money", category: "Online Jobs Zambia", topic: "Canva Graphic Design Side Hustles for Zambian Creatives" },
-  { country: "Zambia", countryCode: "ZM", paymentMethods: "MTN Mobile Money, Airtel Money", category: "Online Jobs Zambia", topic: "Website Testing Remote Jobs Open to Zambian Residents" },
-  { country: "Zambia", countryCode: "ZM", paymentMethods: "MTN Mobile Money", category: "Online Jobs Zambia", topic: "Proofreading & Editing Freelance Opportunities in Lusaka" },
-  { country: "Zambia", countryCode: "ZM", paymentMethods: "MTN Mobile Money, Airtel Money", category: "Online Jobs Zambia", topic: "AI Annotation & Dataset Training Jobs for Zambians" },
-  { country: "Zambia", countryCode: "ZM", paymentMethods: "Airtel Money, MTN Mobile Money", category: "Online Jobs Zambia", topic: "Remote Customer Representative Jobs for Zambians with Good Communication" },
-  { country: "Zambia", countryCode: "ZM", paymentMethods: "MTN Mobile Money", category: "Online Jobs Zambia", topic: "Monetizing WhatsApp Groups & Statuses in Zambia" },
-  { country: "Zambia", countryCode: "ZM", paymentMethods: "MTN Mobile Money, Airtel Money", category: "Online Jobs Zambia", topic: "How to Safely Withdraw Upwork & Payoneer Money to MTN MoMo in Zambia" },
-  { country: "Zambia", countryCode: "ZM", paymentMethods: "MTN Mobile Money", category: "Online Jobs Zambia", topic: "Weekend Work-From-Home Jobs in Zambia for Part-Time Income" },
-  { country: "Zambia", countryCode: "ZM", paymentMethods: "MTN Mobile Money, Airtel Money", category: "Online Jobs Zambia", topic: "How to Identify Online Job Scams in Zambia: Complete Safety Guide" },
-
-  // ================= NIGERIA (20) =================
-  { country: "Nigeria", countryCode: "NG", paymentMethods: "OPay, Palmpay, Bank Transfer", category: "Online Jobs Nigeria", topic: "Legit Online Jobs in Lagos That Pay Daily to OPay or Palmpay" },
-  { country: "Nigeria", countryCode: "NG", paymentMethods: "OPay, Palmpay, Bank Transfer", category: "Online Jobs Nigeria", topic: "High Paying Online Side Hustles for UNILAG, OAU & UI Students" },
-  { country: "Nigeria", countryCode: "NG", paymentMethods: "OPay, Bank Transfer", category: "Online Jobs Nigeria", topic: "Highest Paying Survey Websites That Accept Nigerian Users" },
-  { country: "Nigeria", countryCode: "NG", paymentMethods: "OPay, Palmpay", category: "Online Jobs Nigeria", topic: "Remote Data Entry Jobs in Abuja & Port Harcourt for Beginners" },
-  { country: "Nigeria", countryCode: "NG", paymentMethods: "Bank Transfer, OPay", category: "Online Jobs Nigeria", topic: "How to Start Copywriting in Nigeria & Earn in Dollars" },
-  { country: "Nigeria", countryCode: "NG", paymentMethods: "OPay, Palmpay", category: "Online Jobs Nigeria", topic: "Micro-task Micro-job Platforms paying Nigerians in Naira" },
-  { country: "Nigeria", countryCode: "NG", paymentMethods: "Bank Transfer, OPay", category: "Online Jobs Nigeria", topic: "Virtual Assistant Jobs in Nigeria for International Clients" },
-  { country: "Nigeria", countryCode: "NG", paymentMethods: "OPay, Palmpay", category: "Online Jobs Nigeria", topic: "Online Tutoring Platforms Hiring Nigerian Tutors" },
-  { country: "Nigeria", countryCode: "NG", paymentMethods: "Bank Transfer, OPay", category: "Online Jobs Nigeria", topic: "Audio Transcription Remote Jobs for Fast Typists in Nigeria" },
-  { country: "Nigeria", countryCode: "NG", paymentMethods: "OPay, Palmpay", category: "Online Jobs Nigeria", topic: "Graphic Design Freelancing in Ibadan & Enugu using Canva and Photoshop" },
-  { country: "Nigeria", countryCode: "NG", paymentMethods: "Bank Transfer, OPay", category: "Online Jobs Nigeria", topic: "Affiliate Marketing Complete Guide for Nigerian Youth" },
-  { country: "Nigeria", countryCode: "NG", paymentMethods: "OPay, Palmpay", category: "Online Jobs Nigeria", topic: "Social Media Management Jobs for Nigerian Creatives" },
-  { country: "Nigeria", countryCode: "NG", paymentMethods: "Bank Transfer, OPay", category: "Online Jobs Nigeria", topic: "How to Earn Money Testing Mobile Apps & Websites in Nigeria" },
-  { country: "Nigeria", countryCode: "NG", paymentMethods: "OPay, Palmpay", category: "Online Jobs Nigeria", topic: "Proofreading & Editing Remote Freelancing for Nigerian Graduates" },
-  { country: "Nigeria", countryCode: "NG", paymentMethods: "Bank Transfer, OPay", category: "Online Jobs Nigeria", topic: "AI Training & Data Annotation Jobs for Nigerians" },
-  { country: "Nigeria", countryCode: "NG", paymentMethods: "OPay, Palmpay", category: "Online Jobs Nigeria", topic: "Remote Customer Support & Live Chat Jobs for Nigerians" },
-  { country: "Nigeria", countryCode: "NG", paymentMethods: "OPay, Bank Transfer", category: "Online Jobs Nigeria", topic: "How to Sell Ebooks & Digital Products in Nigeria via Selar" },
-  { country: "Nigeria", countryCode: "NG", paymentMethods: "OPay, Palmpay", category: "Online Jobs Nigeria", topic: "Monetizing WhatsApp Television & Statuses in Nigeria" },
-  { country: "Nigeria", countryCode: "NG", paymentMethods: "Bank Transfer, OPay", category: "Online Jobs Nigeria", topic: "How to Withdraw Paypal, Upwork & Geegpay Funds directly to Nigerian Banks" },
-  { country: "Nigeria", countryCode: "NG", paymentMethods: "OPay, Palmpay", category: "Online Jobs Nigeria", topic: "How to Avoid Telegram & WhatsApp Online Job Scams in Nigeria" },
-
-  // ================= CAMEROON (20) =================
-  { country: "Cameroon", countryCode: "CM", paymentMethods: "Orange Money, MTN Mobile Money", category: "Online Jobs Cameroon", topic: "How to Earn Money Online in Douala & Yaoundé with Orange Money" },
-  { country: "Cameroon", countryCode: "CM", paymentMethods: "MTN Mobile Money, Orange Money", category: "Online Jobs Cameroon", topic: "Legit Online Side Hustles for University Students in Buea & Bamenda" },
-  { country: "Cameroon", countryCode: "CM", paymentMethods: "Orange Money, MTN Mobile Money", category: "Online Jobs Cameroon", topic: "Best Online Survey Sites That Work in Cameroon and Pay via Mobile Money" },
-  { country: "Cameroon", countryCode: "CM", paymentMethods: "MTN Mobile Money, Orange Money", category: "Online Jobs Cameroon", topic: "Data Entry Remote Work Opportunities in Bafoussam & Garoua" },
-  { country: "Cameroon", countryCode: "CM", paymentMethods: "Orange Money", category: "Online Jobs Cameroon", topic: "Bilingual Freelance Content Writing Jobs in Cameroon (English & French)" },
-  { country: "Cameroon", countryCode: "CM", paymentMethods: "MTN Mobile Money, Orange Money", category: "Online Jobs Cameroon", topic: "Micro-task Apps That Pay Cameroonians via MTN Mobile Money" },
-  { country: "Cameroon", countryCode: "CM", paymentMethods: "Orange Money, MTN Mobile Money", category: "Online Jobs Cameroon", topic: "Virtual Assistant Remote Jobs for Bilingual Workers in Cameroon" },
-  { country: "Cameroon", countryCode: "CM", paymentMethods: "MTN Mobile Money", category: "Online Jobs Cameroon", topic: "Online English & French Tutoring Jobs for Cameroonian Teachers" },
-  { country: "Cameroon", countryCode: "CM", paymentMethods: "Orange Money, MTN Mobile Money", category: "Online Jobs Cameroon", topic: "Audio & Video Transcription Jobs for Workers in Cameroon" },
-  { country: "Cameroon", countryCode: "CM", paymentMethods: "MTN Mobile Money, Orange Money", category: "Online Jobs Cameroon", topic: "Remote Graphic Design & Canva Freelancing in Cameroon" },
-  { country: "Cameroon", countryCode: "CM", paymentMethods: "Orange Money", category: "Online Jobs Cameroon", topic: "Social Media Management Jobs for Cameroonian Youth" },
-  { country: "Cameroon", countryCode: "CM", paymentMethods: "MTN Mobile Money, Orange Money", category: "Online Jobs Cameroon", topic: "Affiliate Marketing Complete Beginner Guide for Cameroon" },
-  { country: "Cameroon", countryCode: "CM", paymentMethods: "Orange Money, MTN Mobile Money", category: "Online Jobs Cameroon", topic: "Website & App Usability Testing Jobs in Cameroon" },
-  { country: "Cameroon", countryCode: "CM", paymentMethods: "MTN Mobile Money", category: "Online Jobs Cameroon", topic: "Translation Jobs online: English to French Translation Freelancing" },
-  { country: "Cameroon", countryCode: "CM", paymentMethods: "Orange Money, MTN Mobile Money", category: "Online Jobs Cameroon", topic: "AI Data Labeling & Annotation Remote Tasks for Cameroonians" },
-  { country: "Cameroon", countryCode: "CM", paymentMethods: "MTN Mobile Money, Orange Money", category: "Online Jobs Cameroon", topic: "Customer Support Chat Jobs Available for Cameroonian Residents" },
-  { country: "Cameroon", countryCode: "CM", paymentMethods: "Orange Money", category: "Online Jobs Cameroon", topic: "How to Earn Money on WhatsApp Status in Cameroon" },
-  { country: "Cameroon", countryCode: "CM", paymentMethods: "MTN Mobile Money, Orange Money", category: "Online Jobs Cameroon", topic: "Selling Digital Downloads & Courses Online in Cameroon" },
-  { country: "Cameroon", countryCode: "CM", paymentMethods: "Orange Money, MTN Mobile Money", category: "Online Jobs Cameroon", topic: "How to Safely Receive Upwork & Foreign Freelance Pay in Cameroon" },
-  { country: "Cameroon", countryCode: "CM", paymentMethods: "MTN Mobile Money, Orange Money", category: "Online Jobs Cameroon", topic: "How to Identify Fake Work-From-Home Job Scams in Cameroon" },
-];
-
+// MAIN EXECUTION FUNCTION
 async function runBatch() {
-  console.log(`🚀 Starting Generation of 120 SEO-Optimized Articles via Groq...\n`);
-  
+  const TOTAL_TOPICS = 93;
+  const START_INDEX = 47; // Topic #48
+
+  console.log(`🚀 Resuming batch execution at index ${START_INDEX + 1} of ${TOTAL_TOPICS}...`);
+
   for (let i = 0; i < fullBatchQueue.length; i++) {
-    await generateAndPostBlog(fullBatchQueue[i], i, fullBatchQueue.length);
-    // 1.5-second rate limit pause between generations
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    const currentIndex = START_INDEX + i;
+    await generateAndPostBlog(fullBatchQueue[i], currentIndex, TOTAL_TOPICS);
+    
+    // 2-second rate-limit protection delay
+    await sleep(2000);
   }
 
-  console.log("\n🎉 ALL 120 ARTICLES SUCCESSFULLY CREATED AND PUBLISHED TO SANITY!");
+  console.log("\n🎉 All remaining posts generated and published successfully!");
 }
 
 runBatch();

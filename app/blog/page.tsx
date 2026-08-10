@@ -154,13 +154,15 @@ function NewsletterCTA() {
           <h3 className="text-xl font-extrabold mt-1 leading-snug">
             Start earning from your phone today
           </h3>
-          <p className="text-rose-100 text-sm mt-1">KES 550 one-time · KES 200 welcome bonus</p>
+          <p className="text-rose-100 text-sm mt-1">
+            Join our community and start earning rewards today.
+          </p>
         </div>
         <Link
           href="/join"
           className="shrink-0 text-center bg-white text-rose-500 font-bold text-sm px-6 py-3 rounded-full shadow-md hover:bg-rose-50 transition-colors"
         >
-          Apply — KES 550 One-Time
+          Apply — It&apos;s Free
         </Link>
       </div>
     </div>

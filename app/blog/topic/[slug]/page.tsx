@@ -1,5 +1,7 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
+import { client } from '@/lib/sanity/client'; // Adjust this path according to your project setup
 
 // --- Interfaces ---
 interface Post {
@@ -20,7 +22,7 @@ interface PageProps {
   }>;
 }
 
-// Optional helper to format slug back to clean title (e.g., 'wafanyakazi-wa-maofisini' -> 'Wafanyakazi Wa Maofisini')
+// Format slug back to clean title (e.g., 'wafanyakazi-wa-maofisini' -> 'Wafanyakazi Wa Maofisini')
 function formatSlugToTitle(slug: string): string {
   return decodeURIComponent(slug)
     .replace(/-/g, ' ')
@@ -31,10 +33,14 @@ function formatSlugToTitle(slug: string): string {
 async function getPostsByTopic(topicSlug: string): Promise<Post[]> {
   const decodedSlug = decodeURIComponent(topicSlug);
 
-  // Example Sanity GROQ Query:
-  // Match posts where the tag array contains the slug or formatted tag name
-  /*
-  const query = `*[_type == "post" && ($slug in tags[] || $slug in tags[]->slug.current)] | order(publishedAt desc) {
+  // Matches posts where:
+  // 1. The category slug matches the URL topic parameter
+  // 2. OR string tags array includes the raw or decoded slug
+  const query = `*[_type == "post" && (
+    $slug in categories[]->slug.current || 
+    $slug in tags[] || 
+    lower($slug) in tags[]
+  )] | order(publishedAt desc) {
     _id,
     title,
     slug,
@@ -43,11 +49,18 @@ async function getPostsByTopic(topicSlug: string): Promise<Post[]> {
     "coverImage": mainImage.asset->url,
     tags
   }`;
-  return await client.fetch<Post[]>(query, { slug: decodedSlug });
-  */
 
-  // Replace this mock return with your actual DB/Sanity fetch logic
-  return [];
+  try {
+    const posts = await client.fetch<Post[]>(
+      query,
+      { slug: decodedSlug },
+      { next: { revalidate: 60 } } // Revalidate cache every 60 seconds
+    );
+    return posts || [];
+  } catch (error) {
+    console.error('Error fetching posts by topic:', error);
+    return [];
+  }
 }
 
 // --- Dynamic Metadata ---
@@ -101,26 +114,32 @@ export default async function TopicPage({ params }: PageProps) {
           {posts.map((post) => (
             <article
               key={post._id}
-              className="flex flex-col border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+              className="flex flex-col border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow bg-white"
             >
               {post.coverImage && (
-                <img
-                  src={post.coverImage}
-                  alt={post.title}
-                  className="w-full h-48 object-cover"
-                />
+                <div className="relative w-full h-48 bg-gray-100">
+                  <Image
+                    src={post.coverImage}
+                    alt={post.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    className="object-cover"
+                  />
+                </div>
               )}
               <div className="p-6 flex flex-col flex-1">
-                <time className="text-xs text-gray-500 mb-2">
-                  {new Date(post.publishedAt).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })}
-                </time>
+                {post.publishedAt && (
+                  <time className="text-xs text-gray-500 mb-2">
+                    {new Date(post.publishedAt).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    })}
+                  </time>
+                )}
                 <h2 className="text-xl font-bold text-gray-900 mb-2 line-clamp-2">
                   <Link
-                    href={`/blog/${post.slug.current}`}
+                    href={`/blog/${post.slug?.current}`}
                     className="hover:text-blue-600 transition-colors"
                   >
                     {post.title}
@@ -131,10 +150,10 @@ export default async function TopicPage({ params }: PageProps) {
                     {post.excerpt}
                   </p>
                 )}
-                <div className="mt-auto pt-4 border-t">
+                <div className="mt-auto pt-4 border-t border-gray-100">
                   <Link
-                    href={`/blog/${post.slug.current}`}
-                    className="text-sm font-semibold text-blue-600 hover:text-blue-800"
+                    href={`/blog/${post.slug?.current}`}
+                    className="text-sm font-semibold text-blue-600 hover:text-blue-800 flex items-center gap-1"
                   >
                     Read article →
                   </Link>

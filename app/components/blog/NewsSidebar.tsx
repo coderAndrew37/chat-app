@@ -1,3 +1,4 @@
+import { VELLOEARN_REGISTER_URL } from "@/lib/constants";
 import { BlogPost } from "@/types/blog";
 import Image from "next/image";
 import Link from "next/link";
@@ -67,21 +68,21 @@ export function NewsSidebar({ posts }: NewsSidebarProps) {
         </div>
       </div>
 
-      {/* CTA widget */}
+    {/* CTA widget */}
       <div className="bg-rose-500 rounded-2xl p-5 text-white relative overflow-hidden">
         <div className="absolute -top-4 -right-4 w-20 h-20 bg-white/10 rounded-full blur-xl" />
         <div className="relative z-10">
           <p className="text-[10px] font-black uppercase tracking-widest text-rose-200 mb-1">
-            Free to join
+            Free to join worldwide
           </p>
           <h3 className="text-base font-extrabold leading-snug mb-2">
-            Earn from your phone — paid to M-Pesa
+            Earn from your phone — fast local payouts
           </h3>
           <p className="text-rose-100 text-xs mb-4 leading-relaxed">
-            No experience needed. Withdraw any time.
+            No experience needed. Instant withdrawals across supported countries.
           </p>
           <Link
-            href="/join"
+            href={VELLOEARN_REGISTER_URL}
             className="block text-center bg-white text-rose-500 font-bold text-xs px-4 py-2.5 rounded-full hover:bg-rose-50 transition-colors"
           >
             Apply — It&apos;s Free

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import {
   PortableText,
   PortableTextBlock,
@@ -13,6 +13,7 @@ import Link from "next/link";
 
 import { QuizComponent } from "./QuizComponent";
 import { Quiz, RelatedPostCard } from "@/types/blog";
+import { VELLOEARN_REGISTER_URL } from "@/lib/constants";
 
 // --- Interfaces ---
 
@@ -57,6 +58,49 @@ const slugify = (children: React.ReactNode): string => {
     .replace(/[^\w\s-]/g, "")
     .replace(/\s+/g, "-");
 };
+
+// --- Auto Injector Helper ---
+
+function injectAutoCta(blocks: PortableTextBlock[]): PortableTextBlock[] {
+  if (!blocks || blocks.length === 0) return [];
+
+  // Check if a CTA block already exists in the content
+  const hasExistingCta = blocks.some((b) => b._type === "cta");
+  if (hasExistingCta) return blocks;
+
+  const result = [...blocks];
+  let paragraphCount = 0;
+  let targetIndex = -1;
+
+  // Find position after the 2nd normal paragraph (or after 2nd heading if paragraphs are short)
+  for (let i = 0; i < result.length; i++) {
+    const block = result[i];
+    if (block._type === "block" && block.style === "normal") {
+      paragraphCount++;
+      if (paragraphCount === 2) {
+        targetIndex = i + 1;
+        break;
+      }
+    }
+  }
+
+  // Fallback: If less than 2 paragraphs exist, append near the middle
+  if (targetIndex === -1 && result.length > 2) {
+    targetIndex = Math.floor(result.length / 2);
+  }
+
+  // If a valid insertion point was found, inject the CTA synthetic object
+  if (targetIndex !== -1) {
+    const syntheticCtaBlock: PortableTextBlock = {
+      _key: `auto-cta-${Date.now()}`,
+      _type: "cta",
+      children: [],
+    };
+    result.splice(targetIndex, 0, syntheticCtaBlock);
+  }
+
+  return result;
+}
 
 // --- Components ---
 
@@ -223,7 +267,7 @@ const components: PortableTextComponents = {
     cta: ({
       value,
     }: {
-      value: { title?: string; subtitle?: string; buttonText?: string; url?: string };
+      value?: { title?: string; subtitle?: string; buttonText?: string; url?: string };
     }) => (
       <div className="my-10 p-6 sm:p-8 rounded-2xl bg-gradient-to-r from-rose-500 via-rose-600 to-pink-600 text-white relative overflow-hidden shadow-xl border border-rose-400/20">
         <div className="absolute top-0 right-0 -mt-8 -mr-8 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none" />
@@ -240,7 +284,7 @@ const components: PortableTextComponents = {
             </p>
           </div>
           <Link
-            href={value?.url || "https://mulaearn.com/register.php?ref=velloearn"}
+            href={VELLOEARN_REGISTER_URL}
             className="shrink-0 w-full sm:w-auto text-center px-7 py-3.5 bg-white text-rose-600 rounded-full font-bold text-sm hover:bg-rose-50 transition-all shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
           >
             {value?.buttonText || "Get Started Now →"}
@@ -357,11 +401,13 @@ const components: PortableTextComponents = {
 export default function PortableTextRenderer({
   value,
 }: PortableTextRendererProps) {
+  const contentWithCta = useMemo(() => injectAutoCta(value), [value]);
+
   if (!value || value.length === 0) return null;
 
   return (
     <article className="prose prose-rose max-w-none">
-      <PortableText value={value} components={components} />
+      <PortableText value={contentWithCta} components={components} />
     </article>
   );
 }
