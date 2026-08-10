@@ -26,6 +26,10 @@ interface TableRow {
   cells: string[];
 }
 
+interface PortableTextRendererProps {
+  value: PortableTextBlock[];
+}
+
 // --- Slugify ---
 
 const slugify = (children: React.ReactNode): string => {
@@ -215,26 +219,31 @@ const components: PortableTextComponents = {
       </div>
     ),
 
-    // ─── CTA ──────────────────────────────────────────────────────────────────
+    // ─── High-Converting Call to Action (CTA) ─────────────────────────────────
     cta: ({
       value,
     }: {
-      value: { title: string; buttonText: string; url: string };
+      value: { title?: string; subtitle?: string; buttonText?: string; url?: string };
     }) => (
-      <div className="my-10 p-6 sm:p-8 rounded-2xl bg-rose-500 text-white relative overflow-hidden">
+      <div className="my-10 p-6 sm:p-8 rounded-2xl bg-gradient-to-r from-rose-500 via-rose-600 to-pink-600 text-white relative overflow-hidden shadow-xl border border-rose-400/20">
         <div className="absolute top-0 right-0 -mt-8 -mr-8 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none" />
         <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-          <div>
-            <h3 className="text-xl font-extrabold tracking-tight mb-1">
-              {value.title || "Ready to get started?"}
+          <div className="max-w-xl">
+            <span className="inline-block uppercase tracking-widest text-[10px] font-black text-rose-100 bg-white/10 px-2.5 py-1 rounded-full mb-2 backdrop-blur-sm">
+              Exclusive Opportunity
+            </span>
+            <h3 className="text-xl sm:text-2xl font-extrabold tracking-tight mb-1 leading-snug">
+              {value?.title || "Ready to Start Earning Online Today?"}
             </h3>
-            
+            <p className="text-xs sm:text-sm text-rose-100/90 leading-relaxed font-medium">
+              {value?.subtitle || "Join thousands of members already completing daily micro-tasks and earning instant payouts."}
+            </p>
           </div>
           <Link
-            href={"https://mulaearn.com/register.php?ref=velloearn" }
-            className="shrink-0 px-6 py-3 bg-white text-rose-500 rounded-full font-bold text-sm hover:bg-rose-50 transition-colors shadow-md"
+            href={value?.url || "https://mulaearn.com/register.php?ref=velloearn"}
+            className="shrink-0 w-full sm:w-auto text-center px-7 py-3.5 bg-white text-rose-600 rounded-full font-bold text-sm hover:bg-rose-50 transition-all shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
           >
-            {value.buttonText || "Join Now"}
+            {value?.buttonText || "Get Started Now →"}
           </Link>
         </div>
       </div>
@@ -306,59 +315,53 @@ const components: PortableTextComponents = {
       </p>
     ),
     blockquote: ({ children }) => (
-      <blockquote className="border-l-4 border-rose-400 pl-5 my-7 text-lg text-gray-600 italic leading-relaxed">
+      <blockquote className="border-l-4 border-rose-500 pl-4 py-1 my-6 italic text-gray-600 bg-rose-50/20 rounded-r-lg">
         {children}
       </blockquote>
     ),
   },
 
-  // ─── Lists ───────────────────────────────────────────────────────────────
+  // ─── Lists & Marks ────────────────────────────────────────────────────────
   list: {
     bullet: ({ children }) => (
-      <ul className="list-disc list-outside pl-5 space-y-2 mb-5 text-[15px] text-gray-700 leading-7">
+      <ul className="list-disc list-inside mb-5 space-y-2 text-[15px] leading-7 text-gray-700">
         {children}
       </ul>
     ),
     number: ({ children }) => (
-      <ol className="list-decimal list-outside pl-5 space-y-2 mb-5 text-[15px] text-gray-700 leading-7">
+      <ol className="list-decimal list-inside mb-5 space-y-2 text-[15px] leading-7 text-gray-700">
         {children}
       </ol>
     ),
   },
-
-  // ─── Marks ───────────────────────────────────────────────────────────────
   marks: {
-    link: ({ children, value }) => (
-      <a
-        href={value?.href}
-        target={value?.href?.startsWith("http") ? "_blank" : undefined}
-        rel={value?.href?.startsWith("http") ? "noopener noreferrer" : undefined}
-        className="text-rose-500 hover:text-rose-600 underline underline-offset-2 decoration-rose-200 hover:decoration-rose-400 transition-colors"
-      >
-        {children}
-      </a>
-    ),
-    internalLink: ({ children, value }) => (
-      <Link
-        href={`/blog/${value?.reference?.slug?.current || ""}`}
-        className="text-rose-500 hover:text-rose-600 underline underline-offset-2 decoration-rose-200 hover:decoration-rose-400 transition-colors"
-      >
-        {children}
-      </Link>
-    ),
+    link: ({ children, value }) => {
+      const rel = !value.href.startsWith("/")
+        ? "noreferrer noopener"
+        : undefined;
+      return (
+        <Link
+          href={value.href}
+          rel={rel}
+          className="text-rose-600 font-semibold underline underline-offset-4 decoration-rose-300 hover:decoration-rose-500 transition-colors"
+        >
+          {children}
+        </Link>
+      );
+    },
   },
 };
 
-// ─── Export ──────────────────────────────────────────────────────────────────
+// --- Exported Component ---
 
-export default function CustomPortableText({
+export default function PortableTextRenderer({
   value,
-}: {
-  value: (PortableTextBlock | RelatedPostCard | Quiz)[];
-}) {
+}: PortableTextRendererProps) {
+  if (!value || value.length === 0) return null;
+
   return (
-    <div className="max-w-none">
+    <article className="prose prose-rose max-w-none">
       <PortableText value={value} components={components} />
-    </div>
+    </article>
   );
 }

@@ -1,3 +1,5 @@
+"use client";
+import { useState } from "react";
 import { BlogPost, CustomImage } from "@/types/blog";
 import Image from "next/image";
 
@@ -19,6 +21,9 @@ const formatDate = (dateString: string) =>
   });
 
 export function BlogHeader({ post }: { post: BlogPost }) {
+  const initialSrc = getImgSrc(post.mainImage);
+  const [imgSrc, setImgSrc] = useState<string>(initialSrc);
+
   return (
     <header className="mb-8">
 
@@ -63,32 +68,31 @@ export function BlogHeader({ post }: { post: BlogPost }) {
       )}
 
       {/* ── Hero image — full width, below headline ── */}
-      {post.mainImage && (
-        <figure className="mb-6">
-          <div className="relative w-full aspect-[16/9] overflow-hidden rounded-xl bg-gray-100">
-            <Image
-              src={getImgSrc(post.mainImage)}
-              alt={post.title}
-              fill
-              priority
-              className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 65vw"
-            />
-          </div>
-          {(post.mainImageCaption || post.mainImageSource) && (
-            <figcaption className="mt-2 flex flex-col sm:flex-row sm:justify-between gap-1 text-xs text-gray-400 px-1">
-              {post.mainImageCaption && (
-                <span className="italic">{post.mainImageCaption}</span>
-              )}
-              {post.mainImageSource && (
-                <span className="font-semibold uppercase tracking-wider">
-                  {post.mainImageSource}
-                </span>
-              )}
-            </figcaption>
-          )}
-        </figure>
-      )}
+      <figure className="mb-6">
+        <div className="relative w-full aspect-[16/9] overflow-hidden rounded-xl bg-gray-100">
+          <Image
+            src={imgSrc}
+            alt={post.title}
+            fill
+            priority
+            className="object-cover"
+            sizes="(max-width: 1024px) 100vw, 65vw"
+            onError={() => setImgSrc("/placeholder.jpg")}
+          />
+        </div>
+        {(post.mainImageCaption || post.mainImageSource) && (
+          <figcaption className="mt-2 flex flex-col sm:flex-row sm:justify-between gap-1 text-xs text-gray-400 px-1">
+            {post.mainImageCaption && (
+              <span className="italic">{post.mainImageCaption}</span>
+            )}
+            {post.mainImageSource && (
+              <span className="font-semibold uppercase tracking-wider">
+                {post.mainImageSource}
+              </span>
+            )}
+          </figcaption>
+        )}
+      </figure>
 
     </header>
   );

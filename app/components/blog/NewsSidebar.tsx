@@ -7,24 +7,30 @@ interface NewsSidebarProps {
 }
 
 function SidebarCard({ post }: { post: BlogPost }) {
+  const imageUrl =
+    typeof post.mainImage === "string"
+      ? post.mainImage
+      : (post.mainImage as { asset?: { url?: string } })?.asset?.url || null;
+
+  const slugString =
+    typeof post.slug === "string"
+      ? post.slug
+      : post.slug || "";
+
   return (
     <Link
-      href={`/blog/${post.slug}`}
+      href={`/blog/${slugString}`}
       className="group flex gap-3 items-start py-4 border-b border-gray-100 last:border-0 hover:bg-gray-50/50 transition-colors -mx-2 px-2 rounded-lg"
     >
       {/* Thumbnail */}
       <div className="relative w-20 h-16 rounded-lg overflow-hidden bg-gray-100 shrink-0">
-        {post.mainImage ? (
-          <Image
-            src={post.mainImage as string}
-            alt={post.title}
-            fill
-            className="object-cover transition-transform duration-300 group-hover:scale-105"
-            sizes="80px"
-          />
-        ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-rose-100 to-pink-50" />
-        )}
+        <Image
+          src={imageUrl || "/placeholder.svg"}
+          alt={post.title || "Blog post image"}
+          fill
+          className="object-cover transition-transform duration-300 group-hover:scale-105"
+          sizes="80px"
+        />
       </div>
 
       {/* Text */}

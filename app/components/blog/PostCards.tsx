@@ -3,6 +3,21 @@ import Link from "next/link";
 import { BlogPost } from "@/types/blog";
 import { formatDate } from "@/lib/utils";
 
+// Define default placeholders (ensure these files exist in your /public folder)
+const PLACEHOLDER_POST_IMAGE = "/placeholder.jpg"; // or "/placeholder.svg"
+const PLACEHOLDER_AVATAR_IMAGE = "/avatar-placeholder.png";
+
+// Helper to safely resolve image URLs with optional fallback support
+function getImageUrl(source: unknown, fallback: string = PLACEHOLDER_POST_IMAGE): string {
+  if (!source) return fallback;
+  if (typeof source === "string" && source.trim() !== "") return source;
+  if (typeof source === "object" && source !== null && "asset" in source) {
+    const asset = (source as { asset?: { url?: string } }).asset;
+    if (asset?.url) return asset.url;
+  }
+  return fallback;
+}
+
 export function CategoryBadge({ category }: { category?: string }) {
   if (!category) return null;
   return (
@@ -18,26 +33,27 @@ function ReadingTime({ minutes }: { minutes?: number }) {
 }
 
 export function FeaturedCard({ post }: { post: BlogPost }) {
+  const mainImageUrl = getImageUrl(post.mainImage, PLACEHOLDER_POST_IMAGE);
+  const authorImageUrl = post.author?.image 
+    ? getImageUrl(post.author.image, PLACEHOLDER_AVATAR_IMAGE)
+    : null;
+
   return (
     <Link
       href={`/blog/${post.slug}`}
       className="group relative bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col lg:flex-row"
     >
       <div className="relative w-full lg:w-3/5 aspect-[16/10] lg:aspect-auto lg:min-h-[420px] overflow-hidden bg-gray-100">
-        {post.mainImage ? (
-          <Image
-            src={post.mainImage as string}
-            alt={post.title}
-            fill
-            priority
-            placeholder={post.mainImageBlur ? "blur" : "empty"}
-            blurDataURL={post.mainImageBlur}
-            className="object-cover transition-transform duration-700 group-hover:scale-105"
-            sizes="(max-width: 1024px) 100vw, 60vw"
-          />
-        ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-rose-100 to-pink-50" />
-        )}
+        <Image
+          src={mainImageUrl}
+          alt={post.title || "Featured post image"}
+          fill
+          priority
+          placeholder={post.mainImageBlur ? "blur" : "empty"}
+          blurDataURL={post.mainImageBlur}
+          className="object-cover transition-transform duration-700 group-hover:scale-105"
+          sizes="(max-width: 1024px) 100vw, 60vw"
+        />
         <div className="absolute top-4 left-4">
           <span className="flex items-center gap-1.5 bg-rose-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
             <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
@@ -57,11 +73,11 @@ export function FeaturedCard({ post }: { post: BlogPost }) {
           </p>
         )}
         <div className="flex items-center gap-3 pt-2">
-          {post.author?.image && (
+          {authorImageUrl && (
             <div className="relative w-8 h-8 rounded-full overflow-hidden border-2 border-rose-100 shrink-0">
               <Image
-                src={post.author.image as string}
-                alt={post.author.name}
+                src={authorImageUrl}
+                alt={post.author?.name || "Author avatar"}
                 fill
                 className="object-cover"
                 sizes="32px"
@@ -91,25 +107,26 @@ export function FeaturedCard({ post }: { post: BlogPost }) {
 }
 
 export function PostCard({ post }: { post: BlogPost }) {
+  const mainImageUrl = getImageUrl(post.mainImage, PLACEHOLDER_POST_IMAGE);
+  const authorImageUrl = post.author?.image 
+    ? getImageUrl(post.author.image, PLACEHOLDER_AVATAR_IMAGE)
+    : null;
+
   return (
     <Link
       href={`/blog/${post.slug}`}
       className="group bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 flex flex-col"
     >
       <div className="relative w-full aspect-[16/10] overflow-hidden bg-gray-100">
-        {post.mainImage ? (
-          <Image
-            src={post.mainImage as string}
-            alt={post.title}
-            fill
-            placeholder={post.mainImageBlur ? "blur" : "empty"}
-            blurDataURL={post.mainImageBlur}
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-            sizes="(max-width: 768px) 100vw, 33vw"
-          />
-        ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-rose-50 to-pink-50" />
-        )}
+        <Image
+          src={mainImageUrl}
+          alt={post.title || "Post thumbnail"}
+          fill
+          placeholder={post.mainImageBlur ? "blur" : "empty"}
+          blurDataURL={post.mainImageBlur}
+          className="object-cover transition-transform duration-500 group-hover:scale-105"
+          sizes="(max-width: 768px) 100vw, 33vw"
+        />
       </div>
 
       <div className="flex flex-col flex-1 p-5 gap-3">
@@ -124,11 +141,11 @@ export function PostCard({ post }: { post: BlogPost }) {
         )}
         <div className="flex items-center justify-between pt-1 border-t border-gray-50 mt-auto">
           <div className="flex items-center gap-2 min-w-0">
-            {post.author?.image && (
+            {authorImageUrl && (
               <div className="relative w-6 h-6 rounded-full overflow-hidden border border-rose-100 shrink-0">
                 <Image
-                  src={post.author.image as string}
-                  alt={post.author.name}
+                  src={authorImageUrl}
+                  alt={post.author?.name || "Author avatar"}
                   fill
                   className="object-cover"
                   sizes="24px"
@@ -150,25 +167,23 @@ export function PostCard({ post }: { post: BlogPost }) {
 }
 
 export function SidebarPostCard({ post }: { post: BlogPost }) {
+  const mainImageUrl = getImageUrl(post.mainImage, PLACEHOLDER_POST_IMAGE);
+
   return (
     <Link
       href={`/blog/${post.slug}`}
       className="group flex gap-4 items-start p-4 rounded-2xl hover:bg-rose-50/50 transition-colors"
     >
       <div className="relative w-20 h-16 rounded-xl overflow-hidden bg-gray-100 shrink-0">
-        {post.mainImage ? (
-          <Image
-            src={post.mainImage as string}
-            alt={post.title}
-            fill
-            placeholder={post.mainImageBlur ? "blur" : "empty"}
-            blurDataURL={post.mainImageBlur}
-            className="object-cover transition-transform duration-500 group-hover:scale-110"
-            sizes="80px"
-          />
-        ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-rose-100 to-pink-50" />
-        )}
+        <Image
+          src={mainImageUrl}
+          alt={post.title || "Sidebar thumbnail"}
+          fill
+          placeholder={post.mainImageBlur ? "blur" : "empty"}
+          blurDataURL={post.mainImageBlur}
+          className="object-cover transition-transform duration-500 group-hover:scale-110"
+          sizes="80px"
+        />
       </div>
       <div className="flex-1 min-w-0">
         <CategoryBadge category={post.category} />
