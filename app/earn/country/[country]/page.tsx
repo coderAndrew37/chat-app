@@ -133,7 +133,7 @@ export default async function CountryPage({ params }: PageProps) {
     faqSchema(faqs),
     jobPostingSchema({
       title: `Premium Remote Online Jobs in ${country} | VelloEarn`,
-      description: `Earn ${avgEarning}/mo from chatting with foreigners and AI training. Payouts via ${payment}. Free to join.`,
+      description: `Earn ${avgEarning}/mo from chatting with foreigners and AI training. Payouts via ${payment}. One-time registration fee to join.`,
       country,
       payment,
       minSalary: avgNumeric,
@@ -191,7 +191,7 @@ export default async function CountryPage({ params }: PageProps) {
 
                 <p className="text-base sm:text-lg text-gray-600 leading-relaxed mb-4 max-w-lg">
                   No experience? No problem. Thousands of {demonym} are already earning by 
-                  chatting with lonely foreigners and training AI. Free to join. 
+                  chatting with lonely foreigners and training AI. One-time registration fee to join. 
                   {payment} payouts daily.
                 </p>
 
@@ -206,7 +206,7 @@ export default async function CountryPage({ params }: PageProps) {
                     <div className="text-xs text-gray-400">Top earner this month</div>
                   </div>
                   <div>
-                    <div className="text-2xl font-extrabold text-gray-900">Free</div>
+                    <div className="text-2xl font-extrabold text-gray-900">One-time fee</div>
                     <div className="text-xs text-gray-400">To join</div>
                   </div>
                   <div>
@@ -233,7 +233,7 @@ export default async function CountryPage({ params }: PageProps) {
                 </div>
 
                 <div className="flex flex-wrap gap-4 mt-6 text-xs text-gray-400">
-                  <span>✅ Free to join</span>
+                  <span>✅ One-time registration fee</span>
                   <span>💸 No fees ever</span>
                   <span>📱 Chat from your phone</span>
                   <span>🌍 Direct {payment} payouts</span>

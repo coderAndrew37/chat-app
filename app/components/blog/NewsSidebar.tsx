@@ -73,7 +73,7 @@ export function NewsSidebar({ posts }: NewsSidebarProps) {
         <div className="absolute -top-4 -right-4 w-20 h-20 bg-white/10 rounded-full blur-xl" />
         <div className="relative z-10">
           <p className="text-[10px] font-black uppercase tracking-widest text-rose-200 mb-1">
-            Free to join worldwide
+            Easy to join worldwide
           </p>
           <h3 className="text-base font-extrabold leading-snug mb-2">
             Earn from your phone — fast local payouts
@@ -85,7 +85,7 @@ export function NewsSidebar({ posts }: NewsSidebarProps) {
             href={VELLOEARN_REGISTER_URL}
             className="block text-center bg-white text-rose-500 font-bold text-xs px-4 py-2.5 rounded-full hover:bg-rose-50 transition-colors"
           >
-            Apply — It&apos;s Free
+            Apply Now — It&apos;s Easy
           </Link>
         </div>
       </div>

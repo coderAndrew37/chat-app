@@ -131,7 +131,7 @@ export default async function BlogPostPage({ params }: Props) {
             <BlogHeader post={post} />
 
             <BlogClientShell>
-              <CustomPortableText value={post.body.filter((block) => block._type === 'block') as any} />
+              <CustomPortableText value={post.body} />
             </BlogClientShell>
 
             <div className="mt-8">
