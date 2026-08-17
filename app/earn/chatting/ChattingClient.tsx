@@ -93,7 +93,7 @@ const GEO_CONTENT: Record<"kenya" | "uganda" | "ghana", GeoContent> = {
     objections: [
       {
         q: "How is this different from other 'chat and earn' scams in Kenya?",
-        a: "VelloEarn is 100% free to join. No registration fees, no activation charges, no hidden costs. You apply free, get approved, complete real tasks, and withdraw to M-Pesa instantly. If anyone ever asks for payment before you've earned, that is a scam. Report it immediately.",
+        a: "VelloEarn charges a one-time registration fee.You apply, get approved, complete real tasks, and withdraw to M-Pesa instantly. No hidden fees, no waiting period, no fake promises. We disclose everything upfront via WhatsApp.",
       },
       {
         q: "When exactly does M-Pesa come?",
@@ -131,7 +131,7 @@ const GEO_CONTENT: Record<"kenya" | "uganda" | "ghana", GeoContent> = {
     objections: [
       {
         q: "How is this different from other earn-online scams in Uganda?",
-        a: "We charge nothing. No registration fee, no activation charge. You apply free, get verified, and withdraw real earnings directly to your MTN MoMo or Airtel Money number.",
+        a: "We charge a one-time registration fee. You apply, get verified, and withdraw real earnings directly to your MTN MoMo or Airtel Money number.",
       },
       {
         q: "When exactly does Mobile Money arrive?",
@@ -169,7 +169,7 @@ const GEO_CONTENT: Record<"kenya" | "uganda" | "ghana", GeoContent> = {
     objections: [
       {
         q: "How is this different from other earn-online scams in Ghana?",
-        a: "No upfront payments, ever. You join free, complete real tasks, and withdraw to your MTN MoMo, Telecel, or Vodafone wallet. No activation fees, no processing charges.",
+        a: "One-time registration fee. You join free, complete real tasks, and withdraw to your MTN MoMo, Telecel, or Vodafone wallet. No activation fees, no processing charges.",
       },
       {
         q: "When exactly does my wallet update?",
@@ -232,7 +232,7 @@ export default function ChattingClient({ countryTarget }: ChattingClientProps) {
   const HOW_IT_WORKS = [
     {
       step: "01",
-      title: "Apply free — 2 minutes",
+      title: "Apply Now — 2 minutes",
       body: "Submit your name and WhatsApp number. No CV, no interview, no fee. Your account is active immediately.",
     },
     {
@@ -289,7 +289,7 @@ export default function ChattingClient({ countryTarget }: ChattingClientProps) {
         </p>
 
         <p className="text-sm sm:text-base text-gray-400 mb-8 max-w-lg">
-          Free to join · No fees · Instant {geo.wallet} payouts · 50,000+ active chatters
+          One-time fee to join · No fees · Instant {geo.wallet} payouts · 50,000+ active chatters
         </p>
 
         <div className="flex flex-col sm:flex-row gap-3 mb-10">
@@ -299,7 +299,7 @@ export default function ChattingClient({ countryTarget }: ChattingClientProps) {
             rel="noopener noreferrer"
             className="bg-rose-500 hover:bg-rose-600 text-white font-bold text-base px-8 py-4 rounded-full shadow-lg shadow-rose-200 transition-all hover:scale-105 active:scale-95 text-center"
           >
-            Start Chatting Now — Free →
+            Start Chatting Now — One-time Fee →
           </Link>
           <Link
             href="/blog/is-ai-training-a-scam-kenya"
@@ -313,7 +313,7 @@ export default function ChattingClient({ countryTarget }: ChattingClientProps) {
           {[
             { v: "24/7", l: "Chat anytime" },
             { v: "No minimum", l: "Withdrawal" },
-            { v: "Free", l: "To join" },
+            { v: "Easy", l: "To join" },
           ].map((s) => (
             <div key={s.l}>
               <div className="text-lg font-extrabold text-gray-900">{s.v}</div>
@@ -387,7 +387,7 @@ export default function ChattingClient({ countryTarget }: ChattingClientProps) {
             <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mt-2 mb-3">
               From curious to earning in minutes
             </h2>
-            <p className="text-gray-500">Four simple steps. No tech skills. Free to join.</p>
+            <p className="text-gray-500">Four simple steps. No tech skills. One-time fee to join.</p>
           </div>
 
           <div className="space-y-5">
@@ -411,7 +411,7 @@ export default function ChattingClient({ countryTarget }: ChattingClientProps) {
               rel="noopener noreferrer"
               className="inline-block bg-rose-500 hover:bg-rose-600 text-white font-bold text-base px-10 py-4 rounded-full shadow-lg shadow-rose-200 transition-all hover:scale-105 active:scale-95"
             >
-              Start Chatting Now — Free →
+              Start Chatting Now →
             </Link>
           </div>
         </div>
@@ -567,7 +567,7 @@ export default function ChattingClient({ countryTarget }: ChattingClientProps) {
             Ready to start chatting and earning?
           </h2>
           <p className="text-rose-100 mb-8 leading-relaxed">
-            Free to join. No experience needed. Your first conversation could be your first payout.
+            One-time fee to join. No experience needed. Your first conversation could be your first payout.
           </p>
           <Link
             href={VELLOEARN_REGISTER_URL}
@@ -575,10 +575,10 @@ export default function ChattingClient({ countryTarget }: ChattingClientProps) {
             rel="noopener noreferrer"
             className="inline-block bg-white text-rose-500 font-bold text-base px-10 py-4 rounded-full shadow-xl hover:scale-105 active:scale-95 transition-all"
           >
-            Start Chatting Now — Free →
+            Start Chatting Now — One-time Fee →
           </Link>
           <p className="text-rose-200 text-xs mt-4">
-            Free to join · No fees · Instant {geo.wallet} payouts · 50,000+ active chatters
+            Easy to join · One-time fee · Instant {geo.wallet} payouts · 50,000+ active chatters
           </p>
         </div>
       </section>

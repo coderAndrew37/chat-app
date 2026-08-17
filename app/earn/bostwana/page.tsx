@@ -227,7 +227,7 @@ export default function BotswanaHubPage() {
               {
                 question: "How can I start earning online in Botswana?",
                 answer:
-                  "Create a free VelloEarn account, complete your profile, and browse available micro-job categories such as paid surveys, AI data annotation, and chat moderation."
+                  "Create a VelloEarn account, complete your profile, and browse available micro-job categories such as paid surveys, AI data annotation, and chat moderation."
               },
               {
                 question: "What payout methods are available in Botswana?",

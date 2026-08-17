@@ -41,7 +41,7 @@ function buildFaqs(cfg: JoinLocalizationConfig): Array<{ q: string; a: string | 
   return [
     {
       q: "How much does it cost to join VelloEarn?",
-      a: "VelloEarn is 100% free to join. No registration fees, no monthly subscriptions, no hidden charges — ever. You earn from your first conversation and withdraw instantly.",
+      a: "VelloEarn is 100% Easy to join. No registration fees, no monthly subscriptions, no hidden charges — ever. You earn from your first conversation and withdraw instantly.",
     },
     {
       q: "Who will I be chatting with?",
@@ -53,7 +53,7 @@ function buildFaqs(cfg: JoinLocalizationConfig): Array<{ q: string; a: string | 
     },
     {
       q: "How quickly can I start earning?",
-      a: "Immediately. After signing up for free, you can browse live profiles and start chatting right away. Most members earn within their first hour of chatting.",
+      a: "Immediately. After signing up, you can browse live profiles and start chatting right away. Most members earn within their first hour of chatting.",
     },
     {
       q: `How do ${cfg.payoutMethodShort} payouts work?`,
@@ -208,7 +208,7 @@ function Faq({ q, a }: { q: string; a: string | React.ReactNode }) {
 
 // ─── CTA Button ───────────────────────────────────────────────────────────────
 function CtaButton({ 
-  label = "Start Chatting Now — It's Free →", 
+  label = "Start Chatting Now →", 
   className = "",
   variant = "primary"
 }: {
@@ -388,12 +388,12 @@ export default function JoinPage() {
             </p>
 
             <p className="text-base text-white/50 mb-10 max-w-xl">
-              <span className="text-emerald-400 font-semibold">⚡ 100% free to join</span> · 
+              <span className="text-emerald-400 font-semibold">⚡ 100% Easy to join</span> · 
               Instant {geo.payoutMethodShort} payouts · 50,000+ active chatters
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 mb-14">
-              <CtaButton label="Start Chatting Now — It's Free →" />
+              <CtaButton label="Start Chatting Now →" />
               <button
                 onClick={() => document.getElementById("how-it-works")?.scrollIntoView({ behavior: "smooth" })}
                 className="flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-white/70 font-semibold text-base px-8 py-5 rounded-full border border-white/10 transition-all"
@@ -524,7 +524,7 @@ export default function JoinPage() {
           </div>
 
           <div className="mt-12 text-center">
-            <CtaButton label="Start Earning Today — Free →" />
+            <CtaButton label="Start Earning Today →" />
           </div>
         </div>
       </section>
@@ -545,9 +545,9 @@ export default function JoinPage() {
           <div className="grid lg:grid-cols-2 gap-12 items-start">
             <div>
               <ProcessStep num={1} icon="📝"
-                title="Sign up — 100% free"
+                title="Sign up — 100% easy"
                 body="Create your account in 2 minutes. No registration fees, no CV, no interview. Your account is active immediately."
-                highlight="Free — no payment required"
+                highlight="One-time fee — no monthly deductions"
               />
               <ProcessStep num={2} icon="👥"
                 title="Browse live profiles"
@@ -570,7 +570,7 @@ export default function JoinPage() {
               {/* Step 1 preview */}
               <div className="bg-gradient-to-br from-rose-50 to-pink-50 rounded-3xl p-6 border border-rose-100">
                 <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">
-                  Step 1 — Free signup
+                  Step 1 — One-time fee
                 </p>
                 <div className="bg-white rounded-2xl p-5 shadow-sm">
                   <div className="flex items-center gap-2 mb-4">
@@ -578,10 +578,10 @@ export default function JoinPage() {
                       <span className="text-white text-xs font-bold">★</span>
                     </div>
                     <span className="font-bold text-sm text-rose-700">VELLOEARN</span>
-                    <span className="text-[10px] bg-emerald-100 text-emerald-700 font-semibold px-2 py-0.5 rounded-full ml-auto">Free</span>
+                    <span className="text-[10px] bg-emerald-100 text-emerald-700 font-semibold px-2 py-0.5 rounded-full ml-auto">One-time Fee</span>
                   </div>
                   <p className="text-center font-bold text-gray-900 mb-1">Create Account</p>
-                  <p className="text-center text-xs text-gray-400 mb-4">No fees · No CV · 2 minutes</p>
+                  <p className="text-center text-xs text-gray-400 mb-4">One-time fee · No CV · 2 minutes</p>
                   <div className="space-y-3">
                     {["Username", "Phone number", "Email", "Password"].map((field) => (
                       <div key={field} className="bg-gray-50 rounded-lg px-3 py-2.5 text-xs text-gray-400 border border-gray-100">
@@ -589,7 +589,7 @@ export default function JoinPage() {
                       </div>
                     ))}
                     <div className="bg-gradient-to-r from-rose-500 to-pink-600 rounded-lg px-3 py-2.5 text-xs text-white text-center font-bold">
-                      Create Account — Free
+                      Create Account — Now
                     </div>
                   </div>
                 </div>
@@ -642,21 +642,21 @@ export default function JoinPage() {
                 </div>
               </div>
 
-              {/* Free promise card */}
+              {/* One-time fee promise card */}
               <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-3xl p-6 border border-emerald-200">
                 <div className="flex items-center gap-3 mb-3">
                   <div className="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center">
                     <span className="text-white text-lg">💰</span>
                   </div>
                   <div>
-                    <p className="text-emerald-700 font-bold text-sm">100% Free to Join</p>
+                    <p className="text-emerald-700 font-bold text-sm">100% Easy to join</p>
                     <p className="text-emerald-600/70 text-xs">No fees. No hidden charges. Ever.</p>
                   </div>
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between items-center text-sm">
                     <span className="text-gray-600">Registration fee</span>
-                    <span className="font-bold text-emerald-600">Free</span>
+                    <span className="font-bold text-emerald-600">One-time</span>
                   </div>
                   <div className="flex justify-between items-center text-sm">
                     <span className="text-gray-600">Monthly subscription</span>
@@ -676,9 +676,9 @@ export default function JoinPage() {
           </div>
 
           <div className="mt-14 text-center">
-            <CtaButton label="Join Free — Start Chatting Now →" />
+            <CtaButton label="Join for a One-time Fee — Start Chatting Now →" />
             <p className="text-gray-400 text-sm mt-4">
-              No credit card · No payment required · Start earning today
+              No credit card · No monthly deductions · Start earning today
             </p>
           </div>
         </div>
@@ -719,7 +719,7 @@ export default function JoinPage() {
           </div>
 
           <div className="text-center">
-            <CtaButton label="Unlock All 6 Ways to Earn — Free →" />
+            <CtaButton label="Unlock All 6 Ways to Earn — One-time Fee →" />
           </div>
         </div>
       </section>
@@ -734,17 +734,17 @@ export default function JoinPage() {
             </div>
             <p className="text-rose-400 text-sm font-semibold uppercase tracking-wider mb-4">Our promise to you</p>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-white leading-snug mb-5">
-              Zero fees. <span className="text-rose-400">100% free.</span>
+              One-time fee. <span className="text-rose-400">100% easy.</span>
               <br />
               <span className="text-white/40 text-xl">No hidden charges. No surprises.</span>
             </h2>
             <p className="text-white/40 text-sm leading-relaxed max-w-lg mx-auto mb-6">
-              VelloEarn is completely free. No registration fees. No monthly subscriptions. 
+              VelloEarn charges a one-time registration fee. No on-going fees. No monthly subscriptions. 
               No withdrawal fees. No hidden charges. You earn from your first conversation.
             </p>
             <div className="flex flex-wrap justify-center gap-3">
               {[
-                "✓ Free to join",
+                "✓ Easy to join",
                 "✓ No monthly fees",
                 "✓ No withdrawal fees",
                 "✓ No hidden charges",
@@ -807,12 +807,12 @@ export default function JoinPage() {
             What are you waiting for?
           </h2>
           <p className="text-rose-100 text-lg leading-relaxed mb-8">
-            Free to join. No experience needed. Your first conversation could be your first payout.
+            Easy to join. No experience needed. Your first conversation could be your first payout.
           </p>
 
           <div className="inline-flex items-center gap-6 bg-white/10 backdrop-blur-sm rounded-2xl px-6 py-4 mb-8 flex-wrap justify-center">
             <div className="text-center">
-              <p className="text-white font-extrabold text-xl">Free</p>
+              <p className="text-white font-extrabold text-xl">Easy</p>
               <p className="text-rose-200 text-xs">To join</p>
             </div>
             <span className="text-white/30 font-bold text-xl">✓</span>
@@ -838,7 +838,7 @@ export default function JoinPage() {
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-3 bg-white hover:bg-rose-50 text-rose-500 font-extrabold text-xl px-14 py-6 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all w-full sm:w-auto group"
             >
-              Start Chatting Now — It&apos;s Free
+              Start Chatting Now 
               <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>

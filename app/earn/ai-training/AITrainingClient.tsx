@@ -97,13 +97,13 @@ export const LOCALIZATION_DATA: Record<string, LocalizationConfig> = {
     tasksSectionNote: "Your real responses help train it to understand how Kenyans talk natively.",
     networkProviders: "Safaricom, Airtel, or Telkom",
     universities: "University of Nairobi (UoN) or JKUAT",
-    heroSubText: "Free to join · No fees · Instant M-Pesa payouts · No experience needed",
-    finalCtaSubText: "Free to join · No fees · Start earning today",
-    finalCtaButtonLabel: "Start Training — Free →",
+    heroSubText: "Easy to join · One-time fee · Instant M-Pesa payouts · No experience needed",
+    finalCtaSubText: "Easy to join · One-time fee · Start earning today",
+    finalCtaButtonLabel: "Start Training →",
     legitimacyNote: "Kenya's fast-growing digital economy and high English proficiency make Kenyan contributors prime candidates for training global AI models. All you need is a stable internet connection (Safaricom, Airtel, or Telkom) and a modern browser — no coding or technical background required.",
     payoutRailsDetail: "M-Pesa alongside standard bank transfers, converting cleanly into KES with minimal transaction friction",
     howItWorks: [
-      { title: "1. Apply free", body: "Fill in your name and WhatsApp number. No fees, no CV, no interview. Your account is active immediately." },
+      { title: "1. Apply Now", body: "Fill in your name and WhatsApp number. No fees, no CV, no interview. Your account is active immediately." },
       { title: "2. Complete paid training", body: "Before real tasks, you go through a short guided training module — usually under an hour — that walks through how rating, rewriting, and labelling work. This training itself is compensated." },
       { title: "3. Start real micro-tasks", body: "You move into the live task queue: rating AI answers, rewriting weak ones, labelling content, or chatting with a model to probe its responses. Each task takes a few minutes and can be done from a smartphone or laptop." },
       { title: "4. Quality review", body: "A sample of your work is periodically checked against quality guidelines. If your ratings drift, you get specific feedback to recalibrate — it's a learning loop, not a one-strike system." },
@@ -145,7 +145,7 @@ export const LOCALIZATION_DATA: Record<string, LocalizationConfig> = {
       },
       {
         q: "This sounds too good to be true — how do I know it's not a scam?",
-        a: "Fair question, and worth asking of any online earning platform. We publish real payout amounts, keep everything free and clearly stated upfront, and our task structure matches how legitimate global AI companies actually source human feedback — through verified micro-task platforms, not personal data requests or upfront investment schemes."
+        a: "Fair question, and worth asking of any online earning platform. We publish real payout amounts, keep everything easy and clearly stated upfront, and our task structure matches how legitimate global AI companies actually source human feedback — through verified micro-task platforms, not personal data requests or upfront investment schemes."
       },
       {
         q: "Do I need a degree or prior tech experience?",
@@ -174,13 +174,13 @@ export const LOCALIZATION_DATA: Record<string, LocalizationConfig> = {
     tasksSectionNote: "Your real responses help train it to understand localized phrases used across Uganda.",
     networkProviders: "MTN or Airtel",
     universities: "Makerere University or MUBS",
-    heroSubText: "Free to join · No fees · Instant Mobile Money payouts · No experience needed",
-    finalCtaSubText: "Free to join · No fees · Start earning today",
-    finalCtaButtonLabel: "Start Training — Free →",
+    heroSubText: "Easy to join · One-time fee · Instant Mobile Money payouts · No experience needed",
+    finalCtaSubText: "Easy to join · One-time fee · Start earning today",
+    finalCtaButtonLabel: "Start Training →",
     legitimacyNote: "Uganda's expanding digital transformation and strong English-language education make Ugandan contributors well-positioned to train AI models. All that's required is a reliable internet connection (MTN or Airtel) and a standard browser — no technical background needed.",
     payoutRailsDetail: "MTN Mobile Money and Airtel Money alongside standard bank transfers, converting cleanly into UGX with minimal transaction friction",
     howItWorks: [
-      { title: "1. Apply free", body: "Submit your name and WhatsApp number. No fees, no CV, no interview. Your account is active immediately." },
+      { title: "1. Apply Now", body: "Submit your name and WhatsApp number. No fees, no CV, no interview. Your account is active immediately." },
       { title: "2. Complete paid training", body: "A short guided module — usually under an hour — walks through rating, rewriting, and labelling before you touch live tasks. This training is compensated." },
       { title: "3. Start real micro-tasks", body: "You move into the live queue: rating AI answers, rewriting weak ones, labelling content, or chatting with a model to test its responses. Each task takes minutes and works on smartphone or laptop." },
       { title: "4. Quality review", body: "A sample of your work is periodically checked. If your ratings drift from the guidelines, you get specific feedback to recalibrate — it's a learning loop, not a one-strike system." },
@@ -215,7 +215,7 @@ export const LOCALIZATION_DATA: Record<string, LocalizationConfig> = {
       },
       {
         q: "This sounds too good to be true — how do I know it's not a scam?",
-        a: "A fair question for any online earning platform. We keep everything free and clearly stated upfront, publish real payout figures, and structure tasks the way legitimate global AI companies actually source human feedback — through verified micro-task work, not personal data requests or investment schemes."
+        a: "A fair question for any online earning platform. We keep everything easy and clearly stated upfront, publish real payout figures, and structure tasks the way legitimate global AI companies actually source human feedback — through verified micro-task work, not personal data requests or investment schemes."
       },
       {
         q: "Do I need a degree or prior tech experience?",
@@ -242,13 +242,13 @@ export const LOCALIZATION_DATA: Record<string, LocalizationConfig> = {
     tasksSectionNote: "Your inputs train artificial intelligence layers to accurately process West African English and localized structural terms.",
     networkProviders: "MTN, Telecel, or AT",
     universities: "University of Ghana (UG Legon) or KNUST",
-    heroSubText: "Free to join · No fees · Instant Mobile Money payouts · No experience needed",
-    finalCtaSubText: "Free to join · No fees · Start earning today",
-    finalCtaButtonLabel: "Start Training — Free →",
+    heroSubText: "Easy to join · One-time fee · Instant Mobile Money payouts · No experience needed",
+    finalCtaSubText: "Easy to join · One-time fee · Start earning today",
+    finalCtaButtonLabel: "Start Training →",
     legitimacyNote: "Ghana's exceptional digital transformation pace, reliable fintech infrastructure, and high English fluency make Ghanaian youth and university students the absolute premier candidates for training AI models. All you need to scale up is a secure smartphone or laptop, a reliable browser, and an active connection on local data bundles — with completely zero code knowledge needed.",
     payoutRailsDetail: "MTN Mobile Money (MoMo) and Telecel Cash (formerly Vodafone Cash) alongside direct local bank routing, translating securely into Ghana Cedis (GHS) with near-zero transaction friction",
     howItWorks: [
-      { title: "1. Apply free", body: "Submit your name and WhatsApp number. No fees, no CV, no interview. Your account is active immediately." },
+      { title: "1. Apply Now", body: "Submit your name and WhatsApp number. No fees, no CV, no interview. Your account is active immediately." },
       { title: "2. Complete paid training", body: "Before you touch live systems, you walk through a guided online training module (takes under an hour) explaining how text rating and content labelling operate. This training phase is fully compensated." },
       { title: "3. Start real micro-tasks", body: "Gain immediate access to the live task matrix: scoring AI text accuracy, rewriting unnatural outputs, or stress-testing layout boundaries. Each task takes just 2 to 5 minutes right from a phone or PC." },
       { title: "4. Quality review", body: "A random selection of data points is evaluated against global quality scripts. If answers drift, you get transparent dashboard hints to realign your tracking — it's built as an engineering learning loop." },
@@ -283,7 +283,7 @@ export const LOCALIZATION_DATA: Record<string, LocalizationConfig> = {
       },
       {
         q: "This sounds too good to be true — how do I know it's not a scam?",
-        a: "That is an essential question to ask given the volume of fake online jobs in Ghana. We establish complete trust by keeping everything free and transparent. We explicitly display real earner data, and our structure exactly matches how global platforms source distributed human review—relying on tangible micro-tasks, never tracking your private keys or demanding weird investment multi-level tiers."
+        a: "That is an essential question to ask given the volume of fake online jobs in Ghana. We establish complete trust by keeping everything easy and transparent. We explicitly display real earner data, and our structure exactly matches how global platforms source distributed human review—relying on tangible micro-tasks, never tracking your private keys or demanding weird investment multi-level tiers."
       },
       {
         q: "Do I need a degree or prior tech experience?",
@@ -353,7 +353,7 @@ export default function AITrainingClient({ countryTarget = "kenya" }: AITraining
                   rel="noopener noreferrer"
                   className="bg-violet-500 hover:bg-violet-600 text-white font-bold text-base px-8 py-4 rounded-full shadow-lg shadow-violet-200 transition-all hover:scale-105 active:scale-95 text-center"
                 >
-                  Start Training — Free →
+                  Start Training →
                 </Link>
                 <Link
                   href="/blog/is-ai-training-a-scam-kenya"
@@ -366,7 +366,7 @@ export default function AITrainingClient({ countryTarget = "kenya" }: AITraining
                 {[
                   { v: geo.rateRange, l: "Per task" },
                   { v: "No minimum", l: "Withdrawal" },
-                  { v: "Free", l: "To join" },
+                  { v: "Easy", l: "To join" },
                 ].map((s) => (
                   <div key={s.l}>
                     <div className="text-lg font-extrabold text-gray-900">{s.v}</div>
@@ -495,7 +495,7 @@ export default function AITrainingClient({ countryTarget = "kenya" }: AITraining
               rel="noopener noreferrer"
               className="inline-block bg-violet-500 hover:bg-violet-600 text-white font-bold text-base px-10 py-4 rounded-full shadow-lg shadow-violet-200 transition-all hover:scale-105 active:scale-95"
             >
-              Start Training — Free →
+              Start Training →
             </Link>
           </div>
         </div>
@@ -613,7 +613,7 @@ export default function AITrainingClient({ countryTarget = "kenya" }: AITraining
             {geo.finalCtaButtonLabel}
           </Link>
           <p className="text-violet-300 text-xs mt-4">
-            Free to join · No fees · Start earning today
+            Easy to join · One-time fee · Start earning today
           </p>
         </div>
       </section>

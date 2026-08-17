@@ -162,7 +162,7 @@ function NewsletterCTA() {
           href="/join"
           className="shrink-0 text-center bg-white text-rose-500 font-bold text-sm px-6 py-3 rounded-full shadow-md hover:bg-rose-50 transition-colors"
         >
-          Apply — It&apos;s Free
+          Apply — It&apos;s Easy
         </Link>
       </div>
     </div>

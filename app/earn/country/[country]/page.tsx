@@ -76,7 +76,7 @@ function getMarketFAQs(market: Market) {
     },
     {
       question: `Is VelloEarn free to join?`,
-      answer: `Yes! VelloEarn is 100% free to join. No registration fees, no hidden charges, no monthly subscriptions. You earn from your first conversation and withdraw instantly to your ${payment}.`,
+      answer: `Yes! VelloEarn is 100% free to join. One-time registration fee, no hidden charges, no monthly subscriptions. You earn from your first conversation and withdraw instantly to your ${payment}.`,
     },
     {
       question: `Do I need a laptop to work with VelloEarn in ${country}?`,
@@ -222,7 +222,7 @@ export default async function CountryPage({ params }: PageProps) {
                     rel="noopener noreferrer"
                     className="bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold text-base px-8 py-4 rounded-full shadow-lg shadow-rose-200 transition-all hover:scale-105 active:scale-95 text-center"
                   >
-                    Start Earning Now — Free →
+                    Start Earning Now →
                   </a>
                   <Link
                     href="#how-it-works"
@@ -328,7 +328,7 @@ export default async function CountryPage({ params }: PageProps) {
                     rel="noopener noreferrer"
                     className="inline-block bg-rose-500 hover:bg-rose-600 text-white font-bold px-6 py-3 rounded-full transition-all hover:scale-105 text-sm"
                   >
-                    Start Chatting — Free →
+                    Start Chatting →
                   </a>
                 </div>
               </div>
@@ -363,7 +363,7 @@ export default async function CountryPage({ params }: PageProps) {
                     rel="noopener noreferrer"
                     className="inline-block bg-violet-500 hover:bg-violet-600 text-white font-bold px-6 py-3 rounded-full transition-all hover:scale-105 text-sm"
                   >
-                    Start AI Training — Free →
+                    Start AI Training →
                   </a>
                 </div>
               </div>
@@ -385,7 +385,7 @@ export default async function CountryPage({ params }: PageProps) {
               {[
                 {
                   icon: "📝",
-                  title: "Sign up — free",
+                  title: "Sign up",
                   description: "Create your account in 2 minutes. No fees, no CV, no interview.",
                 },
                 {
@@ -482,8 +482,8 @@ export default async function CountryPage({ params }: PageProps) {
               {[
                 {
                   icon: "✅",
-                  title: "Free to join",
-                  body: "No registration fees. No monthly subscriptions. No hidden charges. Ever.",
+                  title: "Easy to join",
+                  body: "One-time registration fee. No monthly subscriptions. No hidden charges. Ever.",
                 },
                 {
                   icon: "📱",
@@ -557,12 +557,12 @@ export default async function CountryPage({ params }: PageProps) {
             </h2>
 
             <p className="text-rose-100 text-lg mb-8 max-w-xl mx-auto">
-              Free to join. Chat with foreigners or train AI. No experience needed. 
-              No fees. Start earning immediately.
+              One-time registration fee. Chat with foreigners or train AI. No experience needed. 
+              No ongoing fees. Start earning immediately.
             </p>
 
             <div className="flex flex-wrap justify-center gap-6 mb-8 text-white/80 text-sm">
-              <span>✅ Free to join</span>
+              <span>✅ One-time registration fee</span>
               <span>💸 No fees ever</span>
               <span>📱 Chat from your phone</span>
               <span>⚡ Instant {payment} payouts</span>
@@ -574,7 +574,7 @@ export default async function CountryPage({ params }: PageProps) {
               rel="noopener noreferrer"
               className="inline-block bg-white text-rose-500 hover:bg-rose-50 font-extrabold text-xl px-12 py-5 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all"
             >
-              Start Earning Now — Free →
+              Start Earning Now →
             </a>
 
             <p className="text-rose-200/70 text-sm mt-4">

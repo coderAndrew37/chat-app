@@ -18,7 +18,7 @@ const STEPS: Step[] = [
     title: "Sign up & verify",
     description:
       "Create your account and verify your phone number. No fees, no CV, no interview. Your account is active immediately and ready to start earning.",
-    highlight: "Free to join",
+    highlight: "One-time fee — no monthly deductions",
   },
   {
     number: 2,
@@ -93,10 +93,10 @@ export default function HowItWorks() {
             rel="noopener noreferrer"
             className="bg-rose-500 hover:bg-rose-600 text-white font-bold px-8 py-4 rounded-full shadow-lg shadow-rose-200 transition-all hover:scale-105 active:scale-95 text-center"
           >
-            Start Chatting Now — Free
+            Start Chatting Now 
           </Link>
           <a
-            href={`https://wa.me/${whatsappNumber}?text=Hi%2C%20I%20want%20to%20start%20chatting%20with%20foreigners%20and%20earn%20money.%20How%20do%20I%20get%20started%3F`}
+            href={`https://wa.me/${whatsappNumber}?text=Hi%20VelloEarn,%20I%20want%20to%20learn%20more%20about%20earning%20from%20chatting.`}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-white hover:bg-gray-50 text-gray-700 font-semibold px-6 py-4 rounded-full border border-gray-200 shadow-sm transition-all hover:scale-105 active:scale-95"
@@ -110,7 +110,7 @@ export default function HowItWorks() {
 
         {/* Trust signals below CTA */}
         <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-gray-400">
-          <span>✅ Free to join</span>
+          <span>✅ Easy to join</span>
           <span>💸 No fees ever</span>
           <span>📱 Chat from any phone</span>
           <span>💰 Instant M-Pesa payouts</span>

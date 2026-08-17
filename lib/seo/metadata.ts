@@ -4,31 +4,51 @@
 // templates stay consistent and DRY.
 
 import type { Metadata } from "next";
-import type { Market, JobType, City } from "./keyword-matrix";
+import { type Market, type JobType, type City, MARKETS } from "./keyword-matrix";
 
 const SITE_NAME = "VelloEarn";
 const BASE_URL  = process.env.NEXT_PUBLIC_SITE_URL ?? "https://velloearn.co.ke";
+
+// ─── Helper: Generate Hreflang Languages Mapping ─────────────────────────────
+
+/**
+ * Builds regional alternate language links for Google search engines.
+ * Example path: "/earn" -> generates hreflang for en-KE, en-GH, en-SA, etc.
+ */
+function buildHreflangAlternates(pathSuffix: string = ""): Record<string, string> {
+  const alternates: Record<string, string> = {};
+  
+  MARKETS.forEach((m) => {
+    alternates[m.locale] = `${BASE_URL}/earn/${m.slug}${pathSuffix}`;
+  });
+
+  // Default international fallback
+  alternates["x-default"] = `${BASE_URL}${pathSuffix}`;
+
+  return alternates;
+}
 
 // ─── Homepage ────────────────────────────────────────────────────────────────
 
 export function homepageMetadata(): Metadata {
   return {
-    title: "VelloEarn — Legit Online Jobs in Kenya, Uganda, Tanzania & Nigeria | Mobile Money Payouts",
+    title: "VelloEarn — Legit Online Jobs in Kenya, Ghana, GCC & Across Africa | Mobile Payouts",
     description:
-      "Join 10,000+ Africans earning from their phones. Remote chatting, AI training, paid surveys, Swahili teaching & more. Paid directly to M-Pesa, MTN MoMo, OPay, Airtel Money, or Orange Money.",
+      "Join 10,000+ earners making daily money from their phones. Remote chatting, AI training, paid surveys & teaching. Direct payouts via M-Pesa, MTN MoMo, OPay, STC Pay & Orange Money.",
     keywords: [
       "online jobs Kenya",
-      "online jobs Uganda",
       "online jobs Ghana",
+      "online jobs Uganda",
       "online jobs Tanzania",
-      "online jobs Nigeria",
+      "online jobs Saudi Arabia M-Pesa",
+      "online jobs Qatar M-Pesa",
       "earn from phone Africa",
       "remote work M-Pesa",
-      "work from home Nigeria OPay",
-      "legit online jobs Africa",
+      "work from home OPay",
+      "legit online jobs diaspora",
     ],
     openGraph: {
-      title: "VelloEarn — Earn Online Across Africa",
+      title: "VelloEarn — Earn Online Across Africa & The Middle East",
       description:
         "Remote chatting, AI training, surveys & more. Direct mobile wallet payouts. No laptop needed.",
       url: BASE_URL,
@@ -40,20 +60,33 @@ export function homepageMetadata(): Metadata {
       title: "VelloEarn — Legit Online Jobs | Local Mobile Payouts",
       description: "Earn from your phone. Remote chatting, AI training, surveys & more.",
     },
-    alternates: { canonical: BASE_URL },
+    alternates: {
+      canonical: BASE_URL,
+      languages: buildHreflangAlternates(),
+    },
   };
 }
 
 // ─── Country page: /earn/[country] ───────────────────────────────────────────
 
 export function countryPageMetadata(market: Market): Metadata {
-  const { country, payment, currency, topEarning, demonym } = market;
-  const url = `${BASE_URL}/earn/${market.slug}`;
+  const { country, payment, currency, topEarning, demonym, slug } = market;
+  const url = `${BASE_URL}/earn/${slug}`;
+
+  // Tailored title/description for Diaspora markets vs Local markets
+  const isDiaspora = ["saudi-arabia", "qatar", "oman", "lebanon"].includes(slug);
+
+  const title = isDiaspora
+    ? `Online Jobs for ${demonym} — Earn in ${currency} via ${payment} (2026)`
+    : `Online Jobs in ${country} That Pay via ${payment} (2026) — VelloEarn`;
+
+  const description = isDiaspora
+    ? `Find legit online jobs for ${demonym}. Earn ${currency} during your off-hours with instant payouts to ${payment}. Remote chatting, AI tasks & micro-jobs. Free to apply.`
+    : `Find legit online jobs in ${country} paying directly to ${payment}. Remote chatting, AI training, paid surveys & more. Top earners make ${topEarning}/month. Free to apply — no experience needed.`;
 
   return {
-    title: `Online Jobs in ${country} That Pay via ${payment} (2026) — VelloEarn`,
-    description:
-      `Find legit online jobs in ${country} paying directly to ${payment}. Remote chatting, AI training, paid surveys & more. Top earners make ${topEarning}/month. Free to apply — no experience needed.`,
+    title,
+    description,
     keywords: [
       `online jobs ${country}`,
       `work from home ${country}`,
@@ -61,30 +94,33 @@ export function countryPageMetadata(market: Market): Metadata {
       `remote jobs ${country}`,
       `${payment} online jobs`,
       `legit online jobs ${country}`,
-      `online jobs ${country} no experience`,
+      `online jobs for ${demonym}`,
       `earn money online ${country}`,
     ],
     openGraph: {
-      title: `Legit Online Jobs in ${country} — Paid via ${payment}`,
-      description: `Remote chatting, AI training, surveys & more. Direct ${payment} payouts. Free to apply.`,
+      title,
+      description,
       url,
       siteName: SITE_NAME,
       type: "website",
     },
     twitter: {
       card: "summary_large_image",
-      title: `Online Jobs in ${country} | ${payment} Payouts`,
+      title,
       description: `Earn ${currency} from your phone. Legit remote work for ${demonym}.`,
     },
-    alternates: { canonical: url },
+    alternates: {
+      canonical: url,
+      languages: buildHreflangAlternates(),
+    },
   };
 }
 
 // ─── City page: /earn/[country]/[city] ───────────────────────────────────────
 
 export function cityPageMetadata(market: Market, city: City): Metadata {
-  const { country, payment } = market;
-  const url = `${BASE_URL}/earn/${market.slug}/${city.slug}`;
+  const { country, payment, slug } = market;
+  const url = `${BASE_URL}/earn/${slug}/${city.slug}`;
 
   return {
     title: `Online Jobs in ${city.name}, ${country} — Earn via ${payment} | VelloEarn`,
@@ -104,15 +140,21 @@ export function cityPageMetadata(market: Market, city: City): Metadata {
       siteName: SITE_NAME,
       type: "website",
     },
-    alternates: { canonical: url },
+    alternates: {
+      canonical: url,
+      languages: MARKETS.reduce((acc, m) => {
+        acc[m.locale] = `${BASE_URL}/earn/${m.slug}/${city.slug}`;
+        return acc;
+      }, {} as Record<string, string>),
+    },
   };
 }
 
 // ─── Job-type × country page: /earn/[jobSlug]/[country] ──────────────────────
 
 export function jobCountryPageMetadata(market: Market, jobType: JobType): Metadata {
-  const { country, payment } = market;
-  const url = `${BASE_URL}/earn/${jobType.slug}/${market.slug}`;
+  const { country, payment, slug } = market;
+  const url = `${BASE_URL}/earn/${jobType.slug}/${slug}`;
 
   return {
     title: `${jobType.title} Jobs in ${country} — Paid via ${payment} | VelloEarn`,
@@ -132,7 +174,13 @@ export function jobCountryPageMetadata(market: Market, jobType: JobType): Metada
       siteName: SITE_NAME,
       type: "website",
     },
-    alternates: { canonical: url },
+    alternates: {
+      canonical: url,
+      languages: MARKETS.reduce((acc, m) => {
+        acc[m.locale] = `${BASE_URL}/earn/${jobType.slug}/${m.slug}`;
+        return acc;
+      }, {} as Record<string, string>),
+    },
   };
 }
 
@@ -202,6 +250,7 @@ export function jobPostingSchema(opts: {
   title: string;
   description: string;
   country: string;
+  countryCode?: string;
   payment: string;
   minSalary: number;
   maxSalary: number;
@@ -216,7 +265,7 @@ export function jobPostingSchema(opts: {
       "@type": "Place",
       address: {
         "@type": "PostalAddress",
-        addressCountry: opts.country,
+        addressCountry: opts.countryCode ? opts.countryCode.toUpperCase() : opts.country,
       },
     },
     employmentType: "CONTRACTOR",
@@ -227,7 +276,7 @@ export function jobPostingSchema(opts: {
     },
     baseSalary: {
       "@type": "MonetaryAmount",
-      currency: opts.currency,
+      currency: opts.currency.split("/")[0].trim(), // Sanitizes inputs like "KES / SAR" to "KES"
       value: {
         "@type": "QuantitativeValue",
         minValue: opts.minSalary,

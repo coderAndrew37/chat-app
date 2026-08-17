@@ -183,7 +183,7 @@ export default function CameroonHubPage() {
               className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-rose-600 px-8 py-4 text-base font-bold text-white shadow-lg shadow-rose-600/25 transition-all hover:bg-rose-700 hover:shadow-rose-600/35 active:scale-[0.98] sm:w-auto dark:bg-rose-600 dark:hover:bg-rose-500"
             >
               <Smartphone className="h-5 w-5" />
-              <span>Create Free Account · Inscription Gratuite</span>
+              <span>Create an Account · Inscription Gratuite</span>
             </a>
             <a
               href="#rates-matrix"
@@ -255,7 +255,7 @@ export default function CameroonHubPage() {
             </div>
             <span className="absolute top-6 right-6 text-4xl font-black text-slate-200 dark:text-slate-800">01</span>
             <h3 className="mt-6 text-xl font-bold text-slate-900 dark:text-white">
-              1. Register Free Account
+              1. Register an Account
             </h3>
             <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
               Sign up in under 60 seconds with your Cameroonian phone number (+237) or email. No deposit or setup fee is required.
@@ -618,7 +618,7 @@ export default function CameroonHubPage() {
               {
                 question: "Are there any upfront activation fees or mandatory training costs?",
                 answer:
-                  "No. Joining VelloEarn is completely free. We will never ask you for activation fees, registration charges, or paid training modules. If anyone asks you for money to join VelloEarn in Cameroon, it is a scam. / Non. L'accès à VelloEarn est 100% gratuit. Aucun frais d'activation ou de formation ne vous sera jamais demandé.",
+                  "Velloearn charges a one-time registration fee. We will never ask you for on-going fees, or paid training modules. If anyone asks you for money after joining VelloEarn in Cameroon, it is a scam. / Non. L'accès à VelloEarn est 100% gratuit. Aucun frais d'activation ou de formation ne vous sera jamais demandé.",
               },
               {
                 question: "What is the minimum payout threshold in FCFA (XAF)?",
@@ -657,7 +657,7 @@ export default function CameroonHubPage() {
                 rel="noopener noreferrer"
                 className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-rose-600 px-8 py-4 text-base font-bold text-white shadow-lg shadow-rose-600/25 transition-all hover:bg-rose-700 hover:shadow-rose-600/35 active:scale-[0.98] sm:w-auto dark:bg-rose-600 dark:hover:bg-rose-500"
               >
-                <span>Create Free Account · Inscription Gratuite</span>
+                <span>Create Account · Inscription Gratuite</span>
                 <ArrowRight className="h-5 w-5" />
               </a>
             </div>

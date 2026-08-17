@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   return {
     title: `Legit ${jobType.title} Jobs: Work From Home (Earn Weekly via Mobile Money)`,
-    description: `Looking for ${jobType.title} opportunities? ${jobType.tagline} Discover remote positions, hourly pay structures, entry requirements, and secure payouts via local mobile money. Apply free inside.`,
+    description: `Looking for ${jobType.title} opportunities? ${jobType.tagline} Discover remote positions, hourly pay structures, entry requirements, and secure payouts via local mobile money. Apply inside.`,
     alternates: {
       canonical: `/earn/job/${jobType.slug}`,
     }
@@ -148,7 +148,7 @@ const DEEP_CONTENT_MATRIX: Record<string, {
 };
 
 const HOW_IT_WORKS_STEPS = [
-  { step: "01", title: "Apply Free", label: "Takes ~60 seconds", body: "Fill in a short application form. No hidden fees, no experience or CV required." },
+  { step: "01", title: "Apply Now", label: "Takes ~60 seconds", body: "Fill in a short application form. No hidden fees, no experience or CV required." },
   { step: "02", title: "Get Approved", label: "Within 24 Hours", body: "Our automated onboarding system processes your submission and provides immediate access." },
   { step: "03", title: "Start Tasks", label: "Instant Access", body: "Log into your personal workspace from any smartphone and choose available micro-tasks." },
   { step: "04", title: "Earn & Cashout", label: "Flexible Cashouts", body: "Track your real-time earnings on your dashboard and request instant mobile money extractions." },
@@ -190,7 +190,7 @@ export default function GlobalJobPage({ params }: PageProps) {
     },
     {
       question: `Are there hidden fees to start this ${title.toLowerCase()} remote program?`,
-      answer: `No. Submitting an application and receiving project matches on the VelloEarn platform is entirely free. We do not charge registration fees or account creation charges. We disclose everything upfront via WhatsApp.`
+      answer:`We charge one-time registration fees or account creation charges. We disclose everything upfront via WhatsApp.`
     },
     {
       question: `Can I do this work part-time while keeping my regular day job?`,
@@ -269,7 +269,7 @@ export default function GlobalJobPage({ params }: PageProps) {
                     href={VELLOEARN_REGISTER_URL}
                     className="bg-rose-500 hover:bg-rose-600 text-white font-bold text-base px-8 py-4 rounded-xl shadow-lg shadow-rose-200 transition-all text-center hover:-translate-y-0.5"
                   >
-                    Apply for {title} Jobs Free →
+                    Apply for {title} Jobs Now→
                   </Link>
                   <a
                     href="#payout-rates"
@@ -315,7 +315,7 @@ export default function GlobalJobPage({ params }: PageProps) {
                   </Link>
 
                   <p className="text-[11px] text-center text-gray-400">
-                    🔒 100% Free Application. No upfront fees ever required.
+                    🔒 100% Easy Application. One-time registration fees required.
                   </p>
                 </div>
               </div>
@@ -520,13 +520,13 @@ export default function GlobalJobPage({ params }: PageProps) {
               Ready to claim your secure {title.toLowerCase()} task allocation?
             </h2>
             <p className="text-rose-100 mb-8 text-base max-w-2xl mx-auto">
-              Apply free in 2 minutes. Onboarding queues are processed daily. Lock your operational dashboard slots now.
+              Apply now in 2 minutes. Onboarding queues are processed daily. Lock your operational dashboard slots now.
             </p>
             <Link
               href={VELLOEARN_REGISTER_URL}
               className="inline-block bg-white text-rose-600 font-black text-lg px-10 py-4 rounded-xl shadow-2xl hover:scale-105 transition-all uppercase tracking-wide"
             >
-              Initialize Free Application Now
+              Initialize Application Now
             </Link>
           </div>
         </section>

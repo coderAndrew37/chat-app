@@ -276,7 +276,7 @@ export default function Hero() {
                 onClick={handleStartChat}
                 className="bg-rose-500 hover:bg-rose-600 text-white font-bold text-base px-8 py-4 rounded-full shadow-lg shadow-rose-200 transition-all hover:scale-105 active:scale-95"
               >
-                Start Chatting Now — Free
+                Start Chatting Now  →
               </button>
               <Link
                 href="/earn/ai-training"

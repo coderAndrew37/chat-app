@@ -1,4 +1,5 @@
 import { BASE_URL } from "@/lib/config";
+import { VELLOEARN_REGISTER_URL } from "@/lib/constants";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "About VelloEarn — Chat & Earn in Kenya",
     description:
-      "How VelloEarn connects Kenyans to lonely foreigners for paid conversations — with instant M-Pesa payouts. Free to join.",
+      "How VelloEarn connects Kenyans to lonely foreigners for paid conversations — with instant M-Pesa payouts. Join today!",
     type: "website",
     locale: "en_KE",
     siteName: "VelloEarn",
@@ -22,7 +23,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "About VelloEarn — Chat & Earn in Kenya",
     description:
-      "How VelloEarn connects Kenyans to lonely foreigners for paid conversations — with instant M-Pesa payouts. Free to join.",
+      "How VelloEarn connects Kenyans to lonely foreigners for paid conversations — with instant M-Pesa payouts. Join today!",
   },
 };
 
@@ -68,7 +69,7 @@ const STATS: StatItem[] = [
   { value: "< 30 min", label: "Avg. payout time", sub: "M-Pesa instant" },
   { value: "50K+", label: "Foreigners online", sub: "Looking to chat" },
   { value: "24/7", label: "Chat availability", sub: "Chat anytime" },
-  { value: "0", label: "Registration fees", sub: "100% free to join" },
+
 ];
 
 interface ProblemSolutionItem {
@@ -100,7 +101,7 @@ const PROBLEM_SOLUTION: ProblemSolutionItem[] = [
     body:
       "VelloEarn acts as the bridge between Kenyans looking to earn extra income and foreigners seeking genuine conversation. Our platform handles the matching, ensures quality interactions, and routes earnings directly to your M-Pesa.",
     points: [
-      "Free to join — no registration fees ever",
+      "One-time registration fee, no hidden charges",
       "Chat with foreigners from USA, UK, Europe & more",
       "Earn money from every conversation",
       "Withdraw to M-Pesa instantly with no minimum",
@@ -169,8 +170,8 @@ interface TrustItem {
 const TRUST_FLOW: TrustItem[] = [
   {
     step: "01",
-    title: "Sign up for free",
-    body: "Create your account in 2 minutes. No registration fees, no CV, no interview. Your account is active immediately and ready for chatting.",
+    title: "Sign up",
+    body: "Create your account in 2 minutes. One-time registration fee, no CV, no interview. Your account is active immediately and ready for chatting.",
   },
   {
     step: "02",
@@ -199,7 +200,7 @@ interface FAQItem {
 const FAQS: FAQItem[] = [
   {
     q: "How much does it cost to join VelloEarn?",
-    a: "VelloEarn is completely free to join. No registration fees, no monthly subscriptions, no hidden charges — ever. You earn from your first conversation and withdraw your earnings instantly.",
+    a: "VelloEarn is very easy to join. One-time registration fee, no monthly subscriptions, no hidden charges — ever. You earn from your first conversation and withdraw your earnings instantly.",
   },
   {
     q: "Do I need a bank account to receive payments?",
@@ -211,7 +212,7 @@ const FAQS: FAQItem[] = [
   },
   {
     q: "How long does it take to start earning?",
-    a: "Immediately. After signing up for free, you can browse live profiles and start chatting right away. Most members earn their first KES within their first hour of chatting.",
+    a: "Immediately. After signing up, you can browse live profiles and start chatting right away. Most members earn their first KES within their first hour of chatting.",
   },
   {
     q: "Is this available outside Kenya?",
@@ -266,7 +267,7 @@ export default function AboutPage() {
                 </p>
 
                 <div className="flex flex-wrap gap-3">
-                  {["Free to join", "M-Pesa payouts", "24/7 chat", "No experience needed"].map((tag) => (
+                  {["One-time registration fee", "M-Pesa payouts", "24/7 chat", "No experience needed"].map((tag) => (
                     <span
                       key={tag}
                       className="bg-white border border-gray-200 text-gray-600 text-sm px-4 py-1.5 rounded-full"
@@ -305,13 +306,13 @@ export default function AboutPage() {
             <div className="bg-gray-50 border border-gray-100 rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
               <div>
                 <p className="text-sm text-gray-600">
-                  <span className="text-rose-500 font-semibold">Free</span> to join ·
+                  <span className="text-rose-500 font-semibold">One-time registration fee</span> ·
                   <span className="text-emerald-600 font-semibold"> Instant</span> M-Pesa payouts
                 </p>
-                <p className="text-xs text-gray-400">No fees · Start chatting today · 61,000+ active chatters</p>
+                <p className="text-xs text-gray-400">No ongoing fees · Start chatting today · 61,000+ active chatters</p>
               </div>
               <a
-                href="https://starhela.com/register?ref=velloearn"
+                href={VELLOEARN_REGISTER_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="shrink-0 bg-rose-500 hover:bg-rose-600 text-white font-bold text-sm px-8 py-3 rounded-full transition-all hover:scale-105 active:scale-95 shadow-lg shadow-rose-200"
@@ -429,7 +430,7 @@ export default function AboutPage() {
                   </p>
                   <div className="space-y-3">
                     {[
-                      { icon: "✓", text: "100% free to join — no registration fees ever" },
+                    
                       { icon: "✓", text: "No hidden charges, no monthly subscriptions" },
                       { icon: "✓", text: "Every chat earns you money" },
                       { icon: "✓", text: "Instant M-Pesa payouts with no minimum" },
@@ -500,12 +501,12 @@ export default function AboutPage() {
             <div className="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm">
               <p className="text-gray-500 text-sm mb-2">Ready to start chatting?</p>
               <a
-                href="https://starhela.com/register?ref=velloearn"
+                href={VELLOEARN_REGISTER_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-block bg-rose-500 hover:bg-rose-600 text-white font-bold text-base px-10 py-4 rounded-full transition-all hover:scale-105 active:scale-95 shadow-lg shadow-rose-200"
               >
-                Start Chatting Now — Free
+                Start Chatting Now →
               </a>
               <p className="text-gray-400 text-xs mt-3">No registration fees · Instant M-Pesa payouts</p>
             </div>
@@ -524,7 +525,7 @@ export default function AboutPage() {
                 Six ways to chat and earn.
               </h2>
               <p className="text-gray-500 max-w-xl mx-auto">
-                All earning methods are accessible from one free account. Most members start with
+                All earning methods are accessible from one account. Most members start with
                 one and add more as they build their routine.
               </p>
             </div>
@@ -582,11 +583,7 @@ export default function AboutPage() {
                       title: "Built for Kenyans",
                       body: "M-Pesa integration is not an afterthought — it is the architecture.",
                     },
-                    {
-                      icon: "🔒",
-                      title: "100% free to join",
-                      body: "No registration fees. No recurring charges. Full transparency.",
-                    },
+                  
                     {
                       icon: "🎯",
                       title: "Quality conversations",
@@ -690,13 +687,13 @@ export default function AboutPage() {
                   <span className="text-rose-500">Start chatting and earning today.</span>
                 </h2>
                 <p className="text-gray-600 max-w-xl mx-auto mb-8 leading-relaxed">
-                  Free to join. No experience needed. Chat with lonely foreigners.
+                  Join today. No experience needed. Chat with lonely foreigners.
                   Your first M-Pesa payout could be today.
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
                   <a
-                    href="https://starhela.com/register?ref=velloearn"
+                    href={VELLOEARN_REGISTER_URL}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 bg-rose-500 hover:bg-rose-600 text-white font-bold text-base px-10 py-4 rounded-full transition-all hover:scale-105 active:scale-95 shadow-lg shadow-rose-200"
@@ -712,7 +709,6 @@ export default function AboutPage() {
                 </div>
 
                 <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-gray-500">
-                  <span>✓ Free to join</span>
                   <span>✓ M-Pesa payouts</span>
                   <span>✓ No bank account needed</span>
                   <span>✓ No hidden fees</span>
@@ -729,7 +725,7 @@ export default function AboutPage() {
             <Link href="/earn/chatting" className="hover:text-gray-600 transition-colors">Chatting track</Link>
             <Link href="/how-it-works" className="hover:text-gray-600 transition-colors">How it works</Link>
             <Link href="/faq" className="hover:text-gray-600 transition-colors">FAQ</Link>
-            <a href="https://starhela.com/register?ref=velloearn" target="_blank" rel="noopener noreferrer" className="hover:text-gray-600 transition-colors">Start chatting</a>
+            <a href={VELLOEARN_REGISTER_URL} target="_blank" rel="noopener noreferrer" className="hover:text-gray-600 transition-colors">Start chatting</a>
           </div>
         </div>
 

@@ -7,14 +7,14 @@ import { VELLOEARN_REGISTER_URL } from "@/lib/constants";
 export const metadata: Metadata = {
   title: "How It Works — Chat with Foreigners & Earn M-Pesa | VelloEarn",
   description:
-    "Learn how VelloEarn works. Free to join. Chat with lonely foreigners. Earn M-Pesa instantly. No fees, no experience needed. Start today.",
+    "Learn how VelloEarn works. Easy to join. Chat with lonely foreigners. Earn M-Pesa instantly. No fees, no experience needed. Start today.",
   alternates: {
     canonical: `${BASE_URL}/how-it-works`,
   },
   openGraph: {
     title: "How It Works — Chat & Earn in Kenya",
     description:
-      "Free to join. Chat with lonely foreigners. Earn M-Pesa instantly. No fees, no experience needed.",
+      "Easy to join. Chat with lonely foreigners. Earn M-Pesa instantly. No fees, no experience needed.",
     type: "website",
     locale: "en_KE",
     siteName: "VelloEarn",
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "How It Works — Chat & Earn in Kenya",
     description:
-      "Free to join. Chat with lonely foreigners. Earn M-Pesa instantly. No fees, no experience needed.",
+      "Easy to join. Chat with lonely foreigners. Earn M-Pesa instantly. No fees, no experience needed.",
   },
 };
 
@@ -35,12 +35,12 @@ const jsonLd = {
   "@type": "HowTo",
   name: "How to earn money by chatting with foreigners on VelloEarn",
   description:
-    "A step-by-step guide to earning money by chatting with lonely foreigners on VelloEarn. Free to join, no experience needed, instant M-Pesa payouts.",
+    "A step-by-step guide to earning money by chatting with lonely foreigners on VelloEarn. Easy to join, no experience needed, instant M-Pesa payouts.",
   step: [
     {
       "@type": "HowToStep",
       position: 1,
-      name: "Create your free account",
+      name: "Create your account",
       text: "Sign up in 2 minutes. No registration fees, no CV, no interview. Your account is active immediately.",
     },
     {
@@ -79,7 +79,7 @@ const STEPS: Step[] = [
   {
     number: 1,
     icon: <MessageCircle className="w-6 h-6" />,
-    title: "Sign Up for Free",
+    title: "Sign Up",
     description: "Create your account in 2 minutes",
     detail: "No registration fees. No CV. No interview. Your account is active immediately. Just provide your phone number and create a profile.",
   },
@@ -115,7 +115,7 @@ interface Feature {
 const FEATURES: Feature[] = [
   {
     icon: <Shield className="w-6 h-6 text-emerald-500" />,
-    title: "100% Free to Join",
+    title: "100% Easy to join",
     description: "No registration fees. No monthly subscriptions. No hidden charges. Ever.",
   },
   {
@@ -203,7 +203,7 @@ export default function HowItWorks() {
 
             <p className="text-lg text-gray-500 leading-relaxed max-w-2xl mx-auto mb-10">
               Four simple steps from signing up to your first M-Pesa payout. 
-              Free to join. No experience needed. Start today.
+              Easy to join. No experience needed. Start today.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -212,7 +212,7 @@ export default function HowItWorks() {
                 rel="noopener noreferrer"
                 className="bg-rose-500 hover:bg-rose-600 text-white font-bold text-base px-8 py-4 rounded-full shadow-lg shadow-rose-200 transition-all hover:scale-105 active:scale-95"
               >
-                Start Chatting Now — Free
+                Start Chatting Now
               </Link>
               <Link
                 href="#steps"
@@ -229,7 +229,7 @@ export default function HowItWorks() {
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {[
-                { label: "Free to join", value: "100%" },
+                { label: "Easy to join", value: "100%" },
                 { label: "M-Pesa payout time", value: "< 30 min" },
                 { label: "Active chatters", value: "61,000+" },
                 { label: "Chat availability", value: "24/7" },
@@ -293,9 +293,9 @@ export default function HowItWorks() {
                 rel="noopener noreferrer"
                 className="inline-block bg-rose-500 hover:bg-rose-600 text-white font-bold text-base px-10 py-4 rounded-full transition-all hover:scale-105 active:scale-95 shadow-lg shadow-rose-200"
               >
-                Start Your Free Account →
+                Start Your Account →
               </Link>
-              <p className="text-gray-400 text-sm mt-3">No registration fees · No hidden charges</p>
+              <p className="text-gray-400 text-sm mt-3">One-time registration fees · No hidden charges</p>
             </div>
           </div>
         </section>
@@ -374,7 +374,7 @@ export default function HowItWorks() {
               {[
                 {
                   q: "How much does it cost to join VelloEarn?",
-                  a: "VelloEarn is completely free to join. No registration fees, no monthly subscriptions, no hidden charges — ever.",
+                  a: "VelloEarn is completely Easy to join. No registration fees, no monthly subscriptions, no hidden charges — ever.",
                 },
                 {
                   q: "Do I need a bank account to receive payments?",
@@ -386,7 +386,7 @@ export default function HowItWorks() {
                 },
                 {
                   q: "How long does it take to start earning?",
-                  a: "Immediately. After signing up for free, you can browse live profiles and start chatting right away. Most members earn within their first hour.",
+                  a: "Immediately. After signing up, you can browse live profiles and start chatting right away. Most members earn within their first hour.",
                 },
                 {
                   q: "Do I need experience or perfect English?",
@@ -432,14 +432,14 @@ export default function HowItWorks() {
               Ready to start chatting and earning?
             </h2>
             <p className="text-rose-100 text-lg mb-10 leading-relaxed max-w-xl mx-auto">
-              Free to join. No experience needed. Your first M-Pesa payout could be today.
+              Easy to join. No experience needed. Your first M-Pesa payout could be today.
             </p>
             <Link
               href={VELLOEARN_REGISTER_URL}
               rel="noopener noreferrer"
               className="inline-block bg-white hover:bg-rose-50 text-rose-500 font-bold text-base px-10 py-4 rounded-full shadow-xl transition-all hover:scale-105 active:scale-95"
             >
-              Start Chatting Now — Free →
+              Start Chatting Now →
             </Link>
             <p className="text-rose-200 text-xs mt-5">
               No registration fees · Instant M-Pesa payouts · 61,000+ active chatters

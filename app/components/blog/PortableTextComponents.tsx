@@ -27,8 +27,15 @@ interface TableRow {
   cells: string[];
 }
 
+// Custom block union type to handle standard blocks and dynamic CMS blocks cleanly
+type CustomPortableTextBlock =
+  | PortableTextBlock
+  | Quiz
+  | RelatedPostCard
+  | Record<string, unknown>;
+
 interface PortableTextRendererProps {
-  value: PortableTextBlock[];
+  value: CustomPortableTextBlock[];
 }
 
 // --- Slugify ---
@@ -61,7 +68,7 @@ const slugify = (children: React.ReactNode): string => {
 
 // --- Auto Injector Helper ---
 
-function injectAutoCta(blocks: PortableTextBlock[]): PortableTextBlock[] {
+function injectAutoCta<T extends Record<string, unknown>>(blocks: T[]): T[] {
   if (!blocks || blocks.length === 0) return [];
 
   // Check if a CTA block already exists in the content
@@ -72,7 +79,7 @@ function injectAutoCta(blocks: PortableTextBlock[]): PortableTextBlock[] {
   let paragraphCount = 0;
   let targetIndex = -1;
 
-  // Find position after the 2nd normal paragraph (or after 2nd heading if paragraphs are short)
+  // Find position after the 2nd normal paragraph
   for (let i = 0; i < result.length; i++) {
     const block = result[i];
     if (block._type === "block" && block.style === "normal") {
@@ -89,13 +96,13 @@ function injectAutoCta(blocks: PortableTextBlock[]): PortableTextBlock[] {
     targetIndex = Math.floor(result.length / 2);
   }
 
-  // If a valid insertion point was found, inject the CTA synthetic object
+  // If a valid insertion point was found, inject the synthetic CTA object
   if (targetIndex !== -1) {
-    const syntheticCtaBlock: PortableTextBlock = {
+    const syntheticCtaBlock = {
       _key: `auto-cta-${Date.now()}`,
       _type: "cta",
       children: [],
-    };
+    } as unknown as T;
     result.splice(targetIndex, 0, syntheticCtaBlock);
   }
 
@@ -401,13 +408,16 @@ const components: PortableTextComponents = {
 export default function PortableTextRenderer({
   value,
 }: PortableTextRendererProps) {
-  const contentWithCta = useMemo(() => injectAutoCta(value), [value]);
+  const contentWithCta = useMemo(
+    () => injectAutoCta((value || []) as Record<string, unknown>[]),
+    [value]
+  );
 
   if (!value || value.length === 0) return null;
 
   return (
     <article className="prose prose-rose max-w-none">
-      <PortableText value={contentWithCta} components={components} />
+      <PortableText value={contentWithCta as any} components={components} />
     </article>
   );
 }

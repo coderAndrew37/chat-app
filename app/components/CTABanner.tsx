@@ -25,7 +25,7 @@ export default function CTABanner() {
           onClick={handleStartChat}
           className="bg-white hover:bg-rose-50 text-rose-500 font-bold text-base px-10 py-4 rounded-full shadow-xl transition-all hover:scale-105 active:scale-95"
         >
-          Start Chatting Now — Free →
+          Start Chatting Now  →
         </button>
         <p className="text-rose-200 text-xs mt-5">
           No registration fees · Instant M-Pesa payouts · 50,000+ active chatters

@@ -67,7 +67,7 @@ const REGIONAL_DATA = {
     heroStats: [
       { v: "KES 80+", l: "Per survey" },
       { v: "KES 3,000+", l: "Focus groups" },
-      { v: "Free", l: "To join" },
+      { v: "Easy", l: "To join" },
     ],
     taskTypes: [
       { icon: "📋", title: "Paid surveys", time: "5–20 min", pay: "KES 80–350 each", body: "Answer structured questions from global brands. Topics range from consumer habits to political sentiment to product feedback. Your Kenyan perspective is specifically what they're paying for." },
@@ -96,7 +96,7 @@ const REGIONAL_DATA = {
     heroStats: [
       { v: "UGX 2,500+", l: "Per survey" },
       { v: "UGX 90,000+", l: "Focus groups" },
-      { v: "Free", l: "To join" },
+      { v: "Easy", l: "To join" },
     ],
     taskTypes: [
       { icon: "📋", title: "Paid surveys", time: "5–20 min", pay: "UGX 2,500–10,000 each", body: "Answer structured questions from global brands. Topics range from consumer habits to political sentiment to product feedback. Your Ugandan perspective is specifically what they're paying for." },
@@ -125,7 +125,7 @@ const REGIONAL_DATA = {
     heroStats: [
       { v: "GHS 10+", l: "Per survey" },
       { v: "GHS 350+", l: "Focus groups" },
-      { v: "Free", l: "To join" },
+      { v: "Easy", l: "To join" },
     ],
     taskTypes: [
       { icon: "📋", title: "Paid surveys", time: "5–20 min", pay: "GHS 10–40 each", body: "Answer structured questions from global brands. Topics range from consumer habits to political sentiment to product feedback. Your Ghanaian perspective is specifically what they're paying for." },
@@ -158,7 +158,7 @@ export default function SurveysClient({ countryTarget }: SurveysClientProps) {
   const HOW_IT_WORKS = [
     {
       step: "01",
-      title: "Apply free",
+      title: "Apply and create your account",
       body: "Create your account in 2 minutes. No fees, no CV, no interview. Complete your profile to start getting matched to tasks."
     },
     {
@@ -232,7 +232,7 @@ export default function SurveysClient({ countryTarget }: SurveysClientProps) {
               </p>
 
               <p className="text-sm sm:text-base text-gray-400 mb-8 max-w-lg">
-                Free to join · No fees · Instant {config.paymentMethod} payouts · No experience needed
+                Easy to join · No fees · Instant {config.paymentMethod} payouts · No experience needed
               </p>
 
               <div className="flex flex-col sm:flex-row gap-3 mb-10">
@@ -242,7 +242,7 @@ export default function SurveysClient({ countryTarget }: SurveysClientProps) {
                   rel="noopener noreferrer"
                   className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold text-base px-8 py-4 rounded-full shadow-lg shadow-amber-200 transition-all hover:scale-105 active:scale-95 text-center"
                 >
-                  Start Earning — Free →
+                  Start Earning  →
                 </Link>
                 <Link
                   href="#how-it-works"
@@ -379,7 +379,7 @@ export default function SurveysClient({ countryTarget }: SurveysClientProps) {
           <div className="text-center mb-14">
             <span className="text-amber-500 font-semibold text-sm uppercase tracking-wider">How it works</span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mt-2">From sign-up to {config.paymentMethod}.</h2>
-            <p className="text-gray-500 mt-2">Free to join. Start earning today.</p>
+            <p className="text-gray-500 mt-2">Easy to join. Start earning today.</p>
           </div>
           <div className="space-y-5">
             {HOW_IT_WORKS.map((step, i) => (
@@ -401,7 +401,7 @@ export default function SurveysClient({ countryTarget }: SurveysClientProps) {
               rel="noopener noreferrer"
               className="inline-block bg-amber-500 hover:bg-amber-600 text-white font-bold text-base px-10 py-4 rounded-full shadow-lg shadow-amber-200 transition-all hover:scale-105 active:scale-95"
             >
-              Start Earning — Free →
+              Start Earning  →
             </Link>
           </div>
         </div>
@@ -477,12 +477,12 @@ export default function SurveysClient({ countryTarget }: SurveysClientProps) {
           </h2>
           
           <p className="text-amber-100 text-lg mb-8 max-w-xl mx-auto">
-            Free to join. Complete surveys, test products, join focus groups. 
+            Easy to join. Complete surveys, test products, join focus groups. 
             No experience needed. Get paid instantly to {config.paymentMethod}.
           </p>
 
           <div className="flex flex-wrap justify-center gap-6 mb-8 text-white/80 text-sm">
-            <span>✅ Free to join</span>
+            <span>✅ Easy to join</span>
             <span>💸 No fees ever</span>
             <span>📱 Complete from your phone</span>
             <span>⚡ Instant {config.paymentMethod} payouts</span>
@@ -494,7 +494,7 @@ export default function SurveysClient({ countryTarget }: SurveysClientProps) {
             rel="noopener noreferrer"
             className="inline-block bg-white text-amber-600 hover:bg-amber-50 font-extrabold text-xl px-12 py-5 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all"
           >
-            Start Earning — Free →
+            Start Earning  →
           </Link>
           
           <p className="text-amber-200/70 text-sm mt-4">

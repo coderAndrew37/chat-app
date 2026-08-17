@@ -7,7 +7,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.velloearn.co.k
 export const metadata: Metadata = {
   title: "Earn from Remote Tasks in Kenya — M-Pesa Payouts | VelloEarn",
   description:
-    "Get paid to chat with foreigners or train AI in Kenya. Plus surveys, Swahili teaching & more. Free to join. Instant M-Pesa payouts.",
+    "Get paid to chat with foreigners or train AI in Kenya. Plus surveys, Swahili teaching & more. Easy to join. Instant M-Pesa payouts.",
   keywords: [
     "chat with foreigners and earn Kenya",
     "AI training jobs Kenya",
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Earn from Remote Tasks in Kenya — M-Pesa Payouts | VelloEarn",
     description:
-      "Get paid to chat with foreigners or train AI in Kenya. Free to join. Instant M-Pesa payouts.",
+      "Get paid to chat with foreigners or train AI in Kenya. Easy to join. Instant M-Pesa payouts.",
     url: `${BASE_URL}`, // ADDED
     type: "website",
     locale: "en_KE",
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Earn from Remote Tasks in Kenya — M-Pesa Payouts | VelloEarn",
     description:
-      "Get paid to chat with foreigners or train AI in Kenya. Free to join. Instant M-Pesa payouts.",
+      "Get paid to chat with foreigners or train AI in Kenya. Easy to join. Instant M-Pesa payouts.",
     images: [`${BASE_URL}/og-cover.png`], // ADDED
   },
 };

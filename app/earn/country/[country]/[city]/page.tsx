@@ -84,8 +84,8 @@ export default async function CityPage({ params }: PageProps) {
       answer: `Payouts go directly to your ${payment} number — the same number you use in ${city.name} every day. Most withdrawals complete within 30 minutes.`,
     },
     {
-      question: `Is VelloEarn free to join in ${city.name}?`,
-      answer: `Yes! VelloEarn is 100% free to join. No registration fees, no hidden charges, no monthly subscriptions. You earn from your first conversation and withdraw instantly.`,
+      question: `Is VelloEarn easy to join in ${city.name}?`,
+      answer: `Yes! VelloEarn is 100% easy to join. One-time registration fee, no hidden charges, no monthly subscriptions. You earn from your first conversation and withdraw instantly.`,
     },
   ];
 
@@ -166,7 +166,7 @@ export default async function CityPage({ params }: PageProps) {
 
                 <p className="text-base sm:text-lg text-gray-600 leading-relaxed mb-4 max-w-lg">
                   Work from home in {city.name}. Chat with foreigners or train
-                  AI. No experience needed. Free to join. {payment} payouts
+                  AI. No experience needed. One-time registration fee to join. {payment} payouts
                   daily.
                 </p>
 
@@ -186,7 +186,7 @@ export default async function CityPage({ params }: PageProps) {
                   </div>
                   <div>
                     <div className="text-2xl font-extrabold text-gray-900">
-                      Free
+                      One-time fee
                     </div>
                     <div className="text-xs text-gray-400">To join</div>
                   </div>
@@ -206,7 +206,7 @@ export default async function CityPage({ params }: PageProps) {
                     rel="noopener noreferrer"
                     className="bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold text-base px-8 py-4 rounded-full shadow-lg shadow-rose-200 transition-all hover:scale-105 active:scale-95 text-center"
                   >
-                    Start Earning Now — Free →
+                    Start Earning Now — One-time Fee →
                   </Link>
                   <Link
                     href="#how-it-works"
@@ -217,8 +217,8 @@ export default async function CityPage({ params }: PageProps) {
                 </div>
 
                 <div className="flex flex-wrap gap-4 mt-6 text-xs text-gray-400">
-                  <span>✅ Free to join</span>
-                  <span>💸 No fees ever</span>
+                  <span>✅ One-time registration fee</span>
+                  <span>💸 No ongoing fees</span>
                   <span>📱 Chat from your phone</span>
                   <span>🌍 50K+ active chatters</span>
                 </div>
@@ -366,7 +366,7 @@ export default async function CityPage({ params }: PageProps) {
                     rel="noopener noreferrer"
                     className="inline-block bg-rose-500 hover:bg-rose-600 text-white font-bold px-6 py-3 rounded-full transition-all hover:scale-105 text-sm"
                   >
-                    Start Chatting — Free →
+                    Start Chatting →
                   </Link>
                 </div>
               </div>
@@ -412,7 +412,7 @@ export default async function CityPage({ params }: PageProps) {
                     rel="noopener noreferrer"
                     className="inline-block bg-violet-500 hover:bg-violet-600 text-white font-bold px-6 py-3 rounded-full transition-all hover:scale-105 text-sm"
                   >
-                    Start AI Training — Free →
+                    Start AI Training  →
                   </Link>
                 </div>
               </div>
@@ -537,13 +537,13 @@ export default async function CityPage({ params }: PageProps) {
             </h2>
 
             <p className="text-rose-100 text-lg mb-8 max-w-xl mx-auto">
-              Free to join. Chat with foreigners or train AI. No experience
-              needed. No fees. Start earning immediately from {city.name}.
+              One-time registration fee to join. Chat with foreigners or train AI. No experience
+              needed. No ongoing fees. Start earning immediately from {city.name}.
             </p>
 
             <div className="flex flex-wrap justify-center gap-6 mb-8 text-white/80 text-sm">
-              <span>✅ Free to join</span>
-              <span>💸 No fees ever</span>
+              <span>✅ One-time registration fee</span>
+              <span>💸 No ongoing fees</span>
               <span>📱 Chat from your phone</span>
               <span>⚡ Instant {payment} payouts</span>
             </div>
@@ -553,7 +553,7 @@ export default async function CityPage({ params }: PageProps) {
               rel="noopener noreferrer"
               className="inline-block bg-white text-rose-500 hover:bg-rose-50 font-extrabold text-xl px-12 py-5 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all"
             >
-              Start Earning Now — Free →
+              Start Earning Now →
             </Link>
 
             <p className="text-rose-200/70 text-sm mt-4">

@@ -67,7 +67,7 @@ const REGIONAL_CONFIGS = {
     heroStats: [
       { v: "KES 500+", l: "Per essay" },
       { v: "KES 60,000+", l: "Max per dissertation" },
-      { v: "Free", l: "To join" },
+      { v: "Easy", l: "To join" },
     ],
     writingTypes: [
       { icon: "📄", title: "Essays & coursework", pages: "2–10 pages", pay: "KES 500 – 2,500", body: "The bread and butter. Undergraduate essays, discussion posts, case studies, and short papers. High volume, fast turnaround." },
@@ -97,7 +97,7 @@ const REGIONAL_CONFIGS = {
     heroStats: [
       { v: "UGX 15,000+", l: "Per essay" },
       { v: "UGX 1,800,000+", l: "Max per dissertation" },
-      { v: "Free", l: "To join" },
+      { v: "Easy", l: "To join" },
     ],
     writingTypes: [
       { icon: "📄", title: "Essays & coursework", pages: "2–10 pages", pay: "UGX 15,000 – 75,000", body: "The bread and butter. Undergraduate essays, discussion posts, case studies, and short papers. High volume, fast turnaround." },
@@ -127,7 +127,7 @@ const REGIONAL_CONFIGS = {
     heroStats: [
       { v: "GHS 60+", l: "Per essay" },
       { v: "GHS 7,000+", l: "Max per dissertation" },
-      { v: "Free", l: "To join" },
+      { v: "Easy", l: "To join" },
     ],
     writingTypes: [
       { icon: "📄", title: "Essays & coursework", pages: "2–10 pages", pay: "GHS 60 – 300", body: "The bread and butter. Undergraduate essays, discussion posts, case studies, and short papers. High volume, fast turnaround." },
@@ -201,7 +201,7 @@ export default function AcademicWritingClient({ countryTarget }: AcademicWriting
               </p>
 
               <p className="text-sm sm:text-base text-gray-400 mb-8 max-w-lg">
-                Free to join · No fees · Instant {config.paymentMethod} payouts · {config.topEarnerPayout} top earners
+                Easy to join · One-time fee · Instant {config.paymentMethod} payouts · {config.topEarnerPayout} top earners
               </p>
 
               <div className="flex flex-col sm:flex-row gap-3 mb-10">
@@ -211,7 +211,7 @@ export default function AcademicWritingClient({ countryTarget }: AcademicWriting
                   rel="noopener noreferrer"
                   className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-base px-8 py-4 rounded-full shadow-lg shadow-emerald-200 transition-all hover:scale-105 active:scale-95 text-center"
                 >
-                  Start Writing — Free →
+                  Start Writing →
                 </Link>
                 <Link
                   href="#how-it-works"
@@ -338,11 +338,11 @@ export default function AcademicWritingClient({ countryTarget }: AcademicWriting
           <div className="text-center mb-14">
             <span className="text-emerald-600 font-semibold text-sm uppercase tracking-wider">How it works</span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mt-2">Apply. Test. Write. Earn.</h2>
-            <p className="text-gray-500 mt-2">Free to join. Start earning today.</p>
+            <p className="text-gray-500 mt-2">Easy to join. Start earning today.</p>
           </div>
           <div className="space-y-5">
             {[
-              { step: "01", title: "Apply free", body: "Tell us your degree, your strong subjects, and your writing experience. No fees, no CV, no interview. Processing takes 24–48 hours." },
+              { step: "01", title: "Apply Now", body: "Tell us your degree, your strong subjects, and your writing experience. No fees, no CV, no interview. Processing takes 24–48 hours." },
               { step: "02", title: "Pass a short writing test", body: "You'll write a short sample (200–400 words) on an assigned topic. This is how we place you at the right pay grade from the start — higher-quality writers get higher-paying orders." },
               { step: "03", title: "Claim orders from the queue", body: "You log in and browse available orders — topic, word count, deadline, and payout are shown upfront. You pick what suits your skills and schedule." },
               { step: "04", title: `Submit, get approved, get paid`, body: `You submit your work through the platform. Once reviewed and approved, your balance updates. Request a ${config.paymentMethod} payout anytime with no minimum.` }
@@ -365,7 +365,7 @@ export default function AcademicWritingClient({ countryTarget }: AcademicWriting
               rel="noopener noreferrer"
               className="inline-block bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-base px-10 py-4 rounded-full shadow-lg shadow-emerald-200 transition-all hover:scale-105 active:scale-95"
             >
-              Start Writing — Free →
+              Start Writing →
             </Link>
           </div>
         </div>
@@ -474,12 +474,12 @@ export default function AcademicWritingClient({ countryTarget }: AcademicWriting
           </h2>
           
           <p className="text-emerald-100 text-lg mb-8 max-w-xl mx-auto">
-            Free to join. Write essays, research papers, and dissertations. 
+            Easy to join. Write essays, research papers, and dissertations. 
             No experience needed. Get paid instantly to {config.paymentMethod}.
           </p>
 
           <div className="flex flex-wrap justify-center gap-6 mb-8 text-white/80 text-sm">
-            <span>✅ Free to join</span>
+            <span>✅ One-time Registration Fee</span>
             <span>💸 No fees ever</span>
             <span>📱 Write from your phone</span>
             <span>⚡ Instant {config.paymentMethod} payouts</span>
@@ -491,7 +491,7 @@ export default function AcademicWritingClient({ countryTarget }: AcademicWriting
             rel="noopener noreferrer"
             className="inline-block bg-white text-emerald-600 hover:bg-emerald-50 font-extrabold text-xl px-12 py-5 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all"
           >
-            Start Writing — Free →
+            Start Writing →
           </Link>
           
           <p className="text-emerald-200/70 text-sm mt-4">
