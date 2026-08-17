@@ -9,6 +9,7 @@ import { getPostBySlug, getRelatedPosts, getPosts } from "@/lib/api";
 import { BlogClientShell } from "./BlogClient";
 import { TagList } from "@/app/components/blog/TagList";
 import { NewsSidebar } from "@/app/components/blog/NewsSidebar";
+import TrainingChannelBanner from "@/app/components/TrainingChannelBanner";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -153,6 +154,7 @@ export default async function BlogPostPage({ params }: Props) {
         </div>
       </div>
 
+<TrainingChannelBanner />
       {/* More on [Category] — full width below */}
       <RelatedPosts posts={relatedPosts} category={post.category} />
     </main>

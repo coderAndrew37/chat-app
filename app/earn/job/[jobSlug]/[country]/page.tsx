@@ -19,6 +19,7 @@ import {
   jobPostingSchema,
 } from "@/lib/seo/metadata";
 import ApplyButton from "@/app/components/ApplyButton";
+import TrainingChannelBanner from "@/app/components/TrainingChannelBanner";
 
 // Define the Promise-based params type layout for Next.js 15+
 interface PageProps {
@@ -263,6 +264,8 @@ export default async function JobCountryPage({ params }: PageProps) {
             </div>
           </div>
         </section>
+
+        <TrainingChannelBanner />
 
         {/* ── What it involves ───────────────────────────────────── */}
         <section className="py-16 bg-white">

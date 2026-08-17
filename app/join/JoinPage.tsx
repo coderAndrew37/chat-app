@@ -12,6 +12,7 @@ import { VELLOEARN_REGISTER_URL, whatsappNumber } from "@/lib/constants";
 import { useSearchParams } from "next/navigation";
 
 import { fbq } from "@/app/components/pixels/MetaPixel";
+import TrainingChannelBanner from "../components/TrainingChannelBanner";
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 type CountryKey = "kenya" | "uganda" | "ghana";
@@ -528,6 +529,8 @@ export default function JoinPage() {
           </div>
         </div>
       </section>
+
+      <TrainingChannelBanner />
 
       {/* ── SECTION 3 — HOW IT WORKS ── */}
       <section id="how-it-works" className="py-20 bg-white">
