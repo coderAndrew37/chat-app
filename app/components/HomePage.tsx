@@ -24,33 +24,33 @@ export default function HomePageClient() {
   const [modalOpen, setModalOpen] = useState(false);
   const [successData, setSuccessData] = useState<ApplicationFormData | null>(null);
 
-
-
-
   return (
     <>
       <Toaster position="top-center" richColors />
 
       <main>
-        {/* 1. Hero — platform statement, chat + AI training, funnel CTA */}
+        {/* 1. Hero — Primary value proposition & primary signup action */}
         <Hero />
-        <TrainingChannelBanner />
 
-        {/* 2. How it works — apply → pick method → earn to M-Pesa */}
-        <HowItWorks />
-
+        {/* 2. Urgent Proof — Live active demand/clients online immediately builds belief */}
         <LiveForeignersOnline />
 
-        {/* 3. Earn methods — internal link hub for all 6 earning pages */}
-        <EarnMethods />
+        {/* 3. Community / Low-Friction Engagement — Training channel link */}
+        <TrainingChannelBanner />
 
-        {/* 4. Trust — answers "is this a scam", specific facts and numbers */}
+        {/* 4. How It Works — Simple 3-step path to M-Pesa payouts */}
+        <HowItWorks />
+
+        {/* 5. Trust & Verification — Destroys scam anxiety with facts & numbers */}
         <Trust />
 
-        {/* 5. Testimonials — method-specific social proof */}
+        {/* 6. Earn Methods — Catalog of all earning paths */}
+        <EarnMethods />
+
+        {/* 7. Social Proof — Real testimonials and verified payout stories */}
         <Testimonials />
 
-        {/* 6. Final CTA banner */}
+        {/* 8. Final Conversion Push — High-contrast CTA Banner */}
         <CTABanner />
       </main>
 

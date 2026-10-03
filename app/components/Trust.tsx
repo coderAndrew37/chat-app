@@ -1,7 +1,7 @@
-// No "use client" needed — pure presentational
-// SEO NOTE: This section answers the "is this a scam" search intent
-// directly on the homepage. Specific numbers and facts outperform
-// vague promises for both trust AND keyword relevance.
+"use client";
+
+import { useState } from "react";
+import { ChevronDown } from "lucide-react";
 
 interface TrustItem {
   question: string;
@@ -12,7 +12,7 @@ const TRUST_ITEMS: TrustItem[] = [
   {
     question: "Is VelloEarn legitimate?",
     answer:
-      "Yes. We've paid out to thousands of Kenyan earners directly via M-Pesa. No registration fees, no hidden charges. You earn from your first chat, then withdraw instantly — we never ask for money.",
+      "Yes. We've paid out to thousands of Kenyan earners directly via M-Pesa. You earn from your active chat sessions and withdraw directly to your account with zero hidden charges.",
   },
   {
     question: "Do I need experience or a degree?",
@@ -39,6 +39,13 @@ const STATS = [
 ];
 
 export default function Trust() {
+  // First item open by default
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
+
+  const toggleAccordion = (index: number) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
+
   return (
     <section id="trust" className="py-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -57,21 +64,37 @@ export default function Trust() {
 
         <div className="grid lg:grid-cols-2 gap-8 mb-16">
 
-          {/* Trust Q&A */}
-          <div className="space-y-5">
-            {TRUST_ITEMS.map((item) => (
-              <div
-                key={item.question}
-                className="bg-white rounded-2xl p-6 border border-gray-100"
-              >
-                <h3 className="text-base font-bold text-gray-900 mb-2">
-                  {item.question}
-                </h3>
-                <p className="text-sm text-gray-500 leading-relaxed">
-                  {item.answer}
-                </p>
-              </div>
-            ))}
+          {/* Trust Accordion */}
+          <div className="space-y-4">
+            {TRUST_ITEMS.map((item, index) => {
+              const isOpen = openIndex === index;
+              return (
+                <div
+                  key={item.question}
+                  className="bg-white rounded-2xl border border-gray-100 overflow-hidden transition-all shadow-xs"
+                >
+                  <button
+                    onClick={() => toggleAccordion(index)}
+                    className="w-full p-6 text-left flex items-center justify-between gap-4 focus:outline-hidden"
+                  >
+                    <h3 className="text-base font-bold text-gray-900">
+                      {item.question}
+                    </h3>
+                    <ChevronDown
+                      className={`w-5 h-5 text-gray-400 shrink-0 transition-transform duration-200 ${
+                        isOpen ? "rotate-180 text-rose-500" : ""
+                      }`}
+                    />
+                  </button>
+
+                  {isOpen && (
+                    <div className="px-6 pb-6 pt-0 text-sm text-gray-500 leading-relaxed animate-in fade-in duration-200">
+                      {item.answer}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
 
           {/* Stats + visual */}
@@ -99,20 +122,19 @@ export default function Trust() {
                   Our promise
                 </div>
                 <p className="text-2xl font-bold leading-snug mb-4">
-                  Chat for free. Earn forever. No fees.
+                  Chat. Earn daily. Withdraw instantly.
                 </p>
                 <p className="text-rose-100 text-sm leading-relaxed">
-                  Sign up instantly and start chatting with lonely foreigners 
-                  looking for conversation. No registration fees, no monthly 
-                  subscriptions, no hidden charges. Your earnings are yours — 
-                  withdraw to M-Pesa anytime.
+                  Create your account today and start chatting with members 
+                  looking for conversation. Transparent terms, reliable daily payouts, 
+                  and instant M-Pesa withdrawals whenever you cash out.
                 </p>
               </div>
               <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-rose-200">
-                <span>✓ Free to join</span>
-                <span>✓ No fees ever</span>
-                <span>✓ 61,000+ active chatters</span>
-                <span>✓ Instant M-Pesa payouts</span>
+                <span>✓ Instant Account Setup</span>
+                <span>✓ Transparent Payouts</span>
+                <span>✓ 61,000+ Active Chatters</span>
+                <span>✓ Same-Day M-Pesa Withdrawals</span>
               </div>
             </div>
           </div>
