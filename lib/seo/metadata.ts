@@ -1,40 +1,46 @@
-// lib/seo/metadata.ts
-// ─── Central metadata factory ─────────────────────────────────────────────────
-// All generateMetadata() calls across the app import from here so title/desc
-// templates stay consistent and DRY.
-
 import type { Metadata } from "next";
-import { type Market, type JobType, type City, MARKETS } from "./keyword-matrix";
+import type { Market, JobType, City } from "./keyword-matrix";
+import { BASE_URL as CONFIG_BASE_URL } from "@/lib/config";
 
 const SITE_NAME = "VelloEarn";
-const BASE_URL  = process.env.NEXT_PUBLIC_SITE_URL ?? "https://velloearn.co.ke";
+const BASE_URL = CONFIG_BASE_URL.replace(/\/$/, "");
 
-// ─── Helper: Generate Hreflang Languages Mapping ─────────────────────────────
+// ─── Single source of truth for URL paths ────────────────────────────────────
+// Import these in app/sitemap.ts and in any <Link> that points at these pages,
+// so canonicals, sitemap and internal links can never drift apart again.
 
-/**
- * Builds regional alternate language links for Google search engines.
- * Example path: "/earn" -> generates hreflang for en-KE, en-GH, en-SA, etc.
- */
-function buildHreflangAlternates(pathSuffix: string = ""): Record<string, string> {
-  const alternates: Record<string, string> = {};
-  
-  MARKETS.forEach((m) => {
-    alternates[m.locale] = `${BASE_URL}/earn/${m.slug}${pathSuffix}`;
-  });
+export const paths = {
+  country: (m: Market) => `/earn/country/${m.slug}`,
+  city: (m: Market, c: City) => `/earn/country/${m.slug}/${c.slug}`,
+  jobRoot: (j: JobType) => `/earn/job/${j.slug}`,
+  jobCountry: (j: JobType, m: Market) => `/earn/job/${j.slug}/${m.slug}`,
+  blog: (slug: string) => `/blog/${slug}`,
+};
 
-  // Default international fallback
-  alternates["x-default"] = `${BASE_URL}${pathSuffix}`;
+const abs = (path: string) => `${BASE_URL}${path}`;
 
-  return alternates;
+// ─── Length helpers ──────────────────────────────────────────────────────────
+
+/** Pick the first candidate that fits; fall back to the shortest one. */
+function fitTitle(candidates: string[], max = 60): string {
+  return candidates.find((c) => c.length <= max) ?? candidates[candidates.length - 1];
+}
+
+/** Trim a description at a word boundary. */
+function fitDescription(text: string, max = 155): string {
+  if (text.length <= max) return text;
+  const cut = text.slice(0, max - 1);
+  return cut.slice(0, cut.lastIndexOf(" ")).replace(/[.,;:\s]+$/, "") + "…";
 }
 
 // ─── Homepage ────────────────────────────────────────────────────────────────
 
 export function homepageMetadata(): Metadata {
   return {
-    title: "VelloEarn — Legit Online Jobs in Kenya, Ghana, GCC & Across Africa | Mobile Payouts",
-    description:
-      "Join 10,000+ earners making daily money from their phones. Remote chatting, AI training, paid surveys & teaching. Direct payouts via M-Pesa, MTN MoMo, OPay, STC Pay & Orange Money.",
+    title: "VelloEarn — Legit Online Jobs Across Africa | Mobile Payouts",
+    description: fitDescription(
+      "Earn from your phone: remote chatting, AI training, paid surveys & teaching. Direct payouts via M-Pesa, MTN MoMo, OPay & Orange Money."
+    ),
     keywords: [
       "online jobs Kenya",
       "online jobs Ghana",
@@ -60,29 +66,33 @@ export function homepageMetadata(): Metadata {
       title: "VelloEarn — Legit Online Jobs | Local Mobile Payouts",
       description: "Earn from your phone. Remote chatting, AI training, surveys & more.",
     },
-    alternates: {
-      canonical: BASE_URL,
-      languages: buildHreflangAlternates(),
-    },
+    alternates: { canonical: BASE_URL },
   };
 }
 
-// ─── Country page: /earn/[country] ───────────────────────────────────────────
+// ─── Country page: /earn/country/[country] ───────────────────────────────────
 
 export function countryPageMetadata(market: Market): Metadata {
   const { country, payment, currency, topEarning, demonym, slug } = market;
-  const url = `${BASE_URL}/earn/${slug}`;
+  const url = abs(paths.country(market));
 
-  // Tailored title/description for Diaspora markets vs Local markets
   const isDiaspora = ["saudi-arabia", "qatar", "oman", "lebanon"].includes(slug);
 
   const title = isDiaspora
-    ? `Online Jobs for ${demonym} — Earn in ${currency} via ${payment} (2026)`
-    : `Online Jobs in ${country} That Pay via ${payment} (2026) — VelloEarn`;
+    ? fitTitle([
+        `Online Jobs for ${demonym} — Paid via ${payment} | VelloEarn`,
+        `Online Jobs for ${demonym} (2026) | VelloEarn`,
+      ])
+    : fitTitle([
+        `Online Jobs in ${country} Paid via ${payment} (2026) | VelloEarn`,
+        `Online Jobs in ${country} (2026) | VelloEarn`,
+      ]);
 
-  const description = isDiaspora
-    ? `Find legit online jobs for ${demonym}. Earn ${currency} during your off-hours with instant payouts to ${payment}. Remote chatting, AI tasks & micro-jobs. Free to apply.`
-    : `Find legit online jobs in ${country} paying directly to ${payment}. Remote chatting, AI training, paid surveys & more. Top earners make ${topEarning}/month. Free to apply — no experience needed.`;
+  const description = fitDescription(
+    isDiaspora
+      ? `Legit online jobs for ${demonym}. Earn during off-hours with instant payouts to ${payment}. Chatting, AI tasks & micro-jobs. Free to apply.`
+      : `Legit online jobs in ${country} paid to ${payment}. Chatting, AI training, surveys & more. Top earners make ${topEarning}/month. Free to apply.`
+  );
 
   return {
     title,
@@ -97,35 +107,34 @@ export function countryPageMetadata(market: Market): Metadata {
       `online jobs for ${demonym}`,
       `earn money online ${country}`,
     ],
-    openGraph: {
-      title,
-      description,
-      url,
-      siteName: SITE_NAME,
-      type: "website",
-    },
+    openGraph: { title, description, url, siteName: SITE_NAME, type: "website" },
     twitter: {
       card: "summary_large_image",
       title,
       description: `Earn ${currency} from your phone. Legit remote work for ${demonym}.`,
     },
-    alternates: {
-      canonical: url,
-      languages: buildHreflangAlternates(),
-    },
+    alternates: { canonical: url },
   };
 }
 
-// ─── City page: /earn/[country]/[city] ───────────────────────────────────────
+// ─── City page: /earn/country/[country]/[city] ───────────────────────────────
 
 export function cityPageMetadata(market: Market, city: City): Metadata {
-  const { country, payment, slug } = market;
-  const url = `${BASE_URL}/earn/${slug}/${city.slug}`;
+  const { country, payment } = market;
+  const url = abs(paths.city(market, city));
+
+  const title = fitTitle([
+    `Online Jobs in ${city.name}, ${country} — Paid via ${payment} | VelloEarn`,
+    `Online Jobs in ${city.name}, ${country} | VelloEarn`,
+  ]);
+
+  const description = fitDescription(
+    `Online jobs in ${city.name}, ${country}: remote chatting, AI training and survey work paid directly to ${payment}. Apply free.`
+  );
 
   return {
-    title: `Online Jobs in ${city.name}, ${country} — Earn via ${payment} | VelloEarn`,
-    description:
-      `Looking for online jobs in ${city.name}? VelloEarn connects ${city.name} residents with remote chatting, AI training, and survey work. Paid directly to ${payment}. Apply free.`,
+    title,
+    description,
     keywords: [
       `online jobs ${city.name}`,
       `work from home ${city.name}`,
@@ -140,26 +149,33 @@ export function cityPageMetadata(market: Market, city: City): Metadata {
       siteName: SITE_NAME,
       type: "website",
     },
-    alternates: {
-      canonical: url,
-      languages: MARKETS.reduce((acc, m) => {
-        acc[m.locale] = `${BASE_URL}/earn/${m.slug}/${city.slug}`;
-        return acc;
-      }, {} as Record<string, string>),
-    },
+    alternates: { canonical: url },
   };
 }
 
-// ─── Job-type × country page: /earn/[jobSlug]/[country] ──────────────────────
+// ─── Job × country page: /earn/job/[jobSlug]/[country] ───────────────────────
 
 export function jobCountryPageMetadata(market: Market, jobType: JobType): Metadata {
-  const { country, payment, slug } = market;
-  const url = `${BASE_URL}/earn/${jobType.slug}/${slug}`;
+  const { country, payment } = market;
+  const url = abs(paths.jobCountry(jobType, market));
+
+  // Avoid "Micro-Jobs Jobs" / "Side Hustles Jobs"
+  const label = /(jobs|hustles)$/i.test(jobType.title)
+    ? jobType.title
+    : `${jobType.title} Jobs`;
+
+  const title = fitTitle([
+    `${label} in ${country} — Paid via ${payment} | VelloEarn`,
+    `${label} in ${country} | VelloEarn`,
+  ]);
+
+  const description = fitDescription(
+    `${jobType.tagline} ${jobType.shortTitle} jobs in ${country} with direct ${payment} payouts. Free to apply.`
+  );
 
   return {
-    title: `${jobType.title} Jobs in ${country} — Paid via ${payment} | VelloEarn`,
-    description:
-      `${jobType.tagline} Find ${jobType.shortTitle} jobs in ${country} with direct ${payment} payouts. ${jobType.description} Free to apply.`,
+    title,
+    description,
     keywords: [
       `${jobType.shortTitle} jobs ${country}`,
       `${jobType.shortTitle} jobs ${country} ${payment}`,
@@ -168,19 +184,13 @@ export function jobCountryPageMetadata(market: Market, jobType: JobType): Metada
       `legit ${jobType.shortTitle} jobs ${country}`,
     ],
     openGraph: {
-      title: `${jobType.title} Jobs in ${country} | ${payment}`,
+      title: `${label} in ${country} | ${payment}`,
       description: jobType.tagline,
       url,
       siteName: SITE_NAME,
       type: "website",
     },
-    alternates: {
-      canonical: url,
-      languages: MARKETS.reduce((acc, m) => {
-        acc[m.locale] = `${BASE_URL}/earn/${jobType.slug}/${m.slug}`;
-        return acc;
-      }, {} as Record<string, string>),
-    },
+    alternates: { canonical: url },
   };
 }
 
@@ -193,7 +203,7 @@ export function blogPostMetadata(opts: {
   publishedAt: string;
   updatedAt?: string;
 }): Metadata {
-  const url = `${BASE_URL}/blog/${opts.slug}`;
+  const url = abs(paths.blog(opts.slug));
 
   return {
     title: `${opts.title} | VelloEarn`,
@@ -221,18 +231,13 @@ export function faqSchema(items: { question: string; answer: string }[]) {
     mainEntity: items.map((item) => ({
       "@type": "Question",
       name: item.question,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: item.answer,
-      },
+      acceptedAnswer: { "@type": "Answer", text: item.answer },
     })),
   };
 }
 
 /** BreadcrumbList schema */
-export function breadcrumbSchema(
-  crumbs: { name: string; href: string }[]
-) {
+export function breadcrumbSchema(crumbs: { name: string; href: string }[]) {
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -270,13 +275,10 @@ export function jobPostingSchema(opts: {
     },
     employmentType: "CONTRACTOR",
     jobLocationType: "TELECOMMUTE",
-    applicantLocationRequirements: {
-      "@type": "Country",
-      name: opts.country,
-    },
+    applicantLocationRequirements: { "@type": "Country", name: opts.country },
     baseSalary: {
       "@type": "MonetaryAmount",
-      currency: opts.currency.split("/")[0].trim(), // Sanitizes inputs like "KES / SAR" to "KES"
+      currency: opts.currency.split("/")[0].trim(), // "KES / SAR" -> "KES"
       value: {
         "@type": "QuantitativeValue",
         minValue: opts.minSalary,
@@ -287,7 +289,7 @@ export function jobPostingSchema(opts: {
     hiringOrganization: {
       "@type": "Organization",
       name: "VelloEarn",
-      sameAs: process.env.NEXT_PUBLIC_SITE_URL ?? "https://velloearn.co.ke",
+      sameAs: BASE_URL,
     },
     datePosted: new Date().toISOString().split("T")[0],
   };

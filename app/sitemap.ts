@@ -1,30 +1,39 @@
-// app/sitemap.ts
 import type { MetadataRoute } from "next";
-import { client } from "@/lib/sanity/client"; 
+import { client } from "@/lib/sanity/client";
 import {
   MARKETS,
   JOB_TYPES,
   getAllCityParams,
   getAllJobCountryParams,
 } from "@/lib/seo/keyword-matrix";
+import { paths } from "@/lib/seo/metadata";
+import { BASE_URL as CONFIG_BASE_URL } from "@/lib/config";
 
-const BASE_URL = 
-  process.env.NEXT_PUBLIC_SITE_URL || 
-  process.env.NEXT_PUBLIC_BASE_URL || 
-  "https://www.velloearn.co.ke";
+const BASE_URL = CONFIG_BASE_URL.replace(/\/$/, "");
 
-// Revalidate the sitemap layout once every hour via Incremental Static Regeneration
+// Regenerate the sitemap hourly (ISR) so new blog posts appear quickly.
 export const revalidate = 3600;
+
+// Bump this date when you ship real content/template changes to the
+// programmatic pages. Using `new Date()` on every build tells Google that
+// every page changes constantly, and it then learns to ignore <lastmod>.
+const CONTENT_UPDATED = new Date("2026-10-15");
 
 interface SanityBlogPost {
   slug: string;
   lastModified: string;
 }
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const now = new Date().toISOString();
+const entry = (
+  path: string,
+  lastModified: Date = CONTENT_UPDATED
+): MetadataRoute.Sitemap[number] => ({
+  url: `${BASE_URL}${path}`,
+  lastModified,
+});
 
-  // 1. Fetch live blog posts from Sanity CMS using GROQ
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  // 1. Blog posts from Sanity (real last-modified dates)
   let blogPosts: SanityBlogPost[] = [];
   try {
     blogPosts = await client.fetch<SanityBlogPost[]>(
@@ -35,155 +44,63 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     );
   } catch (error) {
     console.error("Failed to fetch blog posts for sitemap:", error);
-    blogPosts = [];
   }
 
-  // 2. Static High-Priority Pages
- // 2. Static High-Priority Pages
-  const staticPages: MetadataRoute.Sitemap = [
-    {
-      url: BASE_URL,
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: 1.0,
-    },
-    {
-      url: `${BASE_URL}/about`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${BASE_URL}/privacy`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.5,
-    },
-    {
-      url: `${BASE_URL}/terms`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.5,
-    },
-    {
-      url:`${BASE_URL}/cookies`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.5,
-    },
-    {
-      url:`${BASE_URL}/earn`,
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: 0.95,
-    }
-    // CRITICAL: Removed "/join" from this tracking segment to resolve GSC indexing conflicts
-  ];
+  // 2. Static pages ("/join" intentionally excluded)
+  const staticPages = ["", "/about", "/privacy", "/terms", "/cookies", "/earn", "/blog"].map(
+    (p) => entry(p)
+  );
 
-  // 3. Core Job Landing Pages
-  // FIXED: Adjusted "swahili-teaching" to "swahili" to accurately mirror your actual page folder structures
+  // 3. Core service pages — CLEAN URLs (these are the Kenya/default versions)
   const CORE_JOB_SLUGS = [
     "chatting",
     "ai-training",
     "swahili-teaching",
     "surveys",
     "forex",
-    "academic-writing"
+    "academic-writing",
   ];
-  
-  const coreJobPages: MetadataRoute.Sitemap = CORE_JOB_SLUGS.map((slug) => ({
-    url: `${BASE_URL}/earn/${slug}`,
-    lastModified: now,
-    changeFrequency: "weekly",
-    priority: 0.95,
-  }));
+  const coreJobPages = CORE_JOB_SLUGS.map((slug) => entry(`/earn/${slug}`));
 
-  // 4. Parameterized Regional Variations
-  const targetRegions = ["kenya", "uganda", "ghana"];
-  const parameterizedLocalizedPages: MetadataRoute.Sitemap = [];
-
-  targetRegions.forEach((country) => {
-    // Target country-parameterized paths for your AI segments
-    parameterizedLocalizedPages.push({
-      url: `${BASE_URL}/earn/ai-training?country=${country}`,
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: 0.95,
-    });
-
-    // Target geo-parameterized paths for your Forex and Survey training pages
-    ["forex", "surveys"].forEach((slug) => {
-      parameterizedLocalizedPages.push({
-        url: `${BASE_URL}/earn/${slug}?geo=${country}`,
-        lastModified: now,
-        changeFrequency: "weekly",
-        priority: 0.95,
-      });
-    });
-  });
-
-  // 5. Country pages: /earn/country/[country]
-  const countryPages: MetadataRoute.Sitemap = MARKETS.map((market) => ({
-    url: `${BASE_URL}/earn/country/${market.slug}`,
-    lastModified: now,
-    changeFrequency: "weekly",
-    priority: 0.95,
-  }));
-
-  // 6. City pages: /earn/country/[country]/[city]
-  const cityPages: MetadataRoute.Sitemap = getAllCityParams().map(
-    ({ market, city }) => ({
-      url: `${BASE_URL}/earn/country/${market.slug}/${city.slug}`,
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: 0.85,
-    })
+  // 4. Localized variants for NON-default regions only.
+  // Kenya is the default, so its canonical is the clean URL above
+  // (e.g. /earn/forex), NOT /earn/forex?geo=kenya.
+  // REQUIRES: each of these pages sets its canonical this way (see forex fix).
+  const LOCALIZED_VARIANTS = [
+    { slug: "ai-training", param: "country" },
+    { slug: "forex", param: "geo" },
+    { slug: "surveys", param: "geo" },
+  ];
+  const EXTRA_REGIONS = ["uganda", "ghana"];
+  const localizedPages = LOCALIZED_VARIANTS.flatMap(({ slug, param }) =>
+    EXTRA_REGIONS.map((region) => entry(`/earn/${slug}?${param}=${region}`))
   );
 
-  // 7. Job type matrix root pages: /earn/job/[jobSlug]
-  const jobRootPages: MetadataRoute.Sitemap = JOB_TYPES.map((job) => ({
-    url: `${BASE_URL}/earn/job/${job.slug}`,
-    lastModified: now,
-    changeFrequency: "weekly",
-    priority: 0.9,
-  }));
-
-  // 8. Job × country pages: /earn/job/[jobSlug]/[country]
-  const jobCountryPages: MetadataRoute.Sitemap = getAllJobCountryParams().map(
-    ({ market, jobType }) => ({
-      url: `${BASE_URL}/earn/job/${jobType.slug}/${market.slug}`,
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: 0.8,
-    })
+  // 5. Programmatic pages (paths come from the same helper the canonicals use)
+  const countryPages = MARKETS.map((m) => entry(paths.country(m)));
+  const cityPages = getAllCityParams().map(({ market, city }) =>
+    entry(paths.city(market, city))
+  );
+  const jobRootPages = JOB_TYPES.map((j) => entry(paths.jobRoot(j)));
+  const jobCountryPages = getAllJobCountryParams().map(({ market, jobType }) =>
+    entry(paths.jobCountry(jobType, market))
   );
 
-  // 9. Sanity Blog Post Entries
-  const blogPages: MetadataRoute.Sitemap = blogPosts.map((post) => ({
-    url: `${BASE_URL}/blog/${post.slug}`,
-    lastModified: new Date(post.lastModified).toISOString(),
-    changeFrequency: "weekly",
-    priority: 0.7,
-  }));
+  // 6. Blog
+  const blogPages = blogPosts.map((post) =>
+    entry(paths.blog(post.slug), new Date(post.lastModified))
+  );
 
-  // 10. Accumulate systems datasets and enforce uniqueness constraints safely
-  const allPages = [
+  // 7. De-duplicate by URL
+  const all = [
     ...staticPages,
     ...coreJobPages,
-    ...parameterizedLocalizedPages,
+    ...localizedPages,
     ...countryPages,
     ...cityPages,
     ...jobRootPages,
     ...jobCountryPages,
     ...blogPages,
   ];
-
-  const uniqueUrls = new Set<string>();
-  return allPages.filter((page) => {
-    if (uniqueUrls.has(page.url)) {
-      return false;
-    }
-    uniqueUrls.add(page.url);
-    return true;
-  });
+  return Array.from(new Map(all.map((e) => [e.url, e])).values());
 }
