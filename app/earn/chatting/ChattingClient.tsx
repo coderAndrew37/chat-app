@@ -255,17 +255,18 @@ export default function ChattingClient({ countryTarget }: ChattingClientProps) {
   return (
     <main className="bg-gray-50 min-h-screen">
 
-   {/* ── 1. HERO ─────────────────────────────────────────────────────────── */}
+{/* ── 1. HERO ─────────────────────────────────────────────────────────── */}
 <section className="relative pt-12 pb-16 sm:pt-20 sm:pb-20 overflow-hidden bg-gradient-to-br from-rose-50 via-white to-orange-50">
   <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-rose-200/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
-  
+  <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-orange-200/20 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 pointer-events-none" />
+
   <div className="max-w-6xl mx-auto px-4 sm:px-6 relative">
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-8 items-start lg:items-center">
 
       {/* Left Column - Hero Content */}
       <div>
-        <Link 
-          href="/" 
+        <Link
+          href="/"
           className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-600 mb-6 sm:mb-8 transition"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -284,7 +285,7 @@ export default function ChattingClient({ countryTarget }: ChattingClientProps) {
         </h1>
 
         <p className="text-base sm:text-lg text-gray-500 leading-relaxed mb-3 max-w-lg">
-          Chat with lonely foreigners looking for conversation. Make friends, 
+          Chat with lonely foreigners looking for conversation. Make friends,
           share your culture, and earn money instantly. No experience needed.
         </p>
 
@@ -295,7 +296,6 @@ export default function ChattingClient({ countryTarget }: ChattingClientProps) {
         <div className="flex flex-col sm:flex-row gap-3 mb-10">
           <Link
             href={VELLOEARN_REGISTER_URL}
-            
             rel="noopener noreferrer"
             className="bg-rose-500 hover:bg-rose-600 text-white font-bold text-base px-8 py-4 rounded-full shadow-lg shadow-rose-200 transition-all hover:scale-105 active:scale-95 text-center"
           >
@@ -323,10 +323,44 @@ export default function ChattingClient({ countryTarget }: ChattingClientProps) {
         </div>
       </div>
 
-      {/* Right Column - Live Chat Feed */}
-      <div className="mt-8 lg:mt-0">
-        <div className="w-full max-w-full mx-auto lg:mx-0">
-          <LiveForeignersOnline />
+      {/* Right Column - Hero Image Collage */}
+      <div className="mt-8 lg:mt-0 relative hidden lg:block h-[440px]">
+        {/* Main image */}
+        <div className="absolute top-0 right-0 w-[280px] h-[360px] rounded-3xl overflow-hidden shadow-2xl shadow-rose-200/50 rotate-2">
+          <Image
+            src="https://images.unsplash.com/photo-1607346256330-dee7af15f7c5?w=600&h=800&fit=crop&q=80"
+            alt="Person chatting on their phone from home"
+            fill
+            className="object-cover"
+            sizes="280px"
+            priority
+          />
+        </div>
+
+        {/* Secondary image */}
+        <div className="absolute bottom-0 left-0 w-[240px] h-[280px] rounded-3xl overflow-hidden shadow-2xl shadow-rose-200/50 -rotate-3 border-4 border-white">
+          <Image
+            src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=500&h=600&fit=crop&q=80"
+            alt="Someone having a conversation on their phone"
+            fill
+            className="object-cover"
+            sizes="240px"
+            priority
+          />
+        </div>
+
+        {/* Floating live stat card */}
+        <div className="absolute bottom-16 right-4 bg-white rounded-2xl shadow-xl p-4 border border-gray-100 w-[200px]">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
+            <span className="text-[10px] font-semibold text-gray-900 uppercase tracking-wider">
+              Live now
+            </span>
+          </div>
+          <div className="text-2xl font-extrabold text-gray-900">24/7</div>
+          <div className="text-[11px] text-gray-400">
+            chatters online this week
+          </div>
         </div>
       </div>
 

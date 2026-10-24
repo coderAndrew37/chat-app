@@ -5,61 +5,56 @@ import { HomePageClient } from "./components";
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.velloearn.co.ke";
 
 export const metadata: Metadata = {
-  title: "Connect with foreigners for love and companion | VelloEarn",
+  title: "Get Paid to Review Hotels in Kenya | VelloEarn",
   description:
-    "Get paid to chat with foreigners or train AI. Plus surveys, Swahili teaching & more. Easy to join. Instant M-Pesa payouts.",
+    "Review real hotels across Kenya and earn KES 250–800 per approved task. Free to join, paid instantly to M-Pesa. No experience needed.",
   keywords: [
-    "chat with foreigners and earn Kenya",
-    "AI training jobs Kenya",
-    "how to train AI and get paid Kenya",
-    "is AI training legit Kenya",
-    "earn money online Kenya M-Pesa",
-    "remote work Kenya",
+    "get paid to review hotels Kenya",
+    "hotel review jobs Kenya",
+    "earn money reviewing hotels",
+    "M-Pesa hotel review tasks",
+    "remote review jobs Kenya",
     "online jobs Kenya",
-    "work from home Nairobi",
     "side hustle Kenya 2026",
     "VelloEarn",
   ],
-  alternates: {
-    // FIXED: Switched to match your www. canonical strategy perfectly
-    canonical: `${BASE_URL}`,
-  },
+  alternates: { canonical: BASE_URL },
   openGraph: {
-    title: "Earn from chatting with lonely foreigners | VelloEarn",
+    title: "Get Paid to Review Hotels in Kenya | VelloEarn",
     description:
-      "Get paid to chat with foreigners or train AI. Plus surveys, Swahili teaching & more. Easy to join. Instant M-Pesa payouts.",
-    url: `${BASE_URL}`, // ADDED
+      "Review real hotels across Kenya and earn KES 250–800 per approved task. Paid instantly to M-Pesa.",
+    url: BASE_URL,
     type: "website",
     locale: "en_KE",
     siteName: "VelloEarn",
     images: [
       {
-        url: `${BASE_URL}/og-cover.png`, // ADDED: Global open graph visual fallback
+        url: `${BASE_URL}/og-cover.png`,
         width: 1200,
         height: 630,
-        alt: "VelloEarn — Remote Tasks Platform in Kenya",
+        alt: "VelloEarn — Hotel Review Tasks in Kenya",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Earn from chatting with lonely foreigners | VelloEarn",
+    title: "Get Paid to Review Hotels in Kenya | VelloEarn",
     description:
-      "Get paid to chat with foreigners or train AI. Plus surveys, Swahili teaching & more. Easy to join. Instant M-Pesa payouts.",
-    images: [`${BASE_URL}/og-cover.png`], // ADDED
+      "Review real hotels across Kenya and earn KES 250–800 per approved task. Paid instantly to M-Pesa.",
+    images: [`${BASE_URL}/og-cover.png`],
   },
 };
 
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "JobPosting",
-  title: "Remote Task Specialist — Chat, AI Training & More",
+  title: "Hotel Review Specialist — Remote, Kenya",
   description:
-    "Join VelloEarn to earn from remote tasks in Kenya — AI training, chatting with foreigners, surveys, Swahili teaching and more. Paid directly to M-Pesa. Flexible hours, no experience needed.",
+    "Review hotels across Kenya for real payouts. Complete photo, text, or video review tasks and get paid to M-Pesa. No experience needed, free to join.",
   hiringOrganization: {
     "@type": "Organization",
     name: "VelloEarn",
-    sameAs: `${BASE_URL}`, // FIXED: Aligned corporate schema link to your www domain
+    sameAs: BASE_URL,
     logo: `${BASE_URL}/logo.jpg`,
   },
   jobLocationType: "TELECOMMUTE",
@@ -69,15 +64,15 @@ const jsonLd = {
   },
   employmentType: "PART_TIME",
   datePosted: new Date().toISOString().split("T")[0],
-  validThrough: "2027-12-31", // ADDED: Suppresses GSC optimization warnings regarding missing expiration attributes
+  validThrough: "2027-12-31",
   baseSalary: {
     "@type": "MonetaryAmount",
     currency: "KES",
     value: {
       "@type": "QuantitativeValue",
-      minValue: 5000,
-      maxValue: 30000,
-      unitText: "MONTH",
+      minValue: 250,
+      maxValue: 800,
+      unitText: "TASK",
     },
   },
 };

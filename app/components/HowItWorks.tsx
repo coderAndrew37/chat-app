@@ -1,120 +1,63 @@
-// No "use client" needed — pure presentational
-
 import { VELLOEARN_REGISTER_URL, whatsappNumber } from "@/lib/constants";
-import Link from "next/link";
 
-interface Step {
-  number: number;
-  icon: string;
-  title: string;
-  description: string;
-  highlight: string;
-}
-
-const STEPS: Step[] = [
+const STEPS = [
   {
-    number: 1,
-    icon: "📝",
-    title: "Sign up & verify",
-    description:
-      "Create your account and verify your phone number. No fees, no CV, no interview. Your account is active immediately and ready to start earning.",
-    highlight: "One-time fee — no monthly deductions",
+    number: "01",
+    title: "Sign up and verify",
+    body: "Create your account, verify your phone. Free to join — no CV, no interview. You're active in under 2 minutes.",
   },
   {
-    number: 2,
-    icon: "💬",
-    title: "Start chatting",
-    description:
-      "Browse live profiles of lonely foreigners looking for conversation. Tap any profile to start chatting. Earn money for every conversation you have.",
-    highlight: "Start instantly",
+    number: "02",
+    title: "Pick a hotel to review",
+    body: "Browse open hotel tasks with clear payouts. Each listing shows exactly what's expected — photos, text, or video.",
   },
   {
-    number: 3,
-    icon: "💸",
-    title: "Earn & withdraw",
-    description:
-      "Your earnings accumulate with every chat. Withdraw to M-Pesa instantly — no minimum balance, no waiting periods. Cash out anytime you want.",
-    highlight: "M-Pesa payouts",
+    number: "03",
+    title: "Submit and get paid",
+    body: "Complete the review, submit through the portal. Approved tasks pay to M-Pesa instantly. No minimum, no waiting.",
   },
 ];
 
-function StepCard({ step, isLast }: { step: Step; isLast: boolean }) {
-  return (
-    <div className="flex flex-col items-center text-center relative">
-      {/* Connector — desktop only, not on last */}
-      {!isLast && (
-        <div className="hidden sm:block absolute top-8 left-[calc(50%+2rem)] right-[calc(-50%+2rem)] h-0.5 bg-rose-100" />
-      )}
-
-      {/* Icon circle */}
-      <div className="w-16 h-16 rounded-full bg-rose-500 text-white text-2xl flex items-center justify-center shadow-lg shadow-rose-200 mb-5 relative z-10">
-        {step.icon}
-      </div>
-
-      {/* Highlight pill */}
-      <span className="text-xs bg-emerald-50 text-emerald-700 font-semibold px-3 py-1 rounded-full mb-3">
-        {step.highlight}
-      </span>
-
-      <h3 className="text-xl font-bold text-gray-900 mb-3">{step.title}</h3>
-      <p className="text-gray-500 leading-relaxed max-w-xs text-sm">
-        {step.description}
-      </p>
-    </div>
-  );
-}
-
 export default function HowItWorks() {
   return (
-    <section id="how-it-works" className="py-20 bg-gray-50">
+    <section id="how-it-works" className="py-16 sm:py-20 bg-gray-50">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-
-        <div className="text-center mb-16">
-          <span className="text-rose-500 font-semibold text-sm uppercase tracking-wider">
+        <div className="mb-12 max-w-2xl">
+          <p className="text-rose-500 font-semibold text-xs uppercase tracking-wider mb-2">
             How it works
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mt-2 mb-3">
-            Start earning by chatting today
+          </p>
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
+            Three steps from signup to M-Pesa
           </h2>
-          <p className="text-gray-500">Three simple steps. No fees. Start earning immediately.</p>
         </div>
 
-        <div className="relative grid grid-cols-1 sm:grid-cols-3 gap-12 sm:gap-8">
-          {STEPS.map((step, i) => (
-            <StepCard key={step.number} step={step} isLast={i === STEPS.length - 1} />
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-10">
+          {STEPS.map((step) => (
+            <div key={step.number}>
+              <div className="text-rose-500 font-extrabold text-2xl mb-3">{step.number}</div>
+              <h3 className="text-base font-bold text-gray-900 mb-2">{step.title}</h3>
+              <p className="text-sm text-gray-500 leading-relaxed">{step.body}</p>
+            </div>
           ))}
         </div>
 
-        {/* CTA buttons below steps */}
-        <div className="mt-14 flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Link
+        <div className="mt-12 flex flex-col sm:flex-row items-start sm:items-center gap-3">
+          <a
             href={VELLOEARN_REGISTER_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-rose-500 hover:bg-rose-600 text-white font-bold px-8 py-4 rounded-full shadow-lg shadow-rose-200 transition-all hover:scale-105 active:scale-95 text-center"
+            className="bg-gray-900 hover:bg-gray-800 text-white font-semibold px-6 py-3 rounded-lg transition-colors text-sm"
           >
-            Start Chatting Now 
-          </Link>
+            Create your account
+          </a>
           <a
-            href={`https://wa.me/${whatsappNumber}?text=Hi%20VelloEarn,%20I%20want%20to%20learn%20more%20about%20earning%20from%20chatting.`}
+            href={`https://wa.me/${whatsappNumber}?text=Hi%20VelloEarn,%20I%20want%20to%20learn%20more%20about%20hotel%20review%20tasks.`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-white hover:bg-gray-50 text-gray-700 font-semibold px-6 py-4 rounded-full border border-gray-200 shadow-sm transition-all hover:scale-105 active:scale-95"
+            className="text-gray-500 hover:text-gray-900 font-medium text-sm transition-colors"
           >
-            <svg className="w-4 h-4 text-[#25D366]" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-            </svg>
-            Ask us on WhatsApp
+            Questions? Message us on WhatsApp
           </a>
-        </div>
-
-        {/* Trust signals below CTA */}
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-gray-400">
-          <span>✅ Easy to join</span>
-          <span>💸 No fees ever</span>
-          <span>📱 Chat from any phone</span>
-          <span>💰 Instant M-Pesa payouts</span>
-          <span>🌍 50,000+ active chatters</span>
         </div>
       </div>
     </section>
