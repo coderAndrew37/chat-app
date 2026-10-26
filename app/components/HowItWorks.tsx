@@ -1,6 +1,8 @@
 import { VELLOEARN_REGISTER_URL, whatsappNumber } from "@/lib/constants";
 
-const STEPS = [
+type Choice = "hotels" | "chatting" | null;
+
+const HOTEL_STEPS = [
   {
     number: "01",
     title: "Sign up and verify",
@@ -18,7 +20,28 @@ const STEPS = [
   },
 ];
 
-export default function HowItWorks() {
+const CHATTING_STEPS = [
+  {
+    number: "01",
+    title: "Sign up and verify",
+    body: "Create your account, verify your phone. Free to join — no CV, no interview. You're active in under 2 minutes.",
+  },
+  {
+    number: "02",
+    title: "Browse live profiles",
+    body: "See who's online right now. Browse profiles of foreigners from USA, UK, Canada, Europe, and more.",
+  },
+  {
+    number: "03",
+    title: "Start chatting & earn",
+    body: "Tap any profile and start talking. Every conversation earns you money. Withdraw to M-Pesa anytime.",
+  },
+];
+
+export default function HowItWorks({ choice }: { choice: Choice }) {
+  const isChatting = choice === "chatting";
+  const steps = isChatting ? CHATTING_STEPS : HOTEL_STEPS;
+
   return (
     <section id="how-it-works" className="py-16 sm:py-20 bg-gray-50">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -27,12 +50,12 @@ export default function HowItWorks() {
             How it works
           </p>
           <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
-            Three steps from signup to M-Pesa
+            {isChatting ? "Three steps to your first payout" : "Three steps from signup to M-Pesa"}
           </h2>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-10">
-          {STEPS.map((step) => (
+          {steps.map((step) => (
             <div key={step.number}>
               <div className="text-rose-500 font-extrabold text-2xl mb-3">{step.number}</div>
               <h3 className="text-base font-bold text-gray-900 mb-2">{step.title}</h3>
@@ -51,7 +74,7 @@ export default function HowItWorks() {
             Create your account
           </a>
           <a
-            href={`https://wa.me/${whatsappNumber}?text=Hi%20VelloEarn,%20I%20want%20to%20learn%20more%20about%20hotel%20review%20tasks.`}
+            href={`https://wa.me/${whatsappNumber}?text=Hi%20VelloEarn,%20I%20want%20to%20learn%20more%20about%20${isChatting ? 'chatting' : 'hotel%20review%20tasks'}.`}
             target="_blank"
             rel="noopener noreferrer"
             className="text-gray-500 hover:text-gray-900 font-medium text-sm transition-colors"

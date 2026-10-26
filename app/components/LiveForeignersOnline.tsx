@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
-import { MessageCircle, Briefcase, X, CheckCircle2, DollarSign, Globe, User } from "lucide-react";
 import { VELLOEARN_REGISTER_URL } from "@/lib/constants";
+import { Briefcase, CheckCircle2, MessageCircle, X } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 
 type Profile = {
   id: string;

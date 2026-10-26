@@ -1,28 +1,28 @@
-// app/page.tsx
 import type { Metadata } from "next";
 import { HomePageClient } from "./components";
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.velloearn.co.ke";
 
 export const metadata: Metadata = {
-  title: "Get Paid to Review Hotels in Kenya | VelloEarn",
+  title: "VelloEarn | Get Paid to Chat with Foreigners & Review Hotels in Kenya",
   description:
-    "Review real hotels across Kenya and earn KES 250–800 per approved task. Free to join, paid instantly to M-Pesa. No experience needed.",
+    "Earn money online in Kenya by chatting with lonely foreigners or reviewing top hotels. Pick your track, complete tasks, and get paid instantly to M-Pesa. Free to join.",
   keywords: [
+    "chat with foreigners and earn Kenya",
     "get paid to review hotels Kenya",
     "hotel review jobs Kenya",
-    "earn money reviewing hotels",
-    "M-Pesa hotel review tasks",
-    "remote review jobs Kenya",
-    "online jobs Kenya",
+    "online jobs Kenya M-Pesa",
+    "remote work Kenya",
     "side hustle Kenya 2026",
     "VelloEarn",
   ],
-  alternates: { canonical: BASE_URL },
+  alternates: {
+    canonical: BASE_URL,
+  },
   openGraph: {
-    title: "Get Paid to Review Hotels in Kenya | VelloEarn",
+    title: "VelloEarn | Chat & Earn or Review Hotels",
     description:
-      "Review real hotels across Kenya and earn KES 250–800 per approved task. Paid instantly to M-Pesa.",
+      "Two ways to earn: Chat with foreigners or review hotels. Instant M-Pesa payouts. Free to join.",
     url: BASE_URL,
     type: "website",
     locale: "en_KE",
@@ -32,48 +32,50 @@ export const metadata: Metadata = {
         url: `${BASE_URL}/og-cover.png`,
         width: 1200,
         height: 630,
-        alt: "VelloEarn — Hotel Review Tasks in Kenya",
+        alt: "VelloEarn — Chat & Hotel Review Tasks",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Get Paid to Review Hotels in Kenya | VelloEarn",
+    title: "VelloEarn | Chat & Earn or Review Hotels",
     description:
-      "Review real hotels across Kenya and earn KES 250–800 per approved task. Paid instantly to M-Pesa.",
+      "Two ways to earn: Chat with foreigners or review hotels. Instant M-Pesa payouts. Free to join.",
     images: [`${BASE_URL}/og-cover.png`],
   },
 };
 
+// Structured data now reflects both primary tracks
 const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "JobPosting",
-  title: "Hotel Review Specialist — Remote, Kenya",
-  description:
-    "Review hotels across Kenya for real payouts. Complete photo, text, or video review tasks and get paid to M-Pesa. No experience needed, free to join.",
-  hiringOrganization: {
-    "@type": "Organization",
-    name: "VelloEarn",
-    sameAs: BASE_URL,
-    logo: `${BASE_URL}/logo.jpg`,
-  },
-  jobLocationType: "TELECOMMUTE",
-  applicantLocationRequirements: {
-    "@type": "Country",
-    name: "Kenya",
-  },
-  employmentType: "PART_TIME",
-  datePosted: new Date().toISOString().split("T")[0],
-  validThrough: "2027-12-31",
-  baseSalary: {
-    "@type": "MonetaryAmount",
-    currency: "KES",
-    value: {
-      "@type": "QuantitativeValue",
-      minValue: 250,
-      maxValue: 800,
-      unitText: "TASK",
-    },
+  "@type": "Organization",
+  name: "VelloEarn",
+  url: BASE_URL,
+  logo: `${BASE_URL}/logo.jpg`,
+  description: "Kenya's remote task marketplace. Chat work and Hotel reviews paid instantly to M-Pesa.",
+  offers: {
+    "@type": "OfferCatalog",
+    name: "Remote Earning Tracks",
+    itemListElement: [
+      {
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: "Chat with Foreigners",
+          description: "Chat with lonely foreigners from around the globe and get paid per conversation.",
+          url: `${BASE_URL}/earn/chatting`,
+        },
+      },
+      {
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: "Hotel Reviews",
+          description: "Review real hotels across Kenya. Earn KES 250–800 per approved review.",
+          url: `${BASE_URL}/earn/hotel-reviews`,
+        },
+      },
+    ],
   },
 };
 

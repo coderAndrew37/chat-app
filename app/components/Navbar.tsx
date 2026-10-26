@@ -49,6 +49,14 @@ export default function Navbar() {
     router.push(VELLOEARN_REGISTER_URL);
   };
 
+  // Handle Home navigation to bypass the Discovery Gateway
+  const handleHomeClick = () => {
+    if (pathname !== "/") {
+      sessionStorage.setItem("vello_returning_to_home", "true");
+    }
+    closeSidebar();
+  };
+
   return (
     <>
       {/* ── Main nav bar ─────────────────────────────────────── */}
@@ -56,7 +64,11 @@ export default function Navbar() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-2 shrink-0">
+            <Link 
+              href="/" 
+              onClick={handleHomeClick}
+              className="flex items-center gap-2 shrink-0"
+            >
               <span className="text-2xl font-extrabold text-rose-500 tracking-tight">
                 VelloEarn
               </span>
@@ -178,7 +190,7 @@ export default function Navbar() {
       >
         {/* Sidebar header */}
         <div className="flex items-center justify-between px-5 h-16 border-b border-gray-100 shrink-0">
-          <Link href="/" onClick={closeSidebar}>
+          <Link href="/" onClick={handleHomeClick}>
             <span className="text-xl font-extrabold text-rose-500 tracking-tight">
               VelloEarn
             </span>
