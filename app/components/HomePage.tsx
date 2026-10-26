@@ -73,7 +73,7 @@ export default function HomePageClient() {
           </>
         )}
 
-        <CTABanner />
+        <CTABanner choice={choice} />
       </main>
     </>
   );
