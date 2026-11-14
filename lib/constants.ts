@@ -11,4 +11,4 @@ export const REQUIREMENTS: RequirementItem[] = [
 ];
 
 export const WA_NUMBER = "254107024260"; // Updated WhatsApp number for VelloEarn inquiries
-export const VELLOEARN_REGISTER_URL = "https://mulaearn.com/register.php?ref=velloearn";
+export const VELLOEARN_REGISTER_URL = "https://lipahub.com/c/dmVsbG9lYXJuNDEy";
