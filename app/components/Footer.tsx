@@ -128,7 +128,7 @@ export default function Footer() {
             {/* Stats row */}
             <div className="flex gap-6 mb-7">
               {[
-                { v: "6 tracks",    l: "Ways to earn" },
+                { v: "5 tracks",    l: "Ways to earn" },
                 { v: "M-Pesa",      l: "Instant payouts" },
                 { v: "KES 500+",    l: "Min withdrawal" },
               ].map((s) => (
