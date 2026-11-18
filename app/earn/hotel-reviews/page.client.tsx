@@ -4,7 +4,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { VELLOEARN_REGISTER_URL } from "@/lib/constants";
-import { HOTELS, Hotel } from "@/data/hotels";
+import { HOTELS, Hotel } from "@/lib/hotels";
+
+// ─── Local helpers (extract to lib/hotels.ts to share with HotelsGrid) ──────
+
+const starsFor = (slug: string) => {
+  let h = 0;
+  for (let i = 0; i < slug.length; i++) h = (h * 31 + slug.charCodeAt(i)) | 0;
+  return 3 + (Math.abs(h) % 3);
+};
+
+const imgSrc = (path: string) => encodeURI("/" + path.replace(/^\/+/, ""));
 
 // ─── Small components ────────────────────────────────────────────────────────
 
@@ -46,14 +56,12 @@ function StarRating({ count }: { count: number }) {
 
 function HotelCard({ hotel }: { hotel: Hotel }) {
   return (
-    <a
-      href={VELLOEARN_REGISTER_URL}
-      target="_blank"
-      rel="noopener noreferrer"
+    <Link
+      href={`/dashboard/hotels/${hotel.slug}/rate`}
       className="group relative block rounded-xl overflow-hidden bg-gray-100 aspect-[3/4] shadow-sm hover:shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2"
     >
       <Image
-        src={hotel.imageUrl}
+        src={imgSrc(hotel.img)}
         alt={`${hotel.name}, ${hotel.city}`}
         fill
         className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
@@ -63,27 +71,29 @@ function HotelCard({ hotel }: { hotel: Hotel }) {
 
       <div className="absolute top-2.5 right-2.5 bg-white text-gray-900 rounded-md px-2 py-1 shadow-sm">
         <div className="text-[10px] font-medium text-gray-500 leading-none">Earn</div>
-        <div className="text-sm font-bold leading-tight">KES {hotel.reviewPayKES}</div>
+        <div className="text-sm font-bold leading-tight">${hotel.pay.toFixed(2)}</div>
       </div>
 
       <div className="absolute bottom-0 left-0 right-0 p-3">
         <div className="flex items-center gap-1 mb-1">
-          <StarRating count={hotel.stars} />
+          <StarRating count={starsFor(hotel.slug)} />
           <span className="text-white/60 text-[10px]">·</span>
-          <span className="text-white/70 text-[10px] font-medium">{hotel.city}</span>
+          <span className="text-white/70 text-[10px] font-medium">
+            {hotel.flag} {hotel.city}
+          </span>
         </div>
         <h3 className="text-white text-sm font-bold leading-snug mb-2 line-clamp-2">
           {hotel.name}
         </h3>
         <div className="flex items-center justify-between text-[10px] text-white/70 mb-2.5">
-          <span>{hotel.reviewType}</span>
-          <span>~{hotel.estMinutes} min</span>
+          <span>Text review</span>
+          <span>~10 min</span>
         </div>
         <div className="bg-white text-gray-900 text-xs font-bold text-center py-2 rounded-md group-hover:bg-rose-500 group-hover:text-white transition-colors">
           Review this hotel
         </div>
       </div>
-    </a>
+    </Link>
   );
 }
 
@@ -112,7 +122,8 @@ const GEO_CONTENT: Record<"kenya" | "uganda" | "ghana", LocalizationConfig> = {
     rateRange: "KES 250–800",
     heroSubText: "Free to join · Instant M-Pesa payouts · No experience needed",
     hotWaterNote: "Whether you're reviewing a Nairobi boutique hotel or a Diani beach resort.",
-    payoutRailsDetail: "M-Pesa alongside standard bank transfers, converting cleanly into KES with minimal transaction friction",
+    payoutRailsDetail:
+      "M-Pesa alongside standard bank transfers, converting cleanly into KES with minimal transaction friction",
     legitimacyNote:
       "Kenya's booming hospitality sector — from Nairobi business hotels to coastal resorts and Maasai Mara safari lodges — has created real, ongoing demand for verified human property reviews. Global travel platforms need local eyes on the ground, and Kenyan reviewers are well-positioned to fill that gap. All you need is a smartphone and a stable internet connection (Safaricom, Airtel, or Telkom).",
     howItWorks: [
@@ -193,8 +204,10 @@ const GEO_CONTENT: Record<"kenya" | "uganda" | "ghana", LocalizationConfig> = {
     payoutMethods: "MTN MoMo & Airtel Money",
     rateRange: "UGX 8,000–28,000",
     heroSubText: "Free to join · Instant Mobile Money payouts · No experience needed",
-    hotWaterNote: "From Kampala business hotels to Lake Victoria lodges and safari camps in Murchison Falls.",
-    payoutRailsDetail: "MTN Mobile Money and Airtel Money alongside standard bank transfers, converting cleanly into UGX",
+    hotWaterNote:
+      "From Kampala business hotels to Lake Victoria lodges and safari camps in Murchison Falls.",
+    payoutRailsDetail:
+      "MTN Mobile Money and Airtel Money alongside standard bank transfers, converting cleanly into UGX",
     legitimacyNote:
       "Uganda's tourism and hospitality sector — from Kampala business hotels to safari lodges near Murchison Falls and Bwindi — is growing fast, and global travel platforms need verified local reviewers on the ground. All you need is a smartphone and a stable internet connection (MTN or Airtel).",
     howItWorks: [
@@ -276,7 +289,8 @@ const GEO_CONTENT: Record<"kenya" | "uganda" | "ghana", LocalizationConfig> = {
     rateRange: "GHS 30–100",
     heroSubText: "Free to join · Instant Mobile Money payouts · No experience needed",
     hotWaterNote: "From Accra boutique hotels to Cape Coast resorts and northern safari camps.",
-    payoutRailsDetail: "MTN Mobile Money (MoMo) and Telecel Cash (formerly Vodafone Cash) alongside direct local bank routing, translating cleanly into Ghana Cedis (GHS)",
+    payoutRailsDetail:
+      "MTN Mobile Money (MoMo) and Telecel Cash (formerly Vodafone Cash) alongside direct local bank routing, translating cleanly into Ghana Cedis (GHS)",
     legitimacyNote:
       "Ghana's hospitality and tourism sector — from Accra business hotels to Cape Coast heritage resorts and northern safari lodges — is expanding rapidly, and global travel platforms need verified local reviewers on the ground. All you need is a smartphone and a stable MTN, Telecel, or AT connection.",
     howItWorks: [
@@ -429,7 +443,7 @@ export default function HotelReviewsClient({ countryTarget }: HotelReviewsClient
               </div>
             </div>
 
-            {/* Right column — a small preview of open tasks */}
+            {/* Right column — preview of open tasks */}
             <div className="mt-8 lg:mt-0">
               <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6">
                 <div className="flex items-center justify-between mb-4">
@@ -443,16 +457,14 @@ export default function HotelReviewsClient({ countryTarget }: HotelReviewsClient
 
                 <div className="space-y-2.5 max-h-[420px] overflow-y-auto pr-2">
                   {HOTELS.slice(0, 5).map((hotel) => (
-                    <a
-                      key={hotel.id}
-                      href={VELLOEARN_REGISTER_URL}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <Link
+                      key={hotel.slug}
+                      href={`/dashboard/hotels/${hotel.slug}/rate`}
                       className="flex items-center gap-3 bg-gray-50 hover:bg-rose-50 border border-gray-100 hover:border-rose-200 rounded-xl p-3 transition-all group"
                     >
                       <div className="relative w-14 h-14 rounded-lg overflow-hidden shrink-0 bg-gray-200">
                         <Image
-                          src={hotel.imageUrl}
+                          src={imgSrc(hotel.img)}
                           alt={hotel.name}
                           fill
                           className="object-cover"
@@ -464,21 +476,21 @@ export default function HotelReviewsClient({ countryTarget }: HotelReviewsClient
                           {hotel.name}
                         </div>
                         <div className="flex items-center gap-2 text-xs text-gray-400 mt-0.5">
-                          <StarRating count={hotel.stars} />
+                          <StarRating count={starsFor(hotel.slug)} />
                           <span>·</span>
                           <span className="truncate">{hotel.city}</span>
                         </div>
                         <div className="text-[11px] text-gray-400 mt-1">
-                          {hotel.reviewType} · ~{hotel.estMinutes} min
+                          Text review · ~10 min
                         </div>
                       </div>
                       <div className="text-right shrink-0">
                         <div className="text-sm font-bold text-emerald-600">
-                          KES {hotel.reviewPayKES}
+                          ${hotel.pay.toFixed(2)}
                         </div>
                         <div className="text-[10px] text-gray-400">per review</div>
                       </div>
-                    </a>
+                    </Link>
                   ))}
                 </div>
 
@@ -565,7 +577,7 @@ export default function HotelReviewsClient({ countryTarget }: HotelReviewsClient
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
             {HOTELS.map((hotel) => (
-              <HotelCard key={hotel.id} hotel={hotel} />
+              <HotelCard key={hotel.slug} hotel={hotel} />
             ))}
           </div>
 
@@ -644,9 +656,9 @@ export default function HotelReviewsClient({ countryTarget }: HotelReviewsClient
             How Payouts Actually Work
           </h3>
           <p className="text-gray-600 leading-relaxed">
-            Every review is scored against a quality checklist before it's approved. Approved
+            Every review is scored against a quality checklist before it&apos;s approved. Approved
             tasks hit your balance instantly, and withdrawals route through{" "}
-            {geo.payoutRailsDetail}. There's no monthly payroll cycle and no minimum
+            {geo.payoutRailsDetail}. There&apos;s no monthly payroll cycle and no minimum
             withdrawal threshold — the money is yours the moment the task clears.
           </p>
         </div>

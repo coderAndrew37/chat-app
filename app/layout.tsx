@@ -8,6 +8,7 @@ import Script from "next/script";
 import MetaPixel from "./components/pixels/MetaPixel";
 import TikTokPixel from "./components/pixels/TikTokPixel";
 import { BASE_URL } from "@/lib/config";
+import { ReviewVerifier } from "./components/dashboard/ReviewVerifier";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -213,7 +214,9 @@ export default function RootLayout({
           async
         />
 
-        <LayoutClient>{children}</LayoutClient>
+        <LayoutClient>
+               <ReviewVerifier />
+               {children}</LayoutClient>
       </body>
     </html>
   );
