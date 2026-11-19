@@ -2,21 +2,87 @@
 
 import Link from "next/link";
 import { useDashboard } from "@/lib/use-dashboard";
+import {
+  TASK_ACCENTS,
+  TASK_LABELS,
+  type TaskType,
+} from "@/lib/tasks/types";
 
 const CARD =
   "rounded-xl border border-[#e5e6f1] bg-white shadow-[0_1px_2px_rgba(20,33,61,0.05),0_8px_24px_-16px_rgba(20,33,61,0.25)]";
 
+// Strips the "Review reward: ", "Survey reward: ", etc. prefix.
+const taskTitleOf = (desc: string) => desc.replace(/^.+?:\s*/, "");
+
+function MiniStat({
+  label,
+  value,
+  sub,
+}: {
+  label: string;
+  value: string;
+  sub: string;
+}) {
+  return (
+    <div className={`${CARD} p-4 sm:p-5`}>
+      <p className="text-[11px] font-semibold uppercase tracking-wider text-[#667088]">
+        {label}
+      </p>
+      <p className="font-heading mt-1 text-xl font-extrabold tabular-nums text-[#14213d]">
+        {value}
+      </p>
+      <p className="mt-0.5 text-xs text-[#667088]">{sub}</p>
+    </div>
+  );
+}
+
+function TypePill({ taskType }: { taskType?: TaskType }) {
+  if (!taskType) {
+    return (
+      <span className="rounded-md bg-[#f6f6fb] px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[#667088]">
+        Reward
+      </span>
+    );
+  }
+  const accent = TASK_ACCENTS[taskType];
+  return (
+    <span
+      className="inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide"
+      style={{ background: accent.bg, color: accent.text }}
+    >
+      {accent.icon} {TASK_LABELS[taskType]}
+    </span>
+  );
+}
+
 export default function WalletPage() {
-  const { state, ready, wallet, country, money, usd } = useDashboard();
+  const { state, ready, wallet, country, money, usd, isActivated } =
+    useDashboard();
+
   if (!ready || !state) return null;
 
   const rewards = state.tx.filter((t) => t.type === "reward");
   const pct = Math.min(100, Math.round((wallet.avail / country.min) * 100));
-  const canWithdraw = wallet.avail >= country.min;
+  const hasMin = wallet.avail >= country.min;
+  const canWithdraw = hasMin && isActivated;
   const avg = rewards.length ? wallet.earned / rewards.length : 0;
   const pendingWd = state.tx.filter(
     (t) => t.type === "withdrawal" && t.status === "Pending",
   ).length;
+  const shortfall = Math.max(0, country.min - wallet.avail);
+
+  let statusLine: string;
+  if (wallet.avail === 0) {
+    statusLine = `Complete tasks to unlock withdrawals at ${money(country.min)}.`;
+  } else if (!hasMin) {
+    statusLine = `Earn ${money(shortfall)} more to reach the ${money(
+      country.min,
+    )} minimum.`;
+  } else if (!isActivated) {
+    statusLine = "Withdraw your earnings o.";
+  } else {
+    statusLine = `You can withdraw now. Minimum is ${money(country.min)}.`;
+  }
 
   return (
     <div className="space-y-4">
@@ -46,30 +112,30 @@ export default function WalletPage() {
                   style={{ width: `${pct}%` }}
                 />
               </div>
-              <p className="mt-2 text-xs text-[#b9c0d6]">
-                {canWithdraw
-                  ? `You can withdraw now. Minimum is ${money(country.min)}.`
-                  : `Earn ${money(
-                      Math.max(0, country.min - wallet.avail),
-                    )} more to reach the ${money(country.min)} minimum.`}
-              </p>
+              <p className="mt-2 text-xs text-[#b9c0d6]">{statusLine}</p>
             </div>
           </div>
 
           <div className="flex flex-wrap gap-2">
             <Link
               href="/dashboard/withdrawals"
-              aria-disabled={!canWithdraw}
+              aria-disabled={!isActivated || !hasMin}
               className={`rounded-lg px-4 py-2.5 text-sm font-bold transition-colors ${
-                canWithdraw
-                  ? "bg-[#ff7a00] text-white hover:bg-[#e86d00]"
-                  : "pointer-events-none bg-white/10 text-white/40"
+                !isActivated
+                  ? "bg-[#5b4bdb] text-white hover:bg-[#4637c2]"
+                  : canWithdraw
+                    ? "bg-[#ff7a00] text-white hover:bg-[#e86d00]"
+                    : "pointer-events-none bg-white/10 text-white/40"
               }`}
             >
-              Withdraw funds
+              {!isActivated
+                ? "Withdraw Now"
+                : canWithdraw
+                  ? "Withdraw funds"
+                  : `Need ${money(shortfall)} more`}
             </Link>
             <Link
-              href="/dashboard/hotels"
+              href="/dashboard/tasks"
               className="rounded-lg border border-white/30 bg-white/10 px-4 py-2.5 text-sm font-bold text-white hover:bg-white/20"
             >
               Earn more
@@ -83,14 +149,14 @@ export default function WalletPage() {
         <MiniStat
           label="Total earnings"
           value={money(wallet.earned)}
-          sub={`${rewards.length} verified review${
+          sub={`${rewards.length} reward${
             rewards.length === 1 ? "" : "s"
           }${rewards.length ? ` · avg ${money(avg)}` : ""}`}
         />
         <MiniStat
           label="Pending earnings"
           value={money(wallet.pending)}
-          sub="Rewards under verification"
+          sub="Under verification"
         />
         <MiniStat
           label="Total withdrawn"
@@ -119,13 +185,13 @@ export default function WalletPage() {
           <div className="px-4 py-12 text-center">
             <p className="text-sm font-bold text-[#14213d]">No earnings yet</p>
             <p className="mt-1 text-xs text-[#667088]">
-              Submit a review to earn your first reward.
+              Complete a task to earn your first reward.
             </p>
             <Link
-              href="/dashboard/hotels"
+              href="/tasks"
               className="mt-4 inline-block rounded-lg bg-[#5b4bdb] px-4 py-2 text-xs font-bold text-white hover:bg-[#4637c2]"
             >
-              Browse hotels
+              Browse tasks
             </Link>
           </div>
         ) : (
@@ -134,7 +200,8 @@ export default function WalletPage() {
               <thead>
                 <tr className="text-left text-[11px] font-semibold uppercase tracking-wider text-[#667088]">
                   <th className="px-4 py-2.5 sm:px-5">Date</th>
-                  <th className="px-4 py-2.5">Hotel</th>
+                  <th className="px-4 py-2.5">Type</th>
+                  <th className="px-4 py-2.5">Task</th>
                   <th className="hidden px-4 py-2.5 text-right sm:table-cell">
                     USD
                   </th>
@@ -152,8 +219,11 @@ export default function WalletPage() {
                         month: "short",
                       })}
                     </td>
+                    <td className="px-4 py-3">
+                      <TypePill taskType={t.taskType} />
+                    </td>
                     <td className="px-4 py-3 font-medium text-[#14213d]">
-                      {t.desc.replace("Review reward: ", "")}
+                      {taskTitleOf(t.desc)}
                     </td>
                     <td className="hidden px-4 py-3 text-right text-xs tabular-nums text-[#667088] sm:table-cell">
                       {usd(t.usd ?? 0)}
@@ -168,28 +238,6 @@ export default function WalletPage() {
           </div>
         )}
       </div>
-    </div>
-  );
-}
-
-function MiniStat({
-  label,
-  value,
-  sub,
-}: {
-  label: string;
-  value: string;
-  sub: string;
-}) {
-  return (
-    <div className={`${CARD} p-4 sm:p-5`}>
-      <p className="text-[11px] font-semibold uppercase tracking-wider text-[#667088]">
-        {label}
-      </p>
-      <p className="font-heading mt-1 text-xl font-extrabold tabular-nums text-[#14213d]">
-        {value}
-      </p>
-      <p className="mt-0.5 text-xs text-[#667088]">{sub}</p>
     </div>
   );
 }

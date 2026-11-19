@@ -1,13 +1,12 @@
 "use client";
 
-import {  ProfilesGrid} from "@/app/components";
-import LiveForeignersOnline from "@/app/components/LiveForeignersOnline";
+import { ProfilesGrid } from "@/app/components";
 import Requirements from "@/app/components/Requirements";
 import TrainingChannelBanner from "@/app/components/TrainingChannelBanner";
+import { VELLOEARN_REGISTER_URL } from "@/lib/constants";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { VELLOEARN_REGISTER_URL } from "@/lib/constants";
 
 // ─── SmartImage ───────────────────────────────────────────────────────────────
 function SmartImage({

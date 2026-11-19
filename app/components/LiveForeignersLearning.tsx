@@ -1,9 +1,9 @@
 // app/components/LiveForeignersLearning.tsx
 "use client";
 
-import { useEffect, useState, useRef } from "react";
-import { MessageCircle, BookOpen, Users, Globe } from "lucide-react";
 import { VELLOEARN_REGISTER_URL } from "@/lib/constants";
+import { BookOpen } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 type Learner = {
   id: string;

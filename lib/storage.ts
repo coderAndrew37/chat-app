@@ -1,30 +1,17 @@
 // lib/storage.ts
 import { DEFAULT_RATES } from "./countries";
+import type {
+  TaskCompletion,
+  TaskCompletionOf,
+  TaskCompletionStatus,
+  TaskType,
+} from "./tasks/types";
+
+import { VERIFY_DELAY_MS } from "./tasks/types";
 
 export const KEY = "hotelrate.dashboard.v1";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
-
-export type ReviewStatus = "Verifying" | "Verified" | "Rejected";
-
-export type Review = {
-  id: string;
-  hotelSlug: string;
-  hotelName: string;
-  ratings: Record<
-    "overall" | "cleanliness" | "service" | "facilities" | "value",
-    number
-  >;
-  title: string;
-  text: string;
-  date: string;
-  due?: number;
-  status: ReviewStatus;
-  reasons: string[];
-  usd: number;
-  rate: number;
-  localAmount: number;
-};
 
 export type TxStatus = "Credited" | "Pending" | "Paid" | "Cancelled";
 
@@ -38,24 +25,34 @@ export type Tx = {
   rate?: number;
   status: TxStatus;
   date: string;
+  taskType?: TaskType;
 };
 
 export type Draft = {
-  hotelSlug: string;
-  ratings: Partial<Review["ratings"]>;
-  title: string;
-  text: string;
+  taskType: TaskType;
+  taskSlug: string;
+  payload: Record<string, unknown>;
 };
 
 export type DashboardState = {
-  profile: { name: string; email: string; phone: string; country: string };
+  profile: {
+    name: string;
+    email: string;
+    phone: string;
+    country: string;
+    accountActivated?: boolean;
+  };
   rates: Record<string, number>;
   minWd: number;
-  reviews: Review[];
+  tasks: TaskCompletion[];
   drafts: Record<string, Draft>;
   tx: Tx[];
   daily: { day: string; count: number };
 };
+
+/** @deprecated Legacy shape — only used by the migration path from
+ *  pre-multi-track dashboards. Do not write to this. */
+export type ReviewStatus = "Verifying" | "Verified" | "Rejected";
 
 // ─── Defaults ───────────────────────────────────────────────────────────────
 
@@ -64,7 +61,7 @@ export function defaults(): DashboardState {
     profile: { name: "", email: "", phone: "", country: "" },
     rates: { ...DEFAULT_RATES },
     minWd: 500,
-    reviews: [],
+    tasks: [],
     drafts: {},
     tx: [],
     daily: { day: new Date().toLocaleDateString("en-CA"), count: 0 },
@@ -81,18 +78,36 @@ export function read(): DashboardState {
     const raw = localStorage.getItem(KEY);
     if (!raw) return base;
 
-    const stored = JSON.parse(raw) as Partial<DashboardState> | null;
+    const stored = JSON.parse(raw) as Record<string, unknown> | null;
     if (!stored || typeof stored !== "object") return base;
 
+      const rawTasks = Array.isArray(stored.tasks)
+      ? normalizeTasks(stored.tasks)
+    : migrateReviewsToTasks(stored.reviews);
+
+     const now = Date.now();
+    const tasks = rawTasks.map((t) =>
+      t.status === "Verifying" && now - Date.parse(t.date) > VERIFY_DELAY_MS
+        ? { ...t, status: "Verified" as const }
+        : t,
+    );
     return {
-      ...base,
-      ...stored,
-      profile: { ...base.profile, ...(stored.profile ?? {}) },
-      rates: { ...base.rates, ...(stored.rates ?? {}) },
-      daily: { ...base.daily, ...(stored.daily ?? {}) },
-      reviews: normalizeReviews(stored.reviews),
+      profile: {
+        ...base.profile,
+        ...((stored.profile as DashboardState["profile"]) ?? {}),
+      },
+      rates: {
+        ...base.rates,
+        ...((stored.rates as Record<string, number>) ?? {}),
+      },
+      minWd: typeof stored.minWd === "number" ? stored.minWd : base.minWd,
+      tasks,
+      drafts: normalizeDrafts(stored.drafts),
       tx: normalizeTx(stored.tx),
-      drafts: stored.drafts ?? {},
+      daily: {
+        ...base.daily,
+        ...((stored.daily as DashboardState["daily"]) ?? {}),
+      },
     };
   } catch {
     return base;
@@ -108,64 +123,134 @@ export function write(s: DashboardState) {
   }
 }
 
-// ─── Legacy migration ───────────────────────────────────────────────────────
-// Normalizes data written by the old HTML dashboard (index.html + app.js),
-// which used `hotel`/`kes` instead of `hotelName`/`localAmount` and had
-// different status values.
+// ─── Normalisation ──────────────────────────────────────────────────────────
 
-function normalizeReviews(list: unknown): Review[] {
+const VALID_TASK_TYPES: TaskType[] = [
+  "hotel-review",
+  "survey",
+  "chatting",
+  "ai-training",
+];
+
+function isTaskType(v: unknown): v is TaskType {
+  return typeof v === "string" && (VALID_TASK_TYPES as string[]).includes(v);
+}
+
+function isTaskStatus(v: unknown): v is TaskCompletionStatus {
+  return v === "Verified" || v === "Verifying" || v === "Rejected";
+}
+
+function normalizeDrafts(raw: unknown): Record<string, Draft> {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) return {};
+  const out: Record<string, Draft> = {};
+  for (const [k, v] of Object.entries(raw as Record<string, unknown>)) {
+    if (!v || typeof v !== "object") continue;
+    const d = v as Record<string, unknown>;
+    if (!isTaskType(d.taskType)) continue;
+    out[k] = {
+      taskType: d.taskType,
+      taskSlug: String(d.taskSlug ?? ""),
+      payload:
+        d.payload && typeof d.payload === "object"
+          ? (d.payload as Record<string, unknown>)
+          : {},
+    };
+  }
+  return out;
+}
+
+function normalizeTasks(list: unknown): TaskCompletion[] {
   if (!Array.isArray(list)) return [];
   return list
-    .map((r): Review | null => {
-      if (!r || typeof r !== "object") return null;
-      const anyR = r as Record<string, unknown>;
-      const ratings = (anyR.ratings ?? {}) as Record<string, number>;
+    .map(normalizeTask)
+    .filter((x): x is TaskCompletion => x !== null);
+}
 
-      const localAmount =
-        typeof anyR.localAmount === "number"
-          ? anyR.localAmount
-          : typeof anyR.kes === "number"
-            ? anyR.kes
-            : 0;
+function normalizeTask(t: unknown): TaskCompletion | null {
+  if (!t || typeof t !== "object") return null;
+  const any = t as Record<string, unknown>;
+  if (!isTaskType(any.taskType)) return null;
+  if (!any.payload || typeof any.payload !== "object") return null;
 
-      const rawStatus = anyR.status;
-      const status: ReviewStatus =
-        rawStatus === "Verified" ||
-        rawStatus === "Rejected" ||
-        rawStatus === "Verifying"
-          ? rawStatus
-          : "Verified";
+  return {
+    id: String(any.id ?? crypto.randomUUID()),
+    taskType: any.taskType,
+    taskSlug: String(any.taskSlug ?? ""),
+    taskTitle: String(any.taskTitle ?? ""),
+    rewardUsd: typeof any.rewardUsd === "number" ? any.rewardUsd : 0,
+    rewardLocal: typeof any.rewardLocal === "number" ? any.rewardLocal : 0,
+    rate:
+      typeof any.rate === "number" ? any.rate : DEFAULT_RATES.KES ?? 130,
+    date: String(any.date ?? new Date().toISOString()),
+    status: isTaskStatus(any.status) ? any.status : "Verified",
+    reasons: Array.isArray(any.reasons) ? (any.reasons as string[]) : [],
+    payload: any.payload as TaskCompletion["payload"],
+  } as TaskCompletion;
+}
 
-      const hotelName = String(anyR.hotelName ?? anyR.hotel ?? "");
-      const hotelSlug =
-        typeof anyR.hotelSlug === "string" && anyR.hotelSlug
-          ? anyR.hotelSlug
-          : slugifyHotel(hotelName);
+// ─── Legacy migration ───────────────────────────────────────────────────────
+// Pre-multi-track dashboards stored hotel reviews at `reviews[]` with
+// `hotel`/`kes` instead of `hotelName`/`localAmount`. Convert to the
+// current `tasks[]` shape.
 
-      return {
-        id: String(anyR.id ?? crypto.randomUUID()),
-        hotelSlug,
-        hotelName,
-        ratings: {
-          overall: ratings.overall ?? 0,
-          cleanliness: ratings.cleanliness ?? 0,
-          service: ratings.service ?? 0,
-          facilities: ratings.facilities ?? 0,
-          value: ratings.value ?? 0,
-        },
-        title: String(anyR.title ?? ""),
-        text: String(anyR.text ?? ""),
-        date: String(anyR.date ?? new Date().toISOString()),
-        due: typeof anyR.due === "number" ? anyR.due : undefined,
-        status,
-        reasons: Array.isArray(anyR.reasons) ? (anyR.reasons as string[]) : [],
-        usd: typeof anyR.usd === "number" ? anyR.usd : 0,
-        rate:
-          typeof anyR.rate === "number" ? anyR.rate : DEFAULT_RATES.KES ?? 130,
-        localAmount,
-      };
-    })
-    .filter((x): x is Review => x !== null);
+function migrateReviewsToTasks(list: unknown): TaskCompletion[] {
+  if (!Array.isArray(list)) return [];
+  return list
+    .map(migrateReview)
+   .filter(
+      (x): x is TaskCompletionOf<"hotel-review"> => x !== null,
+    );
+}
+
+function migrateReview(r: unknown): TaskCompletionOf<"hotel-review"> | null {
+  if (!r || typeof r !== "object") return null;
+  const any = r as Record<string, unknown>;
+
+  const ratings = (any.ratings ?? {}) as Record<string, number>;
+  const hotelName = String(any.hotelName ?? any.hotel ?? "");
+  const hotelSlug =
+    typeof any.hotelSlug === "string" && any.hotelSlug
+      ? any.hotelSlug
+      : slugify(hotelName);
+
+  const rewardLocal =
+    typeof any.localAmount === "number"
+      ? any.localAmount
+      : typeof any.kes === "number"
+        ? any.kes
+        : 0;
+
+  const status: TaskCompletionStatus = isTaskStatus(any.status)
+    ? any.status
+    : "Verified";
+
+  return {
+    id: String(any.id ?? crypto.randomUUID()),
+    taskType: "hotel-review",
+    taskSlug: hotelSlug,
+    taskTitle: hotelName,
+    rewardUsd: typeof any.usd === "number" ? any.usd : 0,
+    rewardLocal,
+    rate:
+      typeof any.rate === "number" ? any.rate : DEFAULT_RATES.KES ?? 130,
+    date: String(any.date ?? new Date().toISOString()),
+    status,
+    reasons: Array.isArray(any.reasons) ? (any.reasons as string[]) : [],
+    payload: {
+      kind: "hotel-review",
+      hotelSlug,
+      hotelCity: "",
+      ratings: {
+        overall: ratings.overall ?? 0,
+        cleanliness: ratings.cleanliness ?? 0,
+        service: ratings.service ?? 0,
+        facilities: ratings.facilities ?? 0,
+        value: ratings.value ?? 0,
+      },
+      title: String(any.title ?? ""),
+      text: String(any.text ?? ""),
+    },
+  };
 }
 
 function normalizeTx(list: unknown): Tx[] {
@@ -173,18 +258,19 @@ function normalizeTx(list: unknown): Tx[] {
   return list
     .map((t): Tx | null => {
       if (!t || typeof t !== "object") return null;
-      const anyT = t as Record<string, unknown>;
-      const type = anyT.type === "withdrawal" ? "withdrawal" : "reward";
+      const any = t as Record<string, unknown>;
+      const type = any.type === "withdrawal" ? "withdrawal" : "reward";
       return {
-        id: String(anyT.id ?? crypto.randomUUID()),
-        ref: String(anyT.ref ?? anyT.id ?? ""),
+        id: String(any.id ?? crypto.randomUUID()),
+        ref: String(any.ref ?? any.id ?? ""),
         type,
-        desc: String(anyT.desc ?? ""),
-        amount: typeof anyT.amount === "number" ? anyT.amount : 0,
-        usd: typeof anyT.usd === "number" ? anyT.usd : undefined,
-        rate: typeof anyT.rate === "number" ? anyT.rate : undefined,
-        status: normalizeTxStatus(anyT.status, type),
-        date: String(anyT.date ?? new Date().toISOString()),
+        desc: String(any.desc ?? ""),
+        amount: typeof any.amount === "number" ? any.amount : 0,
+        usd: typeof any.usd === "number" ? any.usd : undefined,
+        rate: typeof any.rate === "number" ? any.rate : undefined,
+        status: normalizeTxStatus(any.status, type),
+        date: String(any.date ?? new Date().toISOString()),
+        taskType: isTaskType(any.taskType) ? any.taskType : undefined,
       };
     })
     .filter((x): x is Tx => x !== null);
@@ -196,14 +282,13 @@ function normalizeTxStatus(
 ): TxStatus {
   if (s === "Credited" || s === "Pending" || s === "Paid" || s === "Cancelled")
     return s;
-  // Legacy HTML dashboard used "Completed" and "Verified"
   if (s === "Completed") return type === "reward" ? "Credited" : "Paid";
   if (s === "Verified") return "Credited";
   if (s === "Rejected") return "Cancelled";
   return "Pending";
 }
 
-function slugifyHotel(name: string): string {
+function slugify(name: string): string {
   return name
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
